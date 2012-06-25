@@ -1,5 +1,3 @@
-> It all starts here. Read me!
-
 # SRQM: Startup Guide
 
 This document explains how to survive the Statistical Reasoning and Quantitative Methods course run at Sciences Po by François Briatte and Ivaylo Petev.
