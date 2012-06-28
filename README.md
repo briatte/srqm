@@ -2,7 +2,7 @@
 
 This document explains how to setup a computer to follow the [Statistical Reasoning and Quantitative Methods](http://f.briatte.org/teaching/quanti/) (SRQM) course run at Sciences Po by François Briatte and Ivaylo Petev.
 
-Every student gets a copy of this ‘[Teaching Pack](http://phnk.com/srqm/)’ on the first session, and gets assigned to read this file and setup their machines as a warm-up exercise to the course.
+Every student gets a copy of this ‘[Teaching Pack](https://github.com/briatte/srqm/)’ on the first session, and gets assigned to read this file and setup their machines as a warm-up exercise to the course.
 
 ## Requirements
 
@@ -83,13 +83,13 @@ The `srqm setup` command is part of a program that will silently load when you o
 
 **Please ask for help as early as possible**, so that we can put configuration issues behind us and move to the actual course. Most issues can be covered in a matter of minutes if your computer is not experiencing a more serious issue.
 
-**If you do not have access to hard drive space** to perform the above installation, the ‘Teaching Pack’ should be able to run from a USB key plugged to a Sciences Po workstation. This requires the ‘Teaching Pack’ folder to be located at `e:\SRQM` (where your USB key should have loaded). Additional packages will be temporarily installed at location `c:\temp` on your hard drive.
+- **If you do not have access to hard drive space** to perform the above installation, the ‘Teaching Pack’ should be able to run from a USB key plugged to a Sciences Po workstation. This requires the ‘Teaching Pack’ folder to be located at `e:\SRQM` (where your USB key should have loaded). Additional packages will be temporarily installed at location `c:\temp` on your hard drive.
 
-**If you cannot setup Stata and install additional packages**, you will run into errors in the course do-files when we use non-native, user-coded Stata commands. This can sometimes be circumvented, e.g. by replacing all `fre` commands by `tab` commands. You will also need to minimally configure Stata by hand, starting with the working directory (and memory if running Stata 11 or older),
+- **If you cannot setup Stata and install additional packages**, you will run into errors in the course do-files when we use non-native, user-coded Stata commands. This can sometimes be circumvented, e.g. by replacing all `fre` commands by `tab` commands. You will also need to minimally configure Stata by hand, starting with the working directory (and memory if running Stata 11 or older),
 
 ## Readings
 
-When you are done, your first reading should be the Stata Guide, Part 1 (Sections 1-4), to learn more on the course contents and requirements. You will also want to browse through the opening sections of your handbook. A list of readings is available in your syllabus and as a [Google document](http://goo.gl/BJHkQ).
+When you are done, you should turn to the [README](https://github.com/briatte/srqm/blob/master/Course/README.md) file of the `Course` folder to learn about the readings and course requirements.
 
 Welcome to the course, and see you soon!
 
