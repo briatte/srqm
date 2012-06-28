@@ -22,13 +22,13 @@ You can rename the ‘Teaching Pack’ folder to whatever you like, but you will
 
 Stata should be pre-installed on your workstation.
 
-Make sure that you are running Stata from the __"Applications"__ folder or its system equivalent, such as __"Program Files"__ on Windows. Running Stata from outside your system application folder might cripple the graphic user interface or make Stata commands inoperable.
+Make sure that you are running Stata from the __"Applications"__ folder or its system equivalent, such as __"Program Files"__ on Windows. Running Stata from outside your application folder might cripple the software in several respects.
 
 Now, open Stata.
 
 ### 3. Set the working directory
 
-To set the `SRQM` folder as the working directory, use the __File__ menu, __Change Working Directory…__ item, or type &#8984;&#8679;J (Command-Shift-J) on Mac OS X. Alternatively, use the `cd`, `dir` and `pwd` commands if you know some Stata already.
+To set the `SRQM` folder as the working directory, use the __File > Change Working Directory…__ menu item, or type &#8984;&#8679;J (Command-Shift-J) on Mac OS X. Alternatively, use the `cd`, `dir` and `pwd` commands if you know some Stata already.
 
 Watch the folder path that Stata will display in the ‘Results’ window when you select the SRQM folder:
 
@@ -62,8 +62,8 @@ Open Stata again. Your `profile.do` file should guide it to the `SRQM` folder, i
 	Working directory:
 	/Users/fr/Documents/Teaching/SRQM
 
-	Datasets/       README.md       README.pdf     Course/
-	Replication/    profile.do
+	Course/         README.md       Replication/
+	Datasets/       README.pdf      profile.do
 	
 	...
 
