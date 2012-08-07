@@ -106,18 +106,21 @@ program srqm
 		* Memory.
 		if c(version) < 12 {
 			cap set mem 500m, perm
-			if _rc==0 memory
+			if _rc==0 di as txt "Memory set to 500MB (should be enough)."
 			if _rc!=0 di as err "Failed to set memory to 500M."
 		}
 		
 		* Screen breaks.
 		cap set more off, perm
+		if _rc==0 di as txt "Screen breaks set to OFF (cool)."
 		
 		* Maximum variables.
 		cap set maxvar 5000, perm
+		if _rc==0 di as txt "Maximum variables set to 5000 (yay)."
 		
 		* Scroll buffer.
 		cap set scrollbufsize 500000
+		if _rc==0 di as txt "Screen breaks set to 500000 (wow)."
 		
 		* Verbose option: add basic system information.
 		if `verbose' macro dir
@@ -135,7 +138,7 @@ program srqm
 		local variables = "lookfor_all fre revrs univar extremes"
 		local graphs = "catplot ciplot spineplot tabplot"
 		local exports = "log2do2 tabout"
-		local regression = "estout leanout outreg outreg2 clarify"
+		local regression = "estout leanout outreg outreg2"
 		local i=0
 		foreach t in variables graphs exports regression {
 			local i=`i'+1
@@ -146,6 +149,8 @@ program srqm
 				if `verbose' ado de `p'
 				}
 		}
+		net from "http://gking.harvard.edu/clarify"
+		net install clarify
 	}
 	else if `verbose' {
 		ado de

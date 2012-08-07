@@ -5,7 +5,7 @@
 * ssc install spineplot
 * ssc install tabout
 * SETUPuse "Datasets/nhis2009.dta", clear//cap log using "Replication/BriattePetev_1.log", name(draft1) replace* Subsetting to data from most recent year.drop if year!=2009* Subsetting to variables used in the analysis.keep serial psu strata perweight age sex raceb educrec1 ///
-	health height weight uninsured vig10fwk
+	health height weight uninsured vig10fwk yrsinus
 * Set NHIS individual weights (used only for illustrative purposes).
 svyset psu [pw=perweight], strata(strata) vce(linearized) singleunit(missing)
 * DESCRIPTIONS* (a) DV: BMI* Creating the BMI variablegen bmi = weight*703/height^2la var bmi "Body Mass Index"* Recoding into simpler categories.gen bmi7 = .la var bmi7 "Body Mass Index (categories)"replace bmi7 = 1 if bmi < 16.5replace bmi7 = 2 if bmi >= 16.5 & bmi < 18.5replace bmi7 = 3 if bmi >= 18.5 & bmi < 25replace bmi7 = 4 if bmi >= 25 & bmi < 30replace bmi7 = 5 if bmi >= 30 & bmi < 35replace bmi7 = 6 if bmi >= 35 & bmi < 40replace bmi7 = 7 if bmi >= 40la def bmi7 ///

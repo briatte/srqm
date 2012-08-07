@@ -65,19 +65,23 @@ clear
 
 * (1) MEMORY
 
-* Skip this section if you are running Stata 12.
+* Skip this section if you are running Stata 12+.
 
 * Your first step with Stata consists in allocating enough memory to it. The
 * default amount of memory that Stata loads at startup is too small to open
 * large datasets: if you forget to set memory, Stata will reply with an error
 * message. The basic command to allocate 500MB memory follows:
-set mem 500m
+cap set mem 500m
+
+* Note: the 'cap' (capture) prefix is not part of the command, it is an extra
+* safety to allow this do-file to run through the line even if it returns an
+* error, as it should if you are using Stata 12+.
 
 * You need to repeat that command every time you run Stata. The command works
 * only if Stata has no data in storage: if you already have a dataset opened,
 * then Stata will reply with an error message. Fortunately, if you are running
 * Stata from your own computer, you can set memory permanently:
-set mem 500m, perm 
+cap set mem 500m, perm 
 
 * There is more to learn about memory size and default settings in Stata, but
 * for the purpose of this course, this will largely suffice. Furthermore, if

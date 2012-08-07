@@ -228,13 +228,14 @@ sc r yhat, yline(0) // assess homoscedasticity
 rvfplot, yline(0)   // equivalent to above
 
 * Residuals vs. predictors.
-rvpplot bl_asyt25, yline(0)
-rvpplot wdi_gdpc_log, yline(0)
+rvpplot agea, yline(0)
+rvpplot income, yline(0)
+rvpplot edu, yline(0)
+rvpplot lrscale, yline(0)
 
 * Outliers
 sc rst yhat, yline(-2 0 2, lp(dash)) || ///
-	sc rst yhat if abs(rst) > 2, ///
-	ms(Oh) mc("$red") mlab(cname) mlabc("$red") legend(off)
+	sc rst yhat if abs(rst) > 2, ms(Oh) mc("$red") legend(off)
 
 // variance
 vif
