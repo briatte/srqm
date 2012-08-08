@@ -2,11 +2,13 @@
 
 This document explains how to setup a computer to follow the [Statistical Reasoning and Quantitative Methods](http://f.briatte.org/teaching/quanti/) (SRQM) course run at Sciences Po by François Briatte and Ivaylo Petev.
 
-Every student gets a copy of this ‘[Teaching Pack](https://github.com/briatte/srqm/)’ on the first session, and gets assigned to read this file and setup their machines as a warm-up exercise to the course.
+Every student gets a copy of this ‘[Teaching Pack](http://briatte.github.com/srqm/)’ on the first session, and gets assigned to read this file and setup their machines as a warm-up exercise to the course.
 
 ## Requirements
 
-The course requires a working copy of [Stata 12](http://www.stata.com/), by StataCorp. Backward compatibility should extend back to Stata 10, which means that even operating systems older than Mac OS X 10.5 or Windows XP should be able to run the do-files after a few adjustments.
+The course requires a working copy of [Stata 12](http://www.stata.com/), by StataCorp. Minimal system requirements are Mac OS X 10.5 or Windows XP.
+
+Backward compatibility extends back to Stata 10, which means that the course do-files should be able to run after a few adjustments on older operating systems.
 
 ## Installation
 

@@ -3,7 +3,7 @@
 * When: 2012-02-13
 
 * Data: Lobbying and Policy Change, Issue-Level Dataset (2010).
-use "http://www.unc.edu/~fbaum/books/lobby/_documentation/data/issue_level_data_24_August_2010.dta", clear
+cap use "http://www.unc.edu/~fbaum/books/lobby/_documentation/data/issue_level_data_24_August_2010.dta", clear
 if _rc != 0 use "Datasets/lobbying2010.dta", clear
 
 * Log.
@@ -16,8 +16,8 @@ cap log using "Replication/week5.log", name(week5) replace
 
 * This do-file also uses a graph scheme by Edwin Leuven for its figures. Install
 * from his website or remove the "scheme(bw)" option from all graph commands.
-net from "http://leuven.economists.nl/stata"
-net install schemes
+cap net from "http://leuven.economists.nl/stata"
+cap net install schemes
 
 * Finally, note that this do-file uses programming functions that are beyond our
 * course requirements. The do-file is provided as proof of concept. In practice,

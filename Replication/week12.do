@@ -14,16 +14,12 @@
 *					ssc install su
 *					ssc install estout
 
-* Use the most recent version of the QOG dataset, as provided by the Quality
-* of Government Institute at the University of Gothenburg by Jan Teorell and
-* his colleagues (turn to <http://www.qog.pol.gu.se/> for more information).
-use "http://www.qog.pol.gu.se/data/QoG_c_s_latest.dta", clear
+* Data: Quality of Government (2011).
+use "Datasets/qog2011.dta", clear
 
-* Note that using the most recent version implies that the models below can
-* show variable results depending on the completeness of the data and on other
-* variations that the QOG data team might introduce in its updates. The first
-* run of this do-file was against QOG data as of 27 May 2010, and a second run
-* was performed with QOG data as of 6 April 2011.
+* Log.
+cap log using "Replication/week12.log", name(week11) replace
+
 
 * ===============
 * = PREPARATION =
@@ -33,7 +29,12 @@ use "http://www.qog.pol.gu.se/data/QoG_c_s_latest.dta", clear
 ren cname country
 ren ccodewb cty
 ren wdh_lsbw95_05 happy
-recode ht_region (5=1 "Western Europe & North America") (1=2 "Eastern Europe & post-Soviet Union") (2=3 "Latin America") (3/4=4 "Africa") (6/10=5 "Asia & Pacific"), gen(region)
+recode ht_region ///
+	(5=1 "Western Europe & North America") ///
+	(1=2 "Eastern Europe & post-Soviet Union") ///
+	(2=3 "Latin America") (3/4=4 "Africa") ///
+	(6/10=5 "Asia & Pacific") ///
+	, gen(region)
 la var region "Geographical location"
 
 * Understand the dependent variable.
@@ -340,10 +341,16 @@ esttab, constant label beta(2) se(2) r2(2) nonumber ///
 * - We need much better models to handle nonlinearity.
 * - We need much better data to observe other factors.
 
-* That's all folks! It always takes data and brains to
-* perform science. The versatility of the software is a
-* minor factor in the whole equation, really.
+* That's all folks!
 
-* 1- estout:	eststo clear
-* 2- Log:		log close
-* 3- Bye:		exit, clear
+* Wipe stored estimates
+* eststo clear
+
+* Wipe the modified data.
+* clear
+
+* Close log (if opened).
+cap log close week12
+
+* We are done. Just quit the application, have a nice life, and see you later!
+* exit

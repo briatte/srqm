@@ -75,12 +75,18 @@ foreach f in  "Datasets" "Replication" {
 cap pr drop srqm
 program srqm
 
+	local variables = "lookfor_all fre revrs univar extremes"
+	local graphs = "catplot ciplot spineplot tabplot"
+	local exports = "log2do2 mkcorr tabout"
+	local regression = "estout leanout outreg outreg2"
+
 	* Cleanup.
 	clear *
 	cap log close _all
 
 	local verbose = ("`2'" == "verbose")
 	local updates = ("`2'" == "updates")
+	local course = ("`2'" == "course")
 
 	if "`1'" == "setup" | "`1'" == "check" {
 		* Log.
@@ -135,10 +141,6 @@ program srqm
 	* Packages
 	di as inp _n "Looking at packages..."
 	if "`1'" == "setup" & "`2'" != "test" {
-		local variables = "lookfor_all fre revrs univar extremes"
-		local graphs = "catplot ciplot spineplot tabplot"
-		local exports = "log2do2 tabout"
-		local regression = "estout leanout outreg outreg2"
 		local i=0
 		foreach t in variables graphs exports regression {
 			local i=`i'+1
@@ -167,10 +169,24 @@ program srqm
 		
 		if "$path" != "" {
 			di as inp _n "Running all do-files..."
-			forvalues y=5/12 {
+			forvalues y=1/12 {
 				do $path/week`y'.do
-				graph drop _all
+				gr drop _all
+				rm Replication/week`y'.log
 			}
+			
+		rm week5_fig1.pdf
+		rm week5_fig2.pdf
+		rm week5_stats1.csv
+		rm week5_stats2.csv
+		rm week11_stats1.csv
+		rm week11_stats2.csv
+		rm week11_corr.csv
+		rm week11_reg.csv
+		
+		rm Replication/perma.log
+		
+		di as res "Done."
 		}
 	}
 	
@@ -185,6 +201,19 @@ program srqm
 		cap noi update query
 	}
 	
+	* Clean
+	if "`1'" == "clean" {
+		di as inp _n "Uninstalling packages..."
+
+		foreach t in variables graphs exports regression {
+			di as inp "Uninstalling selected packages to handle " "`t'" "..."				
+			foreach p of local `t' {
+				cap noi ssc uninstall `p', replace
+				}
+		}
+		cap ssc uninstall clarify
+	}
+			
 	* LOG
 	di as inp _n "The log for this " `"`1'"' " operation is stored at:"
 	qui log query SRQM
@@ -222,7 +251,7 @@ end
 * folder. Quitting Stata will automatically close it. This log is an additional
 * safety that should not keep you from logging sessions to separate log files.
 
-cap log using "Replication/perm.log", name("permalog") replace
+cap log using "Replication/perma.log", name("permalog") replace
 if _rc==0 noi di as inp _n "Permanent log:" _n as res r(filename)
 if _rc!=0 noi di as err _n "Permanent log returned an error."
 if _rc==604 noi di as res _n "Permanent log already open. Carry on."

@@ -293,6 +293,9 @@ esttab M1 M2 using week11_reg.csv, csv replace constant beta(2) se(2) r2(2) ///
 * = EXIT =
 * ========
 
+* Wipe stored estimates
+* eststo clear
+
 * Wipe the modified data.
 * clear
 

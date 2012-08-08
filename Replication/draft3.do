@@ -241,7 +241,7 @@ sc rst yhat, yline(-2 0 2, lp(dash)) || ///
 vif
 
 // block modeling
-nestreg: reg geq (agea female) (income edu) (lrscale)
+nestreg: reg geq (agea female) (income edu) (i.faith lrscale)
 
 
 
