@@ -2,7 +2,7 @@
 
 This document explains how to setup a computer to follow the [Statistical Reasoning and Quantitative Methods](http://f.briatte.org/teaching/quanti/) (SRQM) course run at Sciences Po by François Briatte and Ivaylo Petev.
 
-Every student gets a copy of this ‘[Teaching Pack](http://briatte.github.com/srqm/)’ on the first session, and gets assigned to read this file and setup their machines as a warm-up exercise to the course.
+Every student gets a copy of this ‘[Teaching Pack](http://f.briatte.org/srqm/)’ on the first session, and gets assigned to read this file and setup their machines as a warm-up exercise to the course.
 
 ## Requirements
 
@@ -16,7 +16,7 @@ The following steps explain how to configure a system to work with Stata for the
 
 ### 1. Copy the ‘Teaching Pack’
 
-Move the whole ‘[Teaching Pack](http://phnk.com/srqm/)’ to a **stable** and **easily accessible** location.
+Move the whole ‘[Teaching Pack](http://f.briatte.org/srqm/)’ to a **stable** and **easily accessible** location.
 
 You can rename the ‘Teaching Pack’ folder to whatever you like, but you will have to use its new name in replacement of `SRQM` in the following instructions.
 
