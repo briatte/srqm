@@ -54,6 +54,9 @@ recode ht_region ///
 la var region "Geographical region"
 
 * Export summary stats.
+tsst using week11_stats.txt, su(births schooling sqrt_schooling log_gdpc) fre(region aids) replace
+
+* Alternative if the tsst command is not installed as part of the course:
 * ssc install tabout, replace
 
 * Continuous data.
@@ -301,7 +304,7 @@ esttab M1 M2 using week11_reg.csv, csv replace constant beta(2) se(2) r2(2) ///
 * eststo clear
 
 * Clean all graphs from memory.
-gr drop _all
+* gr drop _all
 
 * Wipe the modified data.
 * clear

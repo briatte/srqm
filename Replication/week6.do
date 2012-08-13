@@ -157,7 +157,7 @@ tab mitig eum, col nof chi2
 * ========
 
 * Clean all graphs from memory.
-gr drop _all
+* gr drop _all
 
 * Wipe the modified data.
 * clear

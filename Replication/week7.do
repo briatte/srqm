@@ -12,6 +12,10 @@ use "Datasets/ess2008.dta", clear
 * Log.
 cap log using "Replication/week7.log", name(week7) replace
 
+* Packages.
+* ssc install fre
+* ssc install catplot
+
 * ====================
 * = DATA PREPARATION =
 * ====================
@@ -257,7 +261,7 @@ ologit trrtort age i.female income edu i.faith pol tvpol, or vce(cluster cntry)
 * ========
 
 * Clean all graphs from memory.
-gr drop _all
+* gr drop _all
 
 * Wipe the modified data.
 * clear

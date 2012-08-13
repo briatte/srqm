@@ -61,17 +61,6 @@ su p00* partisan* bills hearings witness floor house senate natjourn news tv
 * Both.
 codebook p00* partisan* bills hearings witness floor house senate natjourn news tv, c
 
-* Export summary statistics. Install the command by uncommenting the line below.
-* ssc install tabout, replace
-
-* Continuous data.
-tabstatout bills hearings witness floor house senate natjourn news tv, ///
-	tf(week5_stats1) s(n mean sd min max) c(s) f(%9.2fc) replace
-
-* Categorical data.
-tabout partisan3 using week5_stats2.csv, ///
-	replace c(freq col) oneway ptot(none) f(2) style(tab)
-
 * Our empirical interest is whether a higher degree of partisanship over a given
 * issue is associated with higher degrees of political and media salience. These
 * three dimensions of policy-making might or might not match; the data will help
@@ -103,6 +92,29 @@ gr export week5_fig1.pdf, name(fig1) replace
 * policy issues within their sample. To generalize these proportions to the true
 * population of policy issues, we estimate the proportions of each group.
 prop partisan3
+
+* =============================
+* = EXPORT SUMMARY STATISTICS =
+* =============================
+
+* Two simple ways to export a summary statistics table:
+
+* (1) Use tsst. The command is part of the course: if you have set up the SRQM
+* folder as your working directory, it should run straight away.
+
+* Use su() for continuous variables, fre() for categorical ones:
+tsst using week5_stats.txt, su(hearings witness floor house senate natjourn news tv) fre(partisan3) replace
+
+* (2) Use tabout. Install the command by uncommenting the line below.
+* ssc install tabout, replace
+
+* Export continuous data.
+tabstatout bills hearings witness floor house senate natjourn news tv, ///
+	tf(week5_stats1) s(n mean sd min max) c(s) f(%9.2fc) replace
+
+* Export categorical data.
+tabout partisan3 using week5_stats2.csv, ///
+	replace c(freq col) oneway ptot(none) f(2) style(tab)
 
 * ==================
 * = MEAN ESTIMATES =
@@ -206,7 +218,7 @@ gr export week5_fig2.pdf, name(fig2) replace
 * ========
 
 * Clean all graphs from memory.
-gr drop _all
+* gr drop _all
 
 * Wipe the modified data.
 * clear

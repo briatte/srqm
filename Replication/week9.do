@@ -133,7 +133,7 @@ rvpplot femgovs, $ccode yline(0) name(cpi_femgov_rvp, replace)
 * ========
 
 * Clean all graphs from memory.
-gr drop _all
+* gr drop _all
 
 * Wipe the modified data.
 * clear

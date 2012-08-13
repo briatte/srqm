@@ -114,9 +114,21 @@ set more off, perm
 
 * sysdir set PLUS "c:\temp"
 
-* This course makes heavy use of the 'fre' package to view frequencies. Install
-* the package with this command:
+* This course makes heavy use of the 'fre' package to view frequencies.
+* Install the package with this command:
 ssc install fre, replace
+
+* The code below will install a selection of packages that should be installed
+* to run the course do-files properly. These packages should have already been
+* installed by the 'srqm setup' command that you should have run when starting
+* to use the SRQM Teaching Pack, but this additional check might avoid running
+* into 'unknown command' errors later in class :)
+ssc install catplot, replace
+ssc install spineplot, replace
+ssc install tabout, replace
+ssc install mkcorr, replace
+ssc install estout, replace
+ssc install outreg2, replace
 
 * The settings covered in this section of the do-file should now be permanently
 * stored on your computer. You will not need to come back to them. The settings
@@ -259,10 +271,10 @@ h cap
 * additional help, please turn again to the Stata Guide.
 
 * Clean all graphs from memory.
-gr drop _all
+* gr drop _all
 
 * Wipe the modified data.
-clear
+* clear
 
 * Close log (if opened).
 cap log close week1

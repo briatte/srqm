@@ -338,7 +338,7 @@ esttab, constant label beta(2) se(2) r2(2) nonumber ///
 * eststo clear
 
 * Clean all graphs from memory.
-gr drop _all
+* gr drop _all
 
 * Wipe the modified data.
 * clear

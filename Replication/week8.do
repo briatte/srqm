@@ -164,7 +164,7 @@ gr mat births schooling gdpc hdi corruption femgovs
 * ========
 
 * Clean all graphs from memory.
-gr drop _all
+* gr drop _all
 
 * Wipe the modified data.
 * clear

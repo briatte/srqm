@@ -9,9 +9,9 @@
 * Hi! Welcome to your second SRQM do-file.
 
 * All do-files for this course assume that you have set up Stata for your
-* computer. This includes setting up several parameters such as allocating
-* memory to Stata and setting the working directory to your SRQM folder.
-* Please refer to the do-file from Session 1 for guidance on these steps.
+* computer. This includes setting up several parameters, most importantly
+* setting the working directory to your SRQM folder. Please refer to the
+* do-file from Session 1 for guidance on setup.
 
 * Welcome again to Stata. This do-file contains the commands used during our 
 * second session. Read the comment lines as you go along. We will explore the
@@ -237,7 +237,7 @@ gr dot health, exclude0 yreverse over(sex) over(raceb) ///
 * ========
 
 * Clean all graphs from memory.
-gr drop _all
+* gr drop _all
 
 * Wipe the modified data.
 * clear
