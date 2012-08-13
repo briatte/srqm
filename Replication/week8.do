@@ -2,6 +2,10 @@
 * Who:  F. Briatte and I. Petev
 * When: 2011-10-24
 
+* ================
+* = INTRODUCTION =
+* ================
+
 * Data: Quality of Government (2011).
 use "Datasets/qog2011.dta", clear
 
@@ -158,6 +162,9 @@ gr mat births schooling gdpc hdi corruption femgovs
 * ========
 * = EXIT =
 * ========
+
+* Clean all graphs from memory.
+gr drop _all
 
 * Wipe the modified data.
 * clear

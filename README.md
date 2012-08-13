@@ -1,8 +1,10 @@
-# SRQM: README
+# SRQM Teaching Pack
 
 This document explains how to setup a computer to follow the [Statistical Reasoning and Quantitative Methods](http://f.briatte.org/teaching/quanti/) (SRQM) course run at Sciences Po by François Briatte and Ivaylo Petev.
 
 Every student gets a copy of this ‘[Teaching Pack](http://f.briatte.org/srqm/)’ on the first session, and gets assigned to read this file and setup their machines as a warm-up exercise to the course.
+
+* * *
 
 ## Requirements
 
@@ -16,7 +18,7 @@ The following steps explain how to configure a system to work with Stata for the
 
 ### 1. Copy the ‘Teaching Pack’
 
-Move the whole ‘[Teaching Pack](http://f.briatte.org/srqm/)’ to a **stable** and **easily accessible** location.
+Move the whole ‘Teaching Pack’ to a **stable** and **easily accessible** location on your hard drive, preferrably with your other courses in your `Documents` folder.
 
 You can rename the ‘Teaching Pack’ folder to whatever you like, but you will have to use its new name in replacement of `SRQM` in the following instructions.
 
@@ -26,11 +28,9 @@ Stata should be pre-installed on your workstation.
 
 Make sure that you are running Stata from the __"Applications"__ folder or its system equivalent, such as __"Program Files"__ on Windows. Running Stata from outside your application folder might cripple the software in several respects.
 
-Now, open Stata.
-
 ### 3. Set the working directory
 
-To set the `SRQM` folder as the working directory, use the __File > Change Working Directory…__ menu item, or type &#8984;&#8679;J (Command-Shift-J) on Mac OS X. Alternatively, use the `cd`, `dir` and `pwd` commands if you know some Stata already.
+Now, open Stata. To set the `SRQM` folder as the working directory, use the __File > Change Working Directory…__ menu item, or type &#8984;&#8679;J (Command-Shift-J) on Mac OS X.
 
 Watch the folder path that Stata will display in the ‘Results’ window when you select the SRQM folder:
 
@@ -75,11 +75,9 @@ You will also get an error message if you modify the names and/or the locations 
 
 ### 6. Type `srqm setup`
 
-Finally, type `srqm setup` in the Command window and press `Enter` to run the setup program for this course.
+Finally, type `srqm setup` in the Command window and press `Enter` to run the setup program for this course. The `srqm setup` command is part of a program that will silently load when you open Stata with this configuration. This configuration makes sure that you can run all course do-files.
 
 The program needs to download a few additional packages, so make sure that you are online when running it. If you are not connected to the Internet, as when you get logged off the Sciences Po wifi network, Stata installation commands will systematically fail.
-
-The `srqm setup` command is part of a program that will silently load when you open Stata with this configuration. This configuration makes sure that you can run all course do-files.
 
 ## Troubleshooting
 
@@ -87,12 +85,15 @@ The `srqm setup` command is part of a program that will silently load when you o
 
 - **If you do not have access to hard drive space** to perform the above installation, the ‘Teaching Pack’ should be able to run from a USB key plugged to a Sciences Po workstation. This requires the ‘Teaching Pack’ folder to be located at `e:\SRQM` (where your USB key should have loaded). Additional packages will be temporarily installed at location `c:\temp` on your hard drive.
 
-- **If you cannot setup Stata and install additional packages**, you will run into errors in the course do-files when we use non-native, user-coded Stata commands. This can sometimes be circumvented, e.g. by replacing all `fre` commands by `tab` commands. You will also need to minimally configure Stata by hand, starting with the working directory (and memory if running Stata 11 or older),
+- **If you cannot setup Stata and install additional packages**, you will run into errors in the course do-files when we use non-native, user-coded Stata commands. This can sometimes be circumvented, e.g. by replacing all `fre` commands by `tab` commands. You will also need to minimally configure Stata by hand, starting with the working directory (and memory if running Stata 11 or older).
 
 ## Readings
 
-When you are done, you should turn to the [README](https://github.com/briatte/srqm/blob/master/Course/README.md) file of the `Course` folder to learn about the readings and course requirements.
+When you are done, you should:
 
-Welcome to the course, and see you soon!
+1. turn to the [README](https://github.com/briatte/srqm/blob/master/Course/README.md) file of the `Course` folder, to learn about the course material.
+2. turn to the [README](https://github.com/briatte/srqm/blob/master/Datasets/README.md) file of the `Datasets` folder, to learn about the data sources we will use.
+
+Welcome to SRQM, and see you soon!
 
 François (<francois.briatte@sciences-po.org>) and Ivaylo (<ivaylo.petev@sciences-po.org>)

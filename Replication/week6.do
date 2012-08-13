@@ -2,11 +2,19 @@
 * Who:  F. Briatte and I. Petev
 * When: 2011-10-12
 
+* ================
+* = INTRODUCTION =
+* ================
+
 * Data: Eurobarometer (2009).
 use "Datasets/ebm2009.dta", clear
 
 * Log.
 cap log using "Replication/week6.log", name(week6) replace
+
+* ====================
+* = DATA PREPARATION =
+* ====================
 
 * Country codes.
 ren v7 ccode
@@ -147,6 +155,9 @@ tab mitig eum, col nof chi2
 * ========
 * = EXIT =
 * ========
+
+* Clean all graphs from memory.
+gr drop _all
 
 * Wipe the modified data.
 * clear

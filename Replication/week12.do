@@ -1,25 +1,16 @@
-* What:	do-file for Week 12
-* Who:	François Briatte
-* When:	2011-04-17
+* What: SRQM Session 12
+* Who:  F. Briatte and I. Petev
+* When: 2012-01-26
 
-* ============
-* = PROLOGUE =
-* ============
-
-* 1- memory:		set mem 500m
-* 2- breaks:		set more off
-* 3- directory:		cd <path to your Desktop>
-* 4- log:			log using week10_qog.log, replace
-* 5- packages:		ssc install fre
-*					ssc install su
-*					ssc install estout
+* ================
+* = INTRODUCTION =
+* ================
 
 * Data: Quality of Government (2011).
 use "Datasets/qog2011.dta", clear
 
 * Log.
-cap log using "Replication/week12.log", name(week11) replace
-
+cap log using "Replication/week12.log", name(week12) replace
 
 * ===============
 * = PREPARATION =
@@ -345,6 +336,9 @@ esttab, constant label beta(2) se(2) r2(2) nonumber ///
 
 * Wipe stored estimates
 * eststo clear
+
+* Clean all graphs from memory.
+gr drop _all
 
 * Wipe the modified data.
 * clear

@@ -2,17 +2,21 @@
 * Who:  F. Briatte and I. Petev
 * When: 2012-02-13
 
+* ================
+* = INTRODUCTION =
+* ================
+
+* This do-file is adapted from the replication material (data and code) provided
+* by Frank Baumgartner et al., "Lobbying and Policy Change. Who Wins, Who Loses,
+* and Why" (University of Chicago Press, 2009). The analysis and interpretation
+* does not necessarily follow the original work.
+
 * Data: Lobbying and Policy Change, Issue-Level Dataset (2010).
 cap use "http://www.unc.edu/~fbaum/books/lobby/_documentation/data/issue_level_data_24_August_2010.dta", clear
 if _rc != 0 use "Datasets/lobbying2010.dta", clear
 
 * Log.
 cap log using "Replication/week5.log", name(week5) replace
-
-* This do-file is adapted from the replication material (data and code) provided
-* by Frank Baumgartner et al., "Lobbying and Policy Change. Who Wins, Who Loses,
-* and Why" (University of Chicago Press, 2009). The analysis and interpretation
-* does not necessarily follow the original work.
 
 * This do-file also uses a graph scheme by Edwin Leuven for its figures. Install
 * from his website or remove the "scheme(bw)" option from all graph commands.
@@ -189,7 +193,7 @@ foreach v of varlist log_* sqrt_* {
 	restore
 }
 //
-// Fig. 2. Estimated values of political and media salience by degree of partisanship.
+// Fig. 2. Estimates of political and media salience by degree of partisanship.
 // (run all lines together to generate)
 //
 gr combine ci7 ci1 ci8 ci2 ci3 ci4 ci5 ci9 ci6, scheme(bw) note("Confidence intervals at 95% by degree of partisanship. From top to bottom and left to right: number of bills introduced, hearings held, " ///

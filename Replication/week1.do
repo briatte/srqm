@@ -258,6 +258,9 @@ h cap
 * for you when you shut it down, so this requires no action on your side. For
 * additional help, please turn again to the Stata Guide.
 
+* Clean all graphs from memory.
+gr drop _all
+
 * Wipe the modified data.
 clear
 
@@ -265,4 +268,4 @@ clear
 cap log close week1
 
 * We are done. Just quit the application, have a nice week, and see you soon :)
-exit
+* exit

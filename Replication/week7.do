@@ -2,30 +2,22 @@
 * Who:  F. Briatte and I. Petev
 * When: 2011-10-12
 
+* ================
+* = INTRODUCTION =
+* ================
+
 * Data: European Social Survey, Round 4 (2008).
 use "Datasets/ess2008.dta", clear
 
 * Log.
 cap log using "Replication/week7.log", name(week7) replace
 
-* ======================
-* = DEPENDENT VARIABLE =
-* ======================
+* ====================
+* = DATA PREPARATION =
+* ====================
 
 * Attitudes towards torture.
 fre trrtort
-
-* Start the analysis at the macro-level (country).
-* Weight results by survey design.
-svyset [pw=dweight], vce(linearized) singleunit(missing)
-
-* Plot relevant categories.
-catplot trrtort if trrtort != 3, over(cntry, sort(1)des lab(labsize(*.8))) ///
-	asyvars percent(cntry) stack scale(.7) ytitle("") ///
-	legend(rows(1) region(fc(none) ls(none))) ///
-	bar(1, c(sand)) bar(2, c(sand*.7)) ///
-	bar(3, c(navy*.7)) bar(4, c(navy)) ///
-	name(torture, replace)
 
 * Binary recoding.
 recode trrtort ///
@@ -34,12 +26,27 @@ recode trrtort ///
 	(3=.), gen(torture)
 la var torture "Opposition to torture"
 
+* Weight results by survey design.
+svyset [pw=dweight], vce(linearized) singleunit(missing)
+
+* ======================
+* = DEPENDENT VARIABLE =
+* ======================
+
 fre torture [aw=dweight*pweight]
 su torture [aw=dweight*pweight]
 ci torture [aw=dweight*pweight]
 
 * Average opposition to torture in each country.
 gr dot torture, over(cntry, sort(1) des) scale(.7)
+
+* Detailed breakdown in each country.
+catplot trrtort if trrtort != 8, over(cntry, sort(1)des lab(labsize(*.8))) ///
+	asyvars percent(cntry) stack scale(.7) ytitle("") ///
+	legend(rows(1) label(3 "Neither") region(fc(none) ls(none))) ///
+	bar(1, c(sand)) bar(2, c(sand*.7)) bar(3, c(dimgray)) ///
+	bar(4, c(navy*.7)) bar(5, c(navy)) ///
+	name(torture, replace)
 
 * Comparing Israel to other European countries.
 gen israel=.
@@ -248,6 +255,9 @@ ologit trrtort age i.female income edu i.faith pol tvpol, or vce(cluster cntry)
 * ========
 * = EXIT =
 * ========
+
+* Clean all graphs from memory.
+gr drop _all
 
 * Wipe the modified data.
 * clear

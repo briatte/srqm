@@ -2,13 +2,16 @@
 * Who:  F. Briatte and I. Petev
 * When: 2011-10-24
 
+* ================
+* = INTRODUCTION =
+* ================
+
 * Start again where we stopped with the QOG dataset. This command will make
 * sure that all variables transformations, renaming and recoding from our past 
 * session are properly loaded. It will also keep the macros from last week and
 * load some exploratory scatterplot graphs in memory, before we discard them
 * with the next line to clear the screen from unnecessary clutter.
 do "Replication/week8.do"
-gr drop _all
 
 * Log.
 cap log using "Replication/week9.log", name(week9) replace
@@ -128,6 +131,9 @@ rvpplot femgovs, $ccode yline(0) name(cpi_femgov_rvp, replace)
 * ========
 * = EXIT =
 * ========
+
+* Clean all graphs from memory.
+gr drop _all
 
 * Wipe the modified data.
 * clear

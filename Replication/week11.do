@@ -2,6 +2,10 @@
 * Who:  F. Briatte and I. Petev
 * When: 2011-12-01
 
+* ================
+* = INTRODUCTION =
+* ================
+
 * Data: Quality of Government (2011).
 use "Datasets/qog2011.dta", clear
 
@@ -295,6 +299,9 @@ esttab M1 M2 using week11_reg.csv, csv replace constant beta(2) se(2) r2(2) ///
 
 * Wipe stored estimates
 * eststo clear
+
+* Clean all graphs from memory.
+gr drop _all
 
 * Wipe the modified data.
 * clear

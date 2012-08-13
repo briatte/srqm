@@ -2,10 +2,22 @@
 * Who:  F. Briatte and I. Petev
 * When: 2011-11-21
 
-* Research Question: Do men have more sexual partners than women?
-* Hypothesis: All other things kept equal, men declare having more sexual partners than women.
-* DV  - How many sex partners respondent had in last 5 years.
-* IVs - gender, age, family income, education, marital status, working status, size of residential area.
+* ================
+* = INTRODUCTION =
+* ================
+
+* RESEARCH QUESTION:
+* Do men have more sexual partners than women?
+
+* HYPOTHESIS:
+* All other things kept equal, men declare more sexual partners than women.
+
+* DV:
+* Number of sex partners respondent had in last 5 years.
+
+* IVs:
+* Gender, age, family income, education, marital status, working status, and
+* size of residential area.
 
 * Dataset: U.S. General Social Survey from 2010.
 use "Datasets/gss2010.dta", clear
@@ -52,7 +64,8 @@ ttest partnrs5, by(female)
 reg partnrs5 i.female
 
 * Let's add some of our control variables one by one.
-* Let's control for income: Is higher income associated with a higher number of partners in the US?
+* Let's control for income:
+* Is higher income associated with a higher number of partners in the US?
 reg partnrs5 i.female coninc
 
 * Let's transform income into a more meaningful scale.
@@ -100,21 +113,23 @@ gen zeduc=educ-r(mean)
 
 * Replicate the final regression model with transformed continuous variables.
 reg partnrs5 i.female zconinc2 zeduc zsize i.wrkstat i.marital zage
+
 * The results do not change except for the constant. For this model, the constant
 * stands for the average number of partners of respondents who are:
-* Male
-* With average income
-* With average education
-* From a mid-sized town
-* Employed full-time
-* Married
-* Mid-age
-
-* The end.
+* - Male
+* - With average income
+* - With average education
+* - From a mid-sized town
+* - Employed full-time
+* - Married
+* - Mid-age
 
 * ========
 * = EXIT =
 * ========
+
+* Clean all graphs from memory.
+gr drop _all
 
 * Wipe the modified data.
 * clear

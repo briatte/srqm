@@ -2,6 +2,10 @@
 * Who:  F. Briatte and I. Petev
 * When: 2011-09-14
 
+* ================
+* = INTRODUCTION =
+* ================
+
 * Data: U.S. National Health Interview Survey (2009).
 use "Datasets/nhis2009.dta", clear
 
@@ -187,6 +191,9 @@ ci bmi
 * ========
 * = EXIT =
 * ========
+
+* Clean all graphs from memory.
+gr drop _all
 
 * Wipe the modified data.
 * clear
