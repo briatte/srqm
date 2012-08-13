@@ -1,4 +1,4 @@
-# SRQM: Data Sources
+# SRQM: Data sources
 
 This file listing covers the datasets distributed as part of the [Statistical Reasoning and Quantitative Methods](http://f.briatte.org/teaching/quanti/) course taught by François Briatte and Ivaylo Petev.
 

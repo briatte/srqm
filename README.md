@@ -1,4 +1,4 @@
-# SRQM Teaching Pack
+# SRQM: Teaching Pack
 
 This document explains how to setup a computer to follow the [Statistical Reasoning and Quantitative Methods](http://f.briatte.org/teaching/quanti/) (SRQM) course run at Sciences Po by François Briatte and Ivaylo Petev.
 
