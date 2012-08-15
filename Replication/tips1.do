@@ -1,12 +1,22 @@
 * What: Assignment No. 1 tips and tricks* Who:  F. Briatte and I. Petev* When: 2012-02-23
 
+// ... this do-file is a collection of tips and tricks to help you code for
+// ... assignments; each tip can run separately, and has been written to solve
+// ... common issues in do-files so far.
+
+* * *
+
 // BASIC STATA OPERATIONS
 
 * Tip (1): Set the working directory
 *
 * - Applies every time you open Stata (easy to forget!).
-* - Requires you know where the SRQM folder is.
-* - Requires you keep the SRQM folder in place.
+* - Requires that you know where the SRQM folder is.
+* - Requires that you keep the SRQM folder in place.
+*
+* Follow the README file in your SRQM folder and edit your profile.do file to
+* reflect the location of your SRQM folder. Then run the 'srqm setup' command
+* if you have not done so yet.
 *
 cd "/Users/fr/Documents/Teaching/SRQM/"
 
@@ -16,9 +26,12 @@ cd "/Users/fr/Documents/Teaching/SRQM/"
 * - Requires to be online for 'ssc install' to work.
 * - Requires you actually read the do-files :)
 *
-ssc install fre
-ssc install spineplot
-ssc install tabout
+ssc install catplot, replace
+ssc install spineplot, replace
+ssc install tabout, replace
+ssc install mkcorr, replace
+ssc install estout, replace
+ssc install outreg2, replace
 
 * Tip (3): Run multiple lines together
 *
@@ -93,6 +106,7 @@ hist bti_wr, normal
 * - Required for all variables used in your analysis.
 * - Export continuous data summary statistics with tabstatout (part of tabout)
 * - Export categorical data summary statistics with tabout (requires install).
+* - SUPER TRICK: use the tsst command to export everything in just one command!
 *
 su wvs_theo 
 tabstat wvs_theo, c(s) s(n mean sd min max) // equivalent command
@@ -104,18 +118,29 @@ ssc install tabout, replace
 
 * Continuous data: export stats, then import CSV file in a spreadsheet editor.
 tabstatout wvs_theo wvs_sup, ///
-	tf(a1helper1) s(n mean sd min max) c(s) f(%9.2fc) replace
+	tf(table1) s(n mean sd min max) c(s) f(%9.2fc) replace
 
 fre ht_regtype1 // categorical data
 tab ht_regtype1 // equivalent command (minus the value labels)
 
 * Categorical data: almost the same, some syntax modifications mostly.
-tabout ht_regtype1 using a1helper2.csv, ///
+tabout ht_regtype1 using table2.csv, ///
 	replace c(freq col) oneway ptot(none) f(2) style(tab) //exports frequencies
 
-* The two files a1helper1.csv and a1helper2.csv can be imported and joined up to
+* The two files table1.csv and table2.csv can be imported and joined up to
 * form a summary statistics table as shown in the course material. Additional 
 * explanations are provided in the Stata Guide, Section 13.4.
+
+* SUPER TRICK -- use the tsst command (which is part of the course: it works
+* only if the SRQM folder is the working directory). This command can produce
+* a summary statistics table in just one line:
+
+tsst using table.txt, su(wvs_theo wvs_sup) fre(ht_regtype1)
+
+* The variables enclosed in su() are treated as continuous, while those enclosed
+* in fre() are treated as categorical. This command produces pretty much exactly
+* what you need for the course. The file it creates can be opened in pretty much
+* any spreadsheet editor (like Microsoft Excel) to ease import in your paper.
 
 // ADDITIONAL TRICKS
 

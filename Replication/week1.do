@@ -207,8 +207,9 @@ gr dot weight, over(raceb) over(sex) name(weight_race_sex, replace)
 log close week1
 
 * You will not be able to run the above command if no 'week1' log is opened.
-* To close all potentially opened logs, type the following command:
-cap log close _all
+* To close all potentially opened logs, use the following command (uncomment
+* it first by removing the asterisk at the beginning of the command line):
+* cap log close _all
 
 * If you now go to your 'Replication' folder and open the week1.log file with 
 * any plain text editor, you will find a copy of everything that was entered 

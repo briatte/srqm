@@ -16,14 +16,6 @@
 * (H2) Gender equality significantly increases from one age group to another.
 * (H3) Socio-economic status will predict attitudes of both sexes.
 * (H4) For both males and females, education will be the strongest predictor.
-// Packages:
-
-* Uncomment to install from online if needed:
-
-* ssc install fre          // frequencies
-* ssc install spineplot    // plots for categorical variables
-* ssc install tabout       // export summary statistics
-* ssc install estout       // export correlation and regression tables
 
 // Graphics:
 
@@ -241,7 +233,7 @@ sc rst yhat, yline(-2 0 2, lp(dash)) || ///
 vif
 
 // block modeling
-nestreg: reg geq (agea female) (income edu) (i.faith lrscale)
+nestreg: reg geq (agea female) (income edu) (lrscale)
 
 
 
