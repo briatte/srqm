@@ -2,9 +2,11 @@
 * Who:  F. Briatte and I. Petev
 * When: 2011-09-14
 
+
 * ================
 * = INTRODUCTION =
 * ================
+
 
 * Data: U.S. National Health Interview Survey (2009).
 use "Datasets/nhis2009.dta", clear
@@ -12,9 +14,11 @@ use "Datasets/nhis2009.dta", clear
 * Log.
 cap log using "Replication/week4.log", name(week4) replace
 
+
 * ====================
 * = DATA PREPARATION =
 * ====================
+
 
 * Subset to most recent year.
 drop if year != 2009
@@ -26,9 +30,11 @@ la var bmi "Body Mass Index"
 * Weight the data with NHIS individual weights.
 svyset psu [pw=perweight], strata(strata) vce(linearized) singleunit(missing)
 
+
 * ================
 * = DISTRIBUTION =
 * ================
+
 
 * Obtain summary statistics:
 su bmi
@@ -64,8 +70,10 @@ global q1=r(p25)
 global q3=r(p75)
 global iqr= $q3-$q1
 di $q1, $q3, $iqr
- 
+
+
 * (1) Standard deviation
+* ----------------------
 
 * We can verify what we know about the standard deviation by counting the
 * number of BMI observations that fall between (mean)-1sd and (mean)+1sd,
@@ -83,22 +91,28 @@ di %9.3g r(N)/$total
 * most extreme values of a distribution are more conveniently captured by
 * the notion of outliers, i.e. observations that fall far from the median. 
 
+
 * (2) Outliers
+* ------------
 
 * The interquartile range (IQR) is the range between Q3 (p75) and Q1 (p25).
 * We detect mild (1.5*IQR) or extreme (3*IQR) outliers below Q1 and above Q3: 
 li bmi sex raceb if bmi < $q1-1.5*$iqr | bmi > $q3+1.5*$iqr, N
 li bmi sex raceb if bmi < $q1-3*$iqr | bmi > $q3+3*$iqr, N
 
+
 * ===================
 * = NORMALITY TESTS =
 * ===================
+
 
 * The BMI variable is our dependent variable. Every statistical test or 
 * quantitative method that we are going to use in this course is based on
 * the assumption that this variable is close to being normally distributed.
 
+
 * (1) Visual tests
+* ----------------
 
 * Let's check if the distribution of BMI values approaches normality, and 
 * if not, let's transform the variable to bring it closer to normality.
@@ -127,7 +141,9 @@ quantile bmi, name(bmi_qnt, replace)
 pnorm bmi, name(bmi_pnorm, replace)
 qnorm bmi, name(bmi_qnorm, replace)
 
+
 * (2) Statistical tests
+* ---------------------
 
 * Moving to statistical measures of normality, we can measure skewness, which
 * measures symmetry and approaches 0 in quasi-normal distributions, along with 
@@ -140,9 +156,11 @@ su bmi, d
 * sufficient to observe that we cannot assume the BMI variable to be normally
 * distributed (i.e. we reject our distributional assumption).
 
+
 * ============================
 * = VARIABLE TRANSFORMATIONS =
 * ============================
+
 
 * A technique used to approach normality with a continuous variable consists 
 * in 'transforming' the variable with a mathematical operator that modifies 
@@ -176,9 +194,11 @@ hist logbmi, normal xscale(off) yscale(off) ///
 graph hbox logbmi, fysize(25) name(bmi4, replace)
 graph combine bmi1 bmi3 bmi2 bmi4, imargin(small) ysize(3) col(2)
 
+
 * ==================
 * = SAMPLING ERROR =
 * ==================
+
 
 * Sample size 
 ci bmi
@@ -188,9 +208,11 @@ ci bmi
 sample 50, count
 ci bmi
 
+
 * ========
 * = EXIT =
 * ========
+
 
 * Clean all graphs from memory.
 * gr drop _all

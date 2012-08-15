@@ -27,9 +27,9 @@ recode age ///
 	(75/max=4 "75+"), gen(age4)
 la var age4 "Age groups"
 
-* Visualization.
-gr dot bmi, over(race) asyvars over(age4) over(sex) ///
-	legend(row(1)) yti("Mean BMI") name(bmi_age, replace)
+* Exploration:
+tab age4, summ(bmi) // mean BMI in each age group
+bys age4: ci bmi    // confidence bands
 
 * IV: Gender* ----------
 
@@ -38,41 +38,57 @@ fre sex
 * Recode as dummy.recode sex (1=0 "Male") (2=1 "Female"), gen(female)
 la var female "Gender (1=female)"
 
-* Confidence bands for each gender group.
-bys female: ci bmi
+* Exploration:
+tab female, summ(bmi) // mean BMI in each gender group
+bys female: ci bmi    // confidence bands
 
 * IV: Educational attainment* --------------------------
 
-ren educrec1 edufre edu
+fre educrec1
 
-* Recode to 3 groups.recode edu (13=1 "Grade 12") (14=2 "Undergrad.") (15/16=3 "Postgrad."), gen(edu3)la var edu3 "Educational attainment"fre edu3* IV: Health status
+* Recode to 3 groups.recode educrec1 ///
+	(13=1 "Grade 12") ///
+	(14=2 "Undergrad.") ///
+	(15/16=3 "Postgrad."), gen(edu3)la var edu3 "Educational attainment"* Exploration:
+tab edu3, summ(bmi) // mean BMI at each education level
+bys edu3: ci bmi    // confidence bands
+* IV: Health status
 * -----------------
 fre health
 
-* Summarize BMI by health status.
-tab health, summ(bmi)
+* Exploration:
+tab health, summ(bmi) // mean BMI at each health level
+bys health: ci bmi    // confidence bands
 * Plotting BMI and age for excellent vs. poor health:
-sc bmi age if health==1, mc(dkgreen) || sc bmi age if health==5, mc(dkorange) ///	legend(lab(1 "Excellent health") lab(2 "Poor health")) name(health, replace)
+sc bmi age if health==1, mc(dkgreen) || sc bmi age if health==5, mc(dkorange) ///	legend(lab(1 "Excellent health") lab(2 "Poor health")) ///
+	name(health, replace)
 
 * IV: Physical exercise* ---------------------
 
-ren vig10fwk exercise
-fre exerciserecode exercise ///
-	(1 94 95=0 "Little to none") ///
-	(2/21=1 "Less than 30 minutes/week") ///
-	(22/28=2 "More than 30 minutes/week") ///
-	(96/99=.), ///
-	gen(phy3)
-la var phy3 "Physical exercise"
+fre vig10fwk
+* Recode.
+recode vig10fwk (94/95=0 "Little to no exercise") (96/99=.), gen(phy)
 
-fre phy3 // the US has a pretty sedentary population* IV: Race
+tab phy, m plot // the US has a pretty sedentary population
+                // also, this is a really ugly distribution with huge issues,
+                // so we will add some jitter to the scatterplot to help the
+                // plot look more informative (type 'h sc' for details)* Visualization.
+sc bmi phy if phy > 0, jitter(3) name(bmi_phy, replace)
+
+* Visualization as boxplots.
+gr box phy, noout over(female) asyvars over(age4) medl(lc(red)) ///
+	by(health, total note("")) note("") yti("Mean physical activity") ///	name(phy_box, replace) // note usage of the 'total' option, among others
+* IV: Race
 * --------
 
-ren raceb racefre race* Plotting BMI groups:spineplot bmi7 race, scale(.7) name(bmi7, replace)* Alternative visualization with stacked bars.
+ren raceb racefre race* Exploration:
+tab health, summ(bmi) // mean BMI at each health level
+bys health: ci bmi    // confidence bands
+* Plotting BMI groups:spineplot bmi7 race, scale(.7) name(bmi7, replace)* Slightly more code-consuming visualization, with stacked bars.
 tab race, gen(race_)
 gr bar race_*, stack over(bmi7) scale(.7) ///
 	legend(row(1) lab(1 "NH White") lab(2 "NH Black") lab(3 "Hispanic") lab(4 "Asian")) ///
-	name(bmi7_bars, replace)
+	name(bmi7_race, replace)
 
 * IV: Health insurance* --------------------
 
@@ -80,7 +96,11 @@ fre uninsured
 
 * Recode to dummy.recode uninsured (1=0 "Not covered") (2=1 "Covered") (else=.), gen(hins)
 la var hins "Health insurance (1=covered)."
-* Crosstabulated with race:
+
+* Exploration:
+tab hins, summ(bmi) // mean BMI at each health level
+bys hins: ci bmi    // confidence bands
+* Crosstabulations:
 tab hins race          // raw frequencies
 tab hins race, cell    // cell percentages
 tab hins race, col nof // column percntages
@@ -92,9 +112,6 @@ tab hins race, col nof // column percntages
 
 * Plotting:
 spineplot hins race, scale(.7) name(hins, replace)
-
-* Confidence bands for BMI values in each group:
-bys hins: ci bmi
 
 
 * ======================
@@ -130,21 +147,21 @@ bys hins: ci bmi
 * ------------------
 
 * Install package (uncomment if needed).
-* ssc install tabout
+* ssc install tabout, replace
 
 * Continuous variables:
 tabstatout bmi age, tf(a1_stats1) ///
 	s(n mean sd min max) c(s) f(%9.2fc) replace
 
 * Categorical variables:
-tabout female edu3 health phy3 race hins using a1_stats2.csv, ///
+tabout female edu3 health phy race hins using a1_stats2.csv, ///
 	replace c(freq col) oneway ptot(none) f(2) style(tab)* Note: CSV files often require that you import them rather than just open them.
 * In Microsoft Excel, use 'File > Import' and follow the Excel import procedure.
 
 * Method (2): tsst
 * ----------------
 
-tsst using a1_stats.txt, su(bmi age) fre(female edu3 health phy3 race hins) replace
+tsst using a1_stats.txt, su(bmi age) fre(female edu3 health phy race hins) replace
 
 * Note: the tsst command is part of the course setup and will not run outside
 * of the SRQM folder. Make sure that you set it as the working directory.
@@ -256,7 +273,7 @@ prop race if bmi > 40
 * The following creates a dataset based on the summary statistics for the BMI
 * variable. The advantage of showing this is that it shows the mathematical
 * elements at play in the calculation of confidence intervals.
-collapse (mean) mbmi=bmi (sd) sdbmi=bmi (count) nbmi=bmi, by(race phy3)
+collapse (mean) mbmi=bmi (sd) sdbmi=bmi (count) nbmi=bmi, by(race edu3)
 
 * The "invttail(nbmi,0.025)" function calculates the z-score required in the
 * calculation of a 95% CI, based on the t distribution. The value of 0.025
@@ -268,9 +285,9 @@ gen bmi_lo = mbmi - invttail(nbmi,0.025)*sdbmi/sqrt(nbmi)
 * Dirty graphic hack here, taken from the relevant UCLA Stata FAQ entry.
 * The 5 and 10 values leave a gap of 1 between each of the four categories
 * of raceb, which allows racex to hold both race and exercise values.
-gen racex = race if phy3 == 0
-replace racex = race+5 if phy3 == 1
-replace racex = race+10 if phy3 == 2
+gen racex = race if edu3 == 1
+replace racex = race+5 if edu3 == 2
+replace racex = race+10 if edu3 == 3
 sort racex
 
 * The graph, finally. The labelling of the x-axis is also hacked by using
@@ -283,8 +300,8 @@ graph twoway ///
 	(bar mbmi racex if race==4) ///
 	(rcap bmi_hi bmi_lo racex), ///
 	legend(order(1 "White" 2 "Black" 3 "Hispanic" 4 "Asian") ///
-	row(1)) xlabel( 2.5 "Low" 7.5 "Middle" 12.5 "High", noticks) ///
-	xtitle("Physical exercise") ytitle("Mean BMI (95% CI)") ///
-	name(bmi_phy3, replace)
+	row(1)) xlabel( 2.5 "Grade 12" 7.5 "Undergrad." 12.5 "Postgrad.", noticks) ///
+	xtitle("Educational attainment") ytitle("Mean BMI (95% CI)") ///
+	name(bmi_edu3, replace)
 
 // END OF FILE (for real this time, thanks for following)

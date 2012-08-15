@@ -160,14 +160,27 @@ program srqm
 				do Replication/week`y'.do
 				gr drop _all
 				rm Replication/week`y'.log
+				if `y' < 4 {
+					do Replication/draft`y'.do
+					gr drop _all
+				}
 			}
-	
+
+			rm a1_stats1.csv	
+			rm a1_stats2.csv
+			rm a1_stats.txt
+			rm a2_stats1.csv	
+			rm a2_stats2.csv
+			rm a2_stats.txt
+
 			rm week5_fig1.pdf
 			rm week5_fig2.pdf
 			rm week5_stats.txt
 			rm week5_stats1.csv
 			rm week5_stats2.csv
+
 			rm Replication/week8.log // week8.do runs again at start of week9.do
+
 			rm week11_stats.txt
 			rm week11_stats1.csv
 			rm week11_stats2.csv
@@ -286,7 +299,7 @@ program tsst
 	    	}
 			local N = r(N)
 			qui cap tab `v', gen(`v'_) matcell(m)
-			if _rc != 0 di as err "! (dummies existed already)"
+			if _rc != 0 di as err "!" as txt "(dummies existed already)"
 			qui levelsof `v', local(lvls)
 			local i = 0
 			foreach val of local lvls {

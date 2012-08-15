@@ -2,9 +2,11 @@
 * Who:  F. Briatte and I. Petev
 * When: 2011-10-12
 
+
 * ================
 * = INTRODUCTION =
 * ================
+
 
 * Data: Eurobarometer (2009).
 use "Datasets/ebm2009.dta", clear
@@ -12,9 +14,11 @@ use "Datasets/ebm2009.dta", clear
 * Log.
 cap log using "Replication/week6.log", name(week6) replace
 
+
 * ====================
 * = DATA PREPARATION =
 * ====================
+
 
 * Country codes.
 ren v7 ccode
@@ -24,9 +28,11 @@ ren v8 popweight
 ren v38 ctyweight
 gen wgt=popweight*ctyweight
 
+
 * ======================
 * = DEPENDENT VARIABLE =
 * ======================
+
 
 * Crisis: Mitigation through European currency.
 fre v493 [aw=wgt]
@@ -66,11 +72,15 @@ catplot mitig [aw=wgt], over(ccode, sort(2) lab(labsize(*.8))) ///
 keep if inlist(ccode,8,11,12,13)
 fre mitig
 
+
 * =========================
 * = INDEPENDENT VARIABLES =
 * =========================
 
+
 * (1) Sex
+* -------
+
 ren v644 sex
 recode sex (1=0 "Male") (2=1 "Female"), gen(female)
 la var female "Gender"
@@ -95,7 +105,8 @@ tabchi mitig female, p noo noe // Pearson residuals
 * Fisher's exact test
 tab mitig female, exact
 
-* NOTES
+* Notes
+* -----
 
 * - The Chi-squared test does not operate through the normal distribution to
 * determine statistical significance. The degrees of freedom of the crosstab are
@@ -121,7 +132,10 @@ tab mitig female, exact
 * You can try to use it as an alternative to the Chi-squared test when you have
 * both low cell counts and low dimensions, i.e. low 'r x c' (rows by columns).
 
+
 * (2) Age
+* -------
+
 ren v645 age
 ren v646 age4
 
@@ -131,7 +145,10 @@ tab age4, summ(age)
 * Crosstabulation; Chi-squared test.
 tab mitig age4, col nof chi2
 
+
 * (3) Education
+* -------------
+
 ren v642 edu
 recode edu ///
 	(1/15=1 "15- yrs") ///
@@ -146,7 +163,10 @@ tab mitig edu4, col nof chi2
 * Mean age at each educational level.
 tab edu4, summ(age)
 
+
 * (4) Occupation
+* --------------
+
 ren v767 pro
 
 * Crosstabulation; Chi-squared test.
@@ -162,7 +182,10 @@ la var student "Student"
 * Crosstabulation; Fisher's exact test.
 tab mitig student, col nof exact
 
+
 * (5) Left-right political positioning
+* ------------------------------------
+
 ren v638 pol10
 ren v639 pol3
 ren v640 pol5
@@ -190,15 +213,20 @@ tab mitig pol5, col nofreq chi2
 * Confidence intervals for each proportion.
 prop mitig, over(pol5)
 
+
 * (6) Perception of European Union
+* --------------------------------
+
 ren v182 eum
 
 * Crosstabulation; Chi-squared test.
 tab mitig eum, col nof chi2
 
+
 * ========
 * = EXIT =
 * ========
+
 
 * Clean all graphs from memory.
 * gr drop _all

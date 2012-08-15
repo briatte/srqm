@@ -2,9 +2,11 @@
 * Who:  F. Briatte and I. Petev
 * When: 2012-01-26
 
+
 * ================
 * = INTRODUCTION =
 * ================
+
 
 * Data: Quality of Government (2011).
 use "Datasets/qog2011.dta", clear
@@ -12,9 +14,11 @@ use "Datasets/qog2011.dta", clear
 * Log.
 cap log using "Replication/week12.log", name(week12) replace
 
+
 * ===============
 * = PREPARATION =
 * ===============
+
 
 * Rename and recode variables of interest.
 ren cname country
@@ -61,9 +65,11 @@ sort happy
 * Visualize the dependent variable by geographic region.
 graph dot happy, over(region, sort(1) des) exclude0 name(happy_region, replace)
 
+
 * ================
 * = DISTRIBUTION =
 * ================
+
 
 * Obtain the five-number summary, percentiles and normality indicators.
 su happy, d
@@ -80,9 +86,11 @@ list happy country region if happy < 23.7 | happy > 60.8
 * to label potential outliers within each geographical region.
 graph hbox happy, over(region, sort(1) des total) mark(1, mlabel(ccodealp) mlabposition(6)) scale(.75) name(happy_box, replace)
 
+
 * =========
 * = MODEL =
 * =========
+
 
 * Rename variables of interest.
 ren ffp_fsi state
@@ -117,13 +125,19 @@ ren wdi_mort infant
 * just replace it mentally with the variables under consideration in our third
 * model component, i.e. "speech press women elections politics".
 
+
 * Predictors 1: Security
+* ----------------------
+
 global m1="state"
 d $m1
 su $m1
 gr mat happy $m1, half name(m1, replace)
 
+
 * Predictors 2: Wealth
+* --------------------
+
 global m2="gdp markets"
 d $m2
 su $m2
@@ -135,7 +149,10 @@ la var log_gdp "Gross Domestic Product (log units)"
 global m2="log_gdp markets"
 gr mat happy $m2, half name(m2, replace)
 
+
 * Predictors 3: Freedom
+* ---------------------
+
 global m3="speech press women elections politics"
 d $m3
 su $m3
@@ -146,7 +163,10 @@ gr mat happy $m3, half name(m3, replace)
 * as pseudo-continuous variables in our regression models.
 global m3dummies="i.speech press i.women elections politics"
 
+
 * Predictors 4: Education
+* -----------------------
+
 global m4="edu_f edu_m"
 d $m4
 su $m4
@@ -204,9 +224,11 @@ reg happy $m1 $m2 $m3dummies i.region, r beta
 * Look at how Western countries are positioned on happiness versus log-GDP.
 tw (sc happy log_gdp if region != 1)(sc happy log_gdp if region==1), ytit("Life satisfaction") legend(label(1 "Non-Western countries") label(2 "Western countries"))
 
+
 * ===============
 * = DIAGNOSTICS =
 * ===============
+
 
 * The story of how each diagnostic runs is not told in the do-file. Please
 * turn to the course material for details on the first ones, and to the UCLA
@@ -227,7 +249,9 @@ qnorm r, name(r_qnorm, replace)
 * More formal tests also exist, like this one.
 sktest r
 
-* =1= Multicollinearity
+
+* (1) Multicollinearity
+* ---------------------
 
 * Variance Inflation Factor (VIF)
 vif
@@ -242,7 +266,9 @@ foreach predictor of varlist $m1 $m2 {
 	rvpplot `predictor', yline(0) mlab(cty) name(diag_rvp_`predictor', replace)
 }
 
-* =2= Heteroscedasticity
+
+* (2) Heteroscedasticity
+* ----------------------
 
 * Homoscedasticity of the residuals.
 rvfplot, yline(0) name(diag_rvf, replace)
@@ -255,7 +281,9 @@ imtest
 * the hypothesis of homogeneous variance in our model residuals. A fundamental
 * assumption of linear regression is hence violated at that stage.
 
-* =3= Influential points
+
+* (3) Influential points
+* ----------------------
 
 * Leverage-versus-residuals plot
 lvr2plot, mlabel(cty) name(reg_lvr, replace)
@@ -281,7 +309,8 @@ list d cty country if d > 4/$obs & !mi(d), clean N
 reg happy $m1 $m2 $m3dummies i.region
 reg if d < 4/$obs
 
-* =4= Omitted variables
+* (4) Omitted variables
+* ---------------------
 
 * If this test rejects the null hypothesis, then there is a way to improve
 * the model by using a power (i.e. a polynomial) of the dependent variable.
@@ -298,9 +327,11 @@ ovtest, rhs
 * all these reasons, it takes smart researchers to build models and data
 * that actually return interesting results beyond mere regression output.
 
+
 * ==========
 * = SAVING =
 * ==========
+
 
 * Reminder: you will need the estout package from there on. This is just a
 * demonstration of how to save regression output in a more clever format.
@@ -320,9 +351,11 @@ eststo: qui reg happy $m1 $m2 $m3dummies i.region, r beta
 esttab, constant label beta(2) se(2) r2(2) nonumber ///
 	mtitles("Model 1+2" "Model 1+2+3" "Regional Dummies")
 
+
 * ============
 * = EPILOGUE =
 * ============
+
 
 * Observations:
 * - Kitchen sink models (always) die at diagnosis stage.

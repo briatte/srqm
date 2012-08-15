@@ -2,9 +2,11 @@
 * Who:  F. Briatte and I. Petev
 * When: 2012-01-26
 
+
 * ================
 * = INTRODUCTION =
 * ================
+
 
 * Hi! Welcome to your first SRQM do-file.
 
@@ -12,14 +14,20 @@
 * This do-file is fully commented to guide you through the basics.
 * In your own code, use comments to document your operations.
 
-* PRACTICE
+
+* Practice
+* --------
 
 * Your mission for next week is to replicate this do-file. That means running 
 * it in full, reading the comments along as you execute its commands. Use the 
 * course slides to learn about running do-files and read from the Stata Guide 
 * to understand the commands used.
 
-* INTERFACE
+* There is no substitute to practice to learn statistical software.
+
+
+* Interface
+* ---------
 
 * Quickly review the Stata windows. The Command window is where you will enter
 * all commands, the results of which will show in the Results window. All your
@@ -33,25 +41,54 @@
 * the 'Window > Data Editor' menu item from the graphical user interface. 
 * Again, refer to the Stata guide for additional help.
 
-* COMMANDS
 
-* Remember that Stata commands share a similar syntax. The most common one is:
-* command <argument>
-* Most Stata commands will call one or several variables as the main argument:
-* command <variable>
-* Most Stata commands will also allow one or more options, after a comma:
-* command <variable>, <options>
+* Commands
+* --------
 
-* COURSEWORK
+* Tip (1): Get to learn some syntax
+*
+* - Stata commands share a similar syntax, most commonly: 
+*   command <argument>
+* - Most Stata commands will call one or several variables as the main argument:
+*   command <variable>
+* - Most Stata commands will also allow one or more options, after a comma:
+*   command <variable>, <options>
+
+* Tip (2): Run all lines in sequential order
+*
+* - Applies to all do-files.
+* - Requires you execute do-files in full.
+* - Requires you know where you are in your code.
+*
+clear
+set obs 100
+gen test=1
+ren test x // This line will not run if you do not run the previous ones.
+
+* Tip (3): Run multiple lines together
+*
+* - Applies every time you see '///' at the end of a line.
+* - Requires you select all adjacent lines. Use Ctrl-L (Win) or Cmmd-L (Mac).
+* - Requires you run them with Ctrl-D (Win) or Cmmd-Shift-D (Mac).
+*
+di "This is a test. Execute me by selecting this line, " ///
+	"and this line too, " _newline ///
+	"and this line too. Well done :)"
+
+
+* Coursework
+* ----------
 
 * Remember that you will have to produce such a do-file for your own research
 * project. The easiest option is to use the built-in do-file editor in Stata,
 * which features syntax colouring and keyboard shortcuts to edit and execute
 * do-files. You can also use any plain text editor to do so.
 
+
 * =========
 * = SETUP =
 * =========
+
 
 * The following steps teach you about setting up Stata on any computer. It is
 * recommended that you use your own computer for this class, because this setup
@@ -63,7 +100,8 @@
 * in memory. This command will ensure that this is the case:
 clear 
 
-* (1) MEMORY
+* (1) Memory
+* ----------
 
 * Skip this section if you are running Stata 12+.
 
@@ -88,7 +126,9 @@ cap set mem 500m, perm
 * you are running Stata 12, you are spared from setting memory yourself: Stata
 * will do it automatically.
 
-* (2) BREAKS
+
+* (2) Breaks
+* ----------
 
 * By default, Stata uses screen breaks. If you forget to disable those, the
 * 'Results' window will nag you with useless prompts. Save yourself the hassle
@@ -99,7 +139,9 @@ set more off
 * running Stata from your own computer:
 set more off, perm
 
-* (3) PACKAGES
+
+* (3) Packages
+* ------------
 
 * Stata can be extended by installing packages, just like you would install a
 * plugin or an extension for another software. Installing packages in Stata is
@@ -115,7 +157,7 @@ set more off, perm
 * sysdir set PLUS "c:\temp"
 
 * This course makes heavy use of the 'fre' package to view frequencies.
-* Install the package with this command:
+* Install the package with this command (requires that you are online):
 ssc install fre, replace
 
 * The code below will install a selection of packages that should be installed
@@ -134,14 +176,18 @@ ssc install outreg2, replace
 * stored on your computer. You will not need to come back to them. The settings
 * covered in the next section are different in that respect.
 
+
 * ===========
 * = STARTUP =
 * ===========
 
+
 * The following steps cover starting up Stata for this specific course session.
 * You will need to adapt them to your computer system, so pay extra attention.
 
-* (4) WORKING DIRECTORY
+
+* (4) Working directory
+* ---------------------
 
 * Set the working directory (folder) to the main SRQM folder on your computer.
 * The working folder is where Stata will look to open and save stuff like logs
@@ -163,7 +209,9 @@ cd "/Users/fr/Documents/Teaching/SRQM/"
 * will need to replace "Datasets/" and "Replication/" with your own choices of
 * folders throughout the course.
 
-* (5) DATASET
+
+* (5) Dataset
+* -----------
 
 * We will now load data from the U.S. National Health Interview Survey (2009).
 use "Datasets/nhis2009.dta", clear
@@ -171,7 +219,23 @@ use "Datasets/nhis2009.dta", clear
 * The 'clear' option gets rid of any data previously loaded into memory, since
 * Stata can only open one dataset at once.
 
-* (6) LOG
+* All datasets are in the SRQM Teaching Pack, and will load only if your working
+* directory is correctly set. The README file of the Datasets folder holds links
+* to essential documents for you to read.
+use "Datasets/ess2008.dta", clear
+use "Datasets/wvs2000.dta", clear
+use "Datasets/nhis2009.dta", clear // etc.
+
+// Show all datasets for this course.
+ls "Datasets/*.dta"
+
+* Tip: Cross-dataset searches (requires additional package).
+ssc install lookfor_all, replace
+lookfor_all health, dir(Datasets) // requires SRQM set as the working directory
+
+
+* (6) Log
+* -------
 
 * You can save the commands and results from this do-file to a log file, which
 * will serve as a backup of your work. To log this session, type:
@@ -225,9 +289,11 @@ help graph
 * the tutorials included in the course material, but we also recommend that you
 * use the Stata help pages, as explained below.
 
+
 * ========
 * = HELP =
 * ========
+
 
 * It is essential to the methods covered by this course that you learn to use
 * help extensively. The course material includes a lot of help with Stata, but
@@ -256,9 +322,11 @@ h su
 * but it comes in handy if you engage in more advanced Stata programming.
 h cap  
 
+
 * ========
 * = EXIT =
 * ========
+
 
 * The course will teach you to write commands like the ones featured in this
 * do-file. If you combine practice, documentation and a bit of intuition, you

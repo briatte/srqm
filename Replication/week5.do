@@ -2,9 +2,11 @@
 * Who:  F. Briatte and I. Petev
 * When: 2012-02-13
 
+
 * ================
 * = INTRODUCTION =
 * ================
+
 
 * This do-file is adapted from the replication material (data and code) provided
 * by Frank Baumgartner et al., "Lobbying and Policy Change. Who Wins, Who Loses,
@@ -28,9 +30,11 @@ cap net install schemes
 * you are not required to produce similar code. Everything you need to know on
 * variable transformations is in the do-file from last week.
 
+
 * ================
 * = DATA SUMMARY =
 * ================
+
 
 * In a nutshell, Baumgartner et al. identified US organizations that reported
 * lobbyists in the late Clinton (1999-2000) and early Bush (2001-2002) years.
@@ -78,10 +82,12 @@ foreach v of varlist bills hearings witness floor house senate natjourn news tv 
 		(sc `v' partisan3, yti("", axis(2)) sort ylab(, axis(2) angle(0)) yaxis(2) ysc(alt axis(2))), ///
 		ti(`v', size(medium) margin(bottom)) legend(off) name(`v',replace) scheme(bw)
 }
-//
-// Fig. 1. Measures of political and media salience by degree of partisanship.
-// (run all lines together to generate)
-//
+
+* Fig. 1
+* ------
+
+* Measures of political and media salience by degree of partisanship.
+* Run all lines together to generate.
 gr combine bills hearings witness floor house senate natjourn news tv, ///
 	scheme(bw) note("Right axis: histograms by degree of partisanship. Left axis, from top to bottom and left to right: number of bills introduced, hearings held, " ///
 	"witnesses testifying before Congress, floor statements (overall, House, Senate) and news stories (National Journal, newspapers, TV).", margin(sides) size(vsmall)) ///
@@ -93,19 +99,27 @@ gr export week5_fig1.pdf, name(fig1) replace
 * population of policy issues, we estimate the proportions of each group.
 prop partisan3
 
+
 * =============================
 * = EXPORT SUMMARY STATISTICS =
 * =============================
 
+
 * Two simple ways to export a summary statistics table:
 
-* (1) Use tsst. The command is part of the course: if you have set up the SRQM
+* (1) Use tsst
+* ------------
+
+* The command is part of the course: if you have set up the SRQM
 * folder as your working directory, it should run straight away.
 
 * Use su() for continuous variables, fre() for categorical ones:
 tsst using week5_stats.txt, su(hearings witness floor house senate natjourn news tv) fre(partisan3) replace
 
-* (2) Use tabout. Install the command by uncommenting the line below.
+* (2) Use tabout
+* --------------
+
+* Install the command by uncommenting the line below.
 * ssc install tabout, replace
 
 * Export continuous data.
@@ -116,9 +130,11 @@ tabstatout bills hearings witness floor house senate natjourn news tv, ///
 tabout partisan3 using week5_stats2.csv, ///
 	replace c(freq col) oneway ptot(none) f(2) style(tab)
 
+
 * ==================
 * = MEAN ESTIMATES =
 * ==================
+
 
 * Mean number of bills, hearings and witnesses for each degree of partisanship.
 table partisan3, c(n bills mean bills mean hearings mean witness)
@@ -163,9 +179,12 @@ bysort partisan3: ci bills sqrt_bills
 * code loop for generating quantile plots is provided below.
 sktest bills hearings witness floor house senate natjourn news tv
 
-// foreach v of varlist bills hearings witness floor house senate natjourn news tv {
-//	qnorm `v', name(qplot_`v', replace)
-// }
+* Below is a trivial loop to assess the normality of each independent variable.
+* Uncomment and select all lines to run:
+
+* foreach v of varlist bills hearings witness floor house senate natjourn news tv {
+*	qnorm `v', name(qplot_`v', replace)
+* }
 
 * The same logic thus applies to all measures of salience. The following code
 * assumes that a square root or log transformation might apply to each measure,
@@ -204,18 +223,22 @@ foreach v of varlist log_* sqrt_* {
 	scheme(bw) name(ci$i, replace)
 	restore
 }
-//
-// Fig. 2. Estimates of political and media salience by degree of partisanship.
-// (run all lines together to generate)
-//
+
+* Fig. 2
+* ------
+
+* Estimates of political and media salience by degree of partisanship.
+* Run all lines together to generate.
 gr combine ci7 ci1 ci8 ci2 ci3 ci4 ci5 ci9 ci6, scheme(bw) note("Confidence intervals at 95% by degree of partisanship. From top to bottom and left to right: number of bills introduced, hearings held, " ///
 	"witnesses testifying before Congress, floor statements (overall, House, Senate) and news stories (National Journal, newspapers, TV).", margin(sides) size(vsmall)) ///
 	name(fig2, replace)
 gr export week5_fig2.pdf, name(fig2) replace
 
+
 * ========
 * = EXIT =
 * ========
+
 
 * Clean all graphs from memory.
 * gr drop _all

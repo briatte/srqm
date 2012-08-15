@@ -1,15 +1,12 @@
-add jitter demo
-
-
-
-
 * What: SRQM Session 9
 * Who:  F. Briatte and I. Petev
 * When: 2011-10-24
 
+
 * ================
 * = INTRODUCTION =
 * ================
+
 
 * Start again where we stopped with the QOG dataset. This command will make
 * sure that all variables transformations, renaming and recoding from our past 
@@ -21,11 +18,14 @@ do "Replication/week8.do"
 * Log.
 cap log using "Replication/week9.log", name(week9) replace
 
+
 * ============================
 * = SIMPLE LINEAR REGRESSION =
 * ============================
 
+
 * (1) Fertility Rates and Schooling Years
+* ---------------------------------------
 
 * Looking again at Example 1, visualizing the negative linear fit.
 tw (sc births schooling, $ccode) (lfit births schooling), ///
@@ -72,7 +72,9 @@ reg births sqrt_schooling
 * produce real-world examples of what the model means. However, more variance 
 * in the data is explained when the model is written in this more complex form. 
 
+
 * (2) Schooling Years and (Log) Gross Domestic Product
+* ----------------------------------------------------
 
 * Looking again at Example 2, visualizing the positive linear fit. We here
 * follow the convention where the first variable is considered to be the DV.
@@ -84,7 +86,9 @@ tw (sc schooling log_gdp, $ccode) (lfit schooling log_gdp), ///
 * was necessary to identify the linear relationship between the two variables.
 reg schooling log_gdp
 
+
 * (3) Corruption and Human Development
+* ------------------------------------
 
 * Looking again at Example 3, visualizing the nonlinear, quadratic fit.
 tw (sc corruption hdi, $ccode) (qfit corruption hdi), ///
@@ -111,7 +115,9 @@ predict yhat2
 sc yhat2 corruption hdi, ///
 	ysc(rev) connect(l) sort(yhat) lw(vthick) name(r_curvilinear, replace)
 
+
 * (4) Female Government Ministers and Corruption
+* ----------------------------------------------
 
 * Looking again at Example 4, visualizing the absence of evident fit.
 * A confidence interval was added to the regression line in order to show how
@@ -133,9 +139,11 @@ reg corruption femgovs
 rvfplot, $ccode yline(0) name(cpi_femgov_rvf, replace)
 rvpplot femgovs, $ccode yline(0) name(cpi_femgov_rvp, replace)
 
+
 * ========
 * = EXIT =
 * ========
+
 
 * Clean all graphs from memory.
 * gr drop _all

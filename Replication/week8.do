@@ -2,9 +2,11 @@
 * Who:  F. Briatte and I. Petev
 * When: 2011-10-24
 
+
 * ================
 * = INTRODUCTION =
 * ================
+
 
 * Data: Quality of Government (2011).
 use "Datasets/qog2011.dta", clear
@@ -12,9 +14,11 @@ use "Datasets/qog2011.dta", clear
 * Log.
 cap log using "Replication/week8.log", name(week8) replace
 
+
 * =============
 * = VARIABLES =
 * =============
+
 
 ren wdi_fr births
 ren bl_asyt25 schooling
@@ -25,11 +29,14 @@ ren ti_cpi corruption
 ren gid_fgm femgovs
 d births schooling gdpc hdi corruption femgovs
 
+
 * ===============
 * = CORRELATION =
 * ===============
 
+
 * (1) Fertility Rates and Schooling Years
+* ---------------------------------------
 
 scatter births schooling
 
@@ -37,6 +44,7 @@ pwcorr births schooling
 pwcorr births schooling, obs sig
 
 * (2) Schooling Years and (Log) Gross Domestic Product
+* ----------------------------------------------------
 
 sc gdpc schooling
 
@@ -63,7 +71,9 @@ sc log_gdpc schooling, yline(7.5) xline(6)
 * Verify inspection computationally.
 pwcorr log_gdpc schooling, obs sig
 
+
 * (3) Corruption and Human Development
+* ------------------------------------
 
 * Before graphing the variables, we need to pass a few graph options, because
 * the Corruption Perception Index is reverse-coded (0 marks high corruption,
@@ -80,7 +90,9 @@ sc corruption hdi, yscale(rev) ylabel(0 "High" 10 "Low", angle(hor))
 * will lose some of the information observed graphically by doing so.
 pwcorr corruption hdi, obs sig
 
+
 * (4) Female Government Ministers and Corruption
+* ----------------------------------------------
 
 * Obtain summary statistics.
 su femgovs corruption
@@ -97,9 +109,11 @@ sc femgovs corruption, yline(15) xline(4)
 * the case here if you actually compute the coefficient, but visual inspection
 * and theoretical elaboration provide no substantive justification for it.
 
+
 * ======================
 * = CORRELATION MATRIX =
 * ======================
+
 
 * The most practical way to consider all possible correlations in a list of
 * predictors (or independent variables) is to build a correlation matrix out
@@ -118,11 +132,14 @@ pwcorr births schooling log_gdpc hdi corruption femgovs, star(.05)
 * very large matrixes with majorily insignificant correlation coefficients.
 pwcorr births schooling log_gdpc hdi corruption femgovs, print(.05)
 
+
 * ==============
 * = GRAPH TIPS =
 * ==============
 
+
 * (1) Using macros to set graph options
+* -------------------------------------
 
 * Macros are crucial elements of programming, not just in Stata but in any
 * programming language. The example below is just one very simple example of
@@ -152,16 +169,20 @@ sc corruption femgovs, $ccode ylabel(0 "High" 10 "Low", angle(hor)) ///
 * For another example of graph settings, try using this macro:
 * global ccode = "msymbol(Oh) mcolor(gs4) mlabel(ccodewb) mlabcolor(gs8)"
 
+
 * (2) Scatterplot matrixes
+* ------------------------
 
 * A scatterplot matrix contains all possible bivariate relationships between
 * any number of variables. Building a matrix of your DV and IVs allows to spot
 * relationships between IVs, which will be useful later on in your analysis.
 gr mat births schooling gdpc hdi corruption femgovs
 
+
 * ========
 * = EXIT =
 * ========
+
 
 * Clean all graphs from memory.
 * gr drop _all

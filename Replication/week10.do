@@ -2,9 +2,11 @@
 * Who:  F. Briatte and I. Petev
 * When: 2011-11-21
 
+
 * ================
 * = INTRODUCTION =
 * ================
+
 
 * RESEARCH QUESTION:
 * Do men have more sexual partners than women?
@@ -25,9 +27,11 @@ use "Datasets/gss2010.dta", clear
 * Log.
 cap log using "Replication/week10.log", name(week10) replace
 
+
 * =========================
 * = FINALIZING THE SAMPLE =
 * =========================
+
 
 * Keep variables of interest and respondent ID.
 keep id partnrs5 sex age coninc educ marital wrkstat size
@@ -48,8 +52,10 @@ drop if partnrs5==9
 recode sex (1=0 "Male") (2=1 "Female"), gen(female)
 drop sex
 
+
 * =============
 * = ANALYSIS =* =============
+
 
 * Explore the DV.
 fre partnrs5
@@ -124,9 +130,11 @@ reg partnrs5 i.female zconinc2 zeduc zsize i.wrkstat i.marital zage
 * - Married
 * - Mid-age
 
+
 * ========
 * = EXIT =
 * ========
+
 
 * Clean all graphs from memory.
 * gr drop _all

@@ -12,13 +12,18 @@ svyset psu [pw=perweight], strata(strata) vce(linearized) singleunit(missing)
 	1 "Severely underweight" 2 "Underweight" 3 "Normal" ///
 	4 "Overweight" 5 "Obese" 6 "Severely obese" 7 "Morbidly obese"la val bmi7 bmi7* Note: this is the slow, risky way of recoding continuous variables. Check the
 * code used to construct bmi6 below for a quicker and less error-prone command.
-* Breakdown of mean BMI by categories.d bmi bmi7tab bmi7, summ(bmi) // show mean BMI in each BMI category* Inspecting DV for normality.hist bmi, normal name(bmi_hist, replace)* Transformations (use gladder for the graphical checks).
+* Breakdown of mean BMI by categories.d bmi bmi7tab bmi7, summ(bmi) // show mean BMI in each BMI category* Inspecting DV for normality.hist bmi, normal name(bmi_hist, replace)
+* Transformations (use gladder for the graphical checks).
 ladder bmi
 * Log-BMI transformation.gen logbmi=ln(bmi)
 la var logbmi "log(BMI)"
 
 * Inspect improvement in normality.
-tabstat bmi logbmi, s(skewness kurtosis) c(s)* IV: Age
+tabstat bmi logbmi, s(skewness kurtosis) c(s)* Note: in what follows, significance tests are shown on the untransformed BMI
+* variable for legibility. However, to make sure that you are interpreting the
+* tests on your data as close as possible to their linearity assumptions, you
+* should double-check all tests that you report by also running them on the 
+* transformed version of your dependent variable, if one applies.* IV: Age
 * -------
 su age, d
 
@@ -65,34 +70,60 @@ tab bmi6 age4, chi2
 tab bmi6 age4, chi2 V // with CramŽr's V
 
 * Residuals (requires tab_chi, install if needed)
-* ssc install tab_chi
+* ssc install tab_chi, replace
 tabchi bmi6 age4, r noo noe // raw residuals
 tabchi bmi6 age4, p noo noe // Pearson residuals
 
-* Since it seems interesting to focus on obesity among particular age groups,
-* let's create a dummy for obesity.
-gen obese:obese = (bmi7 > 4)
-tab obese age4 if inlist(age4,1,2), nof col exact matcell(odds)
+* Odds ratios provide an additional way to explore variations in obesity across
+* age groups. Students interested in pushing their model to logistic regression
+* form are particularly encouraged to follow, as they will be using odds ratios
+* and log-odds at a later stage of analysis.
 
-* Build an odds-ratios statement.
-	
+* Create dummies for specific binary states of the dependent variable.
+gen obese = (bmi7 > 4)
+gen normal = (bmi7==3)
 
-tab candidat inc [fweight= pop], matcell(elec)Candidate |
-voted for, |                     Family Income
-      1992 |     <$15k    $15-30k    $30-50k    $50-75k      $75k+ |     Total
------------+-------------------------------------------------------+----------
-   Clinton |   127,947    167,292    190,527    123,920     72,493 |   682,179 
-      Bush |    49,878    130,116    176,586    130,116     96,658 |   583,354 
-     Perot |    39,035     74,352     97,587     55,764     32,219 |   298,957 
------------+-------------------------------------------------------+----------
-     Total |   216,860    371,760    464,700    309,800    201,370 | 1,564,490 
+* Obesity in two age groups.
+tab obese age4 if inlist(age4,1,2), col exact matcell(odds)
 
-     disp "A wealthy person was about " /*      */ round((elec[2,5]*elec[1,1])/(elec[1,5]*elec[2,1])) /*      */ " times more likely to choose Bush over Clinton than a very poor person"
+* Probability of being obese.
+tabodds obese age4 if inlist(age4,1,2)     // as odds
+tabodds obese age4 if inlist(age4,1,2), or // as odds ratios
 
+* Explanatory statement.
+disp _n as txt "A person aged 45-64 is about " ///	as res round((odds[2,2]*odds[1,1])/(odds[1,2]*odds[2,1]),.01) as txt ///	" times more likely to be obese " _n "than a person aged 18-44."
 
+* Normal weight across age groups.
+tab normal age4, col matcell(odds) // exact test ommitted because waiting sucks
 
+* Probability of being normal weight.
+tabodds normal age4     // as odds
+tabodds normal age4, or // as odds ratios against the odds of the first category
 
-* IV: Gender* ----------
+* Explanatory statement.
+disp _n as txt "A person aged 75+ is about " ///	as res 100*round((odds[2,4]*odds[1,1])/(odds[1,4]*odds[2,1]),.01) as txt ///	"% as likely to be normal weight " _n "than a person aged 18-44."
+
+* Visualization of the odds of being normal weight.
+tabodds normal age, ciplot ///
+	yti("Pr(normal weight)") xti("Age") ///
+	name(normal_age, replace)
+
+* Visualization of the odds of being obese.
+tabodds obese age, ciplot ///
+	yti("Pr(obese)") xti("Age") ///
+	name(obese_age, replace)
+
+* Create age groups every five years to average the data over small age groups.
+gen age5f=5*floor(age/5)
+
+* Smoother visualization of the odds of being normal weight.
+tabodds normal age5f, ciplot ///
+	yti("Pr(normal weight)") xti("Age") ///
+	name(normal_age, replace)
+
+* Smoother visualization of the odds of being obese with age.tabodds obese age5f, ciplot  ///
+	yti("Pr(obese)") xti("Age") ///
+	name(obese_age, replace)* IV: Gender* ----------
 
 fre sex
 
@@ -130,12 +161,12 @@ tab bmi6 edu3
 tab bmi6 edu3, nof cell // percents over the whole sample
 tab bmi6 edu3, nof col  // percents of BMI categories in age groups (columns)
 tab bmi6 edu3, chi2 V   // Chi-squared test with CramŽr's V
-* ssc install tab_chi
+* ssc install tab_chi, replace
 tabchi bmi6 edu3, p noo noe // Pearson residuals
 * Crosstabulation of age, gender and education groups.
 table age4 female edu3
 table age4 female edu3, c(mean bmi) f(%8.2f) // show mean BMI in each table cell* Visualization:
-sc bmi age if edu3==1, mc(dimgray) || sc bmi age if edu3==3, mc(dknavy) ///	legend(lab(1 "Excellent health") lab(2 "Poor health")) ///
+sc bmi age if edu3==1, mc(dkgreen) || sc bmi age if edu3==3, mc(dkorange) ///	legend(lab(1 "Grade 12") lab(2 "Postgraduate")) ///
 	name(bmi_edu, replace)
 * IV: Health status
 * -----------------
@@ -160,13 +191,13 @@ tab bmi6 health
 tab bmi6 health, nof cell // percents over the whole sample
 tab bmi6 health, nof col  // percents of BMI categories in age groups (columns)
 tab bmi6 health, chi2 V   // Chi-squared test with CramŽr's V
-* ssc install tab_chi
+* ssc install tab_chi, replace
 tabchi bmi6 health, p noo noe // Pearson residuals
 
 * Visualization:
 gr bar bmi, over(health) asyvars over(female) ///
 	by(age4, note("")) legend(rows(1)) ///
-	name(age_health_bar, replace)
+	name(age_health, replace)
 
 * IV: Physical exercise* ---------------------
 
@@ -175,38 +206,44 @@ fre vig10fwk
 * Recode.
 recode vig10fwk (94/95=0 "Little to no exercise") (96/99=.), gen(phy)
 
-tab phy, m plot // the US has a pretty sedentary population* Physical activity sessions are quasi-continuous, but low-dimensional and very
-* skewed. We use the 'jitter' option to get a scatterplot with overimposed data
-* points, in order to read the result more easily:
-sc bmi phy if phy > 0, jitter(3) mc(dimgray) name(bmi_phy, replace)
-	
+tab phy, m plot // the US has a pretty sedentary population
+                // also, this is a really ugly distribution with huge issues,
+                // so we will add some jitter to the scatterplot to help the
+                // plot look more informative (type 'h sc' for details)* Visualization.
+sc bmi phy if phy > 0, jitter(3) name(bmi_phy, replace)
+
 * Correlation.
 pwcorr bmi phy, obs sig
 
-* Visualization:
-gr box phy, noout over(female) asyvars over(age4) ///
+* Visualization as boxplots.
+gr box phy, noout over(female) asyvars over(age4) medl(lc(red)) ///
 	by(health, total note("")) note("") yti("Mean physical activity") ///	name(phy_box, replace) // note usage of the 'total' option, among others* IV: Race
 * --------
 
-ren raceb racefre race* Plotting BMI and race categories:spineplot bmi7 race, scale(.7) name(bmi7, replace)* Slightly more code-consuming visualization, with stacked bars.
+ren raceb racefre race* Exploration:
+tab race, summ(bmi) // mean BMI at each health level
+bys race: ci bmi    // confidence bands
+* Plotting BMI and race categories:spineplot bmi7 race, scale(.7) name(bmi7, replace)* Slightly more code-consuming visualization, with stacked bars.
 tab race, gen(race_)
 gr bar race_*, stack over(bmi7) scale(.7) ///
 	legend(row(1) lab(1 "NH White") lab(2 "NH Black") lab(3 "Hispanic") lab(4 "Asian")) ///
-	name(bmi7_bars, replace)
+	name(bmi7_race, replace)
 
 * Crosstabulations:
 tab bmi6 race
 tab bmi6 race, nof cell // percents over the whole sample
 tab bmi6 race, nof col  // percents of BMI categories in age groups (columns)
 tab bmi6 race, chi2 V   // Chi-squared test with CramŽr's V
-* ssc install tab_chi
+* ssc install tab_chi, replace
 tabchi bmi6 race, p noo noe // Pearson residuals
 
 * Visualization:
 spineplot bmi7 race, scale(.7) name(hins, replace)
 
-* Odds ratios
-
+* Visualization of the odds of being normal weight across race.
+tabodds normal race, ciplot ///
+	xlab(1 "NH White" 2 "NH Black" 3 "Hispanic" 4 "Asian") yline(1) ///
+	name(normal_race, replace)
 
 * IV: Health insurance* --------------------
 
@@ -214,25 +251,18 @@ fre uninsured
 
 * Recode to dummy.recode uninsured (1=0 "Not covered") (2=1 "Covered") (else=.), gen(hins)
 la var hins "Health insurance (1=covered)."
+
+* Exploration:
+tab hins, summ(bmi) // mean BMI at each health level
+bys hins: ci bmi    // confidence bands
 * Crosstabulations:
 tab bmi6 hins
 tab bmi6 hins, nof cell // percents over the whole sample
 tab bmi6 hins, nof col  // percents of BMI categories in age groups (columns)
 tab bmi6 hins, chi2 V   // Chi-squared test with CramŽr's V
 
-* Confidence bands for BMI values in each group.
-bys hins: ci bmi
-
-+ odds ratios
-
-gen obese:obese = (bmi7 > 4)
-la de obese 0 "Not obese" 1 "Obese"
-
-tab obese hins, col nof exact matcell(odds)
-
-* Build an odds-ratios statement.
-di as txt _n "Respondents with high political TV news exposure were about " ///
-	round((odds[1,2]*odds[2,1])/(odds[2,2]*odds[1,1]),.01) " times " ///	_n "more likely to systematically support torture than other respondents."
+* Plotting:
+spineplot hins race, scale(.7) name(hins, replace)
 
 
 * ======================
@@ -250,34 +280,42 @@ di as txt _n "Respondents with high political TV news exposure were about " ///
 * ------------------
 
 * Install package (uncomment if needed).
-* ssc install tabout
+* ssc install tabout, replace
 
 * Continuous variables:
 tabstatout bmi age, tf(a2_stats1) ///
 	s(n mean sd min max) c(s) f(%9.2fc) replace
 
 * Categorical variables:
-tabout female edu3 health phy3 race hins using a2_stats2.csv, ///
-	replace c(freq col) oneway ptot(none) f(2) style(tab)* Note: CSV files often require that you import them rather than just open them.
-* In Microsoft Excel, use 'File > Import' and follow the Excel import procedure.
-
-* Method (2): tsst
+tabout female edu3 health phy race hins using a2_stats2.csv, ///
+	replace c(freq col) oneway ptot(none) f(2) style(tab)* Method (2): tsst
 * ----------------
 
-tsst using a2_stats.txt, su(bmi age) fre(female edu3 health phy3 race hins) replace
-
-* Note: the tsst command is part of the course setup and will not run outside
-* of the SRQM folder. Make sure that you set it as the working directory.
+tsst using a2_stats.txt, su(bmi age) fre(female edu3 health phy race hins) replace
 
 
 * =======================* = REGRESSION MODELING =* =======================
 
-
-* ///////////
+* Scatterplots of BMI and age by education level and race category.
 sc bmi age if age < 50 & hins, ms(oh) mc(ltkhaki) ///
 	by(edu3 race, legend(off) note("Showing respondents aged 18-49 with health insurance.")) || ///
-	lfit bmi age if age < 50 & hins, yline(27.27, lc(gs8))
+	lfit bmi age if age < 50 & hins, yline(27.27, lc(gs8)) name(sc, replace)
 
+* Note: we 'control' for health insurance and old age by removing these groups
+* from the visualization, but we will learn to actually control for them soon.
+
+* Simple linear regression of BMI against age.
+reg bmi age
+
+* Test whether the effect is consistent across race.
+bys race: reg bmi age
+
+* Test whether the effect is consistent across education.
+bys edu3: reg bmi age
+
+* The next and last part of the course will add multiple regressions here, using
+* both continuous and categorical data. Stay tuned, and turn to the bonus for an
+* introduction to to the logic of regression through ANOVA.
 
 * =======* = END =* =======
 
@@ -289,7 +327,7 @@ sc bmi age if age < 50 & hins, ms(oh) mc(ltkhaki) ///
 * clear
 
 * Close log (if opened).
-cap log close draft1
+cap log close draft2
 
 * We are done. Have a nice day :)* exit
 
@@ -329,8 +367,9 @@ oneway bmi age4
 oneway bmi age4, b // Bonferroni test, i.e. p-values for each IV category
 
 * Plot mean estimates of BMI by age and gender groups:
+anova bmi age4
 margins age4
-marginsplot
+marginsplot, name(anova1, replace)
 
 
 * ANOVA plots
@@ -341,7 +380,7 @@ anova bmi age4 female
 
 * Plot mean estimates of BMI by age and gender groups:
 margins age4#female
-marginsplot
+marginsplot, name(anova2, replace)
 
 * Crosstabulation of gender and age within each race category:
 bys race: tab age4 female
@@ -354,7 +393,7 @@ anova bmi age4 female race
 
 * Plot mean estimates of BMI by age, sex and race groups:
 margins age4#race#female
-marginsplot, by(female) legend(row(1))
+marginsplot, by(female) legend(row(1)) name(anova3, replace)
 
 
 * Going further

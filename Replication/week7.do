@@ -1,15 +1,12 @@
-detail odds
-
-
-
-
 * What: SRQM Session 7
 * Who:  F. Briatte and I. Petev
 * When: 2011-10-12
 
+
 * ================
 * = INTRODUCTION =
 * ================
+
 
 * Data: European Social Survey, Round 4 (2008).
 use "Datasets/ess2008.dta", clear
@@ -21,9 +18,11 @@ cap log using "Replication/week7.log", name(week7) replace
 * ssc install fre
 * ssc install catplot
 
+
 * ====================
 * = DATA PREPARATION =
 * ====================
+
 
 * Attitudes towards torture.
 fre trrtort
@@ -38,9 +37,11 @@ la var torture "Opposition to torture"
 * Weight results by survey design.
 svyset [pw=dweight], vce(linearized) singleunit(missing)
 
+
 * ======================
 * = DEPENDENT VARIABLE =
 * ======================
+
 
 fre torture [aw=dweight*pweight]
 su torture [aw=dweight*pweight]
@@ -68,9 +69,11 @@ prtest torture, by(israel)
 * Subset to all European countries but Israel.
 drop if cntry=="IL"
 
+
 * =========================
 * = INDEPENDENT VARIABLES =
 * =========================
+
 
 * Continue the analysis at the micro-level (individuals).
 * Weight results by survey design and country population.
@@ -78,6 +81,8 @@ gen wgt=dweight*pweight
 svyset [pw=wgt], vce(linearized) singleunit(missing)
 
 * (1) Age
+* -------
+
 ren agea age
 
 * Verify normality.
@@ -103,6 +108,8 @@ tab torture age4, col nof chi2
 ttest age, by(torture)
 
 * (2) Gender
+* ----------
+
 recode gndr (1=0 "Male") (2=1 "Female") (else=.), gen(female)
 la var female "Gender"
 
@@ -113,6 +120,8 @@ tab torture female, col nof exact
 prtest torture, by(female)
 
 * (3) Income deciles
+* ------------------
+
 ren hinctnta income
 
 * Average opposition to torture in each income decile.
@@ -125,7 +134,10 @@ recode income (1/3=1 "D1-D3") (4/6=2 "D4-D6") ///
 * Crosstabulation; Chi-squared test.
 tab torture income4, col nof chi2
 
+
 * (4) Education
+* -------------
+
 ren eduyrs edu
 
 * Verify normality.
@@ -134,7 +146,10 @@ hist edu, bin(15) normal
 * Comparison of average educational attainment in each category.
 ttest edu, by(torture)
 
-* (5) Religious faith.
+
+* (5) Religious faith
+* -------------------
+
 fre rlgblg rlgdnm
 
 * Comparision of proportions in each category.
@@ -165,7 +180,10 @@ prtest torture, by(faith_3)
 * Comparing Muslim respondents to all others.
 prtest torture, by(faith_4)
 
+
 * (6) Political positioning
+* -------------------------
+
 ren lrscale pol
 
 * Verifying normality.
@@ -186,7 +204,10 @@ replace left=0 if pol3==2 | pol==3
 * Comparing left-wing respondents to all others.
 prtest torture, by(left)
 
+
 * (7) Media exposure
+* ------------------
+
 fre tvpol
 
 * Crosstabulation; Chi-squared test.
@@ -206,18 +227,20 @@ tab torture media, col nof exact
 * Comparing respondents with high TV exposure to others.
 prtest torture, by(media)
 
+
 * ==============
 * = EXTENSIONS =
 * ==============
 
-* NOTE
 
 * The following section covers techniques outside of the scope of this course.
 * Feel free to replicate and read from the UCLA Stata annotated output pages on
 * odds ratios and (ordered) logistic regression to understand the techniques we
 * used to finalize our analysis.
+
  
 * (1) Odds ratios
+* ---------------
 
 * Save the crosstabulated frequencies to a matrix.
 tab torture media, col nof exact matcell(odds)
@@ -241,6 +264,7 @@ logit torture ib1.media, or level(99)
 * Read on odds ratios and confidence intervals for more background.
 
 * (2) Logistic regression
+* -----------------------
 
 * Our final model uses a technique that goes beyond this course. It restores
 * some precision in variable measurement by using the full ordinal scales of
@@ -261,9 +285,11 @@ ologit trrtort age i.female income edu i.faith pol tvpol, or vce(cluster cntry)
 * low feeling of local safety is actually a reasonably powerful predictor of
 * stronger support for the use of torture, other factors being kept constant.
 
+
 * ========
 * = EXIT =
 * ========
+
 
 * Clean all graphs from memory.
 * gr drop _all

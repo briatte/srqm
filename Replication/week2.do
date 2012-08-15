@@ -2,9 +2,11 @@
 * Who:  F. Briatte and I. Petev
 * When: 2012-01-26
 
+
 * ================
 * = INTRODUCTION =
 * ================
+
 
 * Hi! Welcome to your second SRQM do-file.
 
@@ -31,9 +33,11 @@ use "Datasets/nhis2009.dta", clear
 * Log the commands and results from this do-file.
 cap log using "Replication/week2.log", name(week2) replace
 
+
 * ====================
 * = DATA EXPLORATION =
 * ====================
+
 
 * Our first step verifies whether the survey is cross-sectional. If we find 
 * that the data spans over several years, we will suppress observations for 
@@ -74,9 +78,11 @@ lookfor height weight
 * List their values for the first ten observations.
 list height weight in 1/10
 
+
 * ===========================
 * = VARIABLE TRANSFORMATION =
 * ===========================
+
 
 * Our next step is to compute the Body Mass Index for each observation in the 
 * dataset (i.e. for each respondent to the survey) from their height and weight
@@ -110,9 +116,11 @@ d bmi
 list sex age health bmi in 50/60
 list sex age health bmi in -10/l
 
+
 * ======================
 * = SUMMARY STATISTICS =
 * ======================
+
 
 * We now turn to analysing the newly created 'bmi' variable, using the 
 * 'summarize' command (shorthand 'su') to obtain its mean, min and max values, 
@@ -165,9 +173,11 @@ su bmi if raceb==2 | raceb==3
 * two ethnic groups: the '|' symbol is the logical operator for 'or'. It
 * reads as: 'summarize BMI if the respondent is Black or Hispanic.'
 
+
 * =========================
 * = INDEPENDENT VARIABLES =
 * =========================
+
 
 * Body Mass Index is our "dependent" variable, i.e. the one that we want to 
 * explain. We have reason to believe that some 'independent' variables like 
@@ -232,9 +242,11 @@ gr dot health, exclude0 yreverse over(sex) over(raceb) ///
 * because causal links are provided by your theory, not by statistical analysis
 * alone. The rest of the course will advance with that word of caution in mind.
 
+
 * ========
 * = EXIT =
 * ========
+
 
 * Clean all graphs from memory.
 * gr drop _all

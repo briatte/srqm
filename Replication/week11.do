@@ -2,9 +2,11 @@
 * Who:  F. Briatte and I. Petev
 * When: 2011-12-01
 
+
 * ================
 * = INTRODUCTION =
 * ================
+
 
 * Data: Quality of Government (2011).
 use "Datasets/qog2011.dta", clear
@@ -12,9 +14,11 @@ use "Datasets/qog2011.dta", clear
 * Log.
 cap log using "Replication/week11.log", name(week11) replace
 
+
 * ========================
 * = VARIABLE PREPARATION =
 * ========================
+
 
 * DV: Fertility rate (births per woman).
 ren wdi_fr births
@@ -67,23 +71,29 @@ tabstatout births schooling sqrt_schooling log_gdpc, ///
 tabout region aids using week11_stats2.csv, ///
 	replace c(freq col) oneway ptot(none) f(2) style(tab)
 
+
 * ===============
 * = CORRELATION =
 * ===============
+
 
 pwcorr births sqrt_schooling log_gdpc aids, star(.05)
 gr mat births sqrt_schooling log_gdpc, half
 
 * Export correlation matrix (requires additional package)
-* ssc install mkcorr, replace
-mkcorr births sqrt_schooling log_gdpc aids, lab num sig log(week11_corr.csv) replace
+* ssc install estout, replace
+eststo clear
+qui estpost correlate births sqrt_schooling log_gdpc aids, matrix listwise
+esttab using week11_corr.csv, unstack not compress label replace // export
 
 * Drop missing data.
 drop if mi(births, sqrt_schooling, log_gdpc, aids)
 
+
 * ==============================
 * = MULTIPLE LINEAR REGRESSION =
 * ==============================
+
 
 sc births sqrt_schooling || lfit births sqrt_schooling
 reg births sqrt_schooling
@@ -100,11 +110,14 @@ reg sqrt_schooling log_gdpc
 * multiple linear regression will be covered during our next sessions with
 * individual-level data, as to provide a different approach.
 
+
 * ================
 * = COEFFICIENTS =
 * ================
 
+
 * (a) Unstandardised (metric)
+* ------------------
 
 * With schooling in metric units and GDP per capita in logged units.
 reg births schooling log_gdpc
@@ -113,7 +126,9 @@ reg births schooling log_gdpc
 * (Not such a good choice of units.)
 reg births sqrt_schooling gdpc
 
-* (b) Standardised (beta)
+
+* (b) Standardised ('beta')
+* ----------------
 
 * With standardised, or 'beta', coefficients.
 reg births sqrt_schooling log_gdpc, beta
@@ -143,7 +158,9 @@ su std_*
 reg std_*
 reg births schooling log_gdpc, beta
 
+
 * (c) Dummies (categorical variables)
+* -----------------------------------
 
 * Visualizing two categories (Asia and Africa) within the sample.
 tw (sc births schooling if region==1, mc(blue)) ///
@@ -193,9 +210,11 @@ tw (sc yhat aids) (lfit yhat aids), xlab(0 "Low" 1 "High")
 ttest yhat, by(aids)
 reg yhat i.aids
 
+
 * ===============
 * = DIAGNOSTICS =
 * ===============
+
 
 * Regression model.
 reg births schooling log_gdpc aids i.region
@@ -204,7 +223,9 @@ reg births schooling log_gdpc aids i.region
 cap drop yhat
 predict yhat
 
+
 * (a) Basic checks on residuals
+* -----------------------------
 
 * Store the unstandardized (metric) residuals.
 cap drop r
@@ -223,7 +244,9 @@ predict rst, rsta
 sc rst yhat, yline(-2 2) || sc rst yhat if abs(rst)>2, mlab(cname) ///
 	ylab(-3(1)3) legend(lab(2 "Outliers"))
 
+
 * (b) Variance inflation and interaction terms
+* --------------------------------------------
 
 * The Variance Inflation Factor (VIF) diagnoses an issue with 'kitchen sink'
 * models that use high numbers of correlated variables together in the model,
@@ -262,7 +285,9 @@ nestreg: reg births ///
 * variables, which will show the impact of high HIV prevalence per continent.
 reg births c.schooling##c.log_gdpc aids#region, r beta
 
+
 * (c) Heteroskedasticity
+* ----------------------
 
 * Homoscedasticity of the residuals versus fitted values (DV).
 rvfplot, yline(0) mlab(ccodewb) name(diag_rvf, replace)
@@ -281,9 +306,11 @@ sc r schooling || sc r schooling if abs(rst) > 2, yline(0) mlab(ccodewb) ///
 * Use robust standard errors to adjust for heterogeneous variance.
 reg births c.schooling##c.log_gdpc aids##region, r beta
 
+
 * ==========
 * = SAVING =
 * ==========
+
 
 * Reminder: you will need the estout package from there on. This is just a
 * demonstration of how to save regression output in a more clever format.
@@ -296,9 +323,11 @@ eststo M2: qui reg births c.schooling##c.log_gdpc aids##region, r beta
 esttab M1 M2 using week11_reg.csv, csv replace constant beta(2) se(2) r2(2) ///
 	label mtitles("Without interaction" "With interaction")
 
+
 * ========
 * = EXIT =
 * ========
+
 
 * Wipe stored estimates
 * eststo clear
