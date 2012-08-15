@@ -1,3 +1,8 @@
+detail odds
+
+
+
+
 * What: SRQM Session 7
 * Who:  F. Briatte and I. Petev
 * When: 2011-10-12

@@ -75,17 +75,58 @@ ren v644 sex
 recode sex (1=0 "Male") (2=1 "Female"), gen(female)
 la var female "Gender"
 
-* Crosstabulation; Chi-squared and Fisher's exact tests.
-tab mitig female
-tab mitig female, col nof
-tab mitig female, row nof
-tab mitig female, exp chi2
+* Crosstabulations:
+tab mitig female    // raw frequencies
+tab mitig female    // cell percentages
+
+* Conditional probabilities:
+tab mitig female, col nof    // column percentages
+tab mitig female, row nof    // rows percentages
+
+* Significance tests:
+tab mitig female, exp chi2   // Chi-squared test (with expected frequencies)
+tab mitig female, exp chi2 V // Cramérs V
+
+* Chi-squared residuals (install tabchi if needed)
+* ssc install tab_chi
+tabchi mitig female, r noo noe // raw residuals
+tabchi mitig female, p noo noe // Pearson residuals
+
+* Fisher's exact test
 tab mitig female, exact
+
+* NOTES
+
+* - The Chi-squared test does not operate through the normal distribution to
+* determine statistical significance. The degrees of freedom of the crosstab are
+* used against a different distribution that expresses different assumptions, of
+* which an important one is that the accuracy of the test is insatisfactory when
+* cell counts fall under 5-10 (depending on what you want to call accuracy).
+
+* - The general idea of nonparametric tests is that they harness a different
+* set of properties in the sample than the total number of observations n, using
+* instead the properties of table cells in different ways. Cramér's V is a means
+* to reinject n in the equation: it measures the strength of association as read
+* in a Chi-squared tests, from -1 to 1 on 2x2 tables, and from 0 to 1 otherwise.
+
+* - A further refinement of the Chi-squared test is to read its residuals, i.e.
+* the substraction of observed - expected frequencies in each cell. To relate
+* the residuals to the overall table, we divide them by a square root of table
+* dimensions to obtain Pearson residuals, where extreme values point the cells
+* contributing most to the association.
+
+* - Last, Fisher's exact test expresses yet other properties that make it exact
+* from a statistical perspective, for very uninteresting reasons that I'll skip.
+* It primarily applies to 2x2 tables, and fails on tables with high dimensions.
+* You can try to use it as an alternative to the Chi-squared test when you have
+* both low cell counts and low dimensions, i.e. low 'r x c' (rows by columns).
 
 * (2) Age
 ren v645 age
 ren v646 age4
-fre age age4
+
+* Mean age in each age group.
+tab age4, summ(age)
 
 * Crosstabulation; Chi-squared test.
 tab mitig age4, col nof chi2
@@ -101,6 +142,9 @@ la var edu4 "Education"
 
 * Crosstabulation; Chi-squared test.
 tab mitig edu4, col nof chi2
+
+* Mean age at each educational level.
+tab edu4, summ(age)
 
 * (4) Occupation
 ren v767 pro

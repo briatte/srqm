@@ -1,3 +1,8 @@
+add jitter demo
+
+
+
+
 * What: SRQM Session 9
 * Who:  F. Briatte and I. Petev
 * When: 2011-10-24
