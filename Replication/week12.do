@@ -11,6 +11,11 @@
 * Data: Quality of Government (2011).
 use "Datasets/qog2011.dta", clear
 
+* This do-file uses a graph scheme by Edwin Leuven for its figures.
+cap net from "http://leuven.economists.nl/stata"
+cap net install schemes
+cap set scheme bw
+
 * Log.
 cap log using "Replication/week12.log", name(week12) replace
 
@@ -36,6 +41,7 @@ la var region "Geographical location"
 
 * DV: Happiness
 * -------------
+
 codebook happy
 
 * Critical note: an aggregate measure of happiness is an interesting concept
@@ -81,7 +87,8 @@ list happy country region if happy < 23.7 | happy > 60.8
 * whole sample: geographical regions below it have a lower median happiness
 * than the whole set of observed countries. We also added a few graph options
 * to label potential outliers within each geographical region.
-gr hbox happy, over(region, sort(1) des total) mark(1, mlabel(ccodealp) mlabposition(6)) scale(.75) name(happy_box, replace)
+gr hbox happy, over(region, sort(1) des total) mark(1, mlab(cty) ///
+	mlabp(6)) scale(.75) name(happy_box, replace)
 
 
 * Independent variables
@@ -113,7 +120,7 @@ la var speech "Freedom of Speech"
 
 * Notes on linear modelling
 * -------------------------
-*
+
 * - Our model considers five series of regressors (or predictors; both names
 * designate our independent, explanatory variables. The series are thematic
 * and correspond to a simple theory: happiness is over-determined by five
@@ -244,7 +251,10 @@ nestreg: reg happy ($m1) ($m2) ($m3), beta
 reg happy $m1 $m2 $m3dummies i.region, r beta
 
 * Look at how Western countries are positioned on happiness versus log-GDP.
-tw (sc happy log_gdp if region != 1)(sc happy log_gdp if region==1), ytit("Life satisfaction") legend(label(1 "Non-Western countries") label(2 "Western countries"))
+tw (sc happy log_gdp if region != 1) ///
+	(sc happy log_gdp if region==1), yti("Life satisfaction") ///
+	legend(label(1 "Non-Western countries") label(2 "Western countries")) ///
+	name(happy_west, replace)
 
 
 * ===============
@@ -285,7 +295,7 @@ vif
 foreach predictor of varlist $m1 $m2 {
 	// (optional)
 	// acprplot `predictor', lowess name(diag_acpr_`predictor', replace)
-	rvpplot `predictor', yline(0) mlab(cty) name(diag_rvp_`predictor', replace)
+	rvpplot `predictor', yline(0) ms(i) mlab(cty) name(diag_rvp_`predictor', replace)
 }
 
 
@@ -308,7 +318,7 @@ imtest
 * ------------------
 
 * Leverage-versus-residuals plot
-lvr2plot, mlabel(cty) name(reg_lvr, replace)
+lvr2plot, ms(i) mlab(cty) name(reg_lvr, replace)
 
 * Extreme studentized residuals (outliers)
 predict rst, rstudent

@@ -18,6 +18,11 @@ global wd "Replication/week11-files"
 cap mkdir "$wd"
 cd "$wd"
 
+* This do-file uses a graph scheme by Edwin Leuven for its figures.
+cap net from "http://leuven.economists.nl/stata"
+cap net install schemes
+cap set scheme bw
+
 * Log.
 cap log using "week11.log", name(week11) replace
 
@@ -159,9 +164,9 @@ reg births schooling log_gdpc, beta
 * -------------------------------
 
 * Visualizing two categories (Asia and Africa) within the sample.
-tw (sc births schooling if region==1, mc(blue)) ///
-	(sc births schooling if region==4, mc(orange)) ///
-	(sc births schooling, m(Oh) mc(gs10)) (lfit births schooling, lc(gs10)), ///
+tw (sc births schooling if region==1, ms(O) mc(blue)) ///
+	(sc births schooling if region==4, ms(O) mc(orange)) ///
+	(sc births schooling, mc(gs10)) (lfit births schooling, lc(gs10)), ///
 	legend(row(1) lab(1 "Asian countries") ///
 	lab(2 "African countries") ///
 	lab(3 "Whole sample")) name(reg_geo, replace)
@@ -186,19 +191,14 @@ cap drop yhat
 predict yhat
 
 * Regression lines for the predicted values of Asia and Africa.
-tw (sc births schooling if region==1, mc(blue)) ///
-	(sc births schooling if region==4, mc(orange)) ///
-	(sc births schooling, m(Oh) mc(gs10)) ///
-	(sc yhat schooling, m(Oh) mc(gs0)) ///
+tw (sc births schooling if region==1, ms(O) mc(blue)) ///
+	(sc births schooling if region==4, ms(O) mc(orange)) ///
+	(sc births schooling, mc(gs10)) ///
 	(sc yhat schooling if region==1, c(l) lc(blue*1.5) mc(blue*1.5)) ///
 	(sc yhat schooling if region==4, c(l) lc(orange*1.5) mc(orange*1.5)), ///
-	legend(order(1 5 2 6 3 4) ///
-	lab(1 "Asian countries") ///
-	lab(2 "African countries") ///
-	lab(3 "Whole sample") ///
-	lab(5 "Fitted values (Asia)") ///
-	lab(6 "Fitted values (Africa)"))
-
+	legend(order(1 "Asian countries" 4 "Fitted values (Asia)" ///
+	2 "African countries" 5 "Fitted values (Africa)"))
+	
 * Regression line for the HIV/AIDS dummy.
 tw (sc yhat aids) (lfit yhat aids), xlab(0 "Low" 1 "High")
 
@@ -237,8 +237,8 @@ cap drop rst
 predict rst, rsta
 
 * Identify outliers beyond 2 standard deviations.
-sc rst yhat, yline(-2 2) || sc rst yhat if abs(rst)>2, mlab(cname) ///
-	ylab(-3(1)3) legend(lab(2 "Outliers"))
+sc rst yhat, yline(-2 2) || sc rst yhat if abs(rst)>2, mlab(ccodewb) ///
+	ylab(-3(1)3) legend(lab(2 "Outliers")) name(diag_rst, replace)
 
 
 * (b) Variance inflation and interaction terms
@@ -286,14 +286,14 @@ reg births c.schooling##c.log_gdpc aids#region, r beta
 * ----------------------
 
 * Homoscedasticity of the residuals versus fitted values (DV).
-rvfplot, yline(0) mlab(ccodewb) name(diag_rvf, replace)
+rvfplot, yline(0) ms(i) mlab(ccodewb) name(diag_rvf, replace)
 
 * Identical, with outliers.
 sc r yhat || sc r yhat if abs(rst) > 2, yline(0) mlab(ccodewb) ///
 	legend(lab(2 "Outliers"))
 
 * Homoskedasticity of the residuals versus one predictor (IV).
-rvpplot schooling, yline(0) mlab(ccodewb) name(diag_rvp, replace)
+rvpplot schooling, yline(0) ms(i) mlab(ccodewb) name(diag_rvp, replace)
 
 * Identical, with outliers.
 sc r schooling || sc r schooling if abs(rst) > 2, yline(0) mlab(ccodewb) ///
@@ -323,8 +323,8 @@ eststo clear
 * Model 1: 'Baseline model'.
 eststo M1: qui reg births schooling log_gdpc, r beta
 
-* Model 1: Adding the HIV/AIDS dummy with regional interactions.
-eststo M1: qui reg births schooling log_gdpc aids##region, r beta
+* Model 2: Adding the HIV/AIDS dummy with regional interactions.
+eststo M2: qui reg births schooling log_gdpc aids##region, r beta
 
 * Model 3: Adding the interaction between education and wealth.
 eststo M3: qui reg births c.schooling##c.log_gdpc aids##region, r beta

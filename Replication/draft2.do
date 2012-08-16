@@ -393,6 +393,11 @@ spineplot hins race, scale(.7) name(hins, replace)
 * Export with tsst command.
 tsst using draft2-stats.txt, su(bmi age) fre(female edu3 health phy race hins) replace
 
+* Note: guidelines to export summary statistics tables appear in week5.do
+* and draft1.do. Please also refer to Section 13.4 of the Stata Guide for 
+* formatting instructions if your feedback indicated that you revise your
+* summary statistics table.
+
 
 * =========
 * = MODEL =

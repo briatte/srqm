@@ -17,6 +17,13 @@
 * make definite choices about your code, remove all errors and make sure that
 * your do-file runs from beginning to end without any issues.
 
+* Required packages (uncomment to install).
+* ssc install fre, replace
+* ssc install catplot, replace
+* ssc install spineplot, replace
+* ssc install tab_chi, replace
+* ssc install estout, replace
+
 
 * =========
 * = SETUP =
@@ -224,17 +231,10 @@ spearman geq agea income edu lrscale, star(.05)
 * of gender equality (age, right-wing) are lower than positive predictors, like
 * income and education. There are also a lot of IV interactions to deal with.
 
-
 * Export correlation matrix.
 eststo clear
-estpost correlate geq agea income edu lrscale, matrix listwise // correlate
-esttab using correlates.csv, unstack not compress label replace // export
-
-
-
-eststo clear
-qui estpost correlate births sqrt_schooling log_gdpc aids, matrix listwise
-esttab using corr.csv, unstack not compress label replace // export
+estpost correlate geq agea income edu lrscale, matrix listwise
+esttab using draft3-corr.csv, unstack not compress label replace
 
 
 * =========

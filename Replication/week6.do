@@ -27,15 +27,17 @@ ren v7 ccode
 ren v8 popweight
 ren v38 ctyweight
 gen wgt=popweight*ctyweight
+svyset [pw=wgt] // weighting scheme set to whole European population
 
 
 * DV: Mitigation of crisis through European currency
 * --------------------------------------------------
 
-fre v493 [aw=wgt]
+fre v493
+svy: tab v493 // weighted proportions
 
 * Visualization.
-catplot v493 [aw=wgt], over(ccode, sort(4)des lab(labsize(*.8))) ///
+catplot v493, over(ccode, sort(4)des lab(labsize(*.8))) ///
 	asyvars percent(ccode) stack scale(.7) ytitle("") ///
 	legend(rows(1) region(fc(none) ls(none))) ///
 	bar(1, c(navy*.7)) bar(2, c(navy*1.3)) ///
@@ -48,16 +50,18 @@ recode v493 ///
 	(3/4=0 "Disagree") ///
 	(else=.), gen(mitig)
 la var mitig "Crisis: mitigated through euro"
-fre mitig [aw=wgt]
+
+fre mitig
+svy: tab mitig // weighted proportions
 
 * You can read the frequency of the positive value in a binary variable by 
 * inspecting its mean. In this case, the mean gives the fraction of respondents
 * that perceive either their domestic government or the EU as the most capable
-* actor in regard to the financial crisis:
-su mitig [aw=wgt]
+* actor in regard to the financial crisis.
+
 
 * Visualization.
-catplot mitig [aw=wgt], over(ccode, sort(2) lab(labsize(*.8))) ///
+catplot mitig, over(ccode, sort(2) lab(labsize(*.8))) ///
 	asyvars percent(ccode) stack scale(.7) ytitle("") ///
 	legend(rows(1) region(fc(none) ls(none))) ///
 	bar(1, c(sand)) bar(2, c(navy)) ///
@@ -76,8 +80,8 @@ recode sex (1=0 "Male") (2=1 "Female"), gen(female)
 la var female "Gender"
 
 * Crosstabulations:
-tab mitig female    // raw frequencies
-tab mitig female    // cell percentages
+tab mitig female       // raw frequencies
+tab mitig female, cell // cell percentages
 
 * Conditional probabilities:
 tab mitig female, col nof    // column percentages
@@ -133,8 +137,9 @@ ren v646 age4
 * Mean age in each age group.
 tab age4, summ(age)
 
-* Crosstabulation; Chi-squared test.
-tab mitig age4, col nof chi2
+* Conditional probabilities:
+tab mitig age4, col nof    // column percentages
+tab mitig age4, row nof    // rows percentages
 
 
 * IV: Education
@@ -148,11 +153,15 @@ recode edu ///
 	(98=.), gen(edu4)
 la var edu4 "Education"
 
-* Crosstabulation; Chi-squared test.
-tab mitig edu4, col nof chi2
-
 * Mean age at each educational level.
 tab edu4, summ(age)
+
+* Conditional probabilities:
+tab mitig edu4, col nof    // column percentages
+tab mitig edu4, row nof    // rows percentages
+
+* Significance tests:
+tab mitig edu4, exp chi2 V
 
 
 * IV: Occupation
@@ -160,58 +169,62 @@ tab edu4, summ(age)
 
 ren v767 pro
 
-* Crosstabulation; Chi-squared test.
-tab mitig pro, col nof chi2
-
 * Visualization with categories ordered by descending order.
 gr dot mitig, over(pro, sort(1) des)
 
 * Isolating student respondents with a binary variable.
-recode pro (8=1) (else=0), gen(student)
-la var student "Student"
+gen student = (pro==8)
 
-* Crosstabulation; Fisher's exact test.
-tab mitig student, col nof exact
+* Conditional probabilities:
+tab mitig student, col nof    // column percentages
+tab mitig student, row nof    // rows percentages
+
+* Significance tests:
+tab mitig edu4, exp chi2 V
 
 
 * IV: Left-right political positioning
 * ------------------------------------
 
-ren v638 pol10
-ren v639 pol3
-ren v640 pol5
-fre pol10 pol3 pol5
+fre v638-v640   // multiple choices here
+ren v638 pol10 // using the version with most dimensions (warning, large tables)
 
 * Visualization over 10 categories.
-catplot mitig, over(pol10) asyvars stack scale(.8) ///
-	bar(1, c(sand)) bar(2, c(navy)) legend(region(fc(none) ls(none))) ///
-	ytitle("") name(mitig_pol10, replace)
+gr dot mitig, over(pol10)
 
-* Visualization over 3 categories.
-catplot mitig, over(pol3) asyvars percent(pol3) stack scale(.8) ///
-	bar(1, c(sand)) bar(2, c(navy)) legend(region(fc(none) ls(none))) ///
-	ytitle("") name(mitig_pol5, replace)
+* Conditional probabilities:
+tab mitig pol10, col nof    // column percentages
+tab mitig pol10, row nof    // rows percentages
 
-* Visualization over 5 categories.
-catplot mitig, over(pol5) asyvars percent(pol5) stack scale(.8) ///
-	bar(1, c(sand)) bar(2, c(navy)) legend(region(fc(none) ls(none))) ///
-	ytitle("") name(mitig_pol5, replace)
-
-* Chi-squared tests on recodings.
-tab mitig pol3, col nofreq chi2
-tab mitig pol5, col nofreq chi2
-
-* Confidence intervals for each proportion.
-prop mitig, over(pol5)
+* Significance tests:
+tab mitig pol10, exp chi2 V
 
 
 * IV: Perception of European Union
 * --------------------------------
 
-ren v182 eum
+recode v182 (1=1 "Benefited") (2=0 "Not benefited"), gen(eum) // create a dummy
 
-* Crosstabulation; Chi-squared test.
-tab mitig eum, col nof chi2
+* Conditional probabilities:
+tab mitig eum, col nof    // column percentages
+tab mitig eum, row nof    // rows percentages
+
+* Significance tests:
+tab mitig eum, exp chi2 V exact // reminder: Cramer's V is [-1,1] on 2x2 tables
+tabchi mitig eum, p noo noe     // Pearson residuals
+
+* Save the crosstabulated frequencies to a matrix.
+tab mitig eum, col matcell(odds)
+
+* Explanatory statement.
+di as txt _n "Respondents who think that their country benefited from EU membership are" _n ///
+	"about " round((odds[2,1]*odds[1,2])/(odds[2,2]*odds[1,1]),.1) " times " ///
+	"more likely to think that the euro mitigated the crisis" _n ///
+	"than respondents who think that their country has not benefited from it." 
+
+* Quick demonstration of odds and odds ratios (more next week).
+tabodds mitig eum
+tabodds mitig eum, or
 
 
 * ========

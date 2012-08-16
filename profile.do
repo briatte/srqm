@@ -142,12 +142,15 @@ program srqm
 	
 		if "`2'" == "routine" {
 			di as inp _n "Clean run through all do-files..."
-			forvalues y=1/12 {
-				do Replication/week`y'.do
+			forvalues y=1/15 {
 				gr drop _all
-				if `y' < 4 {
-					do Replication/draft`y'.do
-					gr drop _all
+				set scheme s2color
+				if `y' < 13 {
+					do Replication/week`y'.do
+				}
+				else {
+					local y2 = `y' - 12
+					do Replication/draft`y2'.do
 				}
 			}
 

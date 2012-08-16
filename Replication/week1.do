@@ -170,7 +170,6 @@ ssc install spineplot, replace
 ssc install tabout, replace
 ssc install tab_chi, replace
 ssc install estout, replace
-ssc install outreg2, replace
 
 * The settings covered in this section of the do-file should now be permanently
 * stored on your computer. You will not need to come back to them. The settings

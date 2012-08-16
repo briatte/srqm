@@ -21,7 +21,7 @@ cap log using "Replication/week8.log", name(week8) replace
 
 
 * Rename variables to short handles.
-ren (wdi_fr births) (bl_asyt25 schooling) (undp_hdi hdi) (ti_cpi corruption) (gid_fgm femgovs)
+ren (wdi_fr bl_asyt25 undp_hdi ti_cpi gid_fgm) (births schooling hdi corruption femgovs)
 
 * Compute GDP per capita.
 gen gdpc = unna_gdp/unna_pop
