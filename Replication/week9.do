@@ -11,8 +11,7 @@
 * Start again where we stopped with the QOG dataset. This command will make
 * sure that all variables transformations, renaming and recoding from our past 
 * session are properly loaded. It will also keep the macros from last week and
-* load some exploratory scatterplot graphs in memory, before we discard them
-* with the next line to clear the screen from unnecessary clutter.
+* load some exploratory scatterplot graphs in memory.
 do "Replication/week8.do"
 
 * Log.
@@ -140,16 +139,22 @@ rvfplot, $ccode yline(0) name(cpi_femgov_rvf, replace)
 rvpplot femgovs, $ccode yline(0) name(cpi_femgov_rvp, replace)
 
 
+* Summary statistics
+* ------------------
+
+* Export with tsst command.
+tsst using stats.txt, su(births schooling sqrt_schooling log_gdpc) fre(region aids) replace
+
+* Note: guidelines to export summary statistics tables appear in week5.do
+* and draft1.do. Please also refer to Section 13.4 of the Stata Guide for 
+* formatting instructions if your feedback indicated that you revise your
+* summary statistics table.
+
+
 * ========
 * = EXIT =
 * ========
 
-
-* Clean all graphs from memory.
-* gr drop _all
-
-* Wipe the modified data.
-* clear
 
 * Close log (if opened).
 cap log close week9

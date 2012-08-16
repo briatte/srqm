@@ -182,17 +182,17 @@ tabstat bmi logbmi, s(n sk kurtosis min max) c(s)
 * Running the same graphs as previously on the original BMI variable,
 * we can observe some improvement towards normality with 'log-BMI'.
 hist logbmi, normal name(logbmi, replace)
-graph hbox logbmi
+gr hbox logbmi
 
 * Running the same graphs with a few options to combine them allows a quick
 * visual comparison of the transformation.
 hist bmi, normal xscale(off) yscale(off) ///
 	title("Untransformed") name(bmi1, replace)
-graph hbox bmi, fysize(25) name(bmi2, replace)
+gr hbox bmi, fysize(25) name(bmi2, replace)
 hist logbmi, normal xscale(off) yscale(off) ///
 	title("Transformed") name(bmi3, replace)
-graph hbox logbmi, fysize(25) name(bmi4, replace)
-graph combine bmi1 bmi3 bmi2 bmi4, imargin(small) ysize(3) col(2)
+gr hbox logbmi, fysize(25) name(bmi4, replace)
+gr combine bmi1 bmi3 bmi2 bmi4, imargin(small) ysize(3) col(2)
 
 
 * ==================
@@ -213,12 +213,6 @@ ci bmi
 * = EXIT =
 * ========
 
-
-* Clean all graphs from memory.
-* gr drop _all
-
-* Wipe the modified data.
-* clear
 
 * Close log (if opened).
 cap log close week4

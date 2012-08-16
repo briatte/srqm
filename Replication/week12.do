@@ -15,15 +15,16 @@ use "Datasets/qog2011.dta", clear
 cap log using "Replication/week12.log", name(week12) replace
 
 
-* ===============
-* = PREPARATION =
-* ===============
+* ================
+* = DESCRIPTIONS =
+* ================
 
 
 * Rename and recode variables of interest.
 ren cname country
 ren ccodewb cty
 ren wdh_lsbw95_05 happy
+
 recode ht_region ///
 	(5=1 "Western Europe & North America") ///
 	(1=2 "Eastern Europe & post-Soviet Union") ///
@@ -32,7 +33,9 @@ recode ht_region ///
 	, gen(region)
 la var region "Geographical location"
 
-* Understand the dependent variable.
+
+* DV: Happiness
+* -------------
 codebook happy
 
 * Critical note: an aggregate measure of happiness is an interesting concept
@@ -63,13 +66,7 @@ drop if mi(happy)
 sort happy
 
 * Visualize the dependent variable by geographic region.
-graph dot happy, over(region, sort(1) des) exclude0 name(happy_region, replace)
-
-
-* ================
-* = DISTRIBUTION =
-* ================
-
+gr dot happy, over(region, sort(1) des) exclude0 name(happy_region, replace)
 
 * Obtain the five-number summary, percentiles and normality indicators.
 su happy, d
@@ -84,22 +81,16 @@ list happy country region if happy < 23.7 | happy > 60.8
 * whole sample: geographical regions below it have a lower median happiness
 * than the whole set of observed countries. We also added a few graph options
 * to label potential outliers within each geographical region.
-graph hbox happy, over(region, sort(1) des total) mark(1, mlabel(ccodealp) mlabposition(6)) scale(.75) name(happy_box, replace)
+gr hbox happy, over(region, sort(1) des total) mark(1, mlabel(ccodealp) mlabposition(6)) scale(.75) name(happy_box, replace)
 
 
-* =========
-* = MODEL =
-* =========
-
+* Independent variables
+* ---------------------
 
 * Rename variables of interest.
 ren ffp_fsi state
 ren bl_asyf15 edu_f
 ren bl_asym15 edu_m
-* Recoding the ciri_speech variable, which is reverse-coded. The new variable
-* will avoid problems of interpretation at some later stages of our analysis.
-gen speech = 2-ciri_speech
-la var speech "Freedom of Speech"
 ren ciri_wosoc women
 ren fh_press press
 ren fh_ep elections
@@ -109,7 +100,19 @@ ren kk_gg markets
 ren wdi_lifexp life
 ren wdi_mort infant
 
-* Notes on what follows:
+* Recoding the ciri_speech variable, which is reverse-coded. The new variable
+* will avoid problems of interpretation at some later stages of our analysis.
+gen speech = 2-ciri_speech
+la var speech "Freedom of Speech"
+
+
+* =========
+* = MODEL =
+* =========
+
+
+* Notes on linear modelling
+* -------------------------
 *
 * - Our model considers five series of regressors (or predictors; both names
 * designate our independent, explanatory variables. The series are thematic
@@ -124,6 +127,11 @@ ren wdi_mort infant
 * terms just represent a list of variables: when you read $m3, for instance,
 * just replace it mentally with the variables under consideration in our third
 * model component, i.e. "speech press women elections politics".
+*
+* - We finally export all different models (basically three of them) to look
+* at the respective contribution of each series of determinants. The estout
+* package is used to simplify the export of regression output. See the do-file
+* from Week 11 if you need to review how the estout package works.
 
 
 * Predictors 1: Security
@@ -172,7 +180,10 @@ d $m4
 su $m4
 gr mat happy $m4, name(m4, replace)
 
+
 * Predictors 5: Health
+* --------------------
+
 global m5="life infant"
 d $m5
 su $m5
@@ -195,20 +206,31 @@ pwcorr happy $m4 $m5, obs sig
 * standard errors, a simple method to deal with heteroscedasticity. Finally,
 * we produce beta (b) coefficients along with unstandardized (B) coefficients.
 
+
 * Model 1: Security
+* -----------------
+
 reg happy $m1, r beta
 twoway (scatter happy state) (lfit happy state), name(happy_state, replace)
 
 * Model 2: Wealth
+* ---------------
+
 reg happy $m2, r beta
 
 * Model 3: Freedom
+* ----------------
+
 reg happy $m3, r beta
 
 * Model 1+2: Security and Wealth
+* ------------------------------
+
 reg happy $m1 $m2, r beta
 
 * Model 1+2+3: Security, Wealth and Freedom
+* -----------------------------------------
+
 reg happy $m1 $m2 $m3dummies, r beta
 
 * Model selection through nested regression (note that we are treating all our
@@ -250,8 +272,8 @@ qnorm r, name(r_qnorm, replace)
 sktest r
 
 
-* (1) Multicollinearity
-* ---------------------
+* Multicollinearity
+* -----------------
 
 * Variance Inflation Factor (VIF)
 vif
@@ -267,8 +289,8 @@ foreach predictor of varlist $m1 $m2 {
 }
 
 
-* (2) Heteroscedasticity
-* ----------------------
+* Heteroscedasticity
+* ------------------
 
 * Homoscedasticity of the residuals.
 rvfplot, yline(0) name(diag_rvf, replace)
@@ -282,8 +304,8 @@ imtest
 * assumption of linear regression is hence violated at that stage.
 
 
-* (3) Influential points
-* ----------------------
+* Influential points
+* ------------------
 
 * Leverage-versus-residuals plot
 lvr2plot, mlabel(cty) name(reg_lvr, replace)
@@ -309,8 +331,9 @@ list d cty country if d > 4/$obs & !mi(d), clean N
 reg happy $m1 $m2 $m3dummies i.region
 reg if d < 4/$obs
 
-* (4) Omitted variables
-* ---------------------
+
+* Omitted variables
+* -----------------
 
 * If this test rejects the null hypothesis, then there is a way to improve
 * the model by using a power (i.e. a polynomial) of the dependent variable.
@@ -328,13 +351,11 @@ ovtest, rhs
 * that actually return interesting results beyond mere regression output.
 
 
-* ==========
-* = SAVING =
-* ==========
+* Export models
+* -------------
 
-
-* Reminder: you will need the estout package from there on. This is just a
-* demonstration of how to save regression output in a more clever format.
+* Reminder: you will need the estout package from there on.
+* ssc install estout, replace
 
 * Format the Models 1, 2 and 3 regression tables.
 eststo clear
@@ -366,15 +387,6 @@ esttab, constant label beta(2) se(2) r2(2) nonumber ///
 * - We need much better data to observe other factors.
 
 * That's all folks!
-
-* Wipe stored estimates
-* eststo clear
-
-* Clean all graphs from memory.
-* gr drop _all
-
-* Wipe the modified data.
-* clear
 
 * Close log (if opened).
 cap log close week12

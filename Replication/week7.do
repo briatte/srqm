@@ -14,15 +14,14 @@ use "Datasets/ess2008.dta", clear
 * Log.
 cap log using "Replication/week7.log", name(week7) replace
 
-* Packages.
-* ssc install fre
-* ssc install catplot
+
+* ================
+* = DESCRIPTIONS =
+* ================
 
 
-* ====================
-* = DATA PREPARATION =
-* ====================
-
+* DV: Justifiability of torture
+* -----------------------------
 
 * Attitudes towards torture.
 fre trrtort
@@ -34,24 +33,17 @@ recode trrtort ///
 	(3=.), gen(torture)
 la var torture "Opposition to torture"
 
-* Weight results by survey design.
-svyset [pw=dweight], vce(linearized) singleunit(missing)
-
-
-* ======================
-* = DEPENDENT VARIABLE =
-* ======================
-
-
+* Overall support, weighted by overall European population.
 fre torture [aw=dweight*pweight]
 su torture [aw=dweight*pweight]
 ci torture [aw=dweight*pweight]
 
 * Average opposition to torture in each country.
-gr dot torture, over(cntry, sort(1) des) scale(.7)
+gr dot torture [aw=dweight], over(cntry, sort(1) des) scale(.7)
 
-* Detailed breakdown in each country.
-catplot trrtort if trrtort != 8, over(cntry, sort(1)des lab(labsize(*.8))) ///
+* Detailed breakdown in each country (requires catplot package)
+* ssc install catplot
+catplot trrtort if trrtort != 8 [aw=dweight], over(cntry, sort(1)des lab(labsize(*.8))) ///
 	asyvars percent(cntry) stack scale(.7) ytitle("") ///
 	legend(rows(1) label(3 "Neither") region(fc(none) ls(none))) ///
 	bar(1, c(sand)) bar(2, c(sand*.7)) bar(3, c(dimgray)) ///
@@ -59,15 +51,13 @@ catplot trrtort if trrtort != 8, over(cntry, sort(1)des lab(labsize(*.8))) ///
 	name(torture, replace)
 
 * Comparing Israel to other European countries.
-gen israel=.
-replace israel=1 if cntry=="IL"
-replace israel=0 if cntry!="IL"
+gen israel = (cntry=="IL")
 
 * Comparison of average opposition to torture inside and outside Israel.
 prtest torture, by(israel)
 
 * Subset to all European countries but Israel.
-drop if cntry=="IL"
+drop if israel
 
 
 * =========================
@@ -80,7 +70,8 @@ drop if cntry=="IL"
 gen wgt=dweight*pweight
 svyset [pw=wgt], vce(linearized) singleunit(missing)
 
-* (1) Age
+
+* IV: Age
 * -------
 
 ren agea age
@@ -107,7 +98,8 @@ tab torture age4, col nof chi2
 * Comparison of average age in each category.
 ttest age, by(torture)
 
-* (2) Gender
+
+* IV: Gender
 * ----------
 
 recode gndr (1=0 "Male") (2=1 "Female") (else=.), gen(female)
@@ -119,7 +111,8 @@ tab torture female, col nof exact
 * Comparison of proportions in each category.
 prtest torture, by(female)
 
-* (3) Income deciles
+
+* IV: Income deciles
 * ------------------
 
 ren hinctnta income
@@ -135,7 +128,7 @@ recode income (1/3=1 "D1-D3") (4/6=2 "D4-D6") ///
 tab torture income4, col nof chi2
 
 
-* (4) Education
+* IV: Education
 * -------------
 
 ren eduyrs edu
@@ -147,7 +140,7 @@ hist edu, bin(15) normal
 ttest edu, by(torture)
 
 
-* (5) Religious faith
+* IV: Religious faith
 * -------------------
 
 fre rlgblg rlgdnm
@@ -181,7 +174,7 @@ prtest torture, by(faith_3)
 prtest torture, by(faith_4)
 
 
-* (6) Political positioning
+* IV: Political positioning
 * -------------------------
 
 ren lrscale pol
@@ -205,7 +198,7 @@ replace left=0 if pol3==2 | pol==3
 prtest torture, by(left)
 
 
-* (7) Media exposure
+* IV: Media exposure
 * ------------------
 
 fre tvpol
@@ -228,74 +221,37 @@ tab torture media, col nof exact
 prtest torture, by(media)
 
 
-* ==============
-* = EXTENSIONS =
-* ==============
+* ===============
+* = ODDS RATIOS =
+* ===============
 
-
-* The following section covers techniques outside of the scope of this course.
-* Feel free to replicate and read from the UCLA Stata annotated output pages on
-* odds ratios and (ordered) logistic regression to understand the techniques we
-* used to finalize our analysis.
-
- 
-* (1) Odds ratios
-* ---------------
 
 * Save the crosstabulated frequencies to a matrix.
 tab torture media, col nof exact matcell(odds)
 
 * Build an odds-ratios statement.
 di as txt _n "Respondents with high political TV news exposure were about " ///
-	round((odds[1,2]*odds[2,1])/(odds[2,2]*odds[1,1]),.01) " times " ///	_n "more likely to systematically support torture than other respondents."
-
-* Same result as a logistic regression with a 99% CI odds ratio.
-logit torture ib1.media, or level(99)
+	round((odds[1,2]*odds[2,1])/(odds[2,2]*odds[1,1]),.01) " times " ///
+	_n "more likely to systematically support torture than other respondents."
 
 * Odds ratios are common in biostatistics, where analysts are often interested
 * in calculating the risk ratio of exposure to a given pathological factor. We
 * used the odds ratios here to change our initial perspective on the variable:
 * instead of measuring opposition to torture, the odds ratios above relate to
-* supporters of torture in particular circumstances. By shifting to a 99% level
-* of confidence, we demonstrated that the effect of high exposure to political
-* TV news is robust, i.e. superior to 1 even with a large confidence interval.
-* This, again, applies mostly to biostatistics, where life-threatening factors
-* are more common and therefore more likely to require a very low alpha level.
-* Read on odds ratios and confidence intervals for more background.
+* supporters of torture among those exposed to TV news, as compared to support
+* among unexposed respondents.
 
-* (2) Logistic regression
-* -----------------------
+* Handiest way to get odds and odds ratios.
+tabodds // this will break
 
-* Our final model uses a technique that goes beyond this course. It restores
-* some precision in variable measurement by using the full ordinal scales of
-* all variables. It also computes robust standard errors by controlling for
-* any country effect. 
-
-* Ordered logistic regression with 95% CI odds ratios for all predictors.
-ologit trrtort age i.female income edu i.faith pol tvpol, or vce(cluster cntry)
-
-* Model checks indicate that the choice of predictors is very lowly efficient
-* at predicting the DV: overall, this model explains very little about support
-* and opposition to torture. However, it reaches stable conclusions: right-wing
-* support and high media exposure are both more present among respondents who
-* are open to the possibility of torture, but to a minor extent. The strongest
-* predictors concern systematic opposition to torture, which is more frequent
-* among females, higher income deciles and higher educated groups. A better way
-* to explain the DV will use more predictors: further exploration shows that a
-* low feeling of local safety is actually a reasonably powerful predictor of
-* stronger support for the use of torture, other factors being kept constant.
+* Same result as a logistic regression with a 99% CI odds ratio.
+logit torture ib1.media, or level(99)
 
 
 * ========
 * = EXIT =
 * ========
 
-
-* Clean all graphs from memory.
-* gr drop _all
-
-* Wipe the modified data.
-* clear
 
 * Close log (if opened).
 cap log close week7

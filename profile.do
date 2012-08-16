@@ -15,7 +15,7 @@ cap cd "~/Documents/Teaching/SRQM"
 // few additional packages to Stata. Some of these packages are used in course
 // do-files. Type in 'srqm' to get the program commands and options.
 
-* SRQM folder checks.
+// Check working directory.
 if _rc != 0 {
 	di as err "Failed setting the working directory."
 	
@@ -36,6 +36,7 @@ noi di as inp _n "Working directory:"
 noi pwd
 noi ls, w
 
+// Check course folders.
 foreach f in  "Datasets" "Replication" {
 	cap cd "`f'"
 	if _rc != 0 {
@@ -50,41 +51,31 @@ foreach f in  "Datasets" "Replication" {
 	cd ..
 }
 
-* SRQM
-*
-* Run this script when the course starts to setup Stata. You must be online to
-* execute the script in full, and you must have properly installed Stata on your
-* computer first.  
-
-* To run the script, type one of the commands below:
-*
-* srqm setup (to make a few permanent settings and install a few packages)
-* srqm check (to run some routine checks on your system and package files)
-*
-* Add 'verbose' after any command to produce more detailed output.
-* The 'check' command also accepts 'offline' or 'online' to run all do-files.
-
 cap pr drop srqm
 program srqm
+	// srqm -- setup programme for the SRQM course
+	//
+	//   srqm setup -- to make some permanent settings and install a few packages
+	//   srqm check -- to run some routine checks on your system and packages
 
-	local variables = "lookfor_all fre revrs univar extremes" // req: fre
-	local graphs = "catplot ciplot spineplot tabplot" // req: catplot, spineplot
-	local exports = "log2do2 mkcorr tabout" // req: mkcorr, tabout
-	local regression = "estout leanout outreg outreg2" // req: estout
+	// Run this script when the course starts to setup Stata. You must be online to
+	// execute the script in full, and you must have properly installed Stata on your
+	// computer first.  
 
-	* Cleanup.
-	cap log close _all
+	local variables = "lookfor_all fre revrs univar extremes"
+	local graphs = "catplot ciplot spineplot tabplot tab_chi" 
+	local exports = "log2do2 mkcorr tabout"
+	local regression = "estout leanout outreg outreg2"
+
+	cap log close _all // interrupt logs
 
 	local verbose = ("`2'" == "verbose")
 
 	if "`1'" == "setup" | "`1'" == "check" {
-		* Log.
 		qui log using `1'.log, name(SRQM) replace
-
 		di as inp "Running SRQM in " `"`1'"' " mode on Stata " c(stata_version)
 	}
 	else {
-		* Error.
 		di as txt _n "Setup commands:" _n
 		di as inp "  srqm setup" as txt " -- setup for the SRQM course"
 		di as inp "  srqm setup offline" as txt " -- skip package installs"
@@ -97,8 +88,6 @@ program srqm
 		exit 198
 	}
 
-	* SETUP: SYSTEM
-	
 	di as inp _n "Looking at system settings..."
 	if "`1'" == "setup" {
 		* Memory.
@@ -128,8 +117,6 @@ program srqm
 		query
 	}
 
-	* SETUP: PACKAGES
-	
 	di as inp _n "Looking at packages..."
 	if "`1'" == "setup" & "`2'" != "offline" {
 		local i=0
@@ -151,7 +138,6 @@ program srqm
 		ado dir
 	}
 	
-	* CHECK
 	if "`1'" == "check" {
 	
 		if "`2'" == "routine" {
@@ -159,34 +145,13 @@ program srqm
 			forvalues y=1/12 {
 				do Replication/week`y'.do
 				gr drop _all
-				rm Replication/week`y'.log
 				if `y' < 4 {
 					do Replication/draft`y'.do
 					gr drop _all
 				}
 			}
 
-			rm a1_stats1.csv	
-			rm a1_stats2.csv
-			rm a1_stats.txt
-			rm a2_stats1.csv	
-			rm a2_stats2.csv
-			rm a2_stats.txt
-
-			rm week5_fig1.pdf
-			rm week5_fig2.pdf
-			rm week5_stats.txt
-			rm week5_stats1.csv
-			rm week5_stats2.csv
-
-			rm Replication/week8.log // week8.do runs again at start of week9.do
-
-			rm week11_stats.txt
-			rm week11_stats1.csv
-			rm week11_stats2.csv
-			rm week11_corr.csv
-			rm week11_reg.csv
-			
+			// cleanup
 			rm Replication/perma.log
 			
 			di as res "Done."
@@ -207,7 +172,6 @@ program srqm
 		}
 	}
 					
-	* LOG
 	di as inp _n "The log for this " `"`1'"' " operation is stored at:"
 	qui log query SRQM
 	di as res r(filename)	
@@ -216,90 +180,75 @@ program srqm
 		di as txt "further assistance with your Stata installation."
 	}
 
-	* END	
 	di as inp _n "Done!"
 	di as inp "Have a nice day."
 	
 	qui log close SRQM
 end
 
-* TSST
-
-* tsst produces tabbed summary statistics tables.
-* 
-* This command produces summary statistics as tab-separated values.
-* Your spreadsheet editor should read its output without any issue.
-*
-* Syntax:
-*
-*    tsst using file.tsv, summarize(v1 v2) frequencies(v3 v4) replace"
-*
-* You can abbreviate the variable groups to su() and fr().
-*
-* Example:
-*
-*    tsst using myfile.txt, su(height weight age) fr(sex uninsured) replace
-*
-* -- inspired by http://repec.org/usug2009/jann.tutorial.pdf
-
 cap pr drop tsst
 program tsst
+	// tsst -- export tabbed summary statistics tables
+	// method: http://www.stata.com/meeting/uk09/uk09_jann.pdf
+
     syntax using/ [, SUmmarize(varlist) FRequencies(varlist) replace append verbose ] 
     tempname fh
 	if "`frequencies'" == "" & "`summarize'" == "" { 
-    	di as err "ERROR: " as txt "No variables."
+    	di as err "  ERROR: No variables provided." _n
     	local exit="yes"
     }
     else if strpos("`using'",".tsv") < 2 & strpos("`using'",".txt") < 2 {
-    	di as err "ERROR: " as txt "File extension should be TXT or TSV."
+    	di as err "ERROR: File extension should be TXT or TSV." _n
     	local exit="yes"
     }
     else {
-    	di as txt "Building the table " "`using'" _n "..."
+		file open `fh' using `using', write `replace' `append'
+		file write `fh' _n _n "Variable" _tab "N" _tab "Mean / %" _tab "SD" _tab "Min." _tab "Max."
+		di ""
     }
 	if "`exit'"=="yes" {
-		di as txt "The tsst command uses the following syntax:" _n
-		di "    tsst using myfile.txt, sum(v1 v2) fre(v3) replace" _n
-    	di "Use the sum() option to summarize continuous variables."
-    	di "Use the fre() option to list frequencies of categorical variables." _n
-		di "Your file will use tab-separated values."
-		di "You'll be able to open this file in pretty much any spreadsheet editor." _n
-		di "Please retry your command with these parameters."
+		di as txt "  Usage:" _n
+		di "    tsst using table.txt, su(v1 v2) fr(v3) replace" _n
+    	di "  su() describes continuous variables (mean, sd, min, max)"
+    	di "  fr() describes categorical variables (frequencies)" _n
+		di "  Example:" _n
+		di "    sysuse nlsw88, clear"
+		di "    su age wage"
+		di "    tab1 race married"
+		di "    tsst using table.txt, su(age wage) fr(race married) replace" _n
+		di "  tsst saves tables to tab-separated values (.tsv or .txt)."
+		di "  You should be able to open them in any spreadsheet editor." _n
 		exit -1
 	}
-	file open `fh' using `using', write `replace' `append'
-	file write `fh' _n _n "Variable" _tab "N" _tab "Mean / %" _tab "SD" _tab "Min." _tab "Max."
 
 	if "`summarize'" != "" {
-		//di as inp "Summarizing..."
 		foreach v of varlist `summarize' {
 			qui summarize `v'
 		    local l: var l `v'
 	    	if "`l'"=="" {
-	    		di as txt "+ " "`v'" as err " (empty variable label)"
+	    		di as txt "   " "`v'" as err " (no variable label)"
 	    		local l="("+"`v'"+")"
 	    	}
 	    	else {
-	    		di as txt "+ " "`v'" " (" "`l'" ")"
+	    		di as txt "   " "`v'" " (" "`l'" ")"
 	    	}
 	    	file write `fh' _n "`l'" _tab (r(N)) _tab (round(r(mean),.01)) _tab (round(r(sd),.01)) _tab (round(r(min),.01)) _tab (round(r(max),.01))
 			}
 	}
 	if "`frequencies'" != "" {
-		//di as inp "Frequencies..."
 		foreach v of varlist `frequencies' {
 			qui su `v'
 		    local l: var l `v'
+			qui cap tab `v', gen(`v'_) matcell(m)
+			if _rc != 0 local d = " -- dummies existed already"
 	    	if "`l'"=="" {
-	    		di as txt "+ " "`v'" as err " (empty variable label)"
+	    		di as txt "  " "`v'" as err " (no variable label)" "`d'"
 	    		local l="("+"`v'"+")"
 	    	}
 	    	else {
-	    		di as txt "+ " "`v'" " (" "`l'" ")"
+	    		di as txt "   " "`v'" " (" "`l'" ")" "`d'"
 	    	}
 			local N = r(N)
-			qui cap tab `v', gen(`v'_) matcell(m)
-			if _rc != 0 di as err "!" as txt "(dummies existed already)"
 			qui levelsof `v', local(lvls)
 			local i = 0
 			foreach val of local lvls {
@@ -310,13 +259,14 @@ program tsst
 				local pos = strpos("`lbl'","==")
 				local vlbl = substr("`lbl'",`pos'+2,.)
 				if `i'==1 file write `fh' _n "`l'" ":"
-				file write `fh' _n " -  " "`vlbl'" _tab (r(N)) _tab (`pc') "%"
+				file write `fh' _n " -  " "`vlbl'" _tab (r(N)) _tab (`pc')
 			}
 		}
 	}
 	file close `fh'
-	di as txt "..." _n "Done. Open the file " as inp "`using'" as txt " with a spreadsheet editor."
-	di "Remember that every table deserves a caption! Enjoy life."
+	di as txt _n "   summarized to " as inp "`using'" _n
+	di as txt "Open the file with any spreadsheet editor to edit further."
+	di as txt "Remember that every table deserves a caption. Enjoy life."
 	if "`verbose'" != "" type `using'
 end
 

@@ -11,13 +11,20 @@
 * Data: Quality of Government (2011).
 use "Datasets/qog2011.dta", clear
 
+* Create a folder to export tables and graphs. This code is particularly handy
+* if you are working on a draft paper and need to save a few replication files.
+global pwd=c(pwd)
+global wd "Replication/week11-files"
+cap mkdir "$wd"
+cd "$wd"
+
 * Log.
-cap log using "Replication/week11.log", name(week11) replace
+cap log using "week11.log", name(week11) replace
 
 
-* ========================
-* = VARIABLE PREPARATION =
-* ========================
+* ================
+* = DESCRIPTIONS =
+* ================
 
 
 * DV: Fertility rate (births per woman).
@@ -57,19 +64,13 @@ recode ht_region ///
 	(6/10=1 "Asia & Pacific"), gen(region)
 la var region "Geographical region"
 
-* Export summary stats.
-tsst using week11_stats.txt, su(births schooling sqrt_schooling log_gdpc) fre(region aids) replace
 
-* Alternative if the tsst command is not installed as part of the course:
-* ssc install tabout, replace
+* ======================
+* = SUMMARY STATISTICS =
+* ======================
 
-* Continuous data.
-tabstatout births schooling sqrt_schooling log_gdpc, ///
-	tf(week11_stats1) s(n mean sd min max) c(s) f(%9.1fc) replace
-
-* Categorical data.
-tabout region aids using week11_stats2.csv, ///
-	replace c(freq col) oneway ptot(none) f(2) style(tab)
+* Export with tsst command.
+tsst using stats.txt, su(births schooling sqrt_schooling log_gdpc) fre(region aids) replace
 
 
 * ===============
@@ -80,11 +81,11 @@ tabout region aids using week11_stats2.csv, ///
 pwcorr births sqrt_schooling log_gdpc aids, star(.05)
 gr mat births sqrt_schooling log_gdpc, half
 
-* Export correlation matrix (requires additional package)
+* Export correlation matrix (requires estout package)
 * ssc install estout, replace
 eststo clear
 qui estpost correlate births sqrt_schooling log_gdpc aids, matrix listwise
-esttab using week11_corr.csv, unstack not compress label replace // export
+esttab using corr.csv, unstack not compress label replace // export
 
 * Drop missing data.
 drop if mi(births, sqrt_schooling, log_gdpc, aids)
@@ -111,13 +112,8 @@ reg sqrt_schooling log_gdpc
 * individual-level data, as to provide a different approach.
 
 
-* ================
-* = COEFFICIENTS =
-* ================
-
-
-* (a) Unstandardised (metric)
-* ------------------
+* Unstandardised (metric) coefficients
+* ------------------------------------
 
 * With schooling in metric units and GDP per capita in logged units.
 reg births schooling log_gdpc
@@ -127,8 +123,8 @@ reg births schooling log_gdpc
 reg births sqrt_schooling gdpc
 
 
-* (b) Standardised ('beta')
-* ----------------
+* Standardised ('beta') coefficients
+* ----------------------------------
 
 * With standardised, or 'beta', coefficients.
 reg births sqrt_schooling log_gdpc, beta
@@ -159,8 +155,8 @@ reg std_*
 reg births schooling log_gdpc, beta
 
 
-* (c) Dummies (categorical variables)
-* -----------------------------------
+* Dummies (categorical variables)
+* -------------------------------
 
 * Visualizing two categories (Asia and Africa) within the sample.
 tw (sc births schooling if region==1, mc(blue)) ///
@@ -224,8 +220,8 @@ cap drop yhat
 predict yhat
 
 
-* (a) Basic checks on residuals
-* -----------------------------
+* Basic checks on residuals
+* -------------------------
 
 * Store the unstandardized (metric) residuals.
 cap drop r
@@ -307,21 +303,35 @@ sc r schooling || sc r schooling if abs(rst) > 2, yline(0) mlab(ccodewb) ///
 reg births c.schooling##c.log_gdpc aids##region, r beta
 
 
-* ==========
-* = SAVING =
-* ==========
+* =================
+* = MODEL RESULTS =
+* =================
 
 
-* Reminder: you will need the estout package from there on. This is just a
-* demonstration of how to save regression output in a more clever format.
+* This section shows how to export regression results, in order to avoid having
+* to copy out the results by hand, copy-paste or any other risky (non)technique
+* that you might come up with at that stage. Exporting regression results also
+* make it easier to build several regression models based on varying sets of 
+* covariates (independent variables), in order to compare their coefficients.
+
+* The next commands require that you install the estout package first.
 * ssc install estout, replace
 
-* Format the regression tables for the model, with and without the interaction.
+* Wipe any previous regression estimates.
 eststo clear
+
+* Model 1: 'Baseline model'.
+eststo M1: qui reg births schooling log_gdpc, r beta
+
+* Model 1: Adding the HIV/AIDS dummy with regional interactions.
 eststo M1: qui reg births schooling log_gdpc aids##region, r beta
-eststo M2: qui reg births c.schooling##c.log_gdpc aids##region, r beta
-esttab M1 M2 using week11_reg.csv, csv replace constant beta(2) se(2) r2(2) ///
-	label mtitles("Without interaction" "With interaction")
+
+* Model 3: Adding the interaction between education and wealth.
+eststo M3: qui reg births c.schooling##c.log_gdpc aids##region, r beta
+
+* Export all models for comparison and reporting.
+esttab M1 M2 M3 using reg.csv, csv replace constant beta(2) se(2) r2(2) ///
+	label mtitles("Baseline" "Controls for HIV/AIDS" "Interaction effects")
 
 
 * ========
@@ -329,17 +339,11 @@ esttab M1 M2 using week11_reg.csv, csv replace constant beta(2) se(2) r2(2) ///
 * ========
 
 
-* Wipe stored estimates
-* eststo clear
-
-* Clean all graphs from memory.
-* gr drop _all
-
-* Wipe the modified data.
-* clear
-
 * Close log (if opened).
 cap log close week11
+
+* Reset working directory.
+cd "$pwd"
 
 * We are done. Just quit the application, have a nice week, and see you soon :)
 * exit

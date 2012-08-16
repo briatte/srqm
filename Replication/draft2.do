@@ -1,31 +1,105 @@
-* What: Example do-file for Assignment No. 2* Who:  François Briatte and Ivaylo Petev* When: 2012-02-23* Topic:  Social Determinants of Obesity in the USA* Data:   National Health Interview Survey* Sample: N = 24,291 for the 2009 survey year* Note: this file updates the previous draft with a few significance tests and 
-* some preliminary regression modelling with the main variables of interest.* =========* = SETUP =* =========* Data.use "Datasets/nhis2009.dta", clear* Log (uncomment if needed).
-* cap log using "Replication/BriattePetev_1.log", name(draft1) replace* Subsetting to data from most recent year.drop if year!=2009* Subsetting to variables used in the analysis.keep serial psu strata perweight age sex raceb educrec1 ///
+* What: Example do-file for draft 2
+* Who:  François Briatte and Ivaylo Petev
+* When: 2012-02-23
+
+* Topic:  Social Determinants of Obesity in the USA
+* Data:   National Health Interview Survey
+* Sample: N = 24,291 for the 2009 survey year
+
+* Note: this file updates the previous draft with a few significance tests and 
+* some preliminary regression modelling with the main variables of interest.
+
+
+* =========
+* = SETUP =
+* =========
+
+
+* Data.
+use "Datasets/nhis2009.dta", clear
+
+* Create a folder to export all files.
+global pwd=c(pwd)
+global wd "Replication/BriattePetev" // !note: edit to fill in your own names
+cap mkdir "$wd"
+cd "$wd"
+
+* Log.
+cap log using "draft2.log", name(draft2) replace
+
+* Subsetting to data from most recent year.
+drop if year!=2009
+
+* Subsetting to variables used in the analysis.
+keep serial psu strata perweight age sex raceb educrec1 ///
 	health height weight uninsured vig10fwk yrsinus
-* Set NHIS individual weights (used only for illustrative purposes).
+
+* Set NHIS individual weights (used only for illustrative purposes).
 svyset psu [pw=perweight], strata(strata) vce(linearized) singleunit(missing)
 
 
-* ================* = DESCRIPTIONS =
-* ================* List.codebook, c* DV: Body Mass Index (BMI)* -------------------------
-* Creating the BMI variable.gen bmi = weight*703/height^2la var bmi "Body Mass Index"* Recoding into simpler categories.gen bmi7 = .la var bmi7 "BMI categories"replace bmi7 = 1 if bmi < 16.5replace bmi7 = 2 if bmi >= 16.5 & bmi < 18.5replace bmi7 = 3 if bmi >= 18.5 & bmi < 25replace bmi7 = 4 if bmi >= 25 & bmi < 30replace bmi7 = 5 if bmi >= 30 & bmi < 35replace bmi7 = 6 if bmi >= 35 & bmi < 40replace bmi7 = 7 if bmi >= 40la de bmi7 ///
+* ================
+* = DESCRIPTIONS =
+* ================
+
+
+* List.
+codebook, c
+
+
+* DV: Body Mass Index (BMI)
+* -------------------------
+
+* Creating the BMI variable.
+gen bmi = weight*703/height^2
+la var bmi "Body Mass Index"
+
+* Recoding into simpler categories.
+gen bmi7 = .
+la var bmi7 "BMI categories"
+replace bmi7 = 1 if bmi < 16.5
+replace bmi7 = 2 if bmi >= 16.5 & bmi < 18.5
+replace bmi7 = 3 if bmi >= 18.5 & bmi < 25
+replace bmi7 = 4 if bmi >= 25 & bmi < 30
+replace bmi7 = 5 if bmi >= 30 & bmi < 35
+replace bmi7 = 6 if bmi >= 35 & bmi < 40
+replace bmi7 = 7 if bmi >= 40
+la de bmi7 ///
 	1 "Severely underweight" 2 "Underweight" 3 "Normal" ///
-	4 "Overweight" 5 "Obese" 6 "Severely obese" 7 "Morbidly obese"la val bmi7 bmi7* Note: this is the slow, risky way of recoding continuous variables. Check the
+	4 "Overweight" 5 "Obese" 6 "Severely obese" 7 "Morbidly obese"
+la val bmi7 bmi7
+
+* Note: this is the slow, risky way of recoding continuous variables. Check the
 * code used to construct bmi6 below for a quicker and less error-prone command.
-* Breakdown of mean BMI by categories.d bmi bmi7tab bmi7, summ(bmi) // show mean BMI in each BMI category* Inspecting DV for normality.hist bmi, normal name(bmi_hist, replace)
-* Transformations (use gladder for the graphical checks).
+
+* Breakdown of mean BMI by categories.
+d bmi bmi7
+tab bmi7, summ(bmi) // show mean BMI in each BMI category
+
+* Inspecting DV for normality.
+hist bmi, normal name(bmi_hist, replace)
+
+* Transformations (use gladder for the graphical checks).
 ladder bmi
-* Log-BMI transformation.gen logbmi=ln(bmi)
+
+* Log-BMI transformation.
+gen logbmi=ln(bmi)
 la var logbmi "log(BMI)"
 
 * Inspect improvement in normality.
-tabstat bmi logbmi, s(skewness kurtosis) c(s)* Note: in what follows, significance tests are shown on the untransformed BMI
+tabstat bmi logbmi, s(skewness kurtosis) c(s)
+
+* Note: in what follows, significance tests are shown on the untransformed BMI
 * variable for legibility. However, to make sure that you are interpreting the
 * tests on your data as close as possible to their linearity assumptions, you
 * should double-check all tests that you report by also running them on the 
-* transformed version of your dependent variable, if one applies.* IV: Age
+* transformed version of your dependent variable, if one applies.
+
+
+* IV: Age
 * -------
-su age, d
+
+su age, d
 
 * Correlation.
 pwcorr bmi age, obs sig
@@ -51,7 +125,8 @@ tab bmi7 age4
 * in the do-file from Week 6. You should recode into less categories to have, in
 * this example, bmi7 recoded to bmi6 with both underweight groups coded as one.
 
-* Recoding BMI to 6 groups.gen bmi6:bmi6 = irecode(bmi, 0, 18.5, 25, 30, 35, 40, .)
+* Recoding BMI to 6 groups.
+gen bmi6:bmi6 = irecode(bmi, 0, 18.5, 25, 30, 35, 40, .)
 la var bmi6 "BMI categories"
 
 * Category labels.
@@ -91,7 +166,9 @@ tabodds obese age4 if inlist(age4,1,2)     // as odds
 tabodds obese age4 if inlist(age4,1,2), or // as odds ratios
 
 * Explanatory statement.
-disp _n as txt "A person aged 45-64 is about " ///	as res round((odds[2,2]*odds[1,1])/(odds[1,2]*odds[2,1]),.01) as txt ///	" times more likely to be obese " _n "than a person aged 18-44."
+disp _n as txt "A person aged 45-64 is about " ///
+	as res round((odds[2,2]*odds[1,1])/(odds[1,2]*odds[2,1]),.01) as txt ///
+	" times more likely to be obese " _n "than a person aged 18-44."
 
 * Normal weight across age groups.
 tab normal age4, col matcell(odds) // exact test ommitted because waiting sucks
@@ -101,7 +178,9 @@ tabodds normal age4     // as odds
 tabodds normal age4, or // as odds ratios against the odds of the first category
 
 * Explanatory statement.
-disp _n as txt "A person aged 75+ is about " ///	as res 100*round((odds[2,4]*odds[1,1])/(odds[1,4]*odds[2,1]),.01) as txt ///	"% as likely to be normal weight " _n "than a person aged 18-44."
+disp _n as txt "A person aged 75+ is about " ///
+	as res 100*round((odds[2,4]*odds[1,1])/(odds[1,4]*odds[2,1]),.01) as txt ///
+	"% as likely to be normal weight " _n "than a person aged 18-44."
 
 * Visualization of the odds of being normal weight.
 tabodds normal age, ciplot ///
@@ -121,13 +200,19 @@ tabodds normal age5f, ciplot ///
 	yti("Pr(normal weight)") xti("Age") ///
 	name(normal_age, replace)
 
-* Smoother visualization of the odds of being obese with age.tabodds obese age5f, ciplot  ///
+* Smoother visualization of the odds of being obese with age.
+tabodds obese age5f, ciplot  ///
 	yti("Pr(obese)") xti("Age") ///
-	name(obese_age, replace)* IV: Gender* ----------
+	name(obese_age, replace)
+
+
+* IV: Gender
+* ----------
 
 fre sex
 
-* Recode as dummy.recode sex (1=0 "Male") (2=1 "Female"), gen(female)
+* Recode as dummy.
+recode sex (1=0 "Male") (2=1 "Female"), gen(female)
 la var female "Gender (1=female)"
 
 * Exploration:
@@ -145,34 +230,50 @@ bys age4: ttest bmi, by(female)
 * you can turn to ANOVA, as explained at the end of this do-file. Part III of
 * this course covers linear regression, which builds on ANOVA.
 
-* IV: Educational attainment* --------------------------
+
+* IV: Educational attainment
+* --------------------------
 
 fre educrec1
 
-* Recode to 3 groups.recode educrec1 ///
+* Recode to 3 groups.
+recode educrec1 ///
 	(13=1 "Grade 12") ///
 	(14=2 "Undergrad.") ///
-	(15/16=3 "Postgrad."), gen(edu3)la var edu3 "Educational attainment"* Exploration:
+	(15/16=3 "Postgrad."), gen(edu3)
+la var edu3 "Educational attainment"
+
+* Exploration:
 tab edu3, summ(bmi) // mean BMI at each education level
 bys edu3: ci bmi    // confidence bands
 
-* Exclude middle group to t-test the Grade 12 and the Postgraduate categories.ttest bmi if edu3!=2, by(edu3)* Crosstabulations:
+* Exclude middle group to t-test the Grade 12 and the Postgraduate categories.
+ttest bmi if edu3!=2, by(edu3)
+
+* Crosstabulations:
 tab bmi6 edu3
 tab bmi6 edu3, nof cell // percents over the whole sample
 tab bmi6 edu3, nof col  // percents of BMI categories in age groups (columns)
 tab bmi6 edu3, chi2 V   // Chi-squared test with Cramér's V
 * ssc install tab_chi, replace
 tabchi bmi6 edu3, p noo noe // Pearson residuals
-* Crosstabulation of age, gender and education groups.
+
+* Crosstabulation of age, gender and education groups.
 table age4 female edu3
-table age4 female edu3, c(mean bmi) f(%8.2f) // show mean BMI in each table cell* Visualization:
-sc bmi age if edu3==1, mc(dkgreen) || sc bmi age if edu3==3, mc(dkorange) ///	legend(lab(1 "Grade 12") lab(2 "Postgraduate")) ///
+table age4 female edu3, c(mean bmi) f(%8.2f) // show mean BMI in each table cell
+
+* Visualization:
+sc bmi age if edu3==1, mc(dkgreen) || sc bmi age if edu3==3, mc(dkorange) ///
+	legend(lab(1 "Grade 12") lab(2 "Postgraduate")) ///
 	name(bmi_edu, replace)
-* IV: Health status
+
+
+* IV: Health status
 * -----------------
 
 fre health
-* Exploration:
+
+* Exploration:
 tab health, summ(bmi) // mean BMI at each health level
 bys health: ci bmi    // confidence bands
 
@@ -182,8 +283,10 @@ ttest bmi if inlist(health,1,5), by(health)
 * Note: if you want to use a t-test on two categories within a variable that has
 * more than two categories, as health status in this example, then the 'inlist'
 * trick used above is probably the quickest option available.
-* Plotting BMI and age for excellent vs. poor health:
-sc bmi age if health==1, mc(dkgreen) || sc bmi age if health==5, mc(dkorange) ///	legend(lab(1 "Excellent health") lab(2 "Poor health")) ///
+
+* Plotting BMI and age for excellent vs. poor health:
+sc bmi age if health==1, mc(dkgreen) || sc bmi age if health==5, mc(dkorange) ///
+	legend(lab(1 "Excellent health") lab(2 "Poor health")) ///
 	name(health, replace)
 
 * Crosstabulations:
@@ -199,7 +302,9 @@ gr bar bmi, over(health) asyvars over(female) ///
 	by(age4, note("")) legend(rows(1)) ///
 	name(age_health, replace)
 
-* IV: Physical exercise* ---------------------
+
+* IV: Physical exercise
+* ---------------------
 
 fre vig10fwk
 
@@ -209,7 +314,9 @@ recode vig10fwk (94/95=0 "Little to no exercise") (96/99=.), gen(phy)
 tab phy, m plot // the US has a pretty sedentary population
                 // also, this is a really ugly distribution with huge issues,
                 // so we will add some jitter to the scatterplot to help the
-                // plot look more informative (type 'h sc' for details)* Visualization.
+                // plot look more informative (type 'h sc' for details)
+
+* Visualization.
 sc bmi phy if phy > 0, jitter(3) name(bmi_phy, replace)
 
 * Correlation.
@@ -217,13 +324,24 @@ pwcorr bmi phy, obs sig
 
 * Visualization as boxplots.
 gr box phy, noout over(female) asyvars over(age4) medl(lc(red)) ///
-	by(health, total note("")) note("") yti("Mean physical activity") ///	name(phy_box, replace) // note usage of the 'total' option, among others* IV: Race
+	by(health, total note("")) note("") yti("Mean physical activity") ///
+	name(phy_box, replace) // note usage of the 'total' option, among others
+
+
+* IV: Race
 * --------
 
-ren raceb racefre race* Exploration:
+ren raceb race
+fre race
+
+* Exploration:
 tab race, summ(bmi) // mean BMI at each health level
 bys race: ci bmi    // confidence bands
-* Plotting BMI and race categories:spineplot bmi7 race, scale(.7) name(bmi7, replace)* Slightly more code-consuming visualization, with stacked bars.
+
+* Plotting BMI and race categories:
+spineplot bmi7 race, scale(.7) name(bmi7, replace)
+
+* Slightly more code-consuming visualization, with stacked bars.
 tab race, gen(race_)
 gr bar race_*, stack over(bmi7) scale(.7) ///
 	legend(row(1) lab(1 "NH White") lab(2 "NH Black") lab(3 "Hispanic") lab(4 "Asian")) ///
@@ -245,17 +363,21 @@ tabodds normal race, ciplot ///
 	xlab(1 "NH White" 2 "NH Black" 3 "Hispanic" 4 "Asian") yline(1) ///
 	name(normal_race, replace)
 
-* IV: Health insurance* --------------------
+
+* IV: Health insurance
+* --------------------
 
 fre uninsured
 
-* Recode to dummy.recode uninsured (1=0 "Not covered") (2=1 "Covered") (else=.), gen(hins)
+* Recode to dummy.
+recode uninsured (1=0 "Not covered") (2=1 "Covered") (else=.), gen(hins)
 la var hins "Health insurance (1=covered)."
 
 * Exploration:
 tab hins, summ(bmi) // mean BMI at each health level
 bys hins: ci bmi    // confidence bands
-* Crosstabulations:
+
+* Crosstabulations:
 tab bmi6 hins
 tab bmi6 hins, nof cell // percents over the whole sample
 tab bmi6 hins, nof col  // percents of BMI categories in age groups (columns)
@@ -265,36 +387,17 @@ tab bmi6 hins, chi2 V   // Chi-squared test with Cramér's V
 spineplot hins race, scale(.7) name(hins, replace)
 
 
-* ======================
-* = SUMMARY STATISTICS =
-* ======================
-
-
-* Note: instructions to export summary statistics tables appear in draft1.do and
-* should be known by now. If you still have issues with summary stats, please go
-* back to the previous draft do-file and check the Stata Guide, Section 13.4, to
-* learn about formatting instructions.
-
-
-* Method (1): tabout
+* Summary statistics
 * ------------------
 
-* Install package (uncomment if needed).
-* ssc install tabout, replace
-
-* Continuous variables:
-tabstatout bmi age, tf(a2_stats1) ///
-	s(n mean sd min max) c(s) f(%9.2fc) replace
-
-* Categorical variables:
-tabout female edu3 health phy race hins using a2_stats2.csv, ///
-	replace c(freq col) oneway ptot(none) f(2) style(tab)* Method (2): tsst
-* ----------------
-
-tsst using a2_stats.txt, su(bmi age) fre(female edu3 health phy race hins) replace
+* Export with tsst command.
+tsst using draft2-stats.txt, su(bmi age) fre(female edu3 health phy race hins) replace
 
 
-* =======================* = REGRESSION MODELING =* =======================
+* =========
+* = MODEL =
+* =========
+
 
 * Scatterplots of BMI and age by education level and race category.
 sc bmi age if age < 50 & hins, ms(oh) mc(ltkhaki) ///
@@ -315,23 +418,22 @@ bys edu3: reg bmi age
 
 * The next and last part of the course will add multiple regressions here, using
 * both continuous and categorical data. Stay tuned, and turn to the bonus for an
-* introduction to to the logic of regression through ANOVA.
-
-* =======* = END =* =======
+* introduction to to the logic of linear regression through ANOVA.
 
 
-* Clean all graphs from memory.
-* gr drop _all
+* =======
+* = END =
+* =======
 
-* Wipe the modified data.
-* clear
 
 * Close log (if opened).
 cap log close draft2
 
-* We are done. Have a nice day :)* exit
+* Reset working directory.
+cd "$pwd"
 
-* ==========
+
+* ==========
 * = BONUS! =
 * ==========
 
@@ -355,8 +457,9 @@ table age4 female, col row c(mean bmi)
 * t-test, but on any number of dimensions. This allows you to use ANOVA on any
 * number of categorical variables, instead of just one dummy (binary) variable.
 * The F-test used in ANOVA is the probability that the means of the dependent 
-* variable (BMI) are equal across IV categories (age by sex). The interaction
-* effects then allow to show the confidence intervals of each estimate.
+* variable (BMI) are equal across IV categories (age by sex). We then use the
+* margins of that test, i.e. the estimated mean of the DV when one or more IV
+* is set to a fixed value, to show the confidence intervals of each estimate.
 
 
 * ANOVA tests
@@ -415,4 +518,5 @@ reg bmi i.age4 female hins i.race // ... multiple linear regression!
 * at least as informative than what you are trying to code. See you next week,
 * and best of luck with your work, we know what overload means and sympathize!
 
-// END OF FILE (for real this time, thanks again for following the bonus trail)
+* We are done. Thanks for following!
+* exit

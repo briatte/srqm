@@ -15,19 +15,20 @@ use "Datasets/qog2011.dta", clear
 cap log using "Replication/week8.log", name(week8) replace
 
 
-* =============
-* = VARIABLES =
-* =============
+* ================
+* = DESCRIPTIONS =
+* ================
 
 
-ren wdi_fr births
-ren bl_asyt25 schooling
+* Rename variables to short handles.
+ren (wdi_fr births) (bl_asyt25 schooling) (undp_hdi hdi) (ti_cpi corruption) (gid_fgm femgovs)
+
+* Compute GDP per capita.
 gen gdpc = unna_gdp/unna_pop
 la var gdpc "Real GDP/capita (constant USD)"
-ren undp_hdi hdi
-ren ti_cpi corruption
-ren gid_fgm femgovs
-d births schooling gdpc hdi corruption femgovs
+
+* Have a quick look.
+codebook births schooling gdpc hdi corruption femgovs, c
 
 
 * ===============
@@ -110,9 +111,8 @@ sc femgovs corruption, yline(15) xline(4)
 * and theoretical elaboration provide no substantive justification for it.
 
 
-* ======================
-* = CORRELATION MATRIX =
-* ======================
+* Correlation matrix
+* ------------------
 
 
 * The most practical way to consider all possible correlations in a list of
@@ -143,14 +143,17 @@ pwcorr births schooling log_gdpc hdi corruption femgovs, print(.05)
 
 * Macros are crucial elements of programming, not just in Stata but in any
 * programming language. The example below is just one very simple example of
-* what macros can do for you. As you know from experience, Stata requires
-* passing a lot of options to produce informative graphs. If you are planning
-* to use identical options on several graphs, you can store these options in
-* a global macro and then call it by entering its name with a $ sign.
+* what macros can do for you. Note that this example is not recommendable as
+* a programming tip (you would not normally fiddle with your global macros).
+
+* As you know from experience, Stata requires passing a lot of options to 
+* produce informative graphs. If you are using a set of consistent options
+* on several graphs, you can store these options in a global macro and call
+* it by entering its name with a $ (dollar) sign. Example below:
 global ccode = "msymbol(i) mlabpos(0) mlabel(ccodewb) mlabcolor(gs4)"
 
 * In the following examples, passing the "$ccode" option will actually pass
-* the graphical options stored in the ccode ("country codes) macro. 
+* the graphical options stored in the ccode ("country codes") macro.
 
 * Improved graph for Example (1)
 sc births schooling, $ccode name(nat_edu, replace)
@@ -183,12 +186,6 @@ gr mat births schooling gdpc hdi corruption femgovs
 * = EXIT =
 * ========
 
-
-* Clean all graphs from memory.
-* gr drop _all
-
-* Wipe the modified data.
-* clear
 
 * Close log (if opened).
 cap log close week8

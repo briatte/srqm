@@ -54,7 +54,8 @@ drop sex
 
 
 * =============
-* = ANALYSIS =* =============
+* = ANALYSIS =
+* =============
 
 
 * Explore the DV.
@@ -135,12 +136,6 @@ reg partnrs5 i.female zconinc2 zeduc zsize i.wrkstat i.marital zage
 * = EXIT =
 * ========
 
-
-* Clean all graphs from memory.
-* gr drop _all
-
-* Wipe the modified data.
-* clear
 
 * Close log (if opened).
 cap log close week10

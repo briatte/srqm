@@ -168,7 +168,7 @@ ssc install fre, replace
 ssc install catplot, replace
 ssc install spineplot, replace
 ssc install tabout, replace
-ssc install mkcorr, replace
+ssc install tab_chi, replace
 ssc install estout, replace
 ssc install outreg2, replace
 
@@ -229,7 +229,7 @@ use "Datasets/nhis2009.dta", clear // etc.
 // Show all datasets for this course.
 ls "Datasets/*.dta"
 
-* Tip: Cross-dataset searches (requires additional package).
+* Tip: an additional package can help you search for variables across datasets.
 ssc install lookfor_all, replace
 lookfor_all health, dir(Datasets) // requires SRQM set as the working directory
 
@@ -261,8 +261,11 @@ fre raceb
 * Obtain summary statistics for the weight variable.
 su weight
 
-* Crosstabulate sex with race.
-tab sex raceb
+* List gender groups from the sex variable.
+tab sex
+
+* Crosstabulate sex and race.
+tab raceb
 
 * Plot average height by sex and race.
 gr dot weight, over(raceb) over(sex) name(weight_race_sex, replace)
@@ -338,12 +341,6 @@ h cap
 * you used to perform your analysis. Stata will automatically save the log file
 * for you when you shut it down, so this requires no action on your side. For
 * additional help, please turn again to the Stata Guide.
-
-* Clean all graphs from memory.
-* gr drop _all
-
-* Wipe the modified data.
-* clear
 
 * Close log (if opened).
 cap log close week1

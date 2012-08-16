@@ -11,24 +11,39 @@
 * This do-file is adapted from the replication material (data and code) provided
 * by Frank Baumgartner et al., "Lobbying and Policy Change. Who Wins, Who Loses,
 * and Why" (University of Chicago Press, 2009). The analysis and interpretation
-* does not necessarily follow the original work.
+* does not necessarily follow the original work: replicate and see for yourself.
 
 * Data: Lobbying and Policy Change, Issue-Level Dataset (2010).
 cap use "http://www.unc.edu/~fbaum/books/lobby/_documentation/data/issue_level_data_24_August_2010.dta", clear
+
+* Use local copy if the original dataset cannot be downloaded at the URL above.
 if _rc != 0 use "Datasets/lobbying2010.dta", clear
 
+* Create a folder to export tables and graphs. This code is particularly handy
+* if you are working on a draft paper and need to save a few replication files.
+global pwd=c(pwd)
+global wd "Replication/week5-files"
+cap mkdir "$wd"
+cd "$wd"
+
 * Log.
-cap log using "Replication/week5.log", name(week5) replace
+cap log using "week5.log", name(week5) replace
 
 * This do-file also uses a graph scheme by Edwin Leuven for its figures. Install
-* from his website or remove the "scheme(bw)" option from all graph commands.
+* from his website to use his neat black and white scheme for creating graphics.
 cap net from "http://leuven.economists.nl/stata"
 cap net install schemes
+cap set scheme bw
 
-* Finally, note that this do-file uses programming functions that are beyond our
-* course requirements. The do-file is provided as proof of concept. In practice,
-* you are not required to produce similar code. Everything you need to know on
-* variable transformations is in the do-file from last week.
+* This do-file contains a detailed guide to exporting summary statistics tables
+* with the tsst or tabout commands: make sure that you use these commands when
+* you work on the first draft of your final paper! To export graphics, use the
+* graph export command.
+
+* Finally, note that this do-file uses programming functions like foreach loops
+* that are beyond our course requirements. In practice, you are not required to
+* produce similar code: everything you need to know on variable transformations
+* is in the do-file from last week.
 
 
 * ================
@@ -80,7 +95,7 @@ bysort partisan3: table p002name, c(mean bills mean floor mean tv)
 foreach v of varlist bills hearings witness floor house senate natjourn news tv {
 	tw (hist partisan3, lc(gs8) xti("") yti("") discrete xlab(0 "low" 1 "med" 2 "hi") ylab(0(.25).5, angle(0)) ysc(alt axis(1))) ///
 		(sc `v' partisan3, yti("", axis(2)) sort ylab(, axis(2) angle(0)) yaxis(2) ysc(alt axis(2))), ///
-		ti(`v', size(medium) margin(bottom)) legend(off) name(`v',replace) scheme(bw)
+		ti(`v', size(medium) margin(bottom)) legend(off) name(`v',replace)
 }
 
 * Fig. 1
@@ -89,10 +104,10 @@ foreach v of varlist bills hearings witness floor house senate natjourn news tv 
 * Measures of political and media salience by degree of partisanship.
 * Run all lines together to generate.
 gr combine bills hearings witness floor house senate natjourn news tv, ///
-	scheme(bw) note("Right axis: histograms by degree of partisanship. Left axis, from top to bottom and left to right: number of bills introduced, hearings held, " ///
+	note("Right axis: histograms by degree of partisanship. Left axis, from top to bottom and left to right: number of bills introduced, hearings held, " ///
 	"witnesses testifying before Congress, floor statements (overall, House, Senate) and news stories (National Journal, newspapers, TV).", margin(sides) size(vsmall)) ///
 	name(fig1, replace)
-gr export week5_fig1.pdf, name(fig1) replace
+gr export fig1.pdf, name(fig1) replace
 
 * The degree of partisanship coded by Baumgartner et al. creates three groups of
 * policy issues within their sample. To generalize these proportions to the true
@@ -105,30 +120,42 @@ prop partisan3
 * =============================
 
 
-* Two simple ways to export a summary statistics table:
+* There are two simple ways to export a summary statistics table. The first one
+* involves the tsst command, which is part of the SRQM Teaching Pack. Using the
+* tsst command should be enough for the purposes fo this course. The second way
+* of exporting summary statistics tables involves installing the tabout command
+* and using its two export commands. This method consumes more code but it will
+* work outside this course and provides more flexibility and options. 
 
-* (1) Use tsst
-* ------------
+* (1) tsst
+* --------
 
-* The command is part of the course: if you have set up the SRQM
-* folder as your working directory, it should run straight away.
+* The command is part of the course: if you have set up the SRQM folder as your
+* working directory, it should work straight away.
 
-* Use su() for continuous variables, fre() for categorical ones:
-tsst using week5_stats.txt, su(hearings witness floor house senate natjourn news tv) fre(partisan3) replace
+tsst using stats.txt, su(hearings witness floor house senate natjourn news tv) fr(partisan3) replace
 
-* (2) Use tabout
-* --------------
+
+* (2) tabout
+* ----------
 
 * Install the command by uncommenting the line below.
 * ssc install tabout, replace
 
 * Export continuous data.
 tabstatout bills hearings witness floor house senate natjourn news tv, ///
-	tf(week5_stats1) s(n mean sd min max) c(s) f(%9.2fc) replace
+	tf(stats1) s(n mean sd min max) c(s) f(%9.2fc) replace
 
 * Export categorical data.
-tabout partisan3 using week5_stats2.csv, ///
+tabout partisan3 using stats2.csv, ///
 	replace c(freq col) oneway ptot(none) f(2) style(tab)
+
+* Note: CSV files often require that you import them rather than just open them.
+* In Microsoft Excel, use 'File : Import' and follow the Excel import procedure.
+* Furthermore, as tabout uses two different commands and files to save summary 
+* statistics, you will need to assemble the final table in your spreadsheet or
+* text document. Editors from the Google Documents or Open Office suites also
+* have excellent editing capabilities.
 
 
 * ==================
@@ -220,7 +247,7 @@ foreach v of varlist log_* sqrt_* {
 	tw sc mean partisan3, xti("") xsc(r(-.5(.5)2.5)) xlab(0 "low" 1 "med" 2 "hi") ms(O) || ///
 	rcap ub lb partisan3, lc(black) ||, ///
 	ti(`v', size(medium) margin(bottom)) legend(off) yla(, ang(h)) ///
-	scheme(bw) name(ci$i, replace)
+	name(ci$i, replace)
 	restore
 }
 
@@ -229,10 +256,10 @@ foreach v of varlist log_* sqrt_* {
 
 * Estimates of political and media salience by degree of partisanship.
 * Run all lines together to generate.
-gr combine ci7 ci1 ci8 ci2 ci3 ci4 ci5 ci9 ci6, scheme(bw) note("Confidence intervals at 95% by degree of partisanship. From top to bottom and left to right: number of bills introduced, hearings held, " ///
+gr combine ci7 ci1 ci8 ci2 ci3 ci4 ci5 ci9 ci6, note("Confidence intervals at 95% by degree of partisanship. From top to bottom and left to right: number of bills introduced, hearings held, " ///
 	"witnesses testifying before Congress, floor statements (overall, House, Senate) and news stories (National Journal, newspapers, TV).", margin(sides) size(vsmall)) ///
 	name(fig2, replace)
-gr export week5_fig2.pdf, name(fig2) replace
+gr export fig2.pdf, name(fig2) replace
 
 
 * ========
@@ -240,14 +267,11 @@ gr export week5_fig2.pdf, name(fig2) replace
 * ========
 
 
-* Clean all graphs from memory.
-* gr drop _all
-
-* Wipe the modified data.
-* clear
-
 * Close log (if opened).
 cap log close week5
+
+* Reset working directory.
+cd "$pwd"
 
 * We are done. Just quit the application, have a nice week, and see you soon :)
 * exit

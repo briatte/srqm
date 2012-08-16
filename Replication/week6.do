@@ -15,9 +15,9 @@ use "Datasets/ebm2009.dta", clear
 cap log using "Replication/week6.log", name(week6) replace
 
 
-* ====================
-* = DATA PREPARATION =
-* ====================
+* ================
+* = DESCRIPTIONS =
+* ================
 
 
 * Country codes.
@@ -29,22 +29,17 @@ ren v38 ctyweight
 gen wgt=popweight*ctyweight
 
 
-* ======================
-* = DEPENDENT VARIABLE =
-* ======================
+* DV: Mitigation of crisis through European currency
+* --------------------------------------------------
 
-
-* Crisis: Mitigation through European currency.
 fre v493 [aw=wgt]
-
-* Cleaner recoding.
 
 * Visualization.
 catplot v493 [aw=wgt], over(ccode, sort(4)des lab(labsize(*.8))) ///
 	asyvars percent(ccode) stack scale(.7) ytitle("") ///
 	legend(rows(1) region(fc(none) ls(none))) ///
 	bar(1, c(navy*.7)) bar(2, c(navy*1.3)) ///
-	bar(3, c(sand*.5)) bar(4, c(sand)) bar(5, c(sand*1.5)) ///
+	bar(3, c(sand*.5)) bar(4, c(sand)) ///
 	name(mitig, replace)
 
 * Binary recoding.
@@ -73,12 +68,7 @@ keep if inlist(ccode,8,11,12,13)
 fre mitig
 
 
-* =========================
-* = INDEPENDENT VARIABLES =
-* =========================
-
-
-* (1) Sex
+* IV: Sex
 * -------
 
 ren v644 sex
@@ -95,18 +85,19 @@ tab mitig female, row nof    // rows percentages
 
 * Significance tests:
 tab mitig female, exp chi2   // Chi-squared test (with expected frequencies)
-tab mitig female, exp chi2 V // Cramérs V
+tab mitig female, exp chi2 V // Cramer's V (requires an acute accent on 'e')
 
-* Chi-squared residuals (install tabchi if needed)
-* ssc install tab_chi
+* Chi-squared residuals (install tab_chi package first)
+* ssc install tab_chi, replace
 tabchi mitig female, r noo noe // raw residuals
 tabchi mitig female, p noo noe // Pearson residuals
 
 * Fisher's exact test
 tab mitig female, exact
 
-* Notes
-* -----
+
+* Notes on association tests
+* --------------------------
 
 * - The Chi-squared test does not operate through the normal distribution to
 * determine statistical significance. The degrees of freedom of the crosstab are
@@ -116,7 +107,7 @@ tab mitig female, exact
 
 * - The general idea of nonparametric tests is that they harness a different
 * set of properties in the sample than the total number of observations n, using
-* instead the properties of table cells in different ways. Cramér's V is a means
+* instead the properties of table cells in different ways. Cramer's V is a means
 * to reinject n in the equation: it measures the strength of association as read
 * in a Chi-squared tests, from -1 to 1 on 2x2 tables, and from 0 to 1 otherwise.
 
@@ -133,7 +124,7 @@ tab mitig female, exact
 * both low cell counts and low dimensions, i.e. low 'r x c' (rows by columns).
 
 
-* (2) Age
+* IV: Age
 * -------
 
 ren v645 age
@@ -146,7 +137,7 @@ tab age4, summ(age)
 tab mitig age4, col nof chi2
 
 
-* (3) Education
+* IV: Education
 * -------------
 
 ren v642 edu
@@ -164,7 +155,7 @@ tab mitig edu4, col nof chi2
 tab edu4, summ(age)
 
 
-* (4) Occupation
+* IV: Occupation
 * --------------
 
 ren v767 pro
@@ -183,7 +174,7 @@ la var student "Student"
 tab mitig student, col nof exact
 
 
-* (5) Left-right political positioning
+* IV: Left-right political positioning
 * ------------------------------------
 
 ren v638 pol10
@@ -214,7 +205,7 @@ tab mitig pol5, col nofreq chi2
 prop mitig, over(pol5)
 
 
-* (6) Perception of European Union
+* IV: Perception of European Union
 * --------------------------------
 
 ren v182 eum
@@ -227,12 +218,6 @@ tab mitig eum, col nof chi2
 * = EXIT =
 * ========
 
-
-* Clean all graphs from memory.
-* gr drop _all
-
-* Wipe the modified data.
-* clear
 
 * Close log (if opened).
 cap log close week6

@@ -154,7 +154,7 @@ hist bmi, freq normal name(bmi, replace)
 * Another visualization is the boxplot, which uses different criteria to shape
 * the distribution of the variable. Refer to the course material to understand
 * how quartiles and outliers are calculated to form each element of the plot.
-graph hbox bmi, name(bmi_boxplot, replace)
+gr hbox bmi, name(bmi_boxplot, replace)
 
 * Here are more examples of logical operators:
 
@@ -223,7 +223,10 @@ gr dot bmi, over(sex) over(raceb) ytitle("Average Body Mass Index") name(bmi_rac
 * each other. Visualization allows to explore that intuition in the same way
 * that it helped thinking about predictors to the dependent variable. 
 
-* Explore a relationship between three independent variables:
+* The graph below explores a relationship between three independent variables.
+* An additional trick in this graph is that its command runs over three lines.
+* The '///' indicates that you have to select all three lines to properly run
+* the graph command. This trick helps formatting do-files in short lines.
 gr dot health, exclude0 yreverse over(sex) over(raceb) ///
 	ylabel(1 "Excellent" 3 "Good" 5 "Poor") ytitle("Average health status") ///
 	name(health_sex_race, replace)
@@ -231,10 +234,6 @@ gr dot health, exclude0 yreverse over(sex) over(raceb) ///
 * The graph uses several options: due to the numerical coding of the 'health'
 * variable, we had to remove 0 from the dot plot, and reverse the axis. We also
 * made the horizontal (y) axis more legible by adding (y)labels and a (y)title.
-
-* An additional trick in this graph is that its command runs over three lines.
-* The '///' indicates that you have to select all three lines to properly run
-* the graph command. This trick just helps with formatting do-files.
 
 * Note that the visual difference is not sufficient to establish that there is
 * a statistically significant difference in mean BMI across ethnic groups. Also
@@ -247,12 +246,6 @@ gr dot health, exclude0 yreverse over(sex) over(raceb) ///
 * = EXIT =
 * ========
 
-
-* Clean all graphs from memory.
-* gr drop _all
-
-* Wipe the modified data.
-* clear
 
 * Close log (if opened).
 cap log close week2

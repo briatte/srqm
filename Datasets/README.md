@@ -241,7 +241,22 @@ The `wvs2000` dataset holds data from the 1999-2004 wave of the World Values Sur
 
 	use "Datasets/wvs2000.dta", clear
 
-The data were extracted from the WVS cumulative dataset. The code to capitalize country names was kindly provided at [StackOverflow](http://stats.stackexchange.com/questions/8234/capitalizing-value-labels-in-stata) by William A. Huber.
+The data were extracted from the WVS cumulative dataset. The code to capitalize country names was kindly provided at [StackOverflow](http://stats.stackexchange.com/questions/8234/capitalizing-value-labels-in-stata) by William A. Huber:
+
+	* Capitalize country names.
+	local varname v2
+	local sLabelName: value label `varname'
+	di "`sLabelName'"
+	levelsof `varname', local(xValues)
+	foreach x of local xValues {
+	    local sLabel: label (`varname') `x', strict
+	    local sLabelNew = proper("`sLabel'")
+	    if "`sLabelNew'"=="Usa" {
+		    local sLabelNew = upper("`sLabel'")    
+	    }
+	    noi di "`x': `sLabel' ==> `sLabelNew'"
+	    label define `sLabelName' `x' "`sLabelNew'", modify
+	}
 
 * * *
 
