@@ -62,9 +62,9 @@ program srqm
 	// execute the script in full, and you must have properly installed Stata on your
 	// computer first.  
 
-	local variables = "extremes fre lookfor_all revrs univar"
+	local variables = "extremes fre kountry lookfor_all revrs univar"
 	local graphs = "catplot ciplot spineplot tab_chi tabplot" 
-	local exports = "log2do2 mkcorr tabout"
+	local exports = "log2do2 logout mkcorr tabout"
 	local regression = "estout leanout outreg outreg2"
 
 	cap log close _all // interrupt logs

@@ -6,12 +6,6 @@
 * Survey: European Social Survey, Round 4 (2008)
 * Sample: N = 28,178
 
-* Hypotheses:
-* (H1) Females will support gender equality significantly more than males.
-* (H2) Gender equality significantly increases from one age group to another.
-* (H3) Socio-economic status will predict attitudes of both sexes.
-* (H4) For both males and females, education will be the strongest predictor.
-
 * Note: like previous drafts, this do-file can be used to template your own. As
 * the last draft is also your final paper, this is the stage where you need to
 * make definite choices about your code, remove all errors and make sure that
