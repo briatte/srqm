@@ -1,10 +1,10 @@
 * What: Example do-file for the final paper
-* Who:  François Briatte and Ivaylo Petev
-* When: 2012-02-23
+* Who:  F. Briatte and I. Petev
+* When: 2012-08-17
 
-* Topic:  Attitudes towards Gender Equality in Europe
+* Topic:  Attitudes towards immigration in Europe
 * Survey: European Social Survey, Round 4 (2008)
-* Sample: N = 24,291
+* Sample: N = 28,178
 
 * Hypotheses:
 * (H1) Females will support gender equality significantly more than males.
@@ -19,7 +19,6 @@
 
 * Required packages (uncomment to install).
 * ssc install fre, replace
-* ssc install catplot, replace
 * ssc install spineplot, replace
 * ssc install tab_chi, replace
 * ssc install estout, replace
@@ -39,20 +38,27 @@ global wd "Replication/BriattePetev" // !note: edit to fill in your own names
 cap mkdir "$wd"
 cd "$wd"
 
-* Log.
-cap log using "draft3.log", name(draft3) replace
-
-* This do-file uses a graph scheme by Edwin Leuven for its figures.
+* Use the black and white graph scheme by Edwin Leuven for figures.
 cap net from "http://leuven.economists.nl/stata"
 cap net install schemes
 cap set scheme bw
 
-* Subsetting to variables used in the analysis.
-keep cntry idno *weight ///
-	mnrgtjb agea gndr lrscale hinctnta eduyrs edulvla rlgblg rlgdnm tvpol
+* Log.
+//cap log using "draft3.log", name(draft3) replace
 
-* Set design weights (used only for illustrative purposes).
-svyset [pw=dweight]
+* Subsetting to respondents age 25+ with full data.
+drop if age < 25 | mi(imdfetn,agea,gndr,brncntr,edulvla,hinctnta,lrscale)
+
+* Subsetting to variables used in the analysis.
+keep cntry idno *weight imdfetn agea gndr brncntr edulvla hinctnta lrscale
+ 
+* Survey weights (design weight by country, multiplied by population weight for
+* each country in reference to country contribution to European population).
+gen dpw=dweight*pweight
+la var dpw "Population*Design survey weights"
+
+* Create country dummies (used for clustering).
+encode cntry, gen(cid)
 
 
 * ================
@@ -63,177 +69,112 @@ svyset [pw=dweight]
 * List.
 codebook, c
 
-// Description:
 
-* (a) DV
-*
-* "Men should have more right to job than women when jobs are scarce"
-* (5-pt scale, 1 = Agree strongly.)
-*
-hist mnrgtjb, discrete
+* DV: Allow many/few immigrants of different race/ethnic group from majority
+* --------------------------------------------------------------------------
+fre imdfetn
 
-gen geq = mnrgtjb
-la var geq "Support for gender equality"
+* Relabel for concise legends in graphs.
+la de imdfetn 1 "Many" 2 "Some" 3 "Few" 4 "None", replace
 
-su geq, d
-global ymean=r(mean) // store mean value, to display in graphs
+* Normality: distribution shows symmetricality but the reduced number of items
+* on a 4-point scale limits variability and will create postestimation issues.
+hist imdfetn, discrete percent addl name(dv, replace)
 
-* (b) Age
-*
-* Create groups for 20-year intervals of age (useful for graphs and tables).
-*
-su agea
+* Dummy: 1 = allow many/some immigrants.
+gen diff = (imdfetn < 3)
+la var diff "Allow many/some immigrants of different race/ethnic group from majority"
 
-gen age20=floor(agea/20)*20
-replace age20=. if age20 > 80 // remove a few very old outliers
-tab age20 // note: group called '0' includes 15-19 years-olds
 
-* (c) Gender
-*
-* Create dummy for females.
-* Males will be the reference category in regressions.
-*
-gen female = (gndr==2)
+* IVs: age, gender, country of birth, education, income, left-right scale
+* -----------------------------------------------------------------------
+d agea gndr brncntr edulvla hinctnta lrscale
 
-la de female 0 "Male" 1 "Female"
-la val female female
+* Renaming.
+ren (agea hinctnta lrscale) (age income rightwing)
 
-table female, c(n geq mean geq p25 geq p50 geq p75 geq)
+* Dummies:
+gen female:sex=(gndr==2)
+la de sex 0 "Male" 1 "Female"
 
-* ... males are mostly distributed over answers 2-4, females 3-5: although mean
-* support might look rather similar, clear distributional differences exist.
+gen born:born=(brncntr==1)
+la de born 0 "foreign-born" 1 "born in country"
 
-* (d) Wealth
-*
-* Measured in income deciles.
-*
-gen income = hinctnta
-
-* Recoding to 4 income groups.
-recode income (1/3=1 "D1-D3") (4/6=2 "D4-D6") ///
-	(7/9=3 "D7-D9") (10=4 "D10"), gen(inc4)
-
-* Crosstabulation, Chi-squared test.
-tab geq inc4, col nof chi2
-
-* (e) Education
-*
-* Measured in years of schooling.
-*
-gen edu = eduyrs
-
-* Verify normality.
-hist edu, bin(15) normal
-kdensity edu if edu < 25, normal // corrected version, squishes outliers
-replace edu=25 if edu > 25
-
-* Comparison of average educational attainment in the two extreme DV categories.
-ttest edu if geq==1 | geq==5, by(geq)
-
-* ... statistically significant gap of roughly four years of education between
-* strong opponents of gender equality and strong supporters.
-
-* (f) Religion
-*
-* Two categorical measures: religious or not (binary), denomination (nominal).
-*
-fre rlgblg rlgdnm
-
-gen religious = (rlgblg==1)
-
-la de religious 0 "Non-religious" 1 "Religious"
-la val religious religious
-
-* Recoding to simpler groups.
-recode rlgdnm (.a=1 "Not religious") (1/4=2 "Christian") ///
-	(5=3 "Jewish") (6=4 "Muslim") (7/8=.) , gen(faith)
-la var faith "Religious faith"
-
-* Create dummies (useful later on).
-tab faith, gen(faith_)
-
-* Crosstabulation, Chi-squared test.
-tab geq faith, col nof chi2
-
-* (g) Political positioning
-*
-gen pol = lrscale
-
-* Verifying normality.
-hist pol, discrete
-
-* Recoding to simpler categories
-recode pol (0/4=1 "Left") (5=2 "Centre") (6/10=3 "Right"), gen(pol3)
-la var pol3 "Political positioning"
-
-* Crosstabulation, Chi-squared test.
-tab geq pol3, col nof chi2
-
-// Visualization:
-
-// ... by country
-gr dot geq, over(cntry, sort(1)des) scale(.75) ///
-	yline($ymean, lp(dash)) ///
-	yti("Support for gender equality") ///
-	name(dv_age_sex, replace)
-
-// ... by age and sex
-gr bar geq [pw=dweight], over(age20) ///
-	by(gndr, note("Horizontal line at sample average.")) ///
-	yti("Support for gender equality") ///
-	yline($ymean, lp(dash)) ///
-	name(dv_age_sex, replace)
-
-// ... by income decile
-gr bar geq [pw=dweight], over(income) ///
-	by(gndr, note("Horizontal line at sample average.")) ///
-	yti("Support for gender equality") ///
-	yline($ymean, lp(dash)) ///
-	name(dv_income, replace)
-
-// ... by age, sex and religious belief
-gr bar geq, over(age20) over(female) ///
-	by(religious, note("Horizontal line at sample average.")) ///
-	yti("Support for gender equality") ///
-	yline($ymean, lp(dash)) ///
-	name(dv_age_sex_religion, replace)
-
-// ... within each major faith group
-spineplot geq faith, xlab(,alt axis(2)) ///
-	scheme(paired) name(dv_faith, replace)
-
-// ... at each level of left-right positions
-spineplot geq pol, xti("Left/Right", axis(2)) ///
-	scheme(paired) name(dv_pol, replace)
-
+* Collapse some educational categories.
+recode edulvla (1 2=1 "Low") (3=2 "Medium") (4 5=3 "High") (else=.), gen(edu3)
+la var edu3 "Education level"
 
 
 * Summary statistics
 * ------------------
 
+* Export with tsst command.
+tsst using draft3-stats.txt, su(age rightwing) fre(imdfetn female born edu3) replace
+
+
+* Associations
+* ------------
+
+* Dummify the DV.
+tab imdfetn, gen(immig_)
+
+* Create age groups.
+gen cohort = irecode(age,24,34,44,54,64,74)
+replace cohort = 25 + 10*(cohort - 1)
+
+* Crossvisualize DV with basic demographics (age, sex and country of birth).
+gr bar immig_*, stack percent over(cohort) yti("") ///
+	legend(lab(1 "Many") lab(2 "Some") lab(3 "Few") lab(4 "None") rows(1)) ///
+	by(female born, note("")) name(demog, replace)
+
+* Crosstabulation.
+tab female imdfetn, row nof chi2 V // Chi-squared test and Cramer's V
+tabchi female imdfetn, p noo noe   // Pearson residuals
+
+tab born imdfetn, row nof chi2 V
+tabchi born imdfetn, p noo noe
+
+tab cohort imdfetn, row nof chi2 V
+tabchi cohort imdfetn, p noo noe
+
+* Dummify educational attainment.
+tab edu3, gen(edu_)
+
+* Clarify x-axis by dropping labels on income deciles.
+la de inc10 1 "D1" 10 "D10", replace
+la val income inc10
+
+* Visualization of education with income, sex and country of birth.
+gr bar edu_*, stack percent over(income) yti("") ///
+	legend(lab(1 "Low") lab(2 "Medium") lab(3 "High") rows(1)) ///
+	by(female born, note("")) name(edu_inc, replace)
+
+* Crosstabulation.
+bys female born: tab income edu3, row nof chi2 V // computed for each subgroup
+tabchi income edu3, p noo noe
+
+* Simplified political scale.
+recode rightwing (0/4=1 "Left-wing") (5=2 "Centre") (6/11=3 "Right-wing"), gen(wing)
+tab wing, gen(wing_)
+
+* Visualization of left-right political leaning by income decile and age cohort.
+gr bar wing_*, stack percent over(income) yti("") ///
+	legend(lab(1 "Left-wing") lab(2 "Centre") lab(3 "Right-wing")) ///
+	by(cohort, note("")) legend(rows(1)) name(pol_inc, replace)
+
+* Crosstabulation.
+tab income wing, row nof chi2 V
+tabchi income wing, p noo noe
 
 
 * Correlation
 * -----------
 
-
-
-// Correlation matrix:
-
-* Spearman coefficients.
-spearman geq agea income edu lrscale, star(.05)
-
-* Reminder: spearman is pwcorr for ordinal data. Spearman's correlation uses
-* ranks instead of values to measure associations, which is more appropriate
-* for ordinal data like k-point scales or other lowly dimensional measures.
-
-* The correlational pattern is interesting: the coefficients of negative predictors
-* of gender equality (age, right-wing) are lower than positive predictors, like
-* income and education. There are also a lot of IV interactions to deal with.
+pwcorr imdfetn age edu3 income rightwing
 
 * Export correlation matrix.
 eststo clear
-estpost correlate geq agea income edu lrscale, matrix listwise
+estpost correlate imdfetn age edu3 income rightwing, matrix listwise
 esttab using draft3-corr.csv, unstack not compress label replace
 
 
@@ -242,81 +183,131 @@ esttab using draft3-corr.csv, unstack not compress label replace
 * =========
 
 
-// Multiple regression:
+* Note: for each model, we produce baseline estimates on the weighted data and
+* then adjust for potential within-country clustering by using robust standard
+* errors that are heteroskedasticity-consistent. We also add some diagnostics,
+* some marginal effects and some sensitivity tests, for illustrative purposes.
+* For this course, you are only required to run your linear regression model 
+* and its diagnostics.
 
-reg geq agea i.female income edu i.faith lrscale // use full model straight away
-reg, beta
 
-* ... the standardised coefficients are most informative here, as the effects 
-* are quite mixed overall, but test our hypotheses as goes:
-*
-* (H1) positive female dummy means females are overall more supportive of gender
-* equality, independently of differences in socio-economic conditions
-*
-* (H2) age and religion are both significant negative predictors of support for
-* gender equality; the precise effect of age will require more analysis below
-*
-* (H3) the general fit of the model confirms that the list of predictors made
-* sense, even if the relatively low R-squared means 80% unpredicted variance.
-*
-* (H4) education is the best positive predictor, and second overall; we cannot
-* rely so much on beta coefficients, so the exact order is better left unknown.
+* Linear regression
+* -----------------
 
-// studying sex*religion interaction
-reg geq agea i.female#i.faith income edu lrscale
+global bl = "age i.female i.born i.edu3 income rightwing" // store IV names
 
-// studying sex*education
-reg geq agea i.female##c.edu i.faith income lrscale
+* Baseline model.
+reg imdfetn $bl [pw=dpw], b
 
-// Diagnostics:
+* Adjusted model.
+reg imdfetn $bl [pw=dpw], vce(cluster cid)
 
-* Generate 
-reg geq agea i.female income edu i.faith lrscale    // re-estimate full model
+* The last option reads as 'variance-covariance estimation is clustered by cid'.
+* This specification enforces robust standard errors into the model. It uses the
+* respondents' country of residence as a panel variable in the estimation of all
+* regression coefficients. Panel variables are variables at which level we might
+* observe some form of within-sample clustering, which violates the assumption
+* that the error term is independently distributed across the observations.
 
-predict rst, rsta  // store standardized residuals
-
-reg geq agea i.female income edu i.faith lrscale, r // robust standard errors
-
-predict yhat       // store fitted values
-predict r, resid   // store residuals
-
-* Residuals.
-kdensity r, normal  // assess normality
-pnorm r
-qnorm r
-
-* Residuals vs. fitted values.
-sc r yhat, yline(0) // assess homoscedasticity
-rvfplot, yline(0)   // equivalent to above
-
-* Residuals vs. predictors.
-rvpplot agea, yline(0)
-rvpplot income, yline(0)
-rvpplot edu, yline(0)
-rvpplot lrscale, yline(0)
-
-* Outliers
-sc rst yhat, yline(-2 0 2, lp(dash)) || ///
-	sc rst yhat if abs(rst) > 2, ms(Oh) mc("$red") legend(off)
-
-// variance
+* Variance inflation.
 vif
 
-// block modeling
-nestreg: reg geq (agea female) (income edu) (lrscale)
+* Inspect residuals.
+predict r, resid
 
-// cluster by country
+* Diagnostic plots.
+hist r, normal name(r, replace) // distribution of residuals
+rvfplot, name(rvf, replace)     // residuals versus fitted values
+
+* Export.
+eststo clear
+eststo lin_1: qui reg imdfetn $bl [pw=dpw], b
+eststo lin_2: qui reg imdfetn $bl [pw=dpw], vce(cluster cid)
+esttab lin_* using draft3-lin.csv, mtitles("Baseline OLS" "Adjusted OLS") replace
+
+* The diagnostics clearly identify the issue here: the limited number of levels
+* in the DV is causing residuals to follow a low-dimensional pattern that does
+* not approximate a normal distribution. The residuals, for instance, follow a
+* quadrimodal distribution that reflect the number of levels in the DV. The data
+* therefore fail to fit the assumptions of the model by design.
+
+* We turn to a logistic regression (logit) model, which accepts only dichotomous
+* outcomes. The binary/dummy recoding of the DV was computed earlier as follows:
+tab diff imdfetn
+
+* You are very welcome to consult the UCLA Stata FAQ pages to learn how logistic
+* regression works if you are interested in estimating a logit model. Otherwise,
+* just follow the code and comments below to get some basic ideas. The following
+* is a very short demo: it would take a full course to explain logistic models
+* properly, and you are very welcome to ask for one :)
 
 
-* Export models
-* -------------
+* Logistic regression
+* -------------------
 
-eststo clear // clear memory
-eststo m1: qui logit geq1 agea i.female#i.faith income edu lrscale // model 1
-eststo m2: qui logit geq1 agea i.female income edu lrscale // model 2
-eststo m3: qui logit geq1 agea i.female#i.faith income edu // model 3
-esttab m1 m2 m3, nogaps mtitles("Full model" "No religion" "No politics") // with titles
-esttab m1 m2 m3 using models.csv, mtitles("Full model" "No religion" "No politics") replace // export
+* Baseline model.
+logit diff $bl [pw=dpw] // coefficients are log-odds* Log-odds are variations in the probability of the DV. Negative log-odds imply
+* that an increase in the IV, or the presence of it, reduces the probability of
+* the DV being equal to 1. Log-odds can be compared by magnitude, but at that
+* stage, it is usually simpler to read only the sign of the coefficient and its
+* significance level (p-value, closeness of confidence interval bounds to zero).* Odds ratios.
+logit diff $bl [pw=dpw], or
+
+* Odds ratios provide an easier means of comparison between coefficients: for
+* example, in this model, completing upper secondary education increases the
+* likelihood of allowing migrants from different groups by a factor of 2.03,
+* i.e. higher-educated respondents are twice more likely than others to have
+* answered "Some" or "Many" to the original question.
+* Adjusted model.logit diff $bl [pw=dpw], vce(cluster cid)
+
+* Odds ratios.
+logit diff $bl [pw=dpw], vce(cluster cid) or
+
+* Export.
+eststo clear
+eststo log_1: qui logit diff $bl [pw=dpw]
+eststo log_2: qui logit diff $bl [pw=dpw], vce(cluster cid)
+esttab log_* using draft3-log.csv, mtitles("Baseline logit" "Adjusted logit") replace
+
+
+* Marginal effects
+* ----------------
+
+* Marginal effects of political attitude: estimated probability of DV at each
+* level of the 10-point left/right scale used in the model, all other factors
+* kept constant (demographics, education and income).
+margins, at(rightwing=(0(1)10))
+marginsplot, xlab(minmax) recast(line) recastci(rarea) ciopts(col(*.6)) name(mfx_right, replace)
+
+* Marginal effects of educational attainment, by gender and country of birth.
+* The margins command will generate estimate for all possible permutations of
+* the IV list provided, and then plot them as confidence intervals.
+margins born#female, at(edu3=(1(1)3))
+marginsplot, xlab(minmax) by(female born) name(mfx_demog, replace)
+
+* Effect of increasing age on the probability of the DV being equal to 1, by sex
+* and country of birth. The overlap in confidence intervals illustrates the weak
+* value of age as a predictor for the DV: the marginal effect of age is residual
+* in the model, at least in comparison to other predictors.
+margins born#female, at(age=(25(5)85))
+marginsplot, by(female) name(mfx_age, replace)
+
+* Sensitivity analysis* --------------------* Ordered logistic regression, to test the cut point that we chose when recoding
+* the DV to a dummy. The results should show identical signs on the coefficients
+* and their order of magnitude should also stay stable. If not, then the model
+* is sensitive to the choice of cutoff point that we made earlier. Note that in
+* our example, the signs of the coefficients should actually be the same for the
+* OLS (linear regression) and ordered logit, not for the logit (the logit codes
+* the dummy in reverse order to the original variable).ologit imdfetn $bl [pw=dpw], vce(cluster cid)* Export all models
+* -----------------
+
+eststo clear
+eststo lin_1: qui reg imdfetn $bl [pw=dpw], b
+eststo lin_2: qui reg imdfetn $bl [pw=dpw], vce(cluster cid)eststo log_1: qui logit diff $bl [pw=dpw]
+eststo log_2: qui logit diff $bl [pw=dpw], vce(cluster cid)
+eststo log_3: qui ologit imdfetn $bl [pw=dpw], vce(cluster cid)
+esttab lin_* log_* using draft3-models.csv, constant label beta(2) se(2) r2(2) ///
+	mtitles("Baseline OLS" "Adjusted OLS" "Baseline logit" "Adjusted logit" "Ordered logit") replace
 
 
 * =======
@@ -329,53 +320,5 @@ cap log close draft3
 
 * Reset working directory.
 cd "$pwd"
-
-
-* ==========
-* = BONUS! =
-* ==========
-
-
-* A primer to logistic regression
-* -------------------------------
-
-* ... the model makes reasonably uniform predictions, without any apparent trace
-* of excessive multicollinearity or anomalies in the residuals, but the linear
-* assumption is violated by our not-very-normal dependent variable, so we switch
-* to logit for regression with categorical data:
-
-// create a dummy for opposing gender equality
-gen geq1 = (mnrgtjb < 3) if !mi(mnrgtjb)
-
-// logistic regression
-logit geq1 agea i.female#i.faith income edu lrscale, nolog
-
-* ... the model computes the marginal increase or decrease in probability that
-* one unit of the IV creates in the DV; here, it predicts opposition to gender
-* equality over the same list of covariates as used in linear regression.
-
-* ... the negative coefficients indicate that young, educated female atheists
-* are the least likely to oppose gender equality; the positive coefficients show
-* that old right-wing males with religious beliefs will be most likely to do;
-* the results are unsurprising so far, but the odds ratios are more informative:
-
-logit geq1 agea i.female#i.faith income edu lrscale, nolog or
-
-// muslim males and females are many more times susceptible to fit the dependent
-// variable, but the conjugated effects of income and education are noticeable
-// too; what we might conclude needs clarification at that stage
-
-// marginal effects
-margins female#faith, asbalanced
-marginsplot, x(faith) scheme(set1)
-
-* ... this plot shows the marginal effects of each religion in each gender group
-* and clarifies the confusion about Jewish women, for the which the coefficient
-* is not statistically differentiable from Jewish males.
-
-// finally, ordered logit equivalent:
-ologit geq agea i.female#i.faith income edu lrscale, nolog
-
-
-* We are done. Thanks for following!
+* We are done. Thanks for following! And all the best for the future.
 * exit

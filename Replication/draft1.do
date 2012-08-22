@@ -6,6 +6,14 @@
 * Data:   National Health Interview Survey
 * Sample: N = 24,291 for the 2009 survey year
 
+* Note: this do-file can be used as a template for your own draft, provided that
+* you have set up Stata for the course by setting the working directory to the
+* SRQM folder. You should have run and reviewed all previous do-files first.
+
+* Required packages (uncomment to install).
+* ssc install fre, replace
+* ssc install spineplot, replace
+
 
 * =========
 * = SETUP =

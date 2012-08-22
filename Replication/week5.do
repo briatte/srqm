@@ -26,14 +26,13 @@ global wd "Replication/week5-files"
 cap mkdir "$wd"
 cd "$wd"
 
-* Log.
-cap log using "week5.log", name(week5) replace
-
-* This do-file also uses a graph scheme by Edwin Leuven for its figures. Install
-* from his website to use his neat black and white scheme for creating graphics.
+* Use the black and white graph scheme by Edwin Leuven for figures.
 cap net from "http://leuven.economists.nl/stata"
 cap net install schemes
 cap set scheme bw
+
+* Log.
+cap log using "week5.log", name(week5) replace
 
 * This do-file contains a detailed guide to exporting summary statistics tables
 * with the tsst or tabout commands: make sure that you use these commands when

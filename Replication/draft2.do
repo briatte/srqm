@@ -7,7 +7,13 @@
 * Sample: N = 24,291 for the 2009 survey year
 
 * Note: this file updates the previous draft with a few significance tests and 
-* some preliminary regression modelling with the main variables of interest.
+* some preliminary regression modelling with the main variables of interest. It
+* also requires that you run it from the SRQM working directory.
+
+* Required packages (uncomment to install).
+* ssc install fre, replace
+* ssc install spineplot, replace
+* ssc install tab_chi, replace
 
 
 * =========

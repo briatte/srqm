@@ -153,9 +153,6 @@ program srqm
 					do Replication/draft`y2'.do
 				}
 			}
-
-			// cleanup
-			rm Replication/perma.log
 			
 			di as res "Done."
 		}
