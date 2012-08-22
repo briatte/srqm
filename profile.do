@@ -62,8 +62,8 @@ program srqm
 	// execute the script in full, and you must have properly installed Stata on your
 	// computer first.  
 
-	local variables = "lookfor_all fre revrs univar extremes"
-	local graphs = "catplot ciplot spineplot tabplot tab_chi" 
+	local variables = "extremes fre lookfor_all revrs univar"
+	local graphs = "catplot ciplot spineplot tab_chi tabplot" 
 	local exports = "log2do2 mkcorr tabout"
 	local regression = "estout leanout outreg outreg2"
 
@@ -71,7 +71,7 @@ program srqm
 
 	local verbose = ("`2'" == "verbose")
 
-	if "`1'" == "setup" | "`1'" == "check" {
+	if inlist("`1'","setup","check","cleanup") {
 		qui log using `1'.log, name(SRQM) replace
 		di as inp "Running SRQM in " `"`1'"' " mode on Stata " c(stata_version)
 	}
@@ -81,9 +81,10 @@ program srqm
 		di as inp "  srqm setup offline" as txt " -- skip package installs"
 		di as txt _n "Debug commands:" _n
 		di as inp "  srqm check" as txt " -- check and update packages" _n
-		di as inp "  srqm check verbose" as txt " -- plenty more output"
-		di as inp "  srqm check routine" as txt " -- run through all do-files"
-		di as inp "  srqm check cleanup" as txt " -- remove course packages"
+		di as inp "  srqm check verbose" as txt " -- print plenty more system output"
+		di as inp "  srqm check routine" as txt " -- run through all course do-files"
+		// undocumented (pretty destructive):
+		// srqm cleanup [packages] [workfiles] [all] -- uninstall packages and/or erase replication workfiles
 		di as txt _n "You probably want to run 'srqm setup'."
 		exit 198
 	}
@@ -128,8 +129,13 @@ program srqm
 				cap noi ssc install `p', replace
 				}
 		}
+
 		cap net from "http://gking.harvard.edu/clarify"
 		cap net install clarify
+		
+		cap net from "http://leuven.economists.nl/stata"
+		cap net install schemes
+		// cap set scheme bw
 	}
 	else if `verbose' {
 		ado de
@@ -141,7 +147,9 @@ program srqm
 	if "`1'" == "check" {
 	
 		if "`2'" == "routine" {
+			local begin_time = c(current_time)
 			di as inp _n "Clean run through all do-files..."
+			
 			forvalues y=1/15 {
 				gr drop _all
 				set scheme s2color
@@ -154,22 +162,48 @@ program srqm
 				}
 			}
 			
-			di as res "Done."
-		}
-		else if "`2'" == "cleanup" {
-			di as inp _n "Uninstalling packages..."
-	
-			foreach t in variables graphs exports regression {
-				di as inp "Uninstalling selected packages to handle " "`t'" "..."				
-				foreach p of local `t' {
-					cap noi ssc uninstall `p'
-					}
-			}
-			cap ssc uninstall clarify		
+			gr drop _all
+			win man close viewer _all // nifty
+			clear all
+			
+			di as res _n "Done! Routine launched at " "`begin_time'" " and finished at " c(current_time) "."
 		}
 		else {
 			cap noi adoupdate, update all ssconly
 		}
+	}
+
+	if "`1'" == "cleanup" {
+	
+		if inlist("`2'","packages","all") {
+			di as inp _n "Uninstalling packages..." // also sets schemes back to default
+	
+			foreach t in variables graphs exports regression {
+				foreach p of local `t' {
+					cap noi ssc uninstall `p'
+					}
+			}
+			cap ssc uninstall clarify	
+			cap ssc uninstall schemes
+			set scheme s2color
+		}
+		
+		if inlist("`2'","workfiles","all") {
+			di as inp _n "Uninstalling workfiles..." // probably requires X Window System
+
+			forvalues y=1/15 {
+				if `y' < 13 {
+					cap !rm Replication/week`y'.log
+					if inlist(`y',5,11) cap !rm -R Replication/week`y'-files
+				}
+				else {
+					local y2 = `y' - 12
+					cap rm Replication/draft`y2'.log
+					if `y2'==3 cap !rm -R Replication/BriattePetev
+				}
+			}
+		}
+	
 	}
 					
 	di as inp _n "The log for this " `"`1'"' " operation is stored at:"
