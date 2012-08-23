@@ -130,12 +130,14 @@ program srqm
 				}
 		}
 
+		di as inp "Installing a few more things..."
+		
 		cap net from "http://gking.harvard.edu/clarify"
 		cap net install clarify
 		
 		cap net from "http://leuven.economists.nl/stata"
 		cap net install schemes
-		// cap set scheme bw
+
 	}
 	else if `verbose' {
 		ado de
@@ -183,6 +185,8 @@ program srqm
 					cap noi ssc uninstall `p'
 					}
 			}
+			
+			di as inp _n "Also uninstalling clarify and some schemes..."
 			cap ssc uninstall clarify	
 			cap ssc uninstall schemes
 			set scheme s2color
