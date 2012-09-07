@@ -48,7 +48,9 @@ This folder path will be used to access the course material throughout the semes
 
 ### 4. Edit `profile.do`
 
-Open the `profile.do` file in Stata from the `SRQM` folder, using the __File > Open…__ menu item, or type &#8984;O (Command-O) on Mac OS X, or type Ctrl-O on Windows. Select __“All Stata Files”__ or __“Do-file (*.do)”__ where asked what file format to show.
+Type `doedit profile.do` in the Command window and press `Enter` to open the `profile.do` file from the `SRQM` folder in Stata.
+
+Alternatively, you can use the __File > Open…__ menu item, or type &#8984;O (Command-O) on Mac OS X, or type Ctrl-O on Windows (make sure to select __“All Stata Files”__ or __“Do-file (*.do)”__ where asked what file format to show).
 
 Stata will open the `profile.do` file in its do-file editor. At the top of the code, at lines 10-11, replace the folder path in quotes by pasting your own folder path to the `SRQM` folder:
 
