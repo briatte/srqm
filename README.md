@@ -8,7 +8,7 @@ Every student gets a copy of this ‘[Teaching Pack](http://f.briatte.org/srqm/)
 
 ## Requirements
 
-The course requires a working copy of [Stata 12](http://www.stata.com/), by StataCorp. Minimal system requirements are Mac OS X 10.5 or Windows XP SP2.
+The course requires a working copy of [Stata 12](http://www.stata.com/), by StataCorp. Minimal system requirements are Mac OS X 10.5 ("Leopard") or Windows XP SP2 (Service Pack 2).
 
 Backward compatibility extends back to Stata 10, which means that the course do-files should be able to run after a few adjustments on older operating systems.
 
@@ -18,79 +18,39 @@ Backward compatibility extends back to Stata 10, which means that the course do-
 
 The following steps explain how to configure a system to work with Stata for the duration of this course.
 
-### 1. Copy the ‘Teaching Pack’
-
-Move the whole ‘Teaching Pack’ to a **stable** and **easily accessible** location on your hard drive, preferrably with your other courses in your `Documents` folder.
-
-You can rename the ‘Teaching Pack’ folder to whatever you like, but you will have to use its new name in replacement of `SRQM` in the following instructions.
-
-### 2. Install Stata
+### 1. Install Stata
 
 Stata should be pre-installed on your workstation.
 
 Make sure that you are running Stata from the __"Applications"__ folder or its system equivalent, such as __"Program Files"__ on Windows. Running Stata from outside your application folder might cripple the software.
 
+### 2. Copy the ‘Teaching Pack’
+
+Move the whole `SRQM` folder to a **stable** and **easily accessible** location on your hard drive.
+
+You can rename the `SRQM` folder to whatever you like, as long as you do not modify it or move it later on. If you do, you will need to update your installation (see the first item in the 'Troubleshooting' section).
+
 ### 3. Set the working directory
 
-Now, open Stata. To set the `SRQM` folder as the working directory, use the __File > Change Working Directory…__ menu item, or type &#8984;&#8679;J (Command-Shift-J) on Mac OS X.
+Now, open Stata and set the `SRQM` folder (or whatever your renamed it to) as the **working directory**.
 
-Watch the folder path that Stata will display in the ‘Results’ window when you select the SRQM folder:
+Use the __File > Change Working Directory…__ menu item, or type &#8984;&#8679;J (Command-Shift-J) on Mac OS X. The folder path that appears in the Results window will be used to access the course material throughout the semester.
 
-	. cd "/Users/fr/Documents/Teaching/SRQM"
-	/Users/fr/Documents/Teaching/SRQM
+### 4. Run the course profile
 
-The folder path will look different on your local system, especially on Windows, which uses backslashes:
+Type `run profile` in the Command window and press `Enter`.
 
-	. cd "C:\Users\Ivo\Documents\Teaching\SRQM"
-	C:\Users\Ivo\Documents\Teaching\SRQM
-
-This folder path will be used to access the course material throughout the semester. If you modify the name and/or the location of the `SRQM` folder during that period, you will need to run through this installation guide again to update your settings. Copy that path to the clipboard.
-
-### 4. Edit `profile.do`
-
-Type `doedit profile.do` in the Command window and press `Enter` to open the `profile.do` file from the `SRQM` folder in Stata.
-
-Alternatively, you can use the __File > Open…__ menu item, or type &#8984;O (Command-O) on Mac OS X, or type Ctrl-O on Windows (make sure to select __“All Stata Files”__ or __“Do-file (*.do)”__ where asked what file format to show).
-
-Stata will open the `profile.do` file in its do-file editor. At the top of the code, at lines 10-11, replace the folder path in quotes by pasting your own folder path to the `SRQM` folder:
-
-	// Edit this command to reflect your local path to the SRQM folder:
-	cap cd "~/Documents/Teaching/SRQM"
-
-Save the modified file using the __File > Save__ item, or type &#8984;S (Command-S) on Mac OS X, or type Ctrl-S on Windows. Then quit Stata when you are done.
-
-### 5. Check your edits
-
-Now open Stata again. Your `profile.do` file should guide it to the `SRQM` folder, in which case Stata will say “Welcome” among a few other things:
-
-	Welcome. You are running Stata with the SRQM profile.
-
-	Working directory:
-	/Users/fr/Documents/Teaching/SRQM
-
-	Course/         README.md       Replication/
-	Datasets/       README.pdf      profile.do
-	
-	...
-
-If Stata says something else that looks like an error, try the following:
-
-- Copy the `profile.do` file to the same folder where you installed the Stata application.
-- Check your folder path for any typo, and make sure that it is enclosed in `"quotes"`.
-
-You will also get an error message if you modify the names and/or the locations of the `Datasets` and `Replication` folders.
-
-### 6. Type `srqm setup`
-
-The final installation step involves downloading a few additional packages, so make sure that you are online. If you are not connected to the Internet, as when you get logged off the Sciences Po wifi network, several of the installation commands run below will systematically fail.
-
-To finalize your installation for the course, type `srqm setup` in the Command window and press `Enter` to run the setup program for this course. The `srqm setup` command is part of a program that will silently load when you open Stata with this configuration. This configuration makes sure that you can run all course do-files.
+This command runs the `profile.do` file that will setup Stata for this course. It will create another `profile.do` file in your Stata application folder that will point to the `SRQM` folder. This setup makes sure that you will be able to work from the ‘Teaching Pack’ for the whole semester.
 
 ## Troubleshooting
 
-- **If you do not have access to hard drive space** to perform the above installation, the ‘Teaching Pack’ should be able to run from a USB key plugged to a Sciences Po workstation. This requires the ‘Teaching Pack’ folder to be located at `e:\SRQM` (where your USB key should have loaded). Additional packages will be temporarily installed at location `c:\temp` on your hard drive.
+You will not need this setup when the course is over. At the end of the semester, you can erase the `profile.do` file that you will find in your Stata application folder. Alternatively, just type `srqm leave` in the Command window. Other issues might also show up with your installation:
 
-- **If you cannot setup Stata and install additional packages**, you will run into errors in the course do-files when we use non-native, user-coded Stata commands. This can sometimes be circumvented, e.g. by replacing all `fre` commands by `tab` commands. You will also need to minimally configure Stata by hand, starting with the working directory (and `memory` if running Stata 11 or older).
+- **If you need to update your installation** because you renamed or moved the ‘Teaching Pack’ on your hard drive after performing the setup, simply erase the `profile.do` file that you will find in your Stata application folder and then run again through the installation steps detailed above. Please ask for help in class if you get stuck.
+
+- **If you do not have access to hard drive space** to perform the above installation, the ‘Teaching Pack’ should be able to run from a USB key plugged to a Sciences Po workstation. Follow the instructions above and the course will try to run in 'experimental mode' directly from the USB key. This mode might easily fail to install additional packages.
+
+- **If you cannot setup Stata and install additional packages**, you will occasionally run into errors in the course do-files. This can sometimes be circumvented, e.g. by replacing all `fre` commands by `tab` commands. You will also need to minimally configure Stata by hand, starting with the working directory (and `memory` if running Stata 11 or older).
 
 ## Readings
 
