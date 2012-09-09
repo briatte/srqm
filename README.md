@@ -44,13 +44,17 @@ This command runs the `profile.do` file that will setup Stata for this course. I
 
 ## Troubleshooting
 
+### Uninstalling
 You will not need this setup when the course is over. At the end of the semester, you can erase the `profile.do` file that you will find in your Stata application folder. Alternatively, just type `srqm leave` in the Command window. Other issues might also show up with your installation:
 
-- **If you need to update your installation** because you renamed or moved the ‘Teaching Pack’ on your hard drive after performing the setup, simply erase the `profile.do` file that you will find in your Stata application folder and then run again through the installation steps detailed above. Please ask for help in class if you get stuck.
+### Updating
+**If you need to update your installation** because you renamed or moved the ‘Teaching Pack’ on your hard drive after performing the setup, simply erase the `profile.do` file that you will find in your Stata application folder and then run again through the installation steps detailed above. Please ask for help in class if you get stuck.
 
-- **If you do not have access to hard drive space** to perform the above installation, the ‘Teaching Pack’ should be able to run from a USB key plugged to a Sciences Po workstation. Follow the instructions above and the course will try to run in 'experimental mode' directly from the USB key. This mode might easily fail to install additional packages.
+### Running from a USB key
+**If you do not have access to hard drive space** to perform the above installation, the ‘Teaching Pack’ should be able to run from a USB key plugged to a Sciences Po workstation. Follow the instructions above and the course will try to run in 'experimental mode' directly from the USB key. This mode might easily fail to install additional packages.
 
-- **If you cannot setup Stata and install additional packages**, you will occasionally run into errors in the course do-files. This can sometimes be circumvented, e.g. by replacing all `fre` commands by `tab` commands. You will also need to minimally configure Stata by hand, starting with the working directory (and `memory` if running Stata 11 or older).
+### Running without setup
+**If you cannot setup Stata and install additional packages**, you will occasionally run into errors in the course do-files. This can sometimes be circumvented, e.g. by replacing all `fre` commands by `tab` commands. You will also need to minimally configure Stata by hand, starting with the working directory (and `memory` if running Stata 11 or older).
 
 ## Readings
 
