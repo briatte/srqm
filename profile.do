@@ -1,54 +1,51 @@
 * What: SRQM profile
-* Who:  F. Briatte and I. Petev
-* When: 2012-08-13
+* Who:  F. Briatte
+* When: 2012-09-09
 
-// Use this do-file to set up Stata for the duration of the course.
-// Stata reads silently through this file at startup, so as long as
-// you set the command below properly, the replication material for
-// this course should run without producing any errors.
+// Use this do-file to set up Stata for the duration of the course: set your
+// working directory to the SRQM folder, then type 'do profile' to configure
+// your computer for the rest of the course. More advanced setup options are
+// covered in the README file of the SRQM folder.
 
-// Edit this command to reflect your local path to the SRQM folder:
-cap cd "~/Documents/Teaching/SRQM"
-
-// The rest of the file will show some information when Stata starts and will
-// create the srqm program, a setup utility for the course that will install a
-// few additional packages to Stata. Some of these packages are used in course
-// do-files. Type in 'srqm' to get the program commands and options.
-
-// Check working directory.
-if _rc != 0 {
-	di as err "Failed setting the working directory."
-	
-	// Trying out the most common USB port in the Sciences Po microlabs.
-	cap cd "e:\SRQM"
-	if _rc == 0 {
-		di as inp "Loading from a USB key..."
-		sysdir set PLUS "c:\temp"
+cap copy profile.do "`c(sysdir_stata)'"
+if _rc == 0 {
+	di as err "Setting up your computer for the SRQM course…"
+	if !regexm(c(pwd),"Users") & !regexm(c(pwd),"c:") {
+		di as err "Note: you are running in temporary mode, probably from a USB key."
+		di as err "Packages will be installed at `c(pwd)'/Packages."
+		cap mkdir "`c(pwd)'/Packages"
+		sysdir set PLUS "`c(pwd)'/Packages"
 	}
-	else {
-		di as err _n "Stata cannot find the working directory, which breaks paths in SRQM do-files."
-		di as err "Please edit the profile.do file in the SRQM folder, as explained in the README."
-		exit -1
-	}
+	tempname fh
+	file open fh using "`c(sysdir_stata)'profile.do", write replace
+	file write fh "// SRQM setup" _n
+	file write fh "cd " _char(34) "`c(pwd)'" _char(34) _n
+	file write fh "noi run profile.do" _n
+	file close fh
+	local run 1
 }
-
-noi di as inp _n "Working directory:"
-noi pwd
-noi ls, w
-
-// Check course folders.
-foreach f in  "Datasets" "Replication" {
-	cap cd "`f'"
-	if _rc != 0 {
-		di as err _n "Stata cannot find the " "`f'" " folder, which breaks paths in SRQM do-files."
-		di as err "Please adjust the folder names or reinstall the original SRQM Teaching Pack."
-		exit -1
-	}
-	noi di as inp _n "`f'" " folder:"
+else { 
+	local run 0
+		
+	noi di as inp _n "Working directory:"
 	noi pwd
-	if "`f'" == "Datasets" noi ls *.dta, w
-	if "`f'" == "Replication" noi ls *.do, w	
-	cd ..
+	noi ls, w
+	
+	// Check course folders.
+	foreach f in  "Datasets" "Replication" {
+		cap cd "`f'"
+		if _rc != 0 {
+			di as err _n "Stata cannot find the " "`f'" " folder, which breaks paths in SRQM do-files."
+			di as err "Please adjust the folder names or reinstall the original SRQM Teaching Pack."
+			exit -1
+		}
+		noi di as inp _n "`f'" " folder:"
+		noi pwd
+		if "`f'" == "Datasets" noi ls *.dta, w
+		if "`f'" == "Replication" noi ls *.do, w	
+		cd ..
+	}
+
 }
 
 cap pr drop srqm
@@ -62,16 +59,13 @@ program srqm
 	// execute the script in full, and you must have properly installed Stata on your
 	// computer first.  
 
-	local variables = "extremes fre kountry lookfor_all revrs univar"
-	local graphs = "catplot ciplot spineplot tab_chi tabplot" 
-	local exports = "log2do2 logout mkcorr tabout"
-	local regression = "estout leanout outreg outreg2"
-
+	local packages = "estout leanout outreg outreg2 log2do2 logout mkcorr tabout catplot ciplot spineplot tabplot extremes fre kountry lookfor_all revrs tab_chi univar"
+	
 	cap log close _all // interrupt logs
 
 	local verbose = ("`2'" == "verbose")
 
-	if inlist("`1'","setup","check","cleanup") {
+	if inlist("`1'","setup","check","cleanup","leave") {
 		qui log using `1'.log, name(SRQM) replace
 		di as inp "Running SRQM in " `"`1'"' " mode on Stata " c(stata_version)
 	}
@@ -79,6 +73,7 @@ program srqm
 		di as txt _n "Setup commands:" _n
 		di as inp "  srqm setup" as txt " -- setup for the SRQM course"
 		di as inp "  srqm setup offline" as txt " -- skip package installs"
+		di as inp "  srqm leave" as txt " -- leave the SRQM course"
 		di as txt _n "Debug commands:" _n
 		di as inp "  srqm check" as txt " -- check and update packages" _n
 		di as inp "  srqm check verbose" as txt " -- print plenty more system output"
@@ -121,13 +116,10 @@ program srqm
 	di as inp _n "Looking at packages..."
 	if "`1'" == "setup" & "`2'" != "offline" {
 		local i=0
-		foreach t in variables graphs exports regression {
+		foreach t of local packages {
 			local i=`i'+1
-			di as inp "[" "`i'" "/4] Installing selected packages to handle " "`t'" "..."
-			
-			foreach p of local `t' {
-				cap noi ssc install `p', replace
-				}
+			di as inp "[Installing package " "`i'" "/" wordcount("`packages'") "…]"
+			cap noi ssc install `t', replace
 		}
 
 		di as inp "Installing a few more things..."
@@ -178,18 +170,16 @@ program srqm
 	if "`1'" == "cleanup" {
 	
 		if inlist("`2'","packages","all") {
-			di as inp _n "Uninstalling packages..." // also sets schemes back to default
+			di as inp _n "Uninstalling packages..."
 	
-			foreach t in variables graphs exports regression {
-				foreach p of local `t' {
-					cap noi ssc uninstall `p'
-					}
+			foreach t of local packages {
+				cap noi ssc uninstall `p'
 			}
 			
 			di as inp _n "Also uninstalling clarify and some schemes..."
 			cap ssc uninstall clarify	
 			cap ssc uninstall schemes
-			set scheme s2color
+			set scheme s2color // also sets schemes back to default
 		}
 		
 		if inlist("`2'","workfiles","all") {
@@ -209,18 +199,20 @@ program srqm
 		}
 	
 	}
-					
-	di as inp _n "The log for this " `"`1'"' " operation is stored at:"
+	
+	if "`1'" == "leave" {
+		cap rm "`c(sysdir_stata)'profile.do"
+		if _rc ==0 di _n "`c(sysdir_stata)'profile.do removed. Farewell!"
+		if _rc !=0 di as err _n "Nothing to remove at `c(sysdir_stata)'profile.do."
+	}
+
+	di as inp _n "Done! The log for this " `"`1'"' " operation is stored at:"
 	qui log query SRQM
-	di as res r(filename)	
+	noi di as res r(filename)	
 	if "`1'" == "check" {
 		di as txt _n "Please email this log to your instructor(s) if you need"
 		di as txt "further assistance with your Stata installation."
-	}
-
-	di as inp _n "Done!"
-	di as inp "Have a nice day."
-	
+	}		
 	qui log close SRQM
 end
 
@@ -321,22 +313,20 @@ program science
 	di as txt _n "  -- Rudolf Carnap" _n
 end
 
-* Permanent log.
-* 
-* This will create a permanent log of the current session in the Replication
-* folder. Quitting Stata will automatically close it. This log is an additional
-* safety that should not keep you from logging sessions to separate log files.
-
+// Permanent log.
 cap log using "Replication/perma.log", name("permalog") replace
-if _rc==0 noi di as inp _n "Permanent log:" _n as res r(filename)
-if _rc!=0 noi di as err _n "Permanent log returned an error."
-if _rc==604 noi di as res _n "Permanent log already open. Carry on."
+if _rc==0 {
+	noi di as inp _n "Permanent log:" _n as res r(filename)
+}
+else if _rc==604 {
+	noi di as err _n "The permanent log is apparent already open."
+}
+else {
+	noi di as err _n "Permanent log returned an error."
+}
 
-noi di as inp _n "Welcome. You are running Stata with the SRQM profile."
+// Finish line.
+if `run'==1 noi srqm setup
+noi di as inp _n "Welcome! You are running Stata with the SRQM profile."
 
-* Last check.
-if c(scrollbufsize) != 500000 | c(maxvar) != 5000 | c(more) != "off" ///
-	noi di as err "It seems you have not yet run the SRQM setup program." _n ///
-	"Please run it by typing 'srqm setup' while connected to the Internet."
-	
 // All set.
