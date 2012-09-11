@@ -123,7 +123,7 @@ program srqm
 			di as inp _n "Uninstalling packages..."
 	
 			foreach t of local packages {
-				cap noi ssc uninstall `p'
+				cap noi ssc uninstall `t'
 			}
 			
 			di as inp _n "Also uninstalling clarify and some schemes..."

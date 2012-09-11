@@ -19,9 +19,7 @@ Please also remember to **systematically cite the data source and authors**, aft
 | `trust2012`	 | 'Bread and Peace'					 | (Hibbs 2012)					 |
 | `wvs2000`		 | World Values Survey					 | 2000							 |
 
-### Other sources:
-
-A selection of other sources is shown at the end of this document. Please remember that other sources are allowed for research projects *iif* -- if and only if -- you can quickly show *skills in data management*.
+A selection of other sources is shown at the end of this document. Please remember that other sources are allowed for research projects *if and only if you can quickly show skills in data management*.
 
 ### Usage commands:
 
@@ -150,7 +148,7 @@ The issue-level dataset is used in Chapter 5 of the book.
 
 ## nhis2009
 
-The `nhis2009` dataset holds data for years 2000--2009 of the U.S. National Health Interview Survey (NHIS):
+The `nhis2009` dataset holds sample adult data for years 2000--2009 of the U.S. National Health Interview Survey (NHIS):
 
 > The National Health Interview Survey (NHIS) has monitored the health of the nation since 1957. NHIS data on a broad range of health topics are collected through personal household interviews. For over 50 years, the U.S. Census Bureau has been the data collection agent for the National Health Interview Survey. Survey results have been instrumental in providing data to track health status, health care access, and progress toward achieving national health objectives.  
 <http://www.cdc.gov/nchs/nhis.htm>
