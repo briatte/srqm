@@ -156,6 +156,18 @@ hist bmi, freq normal name(bmi, replace)
 * how quartiles and outliers are calculated to form each element of the plot.
 gr hbox bmi, name(bmi_boxplot, replace)
 
+* This more complex example uses with the 'over() asyvars' option to produce the
+* box plots of BMI over gender categories, and then again over insurance status.
+* Note that you need to select BOTH LINES TOGETHER to run the command properly.
+* The result will stay in memory under the name given by the name() option.
+gr hbox bmi if uninsured != 9, ///
+	over(sex) asyvars over(uninsured) name(bmi_sex_ins, replace)
+
+* Note how the 'DNK' category for insurance status was excluded by using a call
+* to a conditional operator (if), which excluded observations with an insurance 
+* status equal to 9 when drawing the plot. This part of the command reads as:
+* 'draw a boxplot for all observations with an insurance status not equal to 9'.
+
 * Here are more examples of logical operators:
 
 su bmi if age >= 20 & age < 25
@@ -172,6 +184,19 @@ su bmi if raceb==2 | raceb==3
 * with values 2 and 3. This command therefore summarises BMI only for these
 * two ethnic groups: the '|' symbol is the logical operator for 'or'. It
 * reads as: 'summarize BMI if the respondent is Black or Hispanic.'
+
+* If you have many categories to select, then using the -inlist- operator might
+* be much quicker. The example below selects a series of income categories that
+* fall either below the minimum wage in 2009 (15,000 dollars/year) or that fall
+* five times over that or more (i.e. earnings==11, the highest income category 
+* in the dataset).
+tab earnings if inlist(earnings,1,2,3,11)
+
+* This operator is also practical to select countries, regions and other nominal
+* variables in country-level data, and it accepts strings, i.e. text variables.
+* Examples to follow later. For the moment, simply note that the example above
+* uses a tabulation command because the earnings variable is categorical. This
+* difference in the type of variable is crucial, and is illustrated further.
 
 
 * =========================
@@ -249,6 +274,12 @@ gr dot health, exclude0 yreverse over(sex) over(raceb) ///
 
 * Close log (if opened).
 cap log close week2
+
+* The command above closes the log that we opened when we started this do-file.
+* Logs are essential to keep records of your analysis. They complement do-files,
+* which are records of your commands and comments only. Now that you have closed
+* the log below, have a quick look at it.
+view "Replication/week2.log"
 
 * We are done. Just quit the application, have a nice week, and see you soon :)
 * exit
