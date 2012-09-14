@@ -34,27 +34,29 @@ program srqm
 		exit 198
 	}
 
-	di as inp _n "Looking at system settings..."
+	di as inp _n "Going over system settings..."
+
 	if "`1'" == "setup" {
+
 		* Memory.
 		if c(version) < 12 {
 			cap set mem 500m, perm
-			if _rc==0 di as txt "Memory set to 500MB (should be enough)."
-			if _rc!=0 di as err "Failed to set memory to 500M." ///
+			if _rc==0 di as txt "- Memory.............. set to (500MB)"
+			if _rc!=0 di as err "Failed to set memory to 500M." _n ///
 			"Things might work, or not, depending on the size of your data. Sorry."
 		}
 		
 		* Screen breaks.
 		cap set more off, perm
-		if _rc==0 di as txt "Screen breaks set off (cool)."
+		if _rc==0 di as txt "- Screen breaks....... set to (off)"
 		
 		* Maximum variables.
 		cap set maxvar 5000, perm
-		if _rc==0 di as txt "Maximum variables set to 5000 (yay)."
+		if _rc==0 di as txt "- Maximum variables... set to (5000)"
 		
 		* Scroll buffer.
 		cap set scrollbufsize 500000
-		if _rc==0 di as txt "Screen breaks set to 500000 (wow)."
+		if _rc==0 di as txt "- Screen breaks....... set to (500000)"
 	}
 	else if `verbose' {
 		creturn li
@@ -63,22 +65,22 @@ program srqm
 		query
 	}
 
-	di as inp _n "Looking at packages..."
+	di as inp _n "Going over packages..."
 	if "`1'" == "setup" & "`2'" != "offline" {
 		local i=0
 		foreach t of local packages {
 			local i=`i'+1
-			di as inp "[Installing package " "`i'" "/" wordcount("`packages'") "É]"
-			cap noi ssc install `t', replace
+			di as txt "- Installing package " "`i'" "/" wordcount("`packages'") " (" "`t'" ") ..."
+			cap qui ssc install `t', replace
 		}
 
-		di as inp "[Installing a couple more things...]"
+		di as txt "- Installing a couple more things..."
 		
 		cap net from "http://gking.harvard.edu/clarify"
-		cap noi net install clarify
+		cap qui net install clarify
 		
 		cap net from "http://leuven.economists.nl/stata"
-		cap noi net install schemes
+		cap qui net install schemes
 
 	}
 	else if `verbose' {

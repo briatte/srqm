@@ -10,8 +10,8 @@
 // Hook SRQM profile.
 cap copy profile.do "`c(sysdir_stata)'"
 if _rc == 0 {
-	di as err "Setting up your computer for the SRQM course…"
-	if !regexm(c(pwd),"Users") & !regexm(c(pwd),"c:") {
+	di as err "Setting up your computer for the SRQM course..."
+	if !regexm(c(pwd),"Users|Documents|c:|d:") {
 		di as err "Note: you are running in -experimental- mode, probably from a USB key."
 		di as err "Packages -might- get installed at `c(pwd)'/Packages"
 		cap mkdir "`c(pwd)'/Packages", public
@@ -25,9 +25,9 @@ if _rc == 0 {
 	file close fh
 	local run 1
 }
-else { 
+else if _rc == 602 { // file already exists, assume it sets the pwd, carry on 
 	local run 0
-		
+
 	noi di as inp _n "Working directory:"
 	noi pwd
 	noi ls, w
@@ -48,24 +48,34 @@ else {
 	}
 
 }
+else {
+	local run -1
+	di as err "Warning: The Stata application folder is not writable on your system. To follow " ///
+	_n "the course, you will have to manually set the working directory to point to the " ///
+	_n "SRQM folder at the beginning of every course session. This is done through the" ///
+	_n "'File : Change working directory...' menu, or through the cd command. Both are" ///
+	_n "documented in the Stata Guide. The rest of the setup should work, though."
+}
+
 
 // Course programs.
-adopath + "`c(pwd)'/Programs"
+cap adopath + "`c(pwd)'/Programs"
 
 // Permanent log.
 cap log using "Replication/perma.log", name("permalog") replace
 if _rc==0 {
-	noi di as inp _n "Permanent log:" _n as res r(filename)
+	noi di as inp _n "Permanent log:" _n as res r(filename) _n
 }
 else if _rc==604 {
-	noi di as err _n "The permanent log is apparent already open."
+	noi di as err _n "The permanent log was already open. Carry on."
 }
 else {
-	noi di as err _n "Permanent log returned an error."
+	noi di as err _n "The permanent log returned an error. Too bad."
 }
 
 // Finish line.
-if `run'==1 noi srqm setup
-noi di as inp _n "Welcome! You are running Stata with the SRQM profile."
+if `run'!=0 noi srqm setup
+
+noi di as inp "Welcome!" as txt " You are running Stata with the SRQM profile."
 
 // All set.
