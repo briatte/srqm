@@ -173,7 +173,7 @@ gr hbox bmi if uninsured != 9, ///
 su bmi if age >= 20 & age < 25
 * This command reads as: 'run the 'summarize' command on the 'bmi' variable,
 * but only for observations for wich the 'age' variable takes a value greater 
-* than or equal to 18 and ('&') lesser than 25.'
+* than or equal to 20 and ('&') lesser than 25.'
 
 su bmi if sex==1 & age >= 65
 * This command reads as: 'summarize BMI for observations of sex equal to 1
