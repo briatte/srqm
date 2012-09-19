@@ -266,7 +266,7 @@ tab sex
 * Crosstabulate sex and race.
 tab raceb
 
-* Plot average height by sex and race.
+* Plot average weight by sex and race.
 gr dot weight, over(raceb) over(sex) name(weight_race_sex, replace)
 
 * To close the 'week1' log file previously opened, type the following command:
