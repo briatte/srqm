@@ -31,6 +31,27 @@ la var bmi "Body Mass Index"
 svyset psu [pw=perweight], strata(strata) vce(linearized) singleunit(missing)
 
 
+* =============
+* = VARIABLES =
+* =============
+
+
+* Inspect some of the variables.
+d sex raceb earnings
+
+* Low-dimensional, categorical variables.
+fre sex
+fre raceb
+fre earnings
+
+* The default 'tab' or 'tab1' commands give similar results, minus value labels.
+tab sex
+tab1 raceb earnings, plot
+
+* High-dimensional, continuous variables.
+fre bmi, rows(100)
+
+
 * ================
 * = DISTRIBUTION =
 * ================
