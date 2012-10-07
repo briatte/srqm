@@ -17,6 +17,12 @@ cap log using "Replication/week7.log", name(week7) replace
 * Weights.
 svyset [pw=dweight] // weighting scheme set to country-specific population
 
+* Additional packages.
+foreach p in fre catplot {
+	cap which `p'
+	if _rc==111 ssc install `p'
+}
+
 
 * ================
 * = DESCRIPTIONS =
@@ -44,8 +50,7 @@ bys cntry: ci torture [aw=dweight] // weighted by country-specific population
 * Average opposition to torture in each country.
 gr dot torture [aw=dweight], over(cntry, sort(1) des) scale(.7)
 
-* Detailed breakdown in each country (requires catplot package)
-* ssc install catplot
+* Detailed breakdown in each country.
 catplot trrtort [aw=dweight], over(cntry, sort(1)des lab(labsize(*.8))) ///
 	asyvars percent(cntry) stack scale(.7) ytitle("") ///
 	legend(rows(1) label(3 "Neither") region(fc(none) ls(none))) ///
@@ -241,6 +246,7 @@ prtest torture, by(media)
 * supporters of torture among those exposed to TV news, as compared to support
 * among unexposed respondents.
 
+
 * Simple example
 * --------------
 
@@ -295,4 +301,4 @@ tabodds torture income4, ciplot ///
 cap log close week7
 
 * We are done. Just quit the application, have a nice week, and see you soon :)
-* exit
+* exit, clear

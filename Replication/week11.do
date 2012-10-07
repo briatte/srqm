@@ -23,6 +23,12 @@ cap net from "http://leuven.economists.nl/stata"
 cap net install schemes
 cap set scheme bw
 
+* Additional packages.
+foreach p in estout {
+	cap which `p'
+	if _rc==111 ssc install `p'
+}
+
 * Log.
 cap log using "week11.log", name(week11) replace
 
@@ -87,7 +93,6 @@ pwcorr births sqrt_schooling log_gdpc aids, star(.05)
 gr mat births sqrt_schooling log_gdpc, half
 
 * Export correlation matrix (requires estout package)
-* ssc install estout, replace
 eststo clear
 qui estpost correlate births sqrt_schooling log_gdpc aids, matrix listwise
 esttab using corr.csv, unstack not compress label replace // export
@@ -315,7 +320,6 @@ reg births c.schooling##c.log_gdpc aids##region, r beta
 * covariates (independent variables), in order to compare their coefficients.
 
 * The next commands require that you install the estout package first.
-* ssc install estout, replace
 
 * Wipe any previous regression estimates.
 eststo clear
@@ -346,4 +350,4 @@ cap log close week11
 cd "$pwd"
 
 * We are done. Just quit the application, have a nice week, and see you soon :)
-* exit
+* exit, clear

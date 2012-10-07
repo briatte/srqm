@@ -282,4 +282,4 @@ cap log close week2
 view "Replication/week2.log"
 
 * We are done. Just quit the application, have a nice week, and see you soon :)
-* exit
+* exit, clear

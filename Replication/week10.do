@@ -141,4 +141,4 @@ reg partnrs5 i.female zconinc2 zeduc zsize i.wrkstat i.marital zage
 cap log close week10
 
 * We are done. Just quit the application, have a nice week, and see you soon :)
-* exit
+* exit, clear

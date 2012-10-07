@@ -10,11 +10,11 @@
 * some preliminary regression modelling with the main variables of interest. It
 * also requires that you run it from the SRQM working directory.
 
-* Required packages (uncomment to install).
-* ssc install fre, replace
-* ssc install spineplot, replace
-* ssc install tab_chi, replace
-
+* Required packages.
+foreach p in fre spineplot tab_chi {
+	cap which `p'
+	if _rc==111 ssc install `p'
+}
 
 * =========
 * = SETUP =
@@ -26,7 +26,7 @@ use "Datasets/nhis2009.dta", clear
 
 * Create a folder to export all files.
 global pwd=c(pwd)
-global wd "Replication/BriattePetev" // !note: edit to fill in your own names
+global wd "Replication/draft2-files" // !note: edit to fill in your own names
 cap mkdir "$wd"
 cd "$wd"
 
@@ -151,7 +151,6 @@ tab bmi6 age4, chi2
 tab bmi6 age4, chi2 V // with Cramér's V
 
 * Residuals (requires tab_chi, install if needed)
-* ssc install tab_chi, replace
 tabchi bmi6 age4, r noo noe // raw residuals
 tabchi bmi6 age4, p noo noe // Pearson residuals
 
@@ -261,7 +260,6 @@ tab bmi6 edu3
 tab bmi6 edu3, nof cell // percents over the whole sample
 tab bmi6 edu3, nof col  // percents of BMI categories in age groups (columns)
 tab bmi6 edu3, chi2 V   // Chi-squared test with Cramér's V
-* ssc install tab_chi, replace
 tabchi bmi6 edu3, p noo noe // Pearson residuals
 
 * Crosstabulation of age, gender and education groups.
@@ -300,7 +298,6 @@ tab bmi6 health
 tab bmi6 health, nof cell // percents over the whole sample
 tab bmi6 health, nof col  // percents of BMI categories in age groups (columns)
 tab bmi6 health, chi2 V   // Chi-squared test with Cramér's V
-* ssc install tab_chi, replace
 tabchi bmi6 health, p noo noe // Pearson residuals
 
 * Visualization:
@@ -358,7 +355,6 @@ tab bmi6 race
 tab bmi6 race, nof cell // percents over the whole sample
 tab bmi6 race, nof col  // percents of BMI categories in age groups (columns)
 tab bmi6 race, chi2 V   // Chi-squared test with Cramér's V
-* ssc install tab_chi, replace
 tabchi bmi6 race, p noo noe // Pearson residuals
 
 * Visualization:
@@ -530,4 +526,4 @@ reg bmi i.age4 female hins i.race // ... multiple linear regression!
 * and best of luck with your work, we know what overload means and sympathize!
 
 * We are done. Thanks for following!
-* exit
+* exit, clear

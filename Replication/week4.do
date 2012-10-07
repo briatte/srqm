@@ -239,4 +239,4 @@ ci bmi
 cap log close week4
 
 * We are done. Just quit the application, have a nice week, and see you soon :)
-* exit
+* exit, clear

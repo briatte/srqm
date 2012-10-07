@@ -45,6 +45,7 @@
 * Commands
 * --------
 
+
 * Tip (1): Get to learn some syntax
 *
 * - Stata commands share a similar syntax, most commonly: 
@@ -53,6 +54,7 @@
 *   command <variable>
 * - Most Stata commands will also allow one or more options, after a comma:
 *   command <variable>, <options>
+
 
 * Tip (2): Run all lines in sequential order
 *
@@ -65,6 +67,7 @@ set obs 100
 gen test=1
 ren test x // This line will not run if you do not run the previous ones.
 
+
 * Tip (3): Run multiple lines together
 *
 * - Applies every time you see '///' at the end of a line.
@@ -74,6 +77,9 @@ ren test x // This line will not run if you do not run the previous ones.
 di "This is a test. Execute me by selecting this line, " ///
 	"and this line too, " _newline ///
 	"and this line too. Well done :)"
+
+* You will have to do the same for code loops, such as "foreach {}" loops.
+* You will ususually be warned before in the comments.
 
 
 * Coursework
@@ -99,6 +105,7 @@ di "This is a test. Execute me by selecting this line, " ///
 * For starters, make sure that you just launched Stata and have nothing stored
 * in memory. This command will ensure that this is the case:
 clear 
+
 
 * (1) Memory
 * ----------
@@ -164,12 +171,12 @@ ssc install fre, replace
 * to run the course do-files properly. These packages should have already been
 * installed by the 'srqm setup' command that you should have run when starting
 * to use the SRQM Teaching Pack, but this additional check might avoid running
-* into 'unknown command' errors later in class :)
-ssc install catplot, replace
-ssc install spineplot, replace
-ssc install tabout, replace
-ssc install tab_chi, replace
-ssc install estout, replace
+* into 'unrecognized command' errors later in class. You will have to select 
+* the complete loop below to execute the code properly.
+foreach p in catplot estout lookfor_all spineplot tabout tab_chi {
+	cap which `p'
+	if _rc==111 ssc install `p'
+}
 
 * The settings covered in this section of the do-file should now be permanently
 * stored on your computer. You will not need to come back to them. The settings
@@ -229,8 +236,10 @@ use "Datasets/nhis2009.dta", clear // etc.
 ls "Datasets/*.dta"
 
 * Tip: an additional package can help you search for variables across datasets.
-ssc install lookfor_all, replace
-lookfor_all health, dir(Datasets) // requires SRQM set as the working directory
+lookfor_all health, dir(Datasets)
+
+* The command above, like all commands that open course datasets or do-files,
+* requires that the SRQM folder has been set as the working directory.
 
 
 * (6) Log
@@ -251,8 +260,8 @@ log using "Replication/week1.log", name(week1) replace
 
 * Now run these example commands (do not worry about the comments):
 
-d year sex weight raceb // describe a few variables
-keep if year==2009 // keep observations for year 2009
+d year sex weight raceb  // describe a few variables
+keep if year==2009       // keep observations for year 2009
 
 * Calculate the frequencies for each racial-ethnic group.
 fre raceb
@@ -341,8 +350,8 @@ h cap
 * for you when you shut it down, so this requires no action on your side. For
 * additional help, please turn again to the Stata Guide.
 
-* Close log (if opened).
+* Close log (if still opened, which it should not).
 cap log close week1
 
 * We are done. Just quit the application, have a nice week, and see you soon :)
-* exit
+* exit, clear

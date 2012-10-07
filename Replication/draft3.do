@@ -11,11 +11,11 @@
 * make definite choices about your code, remove all errors and make sure that
 * your do-file runs from beginning to end without any issues.
 
-* Required packages (uncomment to install).
-* ssc install fre, replace
-* ssc install spineplot, replace
-* ssc install tab_chi, replace
-* ssc install estout, replace
+* Required packages.
+foreach p in estout fre spineplot tab_chi {
+	cap which `p'
+	if _rc==111 ssc install `p'
+}
 
 
 * =========
@@ -28,7 +28,7 @@ use "Datasets/ess2008.dta", clear
 
 * Create a folder to export all files.
 global pwd=c(pwd)
-global wd "Replication/BriattePetev" // !note: edit to fill in your own names
+global wd "Replication/draft3-files" // !note: edit to fill in your own names
 cap mkdir "$wd"
 cd "$wd"
 
@@ -240,11 +240,15 @@ tab diff imdfetn
 * -------------------
 
 * Baseline model.
-logit diff $bl [pw=dpw] // coefficients are log-odds* Log-odds are variations in the probability of the DV. Negative log-odds imply
+logit diff $bl [pw=dpw] // coefficients are log-odds
+
+* Log-odds are variations in the probability of the DV. Negative log-odds imply
 * that an increase in the IV, or the presence of it, reduces the probability of
 * the DV being equal to 1. Log-odds can be compared by magnitude, but at that
 * stage, it is usually simpler to read only the sign of the coefficient and its
-* significance level (p-value, closeness of confidence interval bounds to zero).* Odds ratios.
+* significance level (p-value, closeness of confidence interval bounds to zero).
+
+* Odds ratios.
 logit diff $bl [pw=dpw], or
 
 * Odds ratios provide an easier means of comparison between coefficients: for
@@ -252,7 +256,9 @@ logit diff $bl [pw=dpw], or
 * likelihood of allowing migrants from different groups by a factor of 2.03,
 * i.e. higher-educated respondents are twice more likely than others to have
 * answered "Some" or "Many" to the original question.
-* Adjusted model.logit diff $bl [pw=dpw], vce(cluster cid)
+
+* Adjusted model.
+logit diff $bl [pw=dpw], vce(cluster cid)
 
 * Odds ratios.
 logit diff $bl [pw=dpw], vce(cluster cid) or
@@ -286,18 +292,27 @@ marginsplot, xlab(minmax) by(female born) name(mfx_demog, replace)
 margins born#female, at(age=(25(5)85))
 marginsplot, by(female) name(mfx_age, replace)
 
-* Sensitivity analysis* --------------------* Ordered logistic regression, to test the cut point that we chose when recoding
+
+* Sensitivity analysis
+* --------------------
+
+* Ordered logistic regression, to test the cut point that we chose when recoding
 * the DV to a dummy. The results should show identical signs on the coefficients
 * and their order of magnitude should also stay stable. If not, then the model
 * is sensitive to the choice of cutoff point that we made earlier. Note that in
 * our example, the signs of the coefficients should actually be the same for the
 * OLS (linear regression) and ordered logit, not for the logit (the logit codes
-* the dummy in reverse order to the original variable).ologit imdfetn $bl [pw=dpw], vce(cluster cid)* Export all models
+* the dummy in reverse order to the original variable).
+ologit imdfetn $bl [pw=dpw], vce(cluster cid)
+
+
+* Export all models
 * -----------------
 
 eststo clear
 eststo lin_1: qui reg imdfetn $bl [pw=dpw], b
-eststo lin_2: qui reg imdfetn $bl [pw=dpw], vce(cluster cid)eststo log_1: qui logit diff $bl [pw=dpw]
+eststo lin_2: qui reg imdfetn $bl [pw=dpw], vce(cluster cid)
+eststo log_1: qui logit diff $bl [pw=dpw]
 eststo log_2: qui logit diff $bl [pw=dpw], vce(cluster cid)
 eststo log_3: qui ologit imdfetn $bl [pw=dpw], vce(cluster cid)
 esttab lin_* log_* using draft3-models.csv, constant label beta(2) se(2) r2(2) ///
@@ -314,5 +329,6 @@ cap log close draft3
 
 * Reset working directory.
 cd "$pwd"
-* We are done. Thanks for following! And all the best for the future.
-* exit
+
+* We are done. Thanks for following! And all the best for the future.
+* exit, clear

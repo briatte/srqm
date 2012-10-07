@@ -14,6 +14,12 @@ use "Datasets/ebm2009.dta", clear
 * Log.
 cap log using "Replication/week6.log", name(week6) replace
 
+* Required packages.
+foreach p in catplot fre tab_chi {
+	cap which `p'
+	if _rc==111 ssc install `p'
+}
+
 
 * ================
 * = DESCRIPTIONS =
@@ -91,8 +97,7 @@ tab mitig female, row nof    // rows percentages
 tab mitig female, exp chi2   // Chi-squared test (with expected frequencies)
 tab mitig female, exp chi2 V // Cramer's V (requires an acute accent on 'e')
 
-* Chi-squared residuals (install tab_chi package first)
-* ssc install tab_chi, replace
+* Chi-squared residuals:
 tabchi mitig female, r noo noe // raw residuals
 tabchi mitig female, p noo noe // Pearson residuals
 
@@ -236,4 +241,4 @@ tabodds mitig eum, or
 cap log close week6
 
 * We are done. Just quit the application, have a nice week, and see you soon :)
-* exit
+* exit, clear

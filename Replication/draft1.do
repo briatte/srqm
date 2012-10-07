@@ -10,10 +10,11 @@
 * you have set up Stata for the course by setting the working directory to the
 * SRQM folder. You should have run and reviewed all previous do-files first.
 
-* Required packages (uncomment to install).
-* ssc install fre, replace
-* ssc install spineplot, replace
-
+* Required packages.
+foreach p in fre spineplot {
+	cap which `p'
+	if _rc==111 ssc install `p'
+}
 
 * =========
 * = SETUP =
@@ -25,7 +26,7 @@ use "Datasets/nhis2009.dta", clear
 
 * Create a folder to export all files.
 global pwd=c(pwd)
-global wd "Replication/BriattePetev" // !note: edit to fill in your own names
+global wd "Replication/draft1-files" // !note: edit to fill in your own names
 cap mkdir "$wd"
 cd "$wd"
 
@@ -398,4 +399,4 @@ tw ///
 	name(bmi_edu3, replace)
 
 * We are done. Thanks for following!
-* exit
+* exit, clear

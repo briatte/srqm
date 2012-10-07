@@ -19,6 +19,11 @@ cap set scheme bw
 * Log.
 cap log using "Replication/week12.log", name(week12) replace
 
+* Additional packages
+foreach p in estout {
+	cap which `p'
+	if _rc==111 ssc install `p'
+}
 
 * ================
 * = DESCRIPTIONS =
@@ -365,7 +370,6 @@ ovtest, rhs
 * -------------
 
 * Reminder: you will need the estout package from there on.
-* ssc install estout, replace
 
 * Format the Models 1, 2 and 3 regression tables.
 eststo clear
@@ -402,4 +406,4 @@ esttab, constant label beta(2) se(2) r2(2) nonumber ///
 cap log close week12
 
 * We are done. Just quit the application, have a nice life, and see you later!
-* exit
+* exit, clear

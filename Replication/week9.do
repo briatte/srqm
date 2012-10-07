@@ -148,4 +148,4 @@ rvpplot femgovs, $ccode yline(0) name(cpi_femgov_rvp, replace)
 cap log close week9
 
 * We are done. Just quit the application, have a nice week, and see you soon :)
-* exit
+* exit, clear

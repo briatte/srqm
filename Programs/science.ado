@@ -1,5 +1,3 @@
-* What is science?
-*
 * A Stata program by Rudolf Carnap, with assistance from the Vienna Circle.
 * Do not send bugs to the developer, as the program has been abandoned.
 

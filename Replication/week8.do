@@ -191,4 +191,4 @@ gr mat births schooling gdpc hdi corruption femgovs
 cap log close week8
 
 * We are done. Just quit the application, have a nice week, and see you soon :)
-* exit
+* exit, clear

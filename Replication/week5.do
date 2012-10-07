@@ -31,6 +31,12 @@ cap net from "http://leuven.economists.nl/stata"
 cap net install schemes
 cap set scheme bw
 
+* Additional packages.
+foreach p in tabout {
+	cap which `p'
+	if _rc==111 ssc install `p'
+}
+
 * Log.
 cap log using "week5.log", name(week5) replace
 
@@ -129,17 +135,14 @@ prop partisan3
 * (1) tsst
 * --------
 
-* The command is part of the course: if you have set up the SRQM folder as your
-* working directory, it should work straight away.
+* The command is part of the course: it will work only if you have set up the
+* SRQM folder as your working directory and executed the 'run profile' command.
 
 tsst using stats.txt, su(hearings witness floor house senate natjourn news tv) fr(partisan3) replace
 
 
 * (2) tabout
 * ----------
-
-* Install the command by uncommenting the line below.
-* ssc install tabout, replace
 
 * Export continuous data.
 tabstatout bills hearings witness floor house senate natjourn news tv, ///
@@ -273,4 +276,4 @@ cap log close week5
 cd "$pwd"
 
 * We are done. Just quit the application, have a nice week, and see you soon :)
-* exit
+* exit, clear
