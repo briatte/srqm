@@ -1,5 +1,5 @@
-cap pr drop require
-program require
+cap pr drop packages_required
+program packages_required
 	syntax anything
 	tokenize `anything'
 
