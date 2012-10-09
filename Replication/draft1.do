@@ -10,28 +10,33 @@
 * you have set up Stata for the course by setting the working directory to the
 * SRQM folder. You should have run and reviewed all previous do-files first.
 
-* Required packages.
-foreach p in fre spineplot {
-	cap which `p'
-	if _rc==111 ssc install `p'
-}
 
 * =========
 * = SETUP =
 * =========
 
 
-* Data.
-use "Datasets/nhis2009.dta", clear
+* Required packages.
+foreach p in fre spineplot {
+	cap which `p'
+	if _rc==111 ssc install `p'
+}
 
 * Create a folder to export all files.
-global pwd=c(pwd)
-global wd "Replication/draft1-files" // !note: edit to fill in your own names
+global wd "Replication/BriattePetev" // !note: edit to fill in your own names
 cap mkdir "$wd"
-cd "$wd"
 
 * Log.
-cap log using "draft1.log", name(draft1) replace
+cap log using "$wd/draft1.log", name(draft1) replace
+
+
+* ========
+* = DATA =
+* ========
+
+
+* Data.
+use "Datasets/nhis2009.dta", clear
 
 * Subsetting to data from most recent year.
 drop if year!=2009
@@ -39,6 +44,9 @@ drop if year!=2009
 * Subsetting to variables used in the analysis.
 keep serial psu strata perweight age sex raceb educrec1 ///
 	health height weight uninsured vig10fwk yrsinus
+
+* Patterns of missing data.
+misstable pat *
 
 * Set NHIS individual weights (used only for illustrative purposes).
 svyset psu [pw=perweight], strata(strata) vce(linearized) singleunit(missing)
@@ -258,7 +266,7 @@ spineplot hins race, scale(.7) name(hins, replace)
 *   of both commands in use.
 
 * Export with tsst command.
-tsst using draft1-stats.txt, su(bmi age) fr(female edu3 health phy race hins) replace
+tsst using draft1-files/stats.txt, su(bmi age) fr(female edu3 health phy race hins) replace
 
 
 * =======
@@ -268,9 +276,6 @@ tsst using draft1-stats.txt, su(bmi age) fr(female edu3 health phy race hins) re
 
 * Close log (if opened).
 cap log close draft1
-
-* Reset working directory.
-cd "$pwd"
 
 
 * ==========

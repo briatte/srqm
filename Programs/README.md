@@ -1,12 +1,26 @@
 # SRQM: Programs
 
-This folder contains the `srqm` utilities to set up a computer for this course, as explained in the [README](https://github.com/briatte/srqm/blob/master/README.md) file of the `SRQM` folder.
+The folder contains some teaching utilities:
 
-The commands rely on the architecture of the `SRQM` folder, a.k.a the 'Teaching Pack', which contains the course material. All commands should be run with this folder set as the working directory. 
+- the `packages_required` command to check for the existence of commands installed through additional packages
+- the `srqm` utilities to set up a computer for our course, as explained in the [README](https://github.com/briatte/srqm/blob/master/README.md) file of the `SRQM` folder
+- the `tsst` command to export summary statistics tables as tab-separated values
 
-The folder also contains the `tsst` command to export summary statistics tables as tab-separated values, in order to assist students in completing one of the first steps of their research project.
+All commands were written to assist [students](http://f.briatte.org/teaching/quanti/) in completing their research projects.
+
+## `packages_required`
+
+Checks whether a given list of commands are currently installed in Stata, and [if not][statalist-tip], tries to install the corresponding package at the [SSC archive](http://ideas.repec.org/s/boc/bocode.html).
+
+### Syntax
+
+	packages_required fre spineplot tabout etc
+
+The command is used in course do-files to send a legible one-line warning about package dependencies without slowing down execution with multiple `ssc install` commands.
 
 ## `srqm`
+
+The `srqm` utilities rely on the architecture of the `SRQM` folder, a.k.a the '[Teaching Pack](http://f.briatte.org/srqm/)', which contains the course material. All `srqm` commands should be run with this folder set as the working directory.
 
 The `srqm` utilities require one command and optionally one subcommand to execute:
 
@@ -51,7 +65,7 @@ If the `SRQM` folder has been renamed to `SRQM-USB`, the subcommand ignores the 
 
 Installs the additional Stata packages and [graph schemes by Edwin Leuven](http://leuven.economists.nl/stata.php) used in the course do-files. Requires Internet access to execute properly. Usually runs in less than five minutes.
 
-The subcommand will try to run as quickly as possible by skipping packages that are [already installed](http://www.stata.com/statalist/archive/2009-12/msg00493.html). This behaviour can be overriden by passing the `forced` option.
+The subcommand will try to run as quickly as possible by skipping packages that are [already installed][statalist-tip]. This behaviour can be overriden by passing the `forced` option.
 
 ### `srqm check`
 
@@ -109,3 +123,5 @@ Far more sophisticated output options appear in packages like `estout` or `tabou
 - Type `tsst using example` for a working example.
 
 Students are referred to the documentation of their text or spreadsheet editor to learn how to import a tab-separated values document, or how to convert tab-delimited text into tabular output.
+
+[statalist-tip]: http://www.stata.com/statalist/archive/2009-12/msg00461.html

@@ -23,7 +23,7 @@ program srqm
 	local install = "catplot ciplot estout fre kountry leanout log2do2 lookfor_all mkcorr revrs spineplot tab_chi tabout"
 
 	// interrupt logs
-	cap log close _all
+	if `log' cap log close _all
 
 	// check syntax
 	if `setup' | `check' | `clean' {
@@ -303,13 +303,16 @@ program srqm
 			//
 			di as inp _n "Cleaning work files..." // probably requires X Window System
 
-			local expr = "Programs/*[^clean].log"
+			local expr = "Programs/*.log"
 			cap !rm `expr'
 
 			local expr = "Replication/*[^backup].log"
 			cap !rm `expr'
 
 			local expr = "Replication/*-files"
+			cap !rm -R `expr'
+
+			local expr = "Replication/BriattePetev"
 			cap !rm -R `expr'
 		}
 

@@ -3,16 +3,21 @@
 * When: 2012-01-26
 
 
-* ================
-* = INTRODUCTION =
-* ================
-
-
 * Hi! Welcome to your first SRQM do-file.
 
-* This line is a comment due to the '*' symbol at its beginning.
-* This do-file is fully commented to guide you through the basics.
-* In your own code, use comments to document your operations.
+* You are probably viewing this file from the Stata do-file editor, after 
+* opening it with the 'doedit replication/week1' command. If so, you are
+* doing it right: congratulations! Let us guide you through your first
+* do-file.
+
+
+* Comments
+* --------
+
+* This line is a comment due to the '*' symbol at its beginning. It takes a
+* green colour in the Stata do-file editor. This do-file is fully commented
+* to guide you through the basics. In your own code, you should also use 
+* comments to document and section your operations.
 
 
 * Practice
@@ -23,23 +28,74 @@
 * course slides to learn about running do-files and read from the Stata Guide 
 * to understand the commands used.
 
-* There is no substitute to practice to learn statistical software.
+* There is no substitute to practice to learn statistical software. Code is
+* like music, you will recognize the tune and notation if you listen to it.
+* When you learn to code, you learn to play, either for yourself or for the
+* audience of your programming language. For Stata, the audience is a pretty
+* wide range of people and institutions.
 
 
 * Interface
 * ---------
 
 * Quickly review the Stata windows. The Command window is where you will enter
-* all commands, the results of which will show in the Results window. All your
-* past commands will also show in the Review window; you can access them again
-* by pressing the PageUp key (or Fn-UpArrow on a laptop). Refer to the Stata
-* Guide for more help with the Stata interface.
+* all commands, the results of which will show in the Results window. Your
+* past commands will also show in the Review window. Finally, the Variables
+* window should be empty at that stage, because no dataset is currently loaded
+* in Stata. More windows will be opended as we go on.
 
-* The Variables window should be empty at that stage, because no dataset is
-* currently loaded in Stata. Identically, the Data Editor should be empty if
-* you open it, either by typing the 'browse' or 'edit' commands, or by using
-* the 'Window > Data Editor' menu item from the graphical user interface. 
-* Again, refer to the Stata guide for additional help.
+* Note that we will use windows but not, as you are used to, menus. The menu
+* interface in Stata offers point-and-click accessibility but is not suited
+* for programming purposes. Instead, everything we do will be command-based.
+
+* To start, type or copy and paste the following line to the Command window:
+pwd
+
+* The previous command returns the path to your working directory. It prints
+* its output to the Results window, and the command is stored in history as
+* shown in the Review window.
+
+* Now, load a sample Stata dataset that is included with the software:
+sysuse lifeexp
+
+* The previous command loads data in the background. You can access the data
+* with the following command. Close the window after taking a look.
+browse
+
+* Back to the main window, the Variables window shows the list of variables.
+* We are going to use two of them to build a plot. Type the following:
+scatter lexp safewater
+
+* This command creates your first Stata graph. Close the Graph window when
+* you are done inspecting the graph. Finally, type the following command after
+* uncommenting it (remove the asterisk and trailing space):
+* doedit example
+
+* The previous command creates an empty do-file called 'example.do'. The file
+* is located in your working directory, which should be the SRQM folder.
+* Stata has also opened the file in the Do-file Editor so that you can edit it
+* from its programming interface. Copy and paste the four following lines into
+* that empty do-file window:
+
+// Example do-file.
+sysuse lifeexp, clear
+sc lexp safewater
+clear
+
+* Notice that the syntax used for the 'scatter' command is different because
+* it has been abbreviated to 'sc'. The first line is a comment that uses the
+* alternative way to tell Stata that the line is a comment. Save and close
+* the do-file window when you have copied the full code to it.
+
+* The do-file can now be run with the following command (uncomment to run):
+* do example
+
+* The do-file can now be erased with the following command (uncomment to run):
+* rm example.do
+
+* These commands quickly show you how we are going to use the software: by
+* running (executing) code from Stata do-files, so that you can write your
+* own do-file for your research projects. 
 
 
 * Commands
@@ -47,7 +103,7 @@
 
 
 * Tip (1): Get to learn some syntax
-*
+
 * - Stata commands share a similar syntax, most commonly: 
 *   command <argument>
 * - Most Stata commands will call one or several variables as the main argument:
@@ -57,7 +113,7 @@
 
 
 * Tip (2): Run all lines in sequential order
-*
+
 * - Applies to all do-files.
 * - Requires you execute do-files in full.
 * - Requires you know where you are in your code.
@@ -69,7 +125,7 @@ ren test x // This line will not run if you do not run the previous ones.
 
 
 * Tip (3): Run multiple lines together
-*
+
 * - Applies every time you see '///' at the end of a line.
 * - Requires you select all adjacent lines. Use Ctrl-L (Win) or Cmmd-L (Mac).
 * - Requires you run them with Ctrl-D (Win) or Cmmd-Shift-D (Mac).
@@ -82,6 +138,23 @@ di "This is a test. Execute me by selecting this line, " ///
 * You will ususually be warned before in the comments.
 
 
+* Tip (4): Keyboard shortcuts
+
+* - Cmmd-L (Ctrl-L) selects a whole line
+* - Shift + Up/Down arrows selects or deselects neighbouring lines
+* - Cmmd-Shift-D (Ctrl-D) executes the selection
+* - Cmmd-` (Alt-Tab) switches between application windows
+
+* If you get lost while replicating a do-file, the safest option is to run it
+* again from the top. To do that, keyboard shortcuts make your life easy: from
+* the line where you want to start again, just press Cmmd-L (Ctrl-L), then 
+* Cmmd-Shift-Up (Ctrl-Shift-Up), and finally press Cmmd-Shift-D (Ctrl-D) to 
+* rerun the code down to your initial line.
+
+* Additionally, you can navigate your past commands from the Command window,
+* using the PageUp/PageDown keys.
+
+
 * Coursework
 * ----------
 
@@ -90,6 +163,8 @@ di "This is a test. Execute me by selecting this line, " ///
 * which features syntax colouring and keyboard shortcuts to edit and execute
 * do-files. You can also use any plain text editor to do so.
 
+* The next line will open an empty do-file called 'sandbox.do' in your SRQM
+* folder. Start 
 
 * =========
 * = SETUP =
@@ -116,7 +191,7 @@ clear
 * default amount of memory that Stata loads at startup is too small to open
 * large datasets: if you forget to set memory, Stata will reply with an error
 * message. The basic command to allocate 500MB memory follows:
-cap set mem 500m
+set mem 500m
 
 * Note: the 'cap' (capture) prefix is not part of the command, it is an extra
 * safety to allow this do-file to run through the line even if it returns an
@@ -126,7 +201,7 @@ cap set mem 500m
 * only if Stata has no data in storage: if you already have a dataset opened,
 * then Stata will reply with an error message. Fortunately, if you are running
 * Stata from your own computer, you can set memory permanently:
-cap set mem 500m, perm 
+set mem 500m, perm 
 
 * There is more to learn about memory size and default settings in Stata, but
 * for the purpose of this course, this will largely suffice. Furthermore, if
@@ -195,9 +270,12 @@ foreach p in catplot estout lookfor_all spineplot tabout tab_chi {
 * (4) Working directory
 * ---------------------
 
+* The working directory is where Stata will look to open and save stuff like 
+* datasets or logs. Use the 'pwd' command to see where Stata is looking now.
+pwd
+
 * Set the working directory (folder) to the main SRQM folder on your computer.
-* The working folder is where Stata will look to open and save stuff like logs
-* or datasets. This line sets the working directory on my (François) computer:
+* This line sets the working directory on my (François) computer:
 cd "/Users/fr/Documents/Teaching/SRQM/"
 
 * I use Mac OS X, which is why my file path takes that form. Ivaylo uses a PC,
@@ -212,12 +290,44 @@ cd "/Users/fr/Documents/Teaching/SRQM/"
 * It is crucial that you understand how to set the working directory, since we
 * will open datasets and save log files from there. We also assume that you are
 * using the default folder structure from the SRQM Teaching Pack. If not, you
-* will need to replace "Datasets/" and "Replication/" with your own choices of
-* folders throughout the course.
+* will need to replace "Datasets" and "Replication" with your own choices of
+* folders throughout the course, which would be fairly cumbersome.
+
+* The 'cd' command can navigate through your folders. The next example selects
+* the folder that contains the course dataset. The quotes can be omitted when
+* the path contains no spaces, but we will use them systematically to keep the
+* course code consistent.
+cd "Replication"
+
+* Go back one directory, which returns to the SRQM folder.
+cd ..
+
+* The complement to the 'cd' command is the 'ls' command to list file contents.
+ls
 
 
 * (5) Dataset
 * -----------
+
+* Show all datasets for this course. The asterisk in the command is an escape 
+* character that causes the command to return all matches (within .dta files).
+* The 'w' option is to make the output less verbose.
+ls "Datasets/*.dta", w
+
+* All datasets are in the SRQM Teaching Pack, and will load only if your working
+* directory is correctly set. The README file of the Datasets folder holds links
+* to essential documents for you to read.
+use "Datasets/ess2008.dta", clear
+
+lookfor 
+use "Datasets/wvs2000.dta", clear
+use "Datasets/nhis2009.dta", clear // etc.
+
+* Tip: an additional package can help you search for variables across datasets.
+lookfor_all health, dir(Datasets)
+
+* The command above, like all commands that open course datasets or do-files,
+* requires that the SRQM folder has been set as the working directory.
 
 * We will now load data from the U.S. National Health Interview Survey (2009).
 use "Datasets/nhis2009.dta", clear
@@ -225,21 +335,6 @@ use "Datasets/nhis2009.dta", clear
 * The 'clear' option gets rid of any data previously loaded into memory, since
 * Stata can only open one dataset at once.
 
-* All datasets are in the SRQM Teaching Pack, and will load only if your working
-* directory is correctly set. The README file of the Datasets folder holds links
-* to essential documents for you to read.
-use "Datasets/ess2008.dta", clear
-use "Datasets/wvs2000.dta", clear
-use "Datasets/nhis2009.dta", clear // etc.
-
-// Show all datasets for this course.
-ls "Datasets/*.dta"
-
-* Tip: an additional package can help you search for variables across datasets.
-lookfor_all health, dir(Datasets)
-
-* The command above, like all commands that open course datasets or do-files,
-* requires that the SRQM folder has been set as the working directory.
 
 
 * (6) Log
