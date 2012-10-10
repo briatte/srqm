@@ -1,6 +1,9 @@
 * What: SRQM profile
 * Who:  F. Briatte
-* When: 2012-10-07
+* When: 2012-10-09
+
+// Working directory.
+cd $srqm_wd
 
 // Backup log.
 cap log using "Replication/backup.log", name("backlog") replace
