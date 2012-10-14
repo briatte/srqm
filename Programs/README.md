@@ -3,7 +3,7 @@
 The folder contains some teaching utilities:
 
 - the `packages_required` command to check for the existence of commands installed through additional packages
-- the `srqm` utilities to set up a computer for our course, as explained in the [README](https://github.com/briatte/srqm/blob/master/README.md) file of the `SRQM` folder
+- the `srqm` utilities to set up a computer for the course by following the instructions in the [README](https://github.com/briatte/srqm/blob/master/README.md) file of the `SRQM` folder
 - the `tsst` command to export summary statistics tables as tab-separated values
 
 All commands were written to assist [students](http://f.briatte.org/teaching/quanti/) in completing their research projects.

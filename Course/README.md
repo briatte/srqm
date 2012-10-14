@@ -2,30 +2,35 @@
 
 This document lists the course material required to follow the [Statistical Reasoning and Quantitative Methods](http://f.briatte.org/teaching/quanti/) (SRQM) course run at Sciences Po by François Briatte and Ivaylo Petev.
 
-Course requirements appear in the [course syllabus](https://github.com/briatte/srqm/blob/master/Course/syllabus.pdf?raw=true). Basically, every student is expected to do some **reading** and **replication** every week, in order to train for writing a **research project** with a partner.
+Course requirements appear in the [course syllabus](https://github.com/briatte/srqm/blob/master/Course/syllabus.pdf?raw=true). Basically, every student is expected to do some reading and replication every week, in order to train for writing a research project with a partner.
 
 * * *
 
 ## Readings
 
-The list of readings that appears in the syllabus is also available as a [Google document](http://goo.gl/BJHkQ) and from the [course webpage](http://f.briatte.org/teaching/quanti/), along with the weekly slides.
+The weekly course readings are taken from the "[Stata Guide](https://github.com/briatte/srqm/blob/master/Course/StataGuide.pdf?raw=true)", which was written specifically for this course, and from *Making History Count*, an introduction to quantitative methods for historians.
 
-The main reading throughout the course will be the "[Stata Guide](https://github.com/briatte/srqm/blob/master/Course/StataGuide.pdf?raw=true)", which was written specifically for this course. Updates to the Stata Guide will be mentioned in the weekly course emails.
+The list of readings appears in the [course syllabus](https://github.com/briatte/srqm/blob/master/Course/syllabus.pdf?raw=true), in the [course agenda](http://goo.gl/BJHkQ) and on the [course webpage](http://f.briatte.org/teaching/quanti/), along with the weekly slides. It also lists additional resources to learn Stata.
 
-## Replication material
+The course slides and syllabus are stored in the `Course` folder. Course readings are stored in the `Handbooks` folder, which contains only the Stata Guide in the [repository version](http://f.briatte.org/srqm) of the course.
 
-The material to replicate the course is archived in two folders:
+## Replication
 
-- The do-files from the "**Replication**" folder of your teaching pack will be used during class. Remember to set the `SRQM` folder as your working directory prior to running them. Instructions to do so appear in a separate [README](https://github.com/briatte/srqm/blob/master/README.md) file.
+Students are instructed to replicate the weekly do-files in order to learn how to explore the course datasets and write their own analysis as a do-file for their research project. 
 
-- The datasets from the "**Datasets**" folder are used in class and for student research projects. You will be sent information on how to build your research project through email. Details on the datasets appear in their [README](https://github.com/briatte/srqm/blob/master/Datasets/README.md) file.
+- The do-files from the `Replication` folder are used during class. Stata needs to be set up for the course prior to running them, as instructed in a separate [README](https://github.com/briatte/srqm/blob/master/README.md) file.
 
-## Research projects
+- The datasets from the `Datasets` folder are used in class and for student research projects. Links to the dataset documentation appear in a separate [README](https://github.com/briatte/srqm/blob/master/Datasets/README.md) file.
 
-If you want to take a peak at the kind of work that is done in this course, check some [past student projects](http://goo.gl/brYmB) from Spring 2012, and have a look at the [research project template](http://goo.gl/7u8oa).
+## Projects
 
-The [course webpage](http://f.briatte.org/teaching/quanti/) lists additional resources to learn Stata, which requires some serious practice on your side. Feel free to work in groups and share information with other students.
+For this course, students have to form pairs in their class and [register a research project](http://goo.gl/brYmB). To quickly get started on the research project:
+
+1. Replicate the do-files for the first course sessions. Read the first sections of the Stata Guide and additional Stata tutorials if needed.
+2. Create a `Project` folder in the main `SRQM` folder. Start exploring the course datasets and save a first draft do-file to the `Project` folder.
+
+The [paper template](http://goo.gl/7u8oa) shows the kind of research paper expected along the Stata code saved as a do-file. Additional instructions are provided in the last sections of the Stata Guide and in class.
 
 ## Trivia
 
-Finally, you can also check the [SRQM blog](http://srqm.tumblr.com/) for mindless trivia, tons of graphs everywhere and terrific (or terrible) quotes!
+The [SRQM blog](http://srqm.tumblr.com/) aggregates mindless trivia, tons of graphs from everywhere and a few quotes from stats blogs and other places.

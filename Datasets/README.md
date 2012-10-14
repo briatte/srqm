@@ -29,49 +29,39 @@ The Stata commands included at the end of each dataset description require that 
 
 ## ebm2009
 
-The `ebm2009` dataset holds data from the Special Eurobarometer, [Ref. 311](http://ec.europa.eu/public_opinion/archives/eb_special_320_300_en.htm), Wave 71.1 (2009), on "Europeans and the Economic crisis":
+The `ebm2009` dataset holds data from the Special Eurobarometer, [Ref. 311 Wave 71.1](http://ec.europa.eu/public_opinion/archives/eb_special_320_300_en.htm) (2009), on "Europeans and the Economic crisis":
 
 > Special Eurobarometer reports are based on in-depth thematical studies carried out for various services of the European Commission or other EU Institutions and integrated in Standard Eurobarometer's polling waves. Reproduction is authorized, except for commercial purposes, provided the source is acknowledged.  
 <http://ec.europa.eu/public_opinion/archives/eb_special_en.htm>
 
-### Selected documentation:
+### Additional documentation:
 
-- [Survey analysis][ebm2009_analysis] by the European Commission (2009)
-- [Sample factsheet (descriptive results) for Greece][ebm2009_greece] (2009)
-
-[ebm2009_analysis]: http://ec.europa.eu/public_opinion/archives/ebs/ebs_311_summary.zip "ZIP"
-[ebm2009_greece]: http://ec.europa.eu/public_opinion/archives/ebs/ebs_311_factsheets_en.zip "ZIP"
+<http://www.gesis.org/en/eurobarometer/home/>
 
 ### Usage in Stata:
 
 	use "Datasets/ebm2009.dta", clear
 
+The sample can be weighted with the `v8` and `v38` variables.
+
 * * *
 
 ## ess2008
 
-The `ess2008` dataset holds Round 4 (2008) of the European Social Survey (ESS):
+The `ess2008` dataset holds [Round 4](http://ess.nsd.uib.no/ess/round4/) (2008) of the European Social Survey (ESS):
 
 > The European Social Survey (the ESS) is an academically-driven social survey designed to chart and explain the interaction between Europe's changing institutions and the attitudes, beliefs and behaviour patterns of its diverse populations.  
 <http://www.europeansocialsurvey.org>
 
-### Selected documentation:
+### Additional documentation:
 
-- [ESS description brochure][ess2008_brochure]
-- [ESS4 questionnaire][ess2008_questionnaire] (2008)
-- [ESS4 documentation (survey design) report][ess2008_survey] (2011)
-- [ESS1--4 variable list][ess2008_variables]
-- [ESS guide to survey weights][ess2008_weights]
-
-[ess2008_brochure]: http://www.europeansocialsurvey.org/index.php?option=com_docman&task=doc_download&gid=118&itemid=80 "PDF"
-[ess2008_questionnaire]: http://ess.nsd.uib.no/streamer/?module=main&year=2009&country=&download=%5CFieldwork+documents%5C2009%5C01%23ESS4+-+Main+questionnaire+%28including+interviewer%27s+form%29%5C.%5CESS4Source_Mainquestionnaire.pdf "PDF"
-[ess2008_survey]: http://ess.nsd.uib.no/streamer/?module=main&year=2009&country=null&download=%5CSurvey+documentation%5C2009%5C01%23ESS4+-+ESS4-2008+Documentation+Report%2C+ed.+4.0%5CLanguages%5CEnglish%5CESS4DataDocReport_4.0.pdf "PDF"
-[ess2008_variables]: http://ess.nsd.uib.no/streamer/?module=main&year=2009&country=null&download=%5CSurvey+documentation%5C2009%5C05%23ESS4+-+Appendix4%2C+Variable+lists%2C+ed.+4.0%5CLanguages%5CEnglish%5CESS4AppendixA4e04_0.pdf "PDF"
-[ess2008_weights]: http://ess.nsd.uib.no/streamer/?module=main&year=2009&country=null&download=%5CSurvey+documentation%5C2009%5C07%23ESS4+-+Weighting+ESS+Data%5CLanguages%5CEnglish%5CWeightingESS.pdf "PDF"
+<http://ess.nsd.uib.no/>
 
 ### Usage in Stata:
 
 	use "Datasets/ess2008.dta", clear
+
+The sample can be weighted with the `dweight` and `pweight` variables.
 
 The dataset was created by subsetting the ESS cumulative dataset to Round 4, and then by removing variables with no observations. The code follows:
 
@@ -87,6 +77,8 @@ The dataset was created by subsetting the ESS cumulative dataset to Round 4, and
 	
 	save ess2008.dta, replace
 
+Variables that appear in the documentation but not in the dataset are part of the overall ESS rotating module.
+
 * * *
 
 ## gss2010
@@ -96,19 +88,22 @@ The `gss2010` dataset holds data from the U.S. General Social Survey (GSS) for y
 > The GSS contains a standard 'core' of demographic, behavioral, and attitudinal questions, plus topics of special interest. Many of the core questions have remained unchanged since 1972 to facilitate time-trend studies as well as replication of earlier findings.  
 <http://www3.norc.org/GSS+Website/>
 
-### Selected documentation:
+### Additional documentation:
 
-- [GSS variable lists](http://sda.berkeley.edu/D3/GSS10/Docyr/gs10.htm) (online)
-- [Guide to weighting GSS data][gss2010_weights] (GSS Codebook, Appendix A)
-- Stata codebook (for quicker access to variable codings; see "Usage" below)
+To extract a quick codebook out of the dataset, run the following:
 
-[gss2010_weights]: http://publicdata.norc.org:41000/gss/Documents/Codebook/A.pdf "PDF"
+	// Export codebook.
+	use datasets/gss2010, clear
+	log using gss2010_codebook.log, name(gss2010) replace
+	d
+	codebook
+	log close gss2010
 
 ### Usage in Stata:
 
 	use "Datasets/gss2010.dta", clear
 
-The dataset is a subset from the [GSS 1972-2010 cross-sectional cumulative dataset](http://www3.norc.org/GSS+Website/Download/STATA+v8.0+Format/) (Release 1.1, Feb. 2011). The code used to trim the data and to export the Stata codebook follows:
+The dataset is a subset from the [GSS 1972-2010 cross-sectional cumulative dataset](http://www3.norc.org/GSS+Website/Download/STATA+v8.0+Format/) (Release 1.1, Feb. 2011). The code used to trim the data follows:
 
 	// Subset.
 	keep if year==2010
@@ -122,12 +117,6 @@ The dataset is a subset from the [GSS 1972-2010 cross-sectional cumulative datas
 		}
 	}
 	save gss2010.dta, replace
-
-	// Export codebook.
-	log using gss2010_codebook.log, name(gss2010) replace
-	d
-	codebook
-	log close gss2010
 	
 * * *
 
@@ -135,12 +124,9 @@ The dataset is a subset from the [GSS 1972-2010 cross-sectional cumulative datas
 
 The `lobbying2010` dataset contains the variables required to replicate part of the analysis published in Frank R. Baumgartner, Jeffrey M. Berry, Marie Hojnacki, David C. Kimball and Beth L. Leech, *[Lobbying and Policy Change. Who Wins, Who Loses, and Why](http://www.unc.edu/~fbaum/books/lobby/lobbying.htm)* (University of Chicago Press, 20009).
 
-### Selected documentation:
+### Additional documentation:
 
-- [Advocacy and Public Policymaking](http://lobby.la.psu.edu/) (online)
-- [Issue-level codebook][lobbying2010_codebook] (2010)
-
-[lobbying2010_codebook]: http://www.unc.edu/~fbaum/books/lobby/_documentation/data/Issue_level_codebook_24_August_2010.pdf "PDF"
+<http://lobby.la.psu.edu/>
 
 The issue-level dataset is used in Chapter 5 of the book.
 
@@ -152,14 +138,6 @@ The `nhis2009` dataset holds sample adult data for years 2000--2009 of the U.S. 
 
 > The National Health Interview Survey (NHIS) has monitored the health of the nation since 1957. NHIS data on a broad range of health topics are collected through personal household interviews. For over 50 years, the U.S. Census Bureau has been the data collection agent for the National Health Interview Survey. Survey results have been instrumental in providing data to track health status, health care access, and progress toward achieving national health objectives.  
 <http://www.cdc.gov/nchs/nhis.htm>
-
-### Selected documentation:
-
-- [Description brochure][nhis2009_brochure] (2010)
-- [Description of NHIS 2009][nhis2009_description] (2010)
-
-[nhis2009_brochure]: http://www.cdc.gov/nchs/data/nhis/brochure2010January.pdf "PDF"
-[nhis2009_description]: ftp://ftp.cdc.gov/pub/health.../nchs/dataset.../nhis/2009/srvydesc.pdf "PDF"
 
 ### Usage in Stata:
 
@@ -178,14 +156,6 @@ The `qog2011` dataset holds the Quality of Government (QOG) Standard dataset in 
 > Our research addresses the questions of how to create and maintain high quality government institutions and how the quality of such institutions influences public policy in a broader sense.  
 <http://www.qog.pol.gu.se/>
 
-### Selected documentation:
-
-- [QOG Annual report][qog2011_annualreport] (2011)
-- [QOG Standard codebook][qog2011_codebook] (2011)
-
-[qog2011_annualreport]: http://www.qog.pol.gu.se/digitalAssets/1372/1372076_qog_annualreport_2011.pdf "PDF"
-[qog2011_codebook]: http://www.qog.pol.gu.se/digitalAssets/1358/1358062_qog_codebook_v6apr11.pdf "PDF"
-
 ### Usage in Stata:
 
 	use "Datasets/qog2011.dta", clear
@@ -198,16 +168,12 @@ A simpler version of the dataset, [QOG Basic](http://www.qog.pol.gu.se/data/qogb
 
 The `trust2012` dataset contains the variables required to replicate Douglas Hibbs' 'Bread and Peace' model of the U.S. presidential election:
 
-> Aggregate votes for president in postwar elections are well explained by just two fundamental determinants: (1) weighted-average growth of per capita real disposable personal income over the term, and (2) cumulative US military fatalities owing to unprovoked, hostile deployments of American armed forces in foreign conflicts.  No other objectively measured, exogenous factor systematically affects postwar aggregate votes for president.  
+> Aggregate votes for president in postwar elections are well explained by just two fundamental determinants: (1) weighted-average growth of per capita real disposable personal income over the term, and (2) cumulative US military fatalities owing to unprovoked, hostile deployments of American armed forces in foreign conflicts.  
 <http://www.douglas-hibbs.com/Election2012/2012Election-MainPage.htm>
 
-<!-- The following figure summarizes the main relationship explored by the model:
+### Additional documentation:
 
-![Main figure from John Sides' blog post](http://www.themonkeycage.org/trusteconomy-thumb.png) -->
-
-### Selected documentation:
-
-- Douglas Hibbs, "[The 2012 US Presidential Election: Implications of the ‘Bread and Peace’ Model For Obama’s Re-election Prospects as of 2011:q4][trust2012_paper]", 29 February 2012 (with [slides][trust2012_slides] material).
+Douglas Hibbs, "[The 2012 US Presidential Election: Implications of the ‘Bread and Peace’ Model For Obama’s Re-election Prospects as of 2011:q4][trust2012_paper]", 29 February 2012 (with [slides][trust2012_slides] material).
 
 [trust2012_paper]: http://www.douglas-hibbs.com/Election2012/2012Election-MainPage.htm "HTML"
 [trust2012_slides]: http://www.douglas-hibbs.com/Election2012/HIBBS-SLIDES-PCS-2012-02-29.pdf "PDF"
@@ -226,14 +192,6 @@ The `wvs2000` dataset holds data from the 1999-2004 wave of the World Values Sur
 
 > The World Values Survey (WVS) is a worldwide network of social scientists studying changing values and their impact on social and political life. The WVS in collaboration with EVS (European Values Study) carried out representative national surveys in 97 societies containing almost 90 percent of the world's population. These surveys show pervasive changes in what people want out of life and what they believe. In order to monitor these changes, the EVS/WVS has executed five waves of surveys, from 1981 to 2007.  
 <http://www.worldvaluessurvey.org/>
-
-### Selected documentation:
-
-- [Full questionnaire of all WVS waves][wvs2000_questionnaire] (1981-2008)
-- [Questionnaire for Egypt][wvs2000_egypt] (2000)
-
-[wvs2000_questionnaire]: http://www.asep-sa.org/wvs/wvs_1981-2008/WVS_1981-2008_IntegratedQuestionnaire.pdf "PDF"
-[wvs2000_egypt]: http://www.wvsevsdb.com/wvs/WVSDocumentation.jsp?Idioma=I
 
 ### Usage in Stata:
 
