@@ -1,6 +1,6 @@
 # SRQM: Teaching material
 
-This document lists the course material required to follow the [Statistical Reasoning and Quantitative Methods](http://f.briatte.org/teaching/quanti/) (SRQM) course run at Sciences Po by François Briatte and Ivaylo Petev.
+This document lists the material required to follow the [Statistical Reasoning and Quantitative Methods](http://f.briatte.org/teaching/quanti/) (SRQM) course run at Sciences Po by François Briatte and Ivaylo Petev.
 
 Course requirements appear in the [course syllabus](https://github.com/briatte/srqm/blob/master/Course/syllabus.pdf?raw=true). Basically, every student is expected to do some reading and replication every week, in order to train for writing a research project with a partner.
 

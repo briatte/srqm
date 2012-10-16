@@ -2,17 +2,13 @@
 
 This document explains how to setup a computer to follow the [Statistical Reasoning and Quantitative Methods](http://f.briatte.org/teaching/quanti/) (SRQM) course run at Sciences Po by François Briatte and Ivaylo Petev.
 
+The course requires Internet access, basic computer skills and a working copy of [Stata](http://www.stata.com/), by StataCorp. Stata 11 is already installed on Sciences Po workstations.
+
+In the setup instructions below, the `SRQM` folder is the folder that you downloaded from [its webpage](http://f.briatte.org/srqm/). We call this folder the 'Teaching Pack' in class.
+
+If you are enrolled in our course, you will read this file and setup your computer during our first class.
+
 * * *
-
-## Requirements
-
-The course requires:
-
-- A working copy of [Stata](http://www.stata.com/), by StataCorp. Stata 11 is already installed on Sciences Po workstations. The course was also tested with Stata 10 and Stata 12 on both Mac OS X and Windows.
-
-- An up-to-date copy of this 'Teaching Pack', which is available from [its webpage](http://f.briatte.org/srqm/). Students get to read this file and setup their machines as a warm-up exercise during the first class session.
-
-- Internet access and basic computer skills. Aspects of computer use that are relevant to the course are addressed in the Stata Guide found in the `Handbooks` [folder](https://github.com/briatte/srqm/tree/master/Handbooks), and will be covered in class.
 
 ## Installation
 
@@ -20,9 +16,9 @@ Please follow the instructions closely and ask for help as early as possible, so
 
 ### 1. Course material
 
-Move the whole `SRQM` folder to a stable and easily accessible location on your hard drive. Keep the names of the folders that lead to it intact throughout the course.
+Move the whole `SRQM` folder to a stable and easily accessible location on your hard drive. Keep the names of that folder and the folders that lead to it intact throughout the course.
 
-If you later move the `SRQM` folder by changing its name or the names of the folders that lead to it on your hard drive, you will have to update your installation.
+If you later move the `SRQM` folder by changing its name or the names of the folders that lead to it on your hard drive, you will have to run the next installation steps again.
 
 ### 2. Application folder
 
@@ -36,14 +32,16 @@ Make sure that the whole Stata application folder is installed in the `Applicati
 
 ### 3. Working directory
 
-Set the `SRQM` folder as the working directory with the 'File > Change Working Directory…' menu item, also accessible with &#8984;&#8679;J (Command-Shift-J) on Mac OS X.
+Set the `SRQM` folder as the working directory with the 'File > Change Working Directory…' menu item, also accessible with &#8984;&#8679;J (Command-Shift-J) on Mac OS X. Select the `SRQM` folder and press `OK`.
 
-The folder path that appears in the Results window after you select the `SRQM` folder will be used to access the course material throughout the semester. It might look like the following examples:
+The folder path that appears in the Results window might look like the following examples:
 
 | System    | Example of a folder path            |
 |:----------|:------------------------------------|
 | Mac OS X  | `/Users/fr/Documents/Teaching/SRQM` |
 | Windows   | `C:\Users\Ivo\Desktop\SRQM`         |
+
+> **IMPORTANT** -- This folder path must stay intact throughout the semester for Stata to access the course material. If you inadvertently modify its elements, it will break and lead to errors in your code, and you will need to run through installation steps 2 to 4 again. Be careful!
 
 ### 4. Course setup
 
@@ -57,26 +55,12 @@ This command runs the `profile.do` file that will setup Stata for this course by
 	
 - The setup creates another `profile.do` file in your Stata application folder that points to the `SRQM` folder. This makes sure that Stata will automatically run from that location.
 
-At the end of the semester, you can erase the `profile.do` file in your Stata application folder, either manually or with the `srqm clean folder` command.
+## Uninstall
 
-## Troubleshooting
-
-This is the section to read if you get error messages in your Stata screen (they read in red), if you forget your laptop to class, or if things just stop working in any other way.
-
-### Fixing the `SRQM` folder path
-
-If you need to update your installation because you renamed or moved the `SRQM` folder since you performed the course setup, run through installation steps 2--4 (again).
-
-The folder path that you modified must stay intact throughout the course for Stata to find the course material. If you inadvertently break the path, unnecessary panic and time loss will ensue.
-
-### Running in 'temporary' mode
-
-If you need to use a different computer, get the `SRQM` folder offline or [online](http://f.briatte.org/srqm/), copy it to a USB key, rename it to `SRQM-USB` and run through installation steps 2--4.
-
-This allows you to run the course in 'temporary' mode from a Sciences Po workstation or any other computer with Stata. System restrictions and administrator privileges might still cause trouble.
+At the end of the semester, you can erase the `profile.do` file in your Stata application folder, either manually or with the `srqm clean folder` command. This will 'unlink' Stata from the `SRQM` folder.
 
 * * *
 
-You can now start reading the Stata Guide. The sections on Stata.
+You can now enjoy the rest of the course and start reading the Stata Guide. Welcome!
 
 Welcome to SRQM, and see you soon!

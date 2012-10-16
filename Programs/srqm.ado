@@ -74,7 +74,7 @@ program srqm
 				//
 				// USB FALLBACK
 				//
-				di as err "  You seem to be running in 'temporary' mode, most likely from a USB key."
+				di as err "  You seem to be running in 'mobile' mode, most likely from a USB key."
 				
 				local temp "`c(pwd)'/Packages"
 				sysdir set PLUS "`temp'"

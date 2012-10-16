@@ -1,13 +1,17 @@
 # SRQM: Programs
 
-The folder contains some teaching utilities:
+This document lists the programs included with the [Statistical Reasoning and Quantitative Methods](http://f.briatte.org/teaching/quanti/) (SRQM) course run at Sciences Po by François Briatte and Ivaylo Petev.
+
+The `Programs` folder contains the following teaching utilities:
 
 - the `packages_required` command to check for the existence of commands installed through additional packages
 - the `proper_labels` commands to capitalize the first letters of variable labels
 - the `srqm` utilities to set up a computer for the course by following the instructions in the [README](https://github.com/briatte/srqm/blob/master/README.md) file of the `SRQM` folder
 - the `tsst` command to export summary statistics tables as tab-separated values
 
-All commands were written to assist [students](http://f.briatte.org/teaching/quanti/) in completing their research projects.
+All commands were written to assist [students](http://f.briatte.org/teaching/quanti/) in completing their research projects. The rest of this file describes all commands in more detail than necessary to run them in class.
+
+* * *
 
 ## `packages_required`
 
@@ -62,7 +66,7 @@ Tries to tell Stata to automatically run from the `SRQM` folder by copying its p
 
 The `profile.do` file saved to the Stata application folder acts as a symbolic link that also runs the `profile.do` file from the SRQM folder, to perform further integrity checks on the course setup.
 
-This command occasionally fails on Windows Vista and Windows 7 due to an [issue with admin privileges](http://www.stata.com/support/faqs/windows/updating-on-vista/) in which that case users have to set their working directory manually in each session.
+This command requires to run Stata as administrator on Windows Vista and Windows 7, or it will fail due to a [system restriction](http://www.stata.com/support/faqs/windows/updating-on-vista/).
 
 If the `SRQM` folder has been renamed to `SRQM-USB`, the subcommand ignores the Stata application folder and sets instead packages to be installed to a temporary `Packages` folder in the `SRQM` folder.
 
