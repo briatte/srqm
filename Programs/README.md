@@ -3,6 +3,7 @@
 The folder contains some teaching utilities:
 
 - the `packages_required` command to check for the existence of commands installed through additional packages
+- the `proper_labels` commands to capitalize the first letters of variable labels
 - the `srqm` utilities to set up a computer for the course by following the instructions in the [README](https://github.com/briatte/srqm/blob/master/README.md) file of the `SRQM` folder
 - the `tsst` command to export summary statistics tables as tab-separated values
 
@@ -11,6 +12,10 @@ All commands were written to assist [students](http://f.briatte.org/teaching/qua
 ## `packages_required`
 
 Checks whether a given list of commands are currently installed in Stata, and [if not][statalist-tip], tries to install the corresponding package at the [SSC archive](http://ideas.repec.org/s/boc/bocode.html).
+
+## `proper_labels`
+
+Sets the labels of a variable to their proper capitalization. The code for this command was kindly provided by William A. Huber as an answer to a [StackOverflow question](http://stackoverflow.com/questions/12591056/capitalizing-value-labels-in-stata).
 
 ### Syntax
 
