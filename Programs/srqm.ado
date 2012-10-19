@@ -133,8 +133,9 @@ program srqm
 							// so probably slow and desperate
 							local here = c(pwd)
 							cd "`c(sysdir_plus)'"
-							cap cd ../personal
-							if _rc != 0 mkdir personal
+							cap cd ..
+							cap mkdir personal
+							cap cd personal
 							sysdir set PERSONAL "`c(pwd)'"
 							cd "`here'"
 							// shoot again
