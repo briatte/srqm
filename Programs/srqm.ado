@@ -124,34 +124,28 @@ program srqm
 				cap which `t'
 				if _rc==111 | "`3'" == "forced" {
 					cap qui ssc install `t', replace
-					if _rc!=0 {
-						if _rc==699 {
-							// issue: admin privileges required to modify stata.trk
-							// workaround: install to personal folder (create if necessary)
-							// on Sciences Po computers, path will be c:\ado\personal\
-							// iterative (do that for every package that does not work)
-							// so probably slow and desperate
-							local here = c(pwd)
-							qui cd "`c(sysdir_plus)'"
-							qui cd ..
-							cap mkdir personal
-							cap cd personal
-							sysdir set PLUS "`c(pwd)'" // the actual trick
-							qui cd "`here'"
-							// shoot again
-							cap qui ssc install `t', replace
-							if _rc!=0 local msg = "(installation failed)
-						}
-						else if _rc==631 { // Internet error
-							di as err "You do not seem to be online."
-							exit -1
-						}
+					if _rc==699 {
+						// issue: admin privileges required to modify stata.trk
+						// workaround: install to personal folder (create if necessary)
+						// on Sciences Po computers, path will be c:\ado\personal\
+						// iterative (do that for every package that does not work)
+						// so probably slow and desperate
+						local here = c(pwd)
+						qui cd "`c(sysdir_plus)'"
+						qui cd ..
+						cap mkdir personal
+						cap cd personal
+						sysdir set PLUS "`c(pwd)'" // the actual trick
+						qui cd "`here'"
+						// shoot again
+						cap qui ssc install `t', replace
+						if _rc!=0 di as err "Special installation failed with error code ",_rc
 					}
 				}
-				else {
-					local msg = "(already installed)"
+				else if _rc!=0 {
+					di as err "Installation failed with error code ",_rc
 				}
-				di as txt "  [" "`i'" "/" wordcount("`install'") "]: " as inp "`t'" as err " `msg'"
+				di as txt "  [" "`i'" "/" wordcount("`install'") "]: " as inp "`t'"
 			}
 	
 			di as txt "  Installing a couple more things..."
