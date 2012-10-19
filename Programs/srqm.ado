@@ -83,7 +83,7 @@ program srqm
 			if _rc == 0 {
 				file write fh "// SRQM course settings:" _n
 				file write fh "global srqm_wd " _char(34) "`c(pwd)'" _char(34) _n
-				file write fh "confirm file " _char(34) _char(36) "srqm_wd`c(dirsep)'profile.do" _char(34) _n
+				file write fh "cap confirm file " _char(34) _char(36) "srqm_wd`c(dirsep)'profile.do" _char(34) _n
 				file write fh "if _rc!=0 di as err _n ///" _n
 				file write fh _char(34) "  The SRQM folder is no more available at its former location:" _char(34) " _n ///" _n
 				file write fh _tab _char(34) "  `c(pwd)'" _char(34) " _n _n ///" _n
