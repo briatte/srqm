@@ -6,15 +6,16 @@
 cd "$srqm_wd"
 
 // Backup log.
-cap log using "Replication/backup.log", name("backlog") replace
+cap log using "Replication/backup.log", name(backlog) replace
 if _rc==0 {
 	noi di as inp _n "Backup log:" _n as txt r(filename)
 }
 else if _rc==604 {
-	noi di as err "  The backup log was already open. Carry on."
+	qui log query backlog
+	noi di as inp _n "Backup log:" _n as txt r(filename) " (already open)"
 }
 else {
-	noi di as err "  The backup log returned an error. Too bad."
+	noi di as err "(Could not open a backup log.)"
 }
 
 // Load utilities.

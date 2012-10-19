@@ -150,7 +150,7 @@ program srqm
 				else {
 					local msg = "(already installed)"
 				}
-				di as txt "  [" "`i'" "/" wordcount("`packages'") "]: " as inp "`t'" as txt " `msg'"
+				di as txt "  [" "`i'" "/" wordcount("`install'") "]: " as inp "`t'" as txt " `msg'"
 			}
 	
 			di as txt "  Installing a couple more things..."
@@ -205,7 +205,7 @@ program srqm
 			// 
 			// FOLDER INTEGRITY
 			//
-			di as txt _n "{browse `c(pwd)':SRQM} folder:" as txt _n c(pwd)
+			di as inp _n "Working directory:" as txt _n "{browse `c(pwd)'}"
 			ls, w
 
 			foreach f in  "Datasets" "Replication" {
