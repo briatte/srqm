@@ -22,7 +22,7 @@ else {
 cap adopath + "`c(pwd)'/Programs"
 cap noi srqm check folder, nolog
 if _rc != 0 {
-	noi di as err "Please run this course from the original SRQM 'Teaching Pack' folder."
+	noi di as err _n "Please run this course from the original SRQM 'Teaching Pack' folder."
 	exit -1
 }
 

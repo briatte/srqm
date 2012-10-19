@@ -22,6 +22,9 @@ program srqm
 	// package list
 	local install = "catplot ciplot estout fre kountry leanout log2do2 lookfor_all mkcorr revrs spineplot tab_chi tabout"
 
+	// dataset list
+	local datasets = "ebm2009 ess2008 gss2010 lobbying2010 nhis2009 qog2011 trust2012 wvs2000"
+
 	// interrupt logs
 	if `log' cap log close _all
 
@@ -70,67 +73,43 @@ program srqm
 			//
 			di _n as inp "Folder settings:"
 
-			if regexm(c(pwd),"SRQM-USB") {
-				//
-				// USB FALLBACK
-				//
-				di as err "  You seem to be running in 'mobile' mode, most likely from a USB key."
-				
-				local temp "`c(pwd)'/Packages"
-				sysdir set PLUS "`temp'"
-				cap !rm -R "`temp'"
-				cap mkdir "`temp'", public
-				
-				if _rc==0 {
-					di as err ///
-						"  A temporary {browse Packages} folder has been created in your working directory, to" _n ///
-					    "  help you install additional packages on the computer that you are using." _n ///
-					    "  Run the {stata srqm setup packages} command to install packages at that location."					
-				}
-				else {
-					di as err ///
-						"  You seem to be running in 'experimental' mode, most likely from a USB key." _n ///
-						"  The key is not writable, so additional packages will not install properly."					
-				}
+			//
+			// PROFILE SYMLINK
+			//
+			tempname fh
+			di as txt "  Writing to the Stata application folder:"
+			di as txt "  `c(sysdir_stata)'profile.do"
+			cap file open fh using "`c(sysdir_stata)'profile.do", write replace
+			if _rc == 0 {
+				file write fh "// SRQM course settings:" _n
+				file write fh "global srqm_wd " _char(34) "`c(pwd)'" _char(34) _n
+				file write fh "cap noi run " _char(34) _char(36) "srqm_wd`c(dirsep)'profile.do" _char(34) _n
+				file write fh "if _rc!=0 di as err _n ///" _n
+				file write fh _char(34) "  The SRQM folder is no more available at its former location:" _char(34) " _n ///" _n
+				file write fh _tab _char(34) "  `c(pwd)'" _char(34) " _n _n ///" _n
+				file write fh _tab _char(34) "  You need to manually set the working directory to the SRQM folder" _char(34) "_n ///" _n
+				file write fh _tab _char(34) "  and then use the {stata run profile} command to update the link." _char(34) " _n _n ///" _n
+				file write fh _tab _char(34) "  This usually happens when you move or rename some of your folders." _char(34) "_n ///" _n
+				file write fh _tab _char(34) "  The README file of your SRQM folder contains further instructions." _char(34) _n
+				file close fh
+				di as txt _n "  Setting the redirect link to the current working directory:" _n "  " c(pwd)
+				di as inp ///
+					_n "  WARNING: Note this folder path and do not move or rename its parts." ///
+					_n "  If you modify the elements of this path during the course, you will" ///
+				 	_n "  have to manually set the working directory to the SRQM folder, and" /// 
+				 	_n "  then use the {stata run profile} command to update the link."
 			}
 			else {
 				//
-				// PROFILE SYMLINK
+				// Windows Vista and 7 machines require the user to right-click
+				// the application and run it as admin for this bit to work.
 				//
-				tempname fh
-				di as txt "  Writing to the Stata application folder:"
-				di as txt "  `c(sysdir_stata)'profile.do"
-				cap file open fh using "`c(sysdir_stata)'profile.do", write replace
-				if _rc == 0 {
-					file write fh "// SRQM course settings:" _n
-					file write fh "global srqm_wd " _char(34) "`c(pwd)'" _char(34) _n
-					file write fh "cap noi run " _char(34) _char(36) "srqm_wd`c(dirsep)'profile.do" _char(34) _n
-					file write fh "if _rc!=0 di as err _n ///" _n
-					file write fh _char(34) "  The SRQM folder is no more available at its former location:" _char(34) " _n ///" _n
-					file write fh _tab _char(34) "  `c(pwd)'" _char(34) " _n _n ///" _n
-					file write fh _tab _char(34) "  You need to manually set the working directory to the SRQM folder" _char(34) "_n ///" _n
-					file write fh _tab _char(34) "  and then use the {stata run profile} command to update the link." _char(34) " _n _n ///" _n
-					file write fh _tab _char(34) "  This usually happens when you move or rename some of your folders." _char(34) "_n ///" _n
-					file write fh _tab _char(34) "  The README file of your SRQM folder contains further instructions." _char(34) _n
-					file close fh
-					di as txt _n "  Setting the redirect link to the current working directory:" _n "  " c(pwd)
-					di as inp ///
-						_n "  WARNING: Note this folder path and do not move or rename its parts." ///
-						_n "  If you modify the elements of this path during the course, you will" ///
-					 	_n "  have to manually set the working directory to the SRQM folder, and" /// 
-					 	_n "  then use the {stata run profile} command to update the link."
-				}
-				else {
-					//
-					// Windows Vista and 7 machines require the user to right-click the application and run it as admin.
-					//
-					di as err ///
-						_n "  Warning: The Stata application folder is not writable on your system." ///
-						_n "  Try running Stata with admin privileges. If the problem persists, you" ///
-						_n "  will have to manually set the working directory to the SRQM folder at" /// 
-						_n "  the beginning of every course session."
-					exit 0
-				}
+				di as err ///
+					_n "  Warning: The Stata application folder is not writable on your system." ///
+					_n "  Try running Stata with admin privileges. If the problem persists, you" ///
+					_n "  will have to manually set the working directory to the SRQM folder at" /// 
+					_n "  the beginning of every course session."
+				exit 0
 			}
 		}	
 		else if `packages' {
@@ -145,12 +124,33 @@ program srqm
 				cap which `t'
 				if _rc==111 | "`3'" == "forced" {
 					cap qui ssc install `t', replace
-					if _rc!=0 local msg = "-- WARNING: Package installation failed."
+					if _rc!=0 {
+						if _rc==699 {
+							// issue: admin privileges required to modify stata.trk
+							// workaround: install to personal folder (create if necessary)
+							// on Sciences Po computers, path will be c:\ado\personal\
+							// iterative (do that for every package that does not work)
+							// so probably slow and desperate
+							local here = c(pwd)
+							cd "`c(sysdir_plus)'"
+							cap cd ../personal
+							if _rc != 0 mkdir personal
+							sysdir set PERSONAL "`c(pwd)'"
+							cd "`here'"
+							// shoot again
+							cap qui ssc install `t', replace
+							if _rc!=0 local msg = "(installation failed)"
+						}
+						else if _rc==631 { // Internet error
+							di as err "You do not seem to be online."
+							exit -1
+						}
+					}
 				}
 				else {
 					local msg = "(already installed)"
 				}
-				di as txt "  [" "`i'" "/" wordcount("`install'") "]: " as inp "`t'" as txt " `msg'"
+				di as txt "  [" "`i'" "/" wordcount("`install'") "]: " as inp "`t'" as err " `msg'"
 			}
 	
 			di as txt "  Installing a couple more things..."
@@ -215,8 +215,23 @@ program srqm
 					exit -1
 				}
 				di as txt _n "{browse `f'}" " folder:" _n c(pwd)
-				if "`f'" == "Datasets" ls *.dta, w
-				if "`f'" == "Replication" ls *.do, w	
+				if "`f'" == "Datasets" {
+					cap noi ls *.dta, w
+					// exhaustive check if no dta (assuming not yet unzipped)
+					foreach d in `datasets' {
+						cap confirm file `d'.dta
+						if _rc==601 {
+							di as txt "Unzipping " as inp "`d'.dta"
+							cap unzipfile "`d'", replace
+						}
+						if _rc==601 {
+							di as err _n "  WARNING: The `d'.zip file is missing."
+							qui cd ..
+							exit -1
+						}
+					}
+				}
+				if "`f'" == "Replication" cap noi ls *.do, w	
 				qui cd ..
 			}
 		}
@@ -301,7 +316,7 @@ program srqm
 			//
 			// CLEANUP WORKFILES
 			//
-			di as inp _n "Cleaning work files..." // probably requires X Window System
+			di as inp _n "Cleaning work files..." // requires X Window System
 
 			local expr = "Programs/*.log"
 			cap !rm `expr'
