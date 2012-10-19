@@ -132,15 +132,15 @@ program srqm
 							// iterative (do that for every package that does not work)
 							// so probably slow and desperate
 							local here = c(pwd)
-							cd "`c(sysdir_plus)'"
-							cap cd ..
+							qui cd "`c(sysdir_plus)'"
+							qui cd ..
 							cap mkdir personal
 							cap cd personal
-							sysdir set PERSONAL "`c(pwd)'"
-							cd "`here'"
+							sysdir set PLUS "`c(pwd)'" // the actual trick
+							qui cd "`here'"
 							// shoot again
 							cap qui ssc install `t', replace
-							if _rc!=0 local msg = "(installation failed)"
+							if _rc!=0 local msg = "(installation failed)
 						}
 						else if _rc==631 { // Internet error
 							di as err "You do not seem to be online."
@@ -217,8 +217,7 @@ program srqm
 				}
 				di as txt _n "{browse `f'}" " folder:" _n c(pwd)
 				if "`f'" == "Datasets" {
-					cap noi ls *.dta, w
-					// exhaustive check if no dta (assuming not yet unzipped)
+					// exhaustive check
 					foreach d in `datasets' {
 						cap confirm file `d'.dta
 						if _rc==601 {
@@ -231,6 +230,7 @@ program srqm
 							exit -1
 						}
 					}
+					cap noi ls *.dta, w
 				}
 				if "`f'" == "Replication" cap noi ls *.do, w	
 				qui cd ..
