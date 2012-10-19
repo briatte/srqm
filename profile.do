@@ -6,7 +6,7 @@
 cap cd "$srqm_wd"
 
 // Backup log.
-cap log using "Replication/backup.log", name(backlog) replace
+cap log using backup.log, name(backlog) replace
 if _rc==0 {
 	noi di as inp _n "Backup log:" _n as txt r(filename)
 }

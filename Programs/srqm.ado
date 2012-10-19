@@ -83,7 +83,7 @@ program srqm
 			if _rc == 0 {
 				file write fh "// SRQM course settings:" _n
 				file write fh "global srqm_wd " _char(34) "`c(pwd)'" _char(34) _n
-				file write fh "cap noi run " _char(34) _char(36) "srqm_wd`c(dirsep)'profile.do" _char(34) _n
+				file write fh "confirm file " _char(34) _char(36) "srqm_wd`c(dirsep)'profile.do" _char(34) _n
 				file write fh "if _rc!=0 di as err _n ///" _n
 				file write fh _char(34) "  The SRQM folder is no more available at its former location:" _char(34) " _n ///" _n
 				file write fh _tab _char(34) "  `c(pwd)'" _char(34) " _n _n ///" _n
@@ -91,6 +91,8 @@ program srqm
 				file write fh _tab _char(34) "  and then use the {stata run profile} command to update the link." _char(34) " _n _n ///" _n
 				file write fh _tab _char(34) "  This usually happens when you move or rename some of your folders." _char(34) "_n ///" _n
 				file write fh _tab _char(34) "  The README file of your SRQM folder contains further instructions." _char(34) _n
+				file write fh "if _rc!=0 exit 0"
+				file write fh "if _rc==0 noi run profile"
 				file close fh
 				di as txt _n "  Setting the redirect link to the current working directory:" _n "  " c(pwd)
 				di as inp ///
