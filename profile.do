@@ -3,7 +3,7 @@
 * When: 2012-10-09
 
 // Working directory.
-cap cd "$srqm_wd"
+if length("$srqm_wd") > 0 cap cd "$srqm_wd"
 
 // Backup log.
 cap log using backup.log, name(backlog) replace

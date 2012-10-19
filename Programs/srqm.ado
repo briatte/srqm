@@ -91,8 +91,8 @@ program srqm
 				file write fh _tab _char(34) "  and then use the {stata run profile} command to update the link." _char(34) " _n _n ///" _n
 				file write fh _tab _char(34) "  This usually happens when you move or rename some of your folders." _char(34) "_n ///" _n
 				file write fh _tab _char(34) "  The README file of your SRQM folder contains further instructions." _char(34) _n
-				file write fh "if _rc!=0 exit 0"
-				file write fh "if _rc==0 noi run profile"
+				file write fh "if _rc!=0 exit 0" _n
+				file write fh "if _rc==0 noi run profile" _n
 				file close fh
 				di as txt _n "  Setting the redirect link to the current working directory:" _n "  " c(pwd)
 				di as inp ///
