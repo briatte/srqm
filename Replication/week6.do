@@ -8,23 +8,17 @@
 * ================
 
 
-* Data: Eurobarometer (2009).
-use "Datasets/ebm2009.dta", clear
+* Packages.
+foreach p in catplot fre tab_chi {
+	cap which `p'
+	//if _rc==111 ssc install `p'
+}
 
 * Log.
 cap log using "Replication/week6.log", name(week6) replace
 
-* Required packages.
-foreach p in catplot fre tab_chi {
-	cap which `p'
-	if _rc==111 ssc install `p'
-}
-
-
-* ================
-* = DESCRIPTIONS =
-* ================
-
+* Data.
+use "Datasets/ebm2009.dta", clear // Eurobarometer (2009)
 
 * Country codes.
 ren v7 ccode
@@ -33,49 +27,51 @@ ren v7 ccode
 ren v8 popweight
 ren v38 ctyweight
 gen wgt=popweight*ctyweight
-svyset [pw=wgt] // weighting scheme set to whole European population
+svyset [pw=wgt] // survey weights set to overall European population
+
+
+* ================
+* = DESCRIPTIONS =
+* ================
+
 
 
 * DV: Mitigation of crisis through European currency
 * --------------------------------------------------
 
 fre v493
-svy: tab v493 // weighted proportions
+ren v493 mitig4
 
-* Visualization.
-catplot v493, over(ccode, sort(4)des lab(labsize(*.8))) ///
-	asyvars percent(ccode) stack scale(.7) ytitle("") ///
-	legend(rows(1) region(fc(none) ls(none))) ///
-	bar(1, c(navy*.7)) bar(2, c(navy*1.3)) ///
-	bar(3, c(sand*.5)) bar(4, c(sand)) ///
-	name(mitig, replace)
+* Estimate weighted proportions.
+svy: prop mitig4
 
-* Binary recoding.
-recode v493 ///
-	(1/2=1 "Agree") ///
-	(3/4=0 "Disagree") ///
-	(else=.), gen(mitig)
-la var mitig "Crisis: mitigated through euro"
+* Visualization over 4-point scale.
+catplot mitig4, over(ccode, sort(4)des) asyvars percent(ccode) stack ///
+	legend(rows(1)) scale(.7) scheme(burd4) name(mitig4, replace) 
 
-fre mitig
-svy: tab mitig // weighted proportions
+* Binary recoding of the DV.
+recode v493 (1/2=1 "Agree") (3/4=0 "Disagree") (else=.), gen(mitig2)
+la var mitig2 "Euro mitigated crisis"
+fre mitig2
 
 * You can read the frequency of the positive value in a binary variable by 
 * inspecting its mean. In this case, the mean gives the fraction of respondents
-* that perceive either their domestic government or the EU as the most capable
-* actor in regard to the financial crisis.
+* that agrees with the survey question. Be careful, however: when the sample
+* is unweighted, proportions can be misleading.
 
+* Visualization as a fraction.
+gr dot mitig2 if !mi(mitig2), over(ccode, sort(1)des) /// 
+	yti("Euro mitigated crisis (% who agree)") ///
+	legend(rows(1)) scale(.7) name(mitig2, replace)
 
-* Visualization.
-catplot mitig, over(ccode, sort(2) lab(labsize(*.8))) ///
-	asyvars percent(ccode) stack scale(.7) ytitle("") ///
-	legend(rows(1) region(fc(none) ls(none))) ///
-	bar(1, c(sand)) bar(2, c(navy)) ///
-	name(mitig, replace)
+* Subset to respondents from Ireland, Greece, East and West Germany.
+keep if inlist(ccode,8,11,14,4)
 
-* Subset to respondents from Portugal, Italy, Greece and Spain.
-keep if inlist(ccode,8,11,12,13)
-fre mitig
+* Discrete histograms of the DV, faceted by country.
+hist mitig4, by(ccode, note("")) discrete percent yti("") ///
+	xti("Euro mitigated crisis (% who agree)") ///
+	xla(1 `" "Strongly" "agree" "' 4 `" "Strongly" "disagree" "') ///
+	name(mitig4_subset, replace)
 
 
 * IV: Sex
@@ -195,7 +191,15 @@ fre v638-v640   // multiple choices here
 ren v638 pol10 // using the version with most dimensions (warning, large tables)
 
 * Visualization over 10 categories.
-gr dot mitig, over(pol10)
+gr bar mitig, over(pol10)
+
+* Hacked scatterplot (shows line instead of bars).
+bys pol10: egen mean_eum = mean(eum)
+sc mean_eum pol10, sort(pol10) c(l) ms(i) xla(minmax) ///
+	yline(.75) yti("Perception of EU membership (% positive)") ///
+	xla(minmax) xti("Left-right placement") ///
+	by(ccode, note("Horizontal line at sample average.")) ///
+	name(eum_pol10, replace)
 
 * Conditional probabilities:
 tab mitig pol10, col nof    // column percentages

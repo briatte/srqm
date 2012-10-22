@@ -4,28 +4,27 @@ This document lists the programs included with the [Statistical Reasoning and Qu
 
 The `Programs` folder contains the following teaching utilities:
 
-- the `packages_required` command to check for the existence of commands installed through additional packages
-- the `proper_labels` commands to capitalize the first letters of variable labels
-- the `srqm` utilities to set up a computer for the course by following the instructions in the [README](https://github.com/briatte/srqm/blob/master/README.md) file of the `SRQM` folder
+- the `burd` graph schemes to obtain the same plots as the ones shown in the course documentation
+- the `require` command to check for the existence of commands installed by additional packages
+- the `properl` command to capitalize the first letters of variable labels
+- the `srqm` commands to set up a computer for the course (see the [README](https://github.com/briatte/srqm/blob/master/README.md) file of the `SRQM` folder)
 - the `tsst` command to export summary statistics tables as tab-separated values
 
-All commands were written to assist [students](http://f.briatte.org/teaching/quanti/) in completing their research projects. The rest of this file describes all commands in more detail than necessary to run them in class.
+All commands were written to assist students in completing their research projects. The rest of this file describes all commands in more detail than necessary to run them in class.
 
 * * *
 
-## `packages_required`
+## `burd`
 
-Checks whether a given list of commands are currently installed in Stata, and [if not][statalist-tip], tries to install the corresponding package at the [SSC archive](http://ideas.repec.org/s/boc/bocode.html).
+The series of ten `scheme-burd` files contain reversed versions of the `RdBu` [ColorBrewer](http://colorbrewer2.org/) theme, as well as a replacement for the `s2color` scheme. Used to scheme the course plots.
 
-## `proper_labels`
+## `properl`
 
-Sets the labels of a variable to their proper capitalization. The code for this command was kindly provided by William A. Huber as an answer to a [StackOverflow question](http://stackoverflow.com/questions/12591056/capitalizing-value-labels-in-stata).
+Sets the labels of a variable to their proper capitalization, using code kindly provided by William A. Huber as an answer to a [StackOverflow question](http://stackoverflow.com/questions/12591056/capitalizing-value-labels-in-stata). Occasionally used for data management.
 
-### Syntax
+## `require`
 
-	packages_required fre spineplot tabout etc
-
-The command is used in course do-files to send a legible one-line warning about package dependencies without slowing down execution with multiple `ssc install` commands.
+Checks whether a given list of commands are currently installed in Stata, and [if not][statalist-tip], tries to install the corresponding package at the [SSC archive](http://ideas.repec.org/s/boc/bocode.html). Occasionally used for debugging.
 
 ## `srqm`
 

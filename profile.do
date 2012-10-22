@@ -1,55 +1,50 @@
-* What: SRQM profile
-* Who:  F. Briatte
-* When: 2012-10-09
-
-// Working directory.
-if length("$srqm_wd") > 0 cap cd "$srqm_wd"
+*! http://f.briatte.org/teaching/quanti/
 
 // Backup log.
 cap log using backup.log, name(backlog) replace
-if _rc==0 {
-	noi di as inp _n "Backup log:" _n as txt r(filename)
-}
-else if _rc==604 {
+if _rc==0 | _rc==604 {
 	qui log query backlog
-	noi di as inp _n "Backup log:" _n as txt r(filename) " (already open)"
+	noi di as inp _n "Backup log:" _n as txt r(filename)
 }
 else {
 	noi di as err "(Could not open a backup log.)"
 }
 
-// Load utilities.
+* Check course material
+* ---------------------
+*
 cap adopath + "`c(pwd)'/Programs"
 cap noi srqm check folder, nolog
-if _rc != 0 {
-	noi di as err _n "Please run this course from the original SRQM 'Teaching Pack' folder."
-	exit -1
-}
+if _rc != 0 exit -1
 
-// Check settings.
-if c(update_query)=="on" | c(more)=="on" {
+* 
+*
+*
+cap noi srqm setup packages, nolog
+
+* Check Stata settings
+* --------------------
+*
+if c(update_query)=="on" | c(more)=="on" | c(scheme) != "burd" {
 	noi di as txt _n ///
-		"  (It looks like you need to adjust some of your Stata system options.)"
+		"(It looks like we need to adjust some Stata settings.)"
 	cap noi srqm setup, nolog
 }
 
-// Check packages.
-cap which fre
-if _rc==111 {
-	noi di as txt _n ///
-		"  (It looks like you need to install the additional packages for the course.)"
-	cap noi srqm setup packages, nolog
-}
-
-// Check redirect.
+* Check link to course folder
+* ---------------------------
+*
 if "$srqm_wd" != c(pwd) {
 	noi di as txt _n ///
-		"  (It looks like you need to (re)set the link to the SRQM working directory.)"
+		"(It looks like we need to (re)locate the SRQM folder.)"
 	cap noi srqm setup folder, nolog
 }
 
-// All set.
-noi di as inp _n "Welcome!"
-noi di as txt "  You are running Stata with the SRQM profile."
+* All set
+* -------
+*
+local t = "morning"
+if real(substr("`c(current_time)'",1,2)) > 12 local t = "afternoon"
+noi di as inp _n "Good `t'!", as txt "Welcome to the course."
 
 // Enjoy.

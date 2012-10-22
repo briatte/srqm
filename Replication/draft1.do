@@ -24,6 +24,7 @@ foreach p in fre spineplot {
 
 * Create a folder to export all files.
 global wd "Replication/BriattePetev" // !note: edit to fill in your own names
+cap cd "$srqm_wd"
 cap mkdir "$wd"
 
 * Log.
@@ -164,7 +165,7 @@ tab health, summ(bmi) // mean BMI at each health level
 bys health: ci bmi    // confidence bands
 
 * Plotting BMI and age for excellent vs. poor health:
-sc bmi age if health==1, mc(dkgreen) || sc bmi age if health==5, mc(dkorange) ///
+sc bmi age if health==1 || sc bmi age if health==5, ///
 	legend(lab(1 "Excellent health") lab(2 "Poor health")) ///
 	name(health, replace)
 
@@ -201,14 +202,27 @@ fre race
 tab health, summ(bmi) // mean BMI at each health level
 bys health: ci bmi    // confidence bands
 
-* Plotting BMI groups:
-spineplot bmi7 race, scale(.7) name(bmi7, replace)
+* Plotting BMI groups (using 7 levels of blue-red):
+spineplot bmi7 race, scale(.7) name(bmi7, replace) scheme(burd7)
 
-* Slightly more code-consuming visualization, with stacked bars.
-tab race, gen(race_)
-gr bar race_*, stack over(bmi7) scale(.7) ///
-	legend(row(1) lab(1 "NH White") lab(2 "NH Black") lab(3 "Hispanic") lab(4 "Asian")) ///
-	name(bmi7_race, replace)
+* Simplified classification.
+gen bmi4:bmi7 = bmi7
+replace bmi4 = 2 if bmi7==1
+replace bmi4 = 5 if bmi7==6 | bmi7==7
+
+* Create dummies from the categories (creates new numbers for the 4 groups).
+tab bmi4, gen(bmi4_)
+
+* Stacked bar plot (using 4 levels of blue-red):
+gr bar bmi4_*, stack over(race) scale(.7) ///
+	legend(row(1) lab(1 "Underweight") lab(2 "Normal") ///
+	lab(3 "Overweight") lab(4 "Obese")) ///
+	name(bmi4_race, replace) scheme(burd4)
+
+* Histogram by race and gender groups.
+hist bmi, bin(10) xline(27) ///
+	by(race female, cols(2) note("Vertical line at sample mean.") legend(off)) ///
+	name(bmi_race_sex, replace)
 
 
 * IV: Health insurance
@@ -266,7 +280,7 @@ spineplot hins race, scale(.7) name(hins, replace)
 *   of both commands in use.
 
 * Export with tsst command.
-tsst using draft1-files/stats.txt, su(bmi age) fr(female edu3 health phy race hins) replace
+tsst using "$wd/stats.txt", su(bmi age) fr(female edu3 health phy race hins) replace
 
 
 * =======

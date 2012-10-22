@@ -20,18 +20,17 @@
 * NHIS 2009 dataset with a few basic, descriptive Stata commands. This implies
 * that you have acess to the dataset on your current computer.
 
+* Log the commands and results from this do-file.
+cap log using "Replication/week2.log", name(week2) replace
+
 * Data: U.S. National Health Interview Survey (2009).
 use "Datasets/nhis2009.dta", clear
 
 * Once the dataset is loaded, the Variables window will fill up, and you will 
 * be able to look at the actual dataset from the Data Editor. Read from the 
 * course material to make sure that you know how to read through a dataset:
-* its data structure should show observations in rows and variables in columns.
-* If the columns contain years, then the dataset needs to be reshaped: follow
-* the instructions from the Stata Guide to do so, and ask us for assistance.
-
-* Log the commands and results from this do-file.
-cap log using "Replication/week2.log", name(week2) replace
+* its data structure shows observations in rows and variables in columns.
+* Also make sure that you understand what a cross-sectional dataset is.
 
 
 * ====================

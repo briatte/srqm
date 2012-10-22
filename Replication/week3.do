@@ -7,7 +7,6 @@
 * = INTRODUCTION =
 * ================
 
-
 * Egypt underwent a social revolution in 2011. Who were the revolutionaries?
 * What fraction of Egyptian society was willing to undergo radical reform?
 * And most importantly perhaps, how strong was the support for the status quo?
@@ -20,17 +19,17 @@
 * WVS 2000 dataset by concentrating on respondents from Egypt. The analysis
 * will illustrate how to recode variables and missing values.
 
-* Data: World Values Survey (2000).
-use "Datasets/wvs2000.dta", clear
-
 * Log.
 cap log using "Replication/week3.log", name(week3) replace
 
-* To run this do-file, you need to install some packages first. Execute the
-* next lines to do so, or better, run the SRQM setup program as instructed at
-* the beginning of the class. If you have set the SRQM folder as your working
-* directory, you should be able to type 'srqm setup packages' to install all
-* packages, and not worry about running into 'unrecognized command' errors.
+* Data: World Values Survey (2000).
+use "Datasets/wvs2000.dta", clear
+
+* To run this do-file, you might need to install some packages first. The next
+* lines will check this: select the whole loop and execute them. If you have 
+* run the setup for the course, everything is already in place. Otherwise, if
+* you are online, a few additional packages will be installed into Stata. If
+* you skip the setup and loops, you will get 'unrecognized command' errors.
 foreach p in fre spineplot {
 	cap which `p'
 	if _rc==111 ssc install `p'

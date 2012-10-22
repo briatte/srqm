@@ -103,16 +103,16 @@ reg corruption hdi
 * on regression diagnostics, but here is a snapshot of what we can do and 
 * understand by studying them in a bit more depth.
 predict yhat
-sc yhat corruption hdi, ///
-	ysc(rev) connect(l) sort(yhat) lw(vthick) name(r_linear, replace)
+sc yhat corruption hdi, ylab(0 "Highly corrupt" 10 "Lowly corrupt") ///
+	ysc(rev) connect(l) sort(yhat) name(r_linear, replace)
 
 * The curvilinearity, which approaches a y = x^2 function, can be taken care 
 * of by squaring HDI and fitting the model again to the trasnformed data.
 gen hdi2=hdi^2
 reg corruption hdi hdi2
 predict yhat2
-sc yhat2 corruption hdi, ///
-	ysc(rev) connect(l) sort(yhat) lw(vthick) name(r_curvilinear, replace)
+sc yhat2 corruption hdi, ylab(0 "Highly corrupt" 10 "Lowly corrupt") ///
+	ysc(rev) connect(l) sort(yhat) name(r_curvilinear, replace)
 
 
 * (4) Female Government Ministers and Corruption
@@ -123,7 +123,8 @@ sc yhat2 corruption hdi, ///
 * poorly it accounts for the relationship between the variables: only a few
 * data points are actually included in the interval, showing a mediocre fit.
 tw (lfitci corruption femgovs) (sc corruption femgovs, $ccode), ///
-	legend(row(1)) name(cpi_femgov, replace)
+	legend(off) ylab(1 "Highly corrupt" 10 "Lowly corrupt") ///
+	name(cpi_femgov, replace)
 
 * Despite a less-than-optimal fit, the model yet returns a "good", by which
 * we mean a satisfactory p-value lower than our alpha level of statistical

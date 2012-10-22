@@ -11,11 +11,6 @@
 * Data: Quality of Government (2011).
 use "Datasets/qog2011.dta", clear
 
-* This do-file uses a graph scheme by Edwin Leuven for its figures.
-cap net from "http://leuven.economists.nl/stata"
-cap net install schemes
-cap set scheme bw
-
 * Log.
 cap log using "Replication/week12.log", name(week12) replace
 

@@ -8,11 +8,11 @@
 * ================
 
 
-* Data: U.S. National Health Interview Survey (2009).
-use "Datasets/nhis2009.dta", clear
-
 * Log.
 cap log using "Replication/week4.log", name(week4) replace
+
+* Data: U.S. National Health Interview Survey (2009).
+use "Datasets/nhis2009.dta", clear
 
 
 * ====================

@@ -53,9 +53,7 @@ gr dot torture [aw=dweight], over(cntry, sort(1) des) scale(.7)
 * Detailed breakdown in each country.
 catplot trrtort [aw=dweight], over(cntry, sort(1)des lab(labsize(*.8))) ///
 	asyvars percent(cntry) stack scale(.7) ytitle("") ///
-	legend(rows(1) label(3 "Neither") region(fc(none) ls(none))) ///
-	bar(1, c(sand)) bar(2, c(sand*.7)) bar(3, c(dimgray)) ///
-	bar(4, c(navy*.7)) bar(5, c(navy)) ///
+	legend(rows(1) label(3 "Neither") region(fc(none) ls(none))) scheme(burd4) ///
 	name(torture, replace)
 
 * Comparing Israel to other European countries.

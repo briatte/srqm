@@ -8,22 +8,12 @@
 * ================
 
 
-* Data: Quality of Government (2011).
-use "Datasets/qog2011.dta", clear
-
-* Create a folder to export tables and graphs. This code is particularly handy
-* if you are working on a draft paper and need to save a few replication files.
-global pwd=c(pwd)
+* Create a folder to export all files.
 global wd "Replication/week11-files"
+cap cd "$srqm_wd"
 cap mkdir "$wd"
-cd "$wd"
 
-* This do-file uses a graph scheme by Edwin Leuven for its figures.
-cap net from "http://leuven.economists.nl/stata"
-cap net install schemes
-cap set scheme bw
-
-* Additional packages.
+* Required packages.
 foreach p in estout {
 	cap which `p'
 	if _rc==111 ssc install `p'
@@ -31,6 +21,9 @@ foreach p in estout {
 
 * Log.
 cap log using "week11.log", name(week11) replace
+
+* Data: Quality of Government (2011).
+use "Datasets/qog2011.dta", clear
 
 
 * ================
@@ -170,11 +163,12 @@ reg births schooling log_gdpc, beta
 
 * Visualizing two categories (Asia and Africa) within the sample.
 tw (sc births schooling if region==1, ms(O) mc(blue)) ///
-	(sc births schooling if region==4, ms(O) mc(orange)) ///
-	(sc births schooling, mc(gs10)) (lfit births schooling, lc(gs10)), ///
-	legend(row(1) lab(1 "Asian countries") ///
-	lab(2 "African countries") ///
-	lab(3 "Whole sample")) name(reg_geo, replace)
+	(sc births schooling if region==4, ms(O) mc(red)) ///
+	(sc births schooling if !inlist(region,1,4), mc(gs10)) ///
+	(lfit births schooling, lc(gs10)), ///
+	legend(order(1 "Asian countries" 3 "Rest of sample" ///
+	2 "African countries" 4 "Fitted values") row(2)) yti("Fertility rate") ///
+	name(reg_geo, replace)
 
 * Previous regression model.
 reg births schooling log_gdpc
@@ -197,12 +191,14 @@ predict yhat
 
 * Regression lines for the predicted values of Asia and Africa.
 tw (sc births schooling if region==1, ms(O) mc(blue)) ///
-	(sc births schooling if region==4, ms(O) mc(orange)) ///
-	(sc births schooling, mc(gs10)) ///
-	(sc yhat schooling if region==1, c(l) lc(blue*1.5) mc(blue*1.5)) ///
-	(sc yhat schooling if region==4, c(l) lc(orange*1.5) mc(orange*1.5)), ///
-	legend(order(1 "Asian countries" 4 "Fitted values (Asia)" ///
-	2 "African countries" 5 "Fitted values (Africa)"))
+	(sc births schooling if region==4, mc(red)) ///
+	(sc births schooling if !inlist(region,1,4), mc(gs10)) ///
+	(rcap yhat births schooling if region==1, c(l) lc(blue) lp(dash) msize(tiny)) ///
+	(rcap yhat births schooling if region==4, c(l) lc(red) lp(dash) msize(tiny)) ///
+	(sc yhat schooling if region==1, c(l) ms(i) mc(blue) lc(blue)) ///
+	(sc yhat schooling if region==4, c(l) ms(i) mc(red) lc(red)), ///
+	legend(order(1 "Asian countries" 6 "Fitted values (Asia)" 4 "Residuals (Asia)" ///
+	2 "African countries" 7 "Fitted values (Africa)" 5 "Residuals (Africa)") row(2))
 	
 * Regression line for the HIV/AIDS dummy.
 tw (sc yhat aids) (lfit yhat aids), xlab(0 "Low" 1 "High")
@@ -334,7 +330,7 @@ eststo M2: qui reg births schooling log_gdpc aids##region, r beta
 eststo M3: qui reg births c.schooling##c.log_gdpc aids##region, r beta
 
 * Export all models for comparison and reporting.
-esttab M1 M2 M3 using reg.csv, csv replace constant beta(2) se(2) r2(2) ///
+esttab M1 M2 M3 using "$wd/reg.csv", csv replace constant beta(2) se(2) r2(2) ///
 	label mtitles("Baseline" "Controls for HIV/AIDS" "Interaction effects")
 
 
@@ -345,9 +341,6 @@ esttab M1 M2 M3 using reg.csv, csv replace constant beta(2) se(2) r2(2) ///
 
 * Close log (if opened).
 cap log close week11
-
-* Reset working directory.
-cd "$pwd"
 
 * We are done. Just quit the application, have a nice week, and see you soon :)
 * exit, clear

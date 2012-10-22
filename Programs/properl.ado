@@ -1,5 +1,5 @@
-cap pr drop proper_labels
-program proper_labels
+cap pr drop properl
+program properl
 	syntax varlist, [Verbose]
 	local verbose = ("`verbose'" != "")
 	
@@ -23,6 +23,6 @@ program proper_labels
 
 	}
 	di as txt "Variable labels are now properly capitalized. "
-	if `verbose' di "Thanks to William Huber for the code."
-		// http://stackoverflow.com/questions/12591056/capitalizing-value-labels-in-stata	
+	if `verbose' di _n "Thanks to William Huber for the code." _n ///
+		"http://stackoverflow.com/questions/12591056/capitalizing-value-labels-in-stata"	
 end

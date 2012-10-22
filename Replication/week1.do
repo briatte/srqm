@@ -152,19 +152,8 @@ di "This is a test. Execute me by selecting this line, " ///
 * rerun the code down to your initial line.
 
 * Additionally, you can navigate your past commands from the Command window,
-* using the PageUp/PageDown keys.
+* using the PageUp/PageDown keys. One last tip at that stage: practice a lot!
 
-
-* Coursework
-* ----------
-
-* Remember that you will have to produce such a do-file for your own research
-* project. The easiest option is to use the built-in do-file editor in Stata,
-* which features syntax colouring and keyboard shortcuts to edit and execute
-* do-files. You can also use any plain text editor to do so.
-
-* The next line will open an empty do-file called 'sandbox.do' in your SRQM
-* folder. Start 
 
 * =========
 * = SETUP =
@@ -274,26 +263,20 @@ foreach p in catplot estout lookfor_all spineplot tabout tab_chi {
 * datasets or logs. Use the 'pwd' command to see where Stata is looking now.
 pwd
 
-* Set the working directory (folder) to the main SRQM folder on your computer.
-* This line sets the working directory on my (François) computer:
-cd "/Users/fr/Documents/Teaching/SRQM/"
+* For this course, you need to set the working directory to the SRQM folder.
+* This line does that on my (François) computer:
+cap noi cd "/Users/fr/Documents/Teaching/SRQM/"
 
 * I use Mac OS X, which is why my file path takes that form. Ivaylo uses a PC,
 * and his own working directory is located at "C:\Users\Ivo\Desktop\SRQM". You
-* will need to identify the file path on your own computer. We recommend that
+* will need to identify that file path on your own computer. We recommend that
 * you choose a simple location for the SRQM folder and then keep it there.
 
-* The path to your main SRQM folder depends on your operating system. If you do
-* not know that path, use the 'File > Change Working Directory...' menu item in
-* the Stata graphical user interface to select your main SRQM folder.
+* Use the 'File > Change Working Directory...' menu item in the Stata graphical
+* user interface to select the SRQM folder. When the course starts, we will run
+* a setup utility that will set your working directory automatically.
 
-* It is crucial that you understand how to set the working directory, since we
-* will open datasets and save log files from there. We also assume that you are
-* using the default folder structure from the SRQM Teaching Pack. If not, you
-* will need to replace "Datasets" and "Replication" with your own choices of
-* folders throughout the course, which would be fairly cumbersome.
-
-* The 'cd' command can navigate through your folders. The next example selects
+* The 'cd' command navigates through your folders. The next example selects
 * the folder that contains the course dataset. The quotes can be omitted when
 * the path contains no spaces, but we will use them systematically to keep the
 * course code consistent.
@@ -302,7 +285,7 @@ cd "Replication"
 * Go back one directory, which returns to the SRQM folder.
 cd ..
 
-* The complement to the 'cd' command is the 'ls' command to list file contents.
+* The complement to the 'cd' command is the 'ls' command to list files.
 ls
 
 
@@ -316,17 +299,25 @@ ls "Datasets/*.dta", w
 
 * All datasets are in the SRQM Teaching Pack, and will load only if your working
 * directory is correctly set. The README file of the Datasets folder holds links
-* to essential documents for you to read.
-use "Datasets/ess2008.dta", clear
+* to essential documents for you to read if you want to use the data for your
+* research project. You can start looking for variables of interest by using the
+* lookfor command after loading one of the course datasets.
 
-lookfor 
+use "Datasets/ess2008.dta", clear
+lookfor health immig
+
+use "Datasets/qog2011.dta", clear
+lookfor devel orig
+
 use "Datasets/wvs2000.dta", clear
-use "Datasets/nhis2009.dta", clear // etc.
+lookfor army homo
+
+// etc. (this line is also a comment)
 
 * Tip: an additional package can help you search for variables across datasets.
 lookfor_all health, dir(Datasets)
 
-* The command above, like all commands that open course datasets or do-files,
+* The command above, like all commands that calls datasets or do-files,
 * requires that the SRQM folder has been set as the working directory.
 
 * We will now load data from the U.S. National Health Interview Survey (2009).
