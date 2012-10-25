@@ -1,4 +1,4 @@
-*! http://f.briatte.org/teaching/quanti/
+*! http://f.briatte.org/teaching/quanti/  Sciences Po, Spring 2013  Version 1.0
 
 // Backup log.
 cap log using backup.log, name(backlog) replace

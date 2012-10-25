@@ -1,0 +1,17 @@
+if log, log and sysdir
+
+- check folder, nolog
+	- checks folder content
+	- checks folder link by profile.do
+	- exit -1 if err
+	- if nothing, ado dir
+	
+- check settings, nolog
+	- checks options, update if req (or forced)
+	- checks packages, update if req (or forced)
+	- no exit if fail
+
+- cleanup
+	- run course
+	- remove temp files
+	- remove packages

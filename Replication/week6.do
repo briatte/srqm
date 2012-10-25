@@ -11,7 +11,7 @@
 * Packages.
 foreach p in catplot fre tab_chi {
 	cap which `p'
-	//if _rc==111 ssc install `p'
+	//if _rc==111 cap noi ssc install `p'
 }
 
 * Log.
@@ -50,7 +50,7 @@ catplot mitig4, over(ccode, sort(4)des) asyvars percent(ccode) stack ///
 	legend(rows(1)) scale(.7) scheme(burd4) name(mitig4, replace) 
 
 * Binary recoding of the DV.
-recode v493 (1/2=1 "Agree") (3/4=0 "Disagree") (else=.), gen(mitig2)
+recode mitig4 (1/2=1 "Agree") (3/4=0 "Disagree") (else=.), gen(mitig2)
 la var mitig2 "Euro mitigated crisis"
 fre mitig2
 

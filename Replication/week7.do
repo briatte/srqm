@@ -126,8 +126,8 @@ recode income (1/3=1 "D1-D3") (4/6=2 "D4-D6") ///
 la var income4 "HH income"
 
 * Conditional probabilities:
-tab torture age4, col nof    // column percentages
-tab torture age4, row nof    // rows percentages
+tab torture income4, col nof    // column percentages
+tab torture income4, row nof    // rows percentages
 
 * Significance tests:
 tab torture income4, exp chi2 V
@@ -262,7 +262,7 @@ tabodds torture media, or base(2) // odds ratio against hi media exposure
 tab torture media, col nof exact matcell(odds)
 
 * Build an odds-ratios statement.
-di as txt _n "Respondents with high political TV news exposure were about " ///
+di as txt _n "Respondents with low political TV news exposure were about " ///
 	round((odds[2,1]*odds[1,2])/(odds[1,1]*odds[2,2]),.01) " times " ///
 	_n "less likely to systematically support torture than other respondents."
 

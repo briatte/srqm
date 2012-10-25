@@ -32,7 +32,7 @@ use "Datasets/wvs2000.dta", clear
 * you skip the setup and loops, you will get 'unrecognized command' errors.
 foreach p in fre spineplot {
 	cap which `p'
-	if _rc==111 ssc install `p'
+	if _rc==111 cap ssc install `p'
 }
 
 * Finally, if you need to use survey weights:
@@ -111,6 +111,7 @@ bysort female: su sq
 
 * The same result appears if you crosstabulate both variables.
 tab sq female, col
+
 
 * (2) Age
 * -------

@@ -87,7 +87,7 @@ program srqm
 				file write fh "cap confirm file " _char(34) _char(36) "srqm_wd`c(dirsep)'Programs`c(dirsep)'srqm.ado" _char(34) _n
 				file write fh "if _rc!=0 {" _n _tab "noi di as err _n ///" _n
 				file write fh _tab _tab _char(34) "ERROR: The SRQM folder is no longer available at its former location:" _char(34) " as txt _n ///" _n
-				file write fh _tab _tab _char(34) "`c(pwd)'" _char(34) " _n _n ///" _n
+				file write fh _tab _tab _char(34) "`c(pwd)'" _char(34) " _n(2) ///" _n
 				file write fh _tab _tab _char(34) "This error occurs when you rename or relocate the SRQM folder." _char(34) " _n ///" _n
 				file write fh _tab _tab _char(34) "Use the 'File > Change Working Directory...' menu to manually" _char(34) " _n ///" _n
 				file write fh _tab _tab _char(34) "select the SRQM folder, then execute the {stata run profile} command." _char(34) " _n ///" _n
@@ -98,7 +98,7 @@ program srqm
 				file write fh _tab "if _rc==0 noi type profile.do, starbang" _n
 				file write fh _tab "if _rc!=0 | " _char(34) _char(36) "srqm_wd" _char(34) "==" _char(34) _char(34) " {" _n
 				file write fh _tab _tab "noi di as txt ///" _n
-				file write fh _tab _tab _tab _char(34) "Some essential course material is not available in your working directory." _char(34) " _n _n ///" _n
+				file write fh _tab _tab _tab _char(34) "Some essential course material is not available in your working directory." _char(34) " _n(2) ///" _n
 				file write fh _tab _tab _tab _char(34) "This error occurs when you modify the folders or files of the SRQM folder." _char(34) " _n ///" _n
 				file write fh _tab _tab _tab _char(34) "Restore the SRQM folder from a backup copy or from http://f.briatte.org/srqm" _char(34) " _n ///" _n
 				file write fh _tab _tab _tab _char(34) "Then set it as the working directory and execute the {stata run profile} command." _char(34) " _n ///" _n
@@ -120,7 +120,7 @@ program srqm
 				// the application and run it as admin for this bit to work.
 				//
 				di as err ///
-					_n "ERROR: The Stata application folder is not writable on your system." as txt _n _n ///
+					_n "ERROR: The Stata application folder is not writable on your system." as txt _n(2) ///
 					_n "Try again while running Stata with admin privileges. If the problem persists," ///
 					_n "you will have to manually select the SRQM folder from the 'File > Change" ///
 					_n "Working Directory...' menu and then execute the {stata run profile} command."
@@ -158,12 +158,11 @@ program srqm
 						qui cd "`c(sysdir_plus)'"
 						qui cd ..
 						cap mkdir personal
-						if _rc==0 di as txt "Could not install to the PLUS folder:" ///
+						if _rc==0 noi di as txt "Could not install to the PLUS folder:" ///
 							_n "`c(sysdir_plus)'" _n ///
 							"Installing to the PERSONAL folder instead:" _n ///
 							"`c(pwd)'/personal"
 						cap cd personal
-						if 
 						cap sysdir set PLUS "`c(pwd)'" // shouldn't ever fail
 						qui cd "`here'"
 						// shoot again
@@ -360,7 +359,7 @@ program srqm
 		cap log query SRQM
 		di _n as txt "Done!", ///
 			"The log for this operation is at the following location:" ///
-			_n r(filename) _n _n "Have a nice day."
+			_n r(filename) _n(2) "Have a nice day."
 		cap log close SRQM
 		cap log on backlog
 	}

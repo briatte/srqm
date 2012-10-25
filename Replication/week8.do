@@ -70,7 +70,7 @@ su log_gdpc schooling
 sc log_gdpc schooling, yline(7.5) xline(6)
 
 * Verify inspection computationally.
-pwcorr log_gdpc schooling, obs sig
+pwcorr gdpc log_gdpc schooling, obs sig
 
 
 * (3) Corruption and Human Development
@@ -181,6 +181,8 @@ sc corruption femgovs, $ccode ylabel(0 "High" 10 "Low", angle(hor)) ///
 * relationships between IVs, which will be useful later on in your analysis.
 gr mat births schooling gdpc hdi corruption femgovs
 
+* Export a correlation matrix.
+mkcorr births schooling gdpc hdi corruption femgovs, lab num sig log(corr.txt) replace
 
 * ========
 * = EXIT =
