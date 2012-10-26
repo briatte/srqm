@@ -222,7 +222,7 @@ gr dot sq, over(female) over(hh) name(sq_hhold, replace)
 
 * Alternative visualization. Install the command by uncommenting the line below.
 spineplot married sq, name(spine_married, replace)
-spineplot hh sq, name(spine_hh, replace)
+spineplot hh sq, scheme(burd7) name(spine_hh, replace)
 
 * Alternative crosstabulations:
 table children female married, c(n sq mean sq) format(%9.2f) // supercolumns
@@ -254,7 +254,7 @@ la var city3 "City size"
 gr dot sq, over(city3) name(sq_city3, replace)
 
 * Alternative visualization.
-spineplot city3 sq, name(sq_city3, replace)
+spineplot city3 sq, scheme(burd7) name(sq_city3, replace)
 
 * Crosstabulation.
 tab sq city3, col nofreq
@@ -285,14 +285,14 @@ gen ul = sq + invttail(n-1,0.025)*(sd / sqrt(n))
 gen ll = sq - invttail(n-1,0.025)*(sd / sqrt(n))
 
 * Plot.
-tw conn sq agegroup if city2==0, ms(O) mc(dknavy) lc(dknavy) || ///
-	rcap ul ll agegroup if city2==0, lc(dknavy) || ///
-	conn sq agegroup if city2==1, ms(O)  mc(dkorange) lc(dkorange) || ///
-	rcap ul ll agegroup if city2==1, lc(dkorange) ///
+tw conn sq agegroup if city2==0 || ///
+	rcap ul ll agegroup if city2==0 || ///
+	rcap ul ll agegroup if city2==1 || ///
+	conn sq agegroup if city2==1, ms(Oh) ///
 	xlab(1 "16-33" 2 "34-49" 3 "50-64" 4 "65+") ///
-	legend(subtitle("City population") pos(3) col(1) order(1 3) ///
-	lab(1 "< 500,000") lab(3 "> 500,000")) ///
-	yti("Attitude = (status quo)") // that was long
+	legend(subtitle("City population") pos(3) col(1) ///
+	order(1 "< 500,000" 4 "> 500,000")) ///
+	yti("Attitude = (status quo)") scheme(burd4) // that was long
 
 * Restore original data.
 restore

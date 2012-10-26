@@ -8,6 +8,12 @@
 * ================
 
 
+* Install additional packages if needed.
+foreach p in mkcorr {
+	cap which `p'
+	if _rc==111 cap noi ssc install `p'
+}
+
 * Data: Quality of Government (2011).
 use "Datasets/qog2011.dta", clear
 
@@ -36,7 +42,7 @@ codebook births schooling gdpc hdi corruption femgovs, c
 * ===============
 
 
-* (1) Fertility Rates and Schooling Years
+* IV: Fertility Rates and Schooling Years
 * ---------------------------------------
 
 scatter births schooling
@@ -44,7 +50,7 @@ scatter births schooling
 pwcorr births schooling
 pwcorr births schooling, obs sig
 
-* (2) Schooling Years and (Log) Gross Domestic Product
+* IV: Schooling Years and (Log) Gross Domestic Product
 * ----------------------------------------------------
 
 sc gdpc schooling
@@ -73,14 +79,15 @@ sc log_gdpc schooling, yline(7.5) xline(6)
 pwcorr gdpc log_gdpc schooling, obs sig
 
 
-* (3) Corruption and Human Development
+* IV: Corruption and Human Development
 * ------------------------------------
 
 * Before graphing the variables, we need to pass a few graph options, because
 * the Corruption Perception Index is reverse-coded (0 marks high corruption,
 * and 10 marks very low corruption). To enhance visual interpretation, we
 * therefore use an inverted axis scale, and add horizontal axis labels to it.
-sc corruption hdi, yscale(rev) ylabel(0 "High" 10 "Low", angle(hor))
+sc corruption hdi, yscale(rev) ///
+	xlab(0 "Low" 1 "High") ylab(0 "Highly corrupt" 10 "Lowly corrupt", angle(hor))
 
 * The pattern that appears graphically is not linear: corruption is stationary
 * for low to medium values of HDI, and then rapidly drops towards high values.
@@ -92,7 +99,7 @@ sc corruption hdi, yscale(rev) ylabel(0 "High" 10 "Low", angle(hor))
 pwcorr corruption hdi, obs sig
 
 
-* (4) Female Government Ministers and Corruption
+* IV: Female Government Ministers and Corruption
 * ----------------------------------------------
 
 * Obtain summary statistics.
@@ -111,9 +118,20 @@ sc femgovs corruption, yline(15) xline(4)
 * and theoretical elaboration provide no substantive justification for it.
 
 
-* Correlation matrix
-* ------------------
+* Correlation and scatterplot matrixes
+* ------------------------------------
 
+
+* Start with visual inspection of the data organized as a scatterplot matrix.
+* A scatterplot matrix contains all possible bivariate relationships between
+* any number of variables. Building a matrix of your DV and IVs allows to spot
+* relationships between IVs, which will be useful later on in your analysis.
+* Note that the example below shows the untransformed measure of GDP per capita.
+gr mat births schooling gdpc hdi corruption femgovs, name(gr_matrix, replace)
+
+* You could also look at a sparser version of the matrix that shows only a
+* subset of geographical regions (subsaharan Africa and Western states).
+gr mat births schooling log_gdpc hdi corruption femgovs if inlist(ht_region,4,5)
 
 * The most practical way to consider all possible correlations in a list of
 * predictors (or independent variables) is to build a correlation matrix out
@@ -132,14 +150,15 @@ pwcorr births schooling log_gdpc hdi corruption femgovs, star(.05)
 * very large matrixes with majorily insignificant correlation coefficients.
 pwcorr births schooling log_gdpc hdi corruption femgovs, print(.05)
 
-
-* ==============
-* = GRAPH TIPS =
-* ==============
+* Export a correlation matrix.
+mkcorr births schooling gdpc hdi corruption femgovs, lab num sig log(corr.txt) replace
 
 
-* (1) Using macros to set graph options
-* -------------------------------------
+* Marker labels for scatterplots
+* ------------------------------
+
+* Here's a quick graph tip that will be useful to those working on country-level
+* data, where it might be interesting to show country codes in scatterplots.
 
 * Macros are crucial elements of programming, not just in Stata but in any
 * programming language. The example below is just one very simple example of
@@ -150,39 +169,27 @@ pwcorr births schooling log_gdpc hdi corruption femgovs, print(.05)
 * produce informative graphs. If you are using a set of consistent options
 * on several graphs, you can store these options in a global macro and call
 * it by entering its name with a $ (dollar) sign. Example below:
-global ccode = "msymbol(i) mlabpos(0) mlabel(ccodewb) mlabcolor(gs4)"
+global ccode = "ms(i) mlabpos(0) mlab(ccodewb)"
 
+* The option make the marker symbol invisible, then center the marker label and
+* fill it with the ccodewb variable (just as for commands, you learn how to pass
+* these options by reading the help pages, which can be slightly excruciating).
 * In the following examples, passing the "$ccode" option will actually pass
 * the graphical options stored in the ccode ("country codes") macro.
 
-* Improved graph for Example (1)
-sc births schooling, $ccode name(nat_edu, replace)
+* Improve previous example.
+sc births schooling, $ccode name(fert_edu1, replace)
 
-* Improved graph for Example (2)
-sc log_gdp schooling, $ccode name(gdp_edu, replace)
+* Add color to Western states.
+sc births schooling, $ccode || ///
+	sc births schooling if ht_region==5, $ccode legend(off) ///
+	name(fert_edu2, replace)
 
-* Improved graph for Example (3)
-sc corruption hdi, $ccode yscale(rev) ylabel(0 "High" 10 "Low", angle(hor)) ///
-	name(cpi_hdi, replace)
+* Add color to subsaharan Africa, remove color for ROTW.
+sc births schooling, mlabc(gs10) $ccode || ///
+	sc births schooling if ht_region==4, $ccode legend(off) ///
+	name(fert_edu3, replace)
 
-* Improved graph for Example (4)
-sc corruption femgovs, $ccode ylabel(0 "High" 10 "Low", angle(hor)) ///
-	name(cpi_femgov, replace)
-
-* For another example of graph settings, try using this macro:
-* global ccode = "msymbol(Oh) mcolor(gs4) mlabel(ccodewb) mlabcolor(gs8)"
-
-
-* (2) Scatterplot matrixes
-* ------------------------
-
-* A scatterplot matrix contains all possible bivariate relationships between
-* any number of variables. Building a matrix of your DV and IVs allows to spot
-* relationships between IVs, which will be useful later on in your analysis.
-gr mat births schooling gdpc hdi corruption femgovs
-
-* Export a correlation matrix.
-mkcorr births schooling gdpc hdi corruption femgovs, lab num sig log(corr.txt) replace
 
 * ========
 * = EXIT =

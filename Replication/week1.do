@@ -56,7 +56,7 @@ pwd
 * shown in the Review window.
 
 * Now, load a sample Stata dataset that is included with the software:
-sysuse lifeexp
+sysuse lifeexp, clear
 
 * The previous command loads data in the background. You can access the data
 * with the following command. Close the window after taking a look.
@@ -237,9 +237,9 @@ ssc install fre, replace
 * to use the SRQM Teaching Pack, but this additional check might avoid running
 * into 'unrecognized command' errors later in class. You will have to select 
 * the complete loop below to execute the code properly.
-foreach p in catplot estout lookfor_all spineplot tabout tab_chi {
+foreach p in catplot estout fre lookfor_all spineplot tabout {
 	cap which `p'
-	if _rc==111 ssc install `p'
+	if _rc==111 cap noi ssc install `p'
 }
 
 * The settings covered in this section of the do-file should now be permanently

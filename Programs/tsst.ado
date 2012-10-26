@@ -2,7 +2,7 @@ cap pr drop tsst
 program tsst
 	// export tabbed summary statistics tables
 
-    syntax [using/] [aweight fweight pweight/] [, SUmmarize(varlist) FRequencies(varlist) replace verbose f(int 1)] 
+    syntax [using/] [if] [in] [aweight fweight pweight/] [, SUmmarize(varlist) FRequencies(varlist) replace verbose f(int 1)] 
     tempname fh
 	local fl = 10^(-`f')
 
@@ -60,10 +60,10 @@ program tsst
 	if "`summarize'" != "" {
 		foreach v of varlist `summarize' {
 			if "`weight'" == "" {
-				qui su `v'
+				qui su `v' `if' `in'
 			}
 			else {
-				qui su `v' [`weight'=`exp']
+				qui su `v' `if' `in' [`weight'=`exp']
 			}
 		    local l: var l `v'
 	    	if "`l'"=="" {
@@ -80,10 +80,10 @@ program tsst
 	if "`frequencies'" != "" {
 		foreach v of varlist `frequencies' {
 			if "`weight'" == "" {
-				qui cap tab `v', gen(`v'_) matcell(m)
+				qui cap tab `v' `if' `in', gen(`v'_) matcell(m)
 			}
 			else {
-				qui cap tab `v' [`weight'=`exp'], gen(`v'_) matcell(m)
+				qui cap tab `v' `if' `in' [`weight'=`exp'], gen(`v'_) matcell(m)
 				mat li m
 			}
 			if _rc != 0 local d = "-- dummies existed already"
@@ -96,7 +96,7 @@ program tsst
 	    		di as txt "   " "`v'" " (" "`l'" ") " "`d'"
 	    	}
 			local N = r(N)
-			qui levelsof `v', local(lvls)
+			qui levelsof `v' `if' `in', local(lvls)
 			local i = 0
 			foreach val of local lvls {
 				local i=`i'+1
@@ -110,6 +110,8 @@ program tsst
 			}
 		}
 	}
+	qui misstable pat `summarize' `frequencies' `if' `in'
+	file write `fh' _n "Complete observations: " _tab "`r(N_complete)'"
 	if "`weight'" != "" file write `fh' _n "Survey weights: " "`exp'" "."
 	file close `fh'
 	local pwd = c(pwd)

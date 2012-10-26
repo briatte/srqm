@@ -11,7 +11,7 @@
 * Packages.
 foreach p in catplot fre tab_chi {
 	cap which `p'
-	//if _rc==111 cap noi ssc install `p'
+	if _rc==111 cap noi ssc install `p'
 }
 
 * Log.
@@ -226,7 +226,8 @@ tabchi mitig eum, p noo noe     // Pearson residuals
 tab mitig eum, col matcell(odds)
 
 * Explanatory statement.
-di as txt _n "Respondents who think that their country benefited from EU membership are" _n ///
+di as txt _n ///
+	"Respondents who think that their country benefited from EU membership are" _n ///
 	"about " round((odds[2,1]*odds[1,2])/(odds[2,2]*odds[1,1]),.1) " times " ///
 	"more likely to think that the euro mitigated the crisis" _n ///
 	"than respondents who think that their country has not benefited from it." 
