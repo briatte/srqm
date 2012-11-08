@@ -1,54 +1,93 @@
-* What: SRQM Session 9
+* What: SRQM Session 9 (new: 8)
 * Who:  F. Briatte and I. Petev
-* When: 2011-10-24
+* When: 2012-11-05
 
 
-* ================
-* = INTRODUCTION =
-* ================
+* =========
+* = SETUP =
+* =========
 
 
-* Start again where we stopped with the QOG dataset. This command will make
-* sure that all variables transformations, renaming and recoding from our past 
-* session are properly loaded. It will also keep the macros from last week and
-* load some exploratory scatterplot graphs in memory.
+* Replicate last week and clear graphs (also loads and prepares the data)
 do "Replication/week8.do"
+gr drop _all
 
-* Log.
-cap log using "Replication/week9.log", name(week9) replace
+* Required commands.
+foreach p in mkcorr {
+	cap which `p'
+	if _rc==111 cap noi ssc install `p' // install from online if missing
+}
+
+* Log results.
+cap log using "Replication/week9.log", replace
+
+* Graph macro.
+global ci "legend(off) alc(gs8) alp(dash) fc(none)"
+
+gen region:region = ht_region
+
+* Recode and relabel values.
+recode region (6/10=6)
+la de region 1 "E. Europe and PSU" 2 "Lat. America" ///
+	3 "N. Africa and M. East" 4 "Sub-Sah. Africa" ///
+	5 "W. Europe and N. America" 6 "Asia, Pacific and Carribean" ///
+	, modify
 
 
-* ============================
-* = SIMPLE LINEAR REGRESSION =
-* ============================
+* ==========
+* = MODELS =
+* ==========
 
 
 * (1) Fertility Rates and Schooling Years
 * ---------------------------------------
 
-* Looking again at Example 1, visualizing the negative linear fit.
-tw (sc births schooling, $ccode) (lfit births schooling), ///
-	name(nat_edu, replace)
-	
-* Looking at the regression coefficient and at the intercept provides a model
-* of the relationship: the model basically reads as: starting with an initial
-* level of (_cons) births, every increase of one unit of births is associated
-* with a variation of (coef) units of schooling years. We cannot say that one
-* variable is "causing" the other without confusing statistical causation with 
-* actual causation, which is a common but serious mistake, unless we provide a 
-* substantive theory to link both variables. We will come back to that later.
-reg schooling births
+* We are looking again at Example 1 for the previous do-file. At that stage, we
+* assume that you have a subtantive model to explain the relationship that you
+* are studying, otherwise the results of the model will land nowhere and serve
+* no analytical purpose. Theoretical support is hence unavoidable hereinafter.
 
-* The relationship can be read in any direction: inverting the variables in 
-* the model will affect the coeffient and intercept, but not the R-squared or
-* the p-value of the regression itself. Only a substantive understanding of
-* the model can determine the y (DV) and x (IV) assignment of the variables. 
+* Visual fit.
+sc births schooling, $ccode ///
+	legend(off) yti("Fertility rate (births per woman)") ///
+	name(fert_edu1, replace)
+
+* Linear fit.
+tw (sc births schooling, $ccode) (lfit births schooling, $ci), ///
+	yti("Fertility rate (births per woman)") ///
+	name(fert_edu2, replace)
+
+* Add 95% CI.
+tw (sc births schooling, $ccode) (lfitci births schooling, $ci), ///
+	yti("Fertility rate (births per woman)") ///
+	name(fert_edu3, replace)
+
+* The association of two continuous variables might be expressed as a model of
+* the relationship. The first variable in the model is the dependent variable,
+* or y in the regression equation f: y = bx. The effect of the second variable
+* (called the independent variable, or the predictor) will be estimated as the
+* regression coefficient b. The model below estimates the predicted effect of
+* education on the fertility rate (f: number of births = b*schooling years).
 reg births schooling
 
-* Finally, we worked on a linear model, but a more advanced model might better
+* Simple residuals-versus-fitted plot.
+rvfplot
+
+* Get fitted values.
+cap drop yhat
+predict yhat
+
+* Get residuals.
+cap drop r
+predict r, resid
+
+* Detailed residuals-versus-fitted plots.
+sc r yhat, yline(0) by(region) $ccode
+
+* We will start working on linear models, but a more advanced model might better
 * explain the relationship as it actually looks less linear than quadratic.
 tw (sc births schooling, $ccode) (qfit births schooling), ///
-	name(nat_edu_q, replace)
+	name(fert_edu, replace)
 
 * In this case, using the square root of the independent variable might provide
 * better estimates of its actual effect on the dependent variable. We could have
@@ -57,11 +96,11 @@ tw (sc births schooling, $ccode) (qfit births schooling), ///
 
 * Variable transformation.
 gen sqrt_schooling = sqrt(schooling)
-la var sqrt_schooling "Average Schooling Years (Total) (square root)"
+la var sqrt_schooling "Average schooling years (sqrt)"
 
 * Visual inspection.
 tw (sc births sqrt_schooling, $ccode) (lfit births sqrt_schooling), ///
-	name(nat_edu_q, replace)
+	name(fert_edu, replace)
 
 * Regression model.
 reg births sqrt_schooling
@@ -71,19 +110,25 @@ reg births sqrt_schooling
 * produce real-world examples of what the model means. However, more variance 
 * in the data is explained when the model is written in this more complex form. 
 
+* Visualization with solved square root units.
+tw (sc births sqrt_schooling, $ccode) (lfit births sqrt_schooling), ///
+	xla(1 "1" 1.5 "2.25" 2 "4" 2.5 "6.25" 3 "9" 3.5 "12.25") ///
+	xti("Average schooling years") note("Horizontal axis in square units.") ///
+	name(fert_edu, replace)
+
 
 * (2) Schooling Years and (Log) Gross Domestic Product
 * ----------------------------------------------------
 
 * Looking again at Example 2, visualizing the positive linear fit. We here
 * follow the convention where the first variable is considered to be the DV.
-tw (sc schooling log_gdp, $ccode) (lfit schooling log_gdp), ///
-	name(edu_gdp, replace)
+tw (sc schooling log_gdpc, $ccode) (lfit schooling log_gdpc), ///
+	name(edu_log_gdpc, replace)
 
 * The interpretation of the coefficient and intercept are going to be rather
 * difficult here due to the logarithmic unit of GDP, but the transformation
 * was necessary to identify the linear relationship between the two variables.
-reg schooling log_gdp
+reg schooling log_gdpc
 
 
 * (3) Corruption and Human Development
@@ -91,7 +136,8 @@ reg schooling log_gdp
 
 * Looking again at Example 3, visualizing the nonlinear, quadratic fit.
 tw (sc corruption hdi, $ccode) (qfit corruption hdi), ///
-	ysc(rev) ylabel(0 "High" 10 "Low", angle(hor)) name(cpi_hdi, replace)
+	ysc(rev) yla(0 "High" 10 "Low", angle(hor)) ///
+	name(cpi_hdi, replace)
 
 * Before interpreting the model, remember that:
 * - the relationship is, in fact, quadratic, and only approximately linear
@@ -102,17 +148,21 @@ reg corruption hdi
 * A more thorough exploration of residuals will be covered in later sessions
 * on regression diagnostics, but here is a snapshot of what we can do and 
 * understand by studying them in a bit more depth.
+cap drop yhat
 predict yhat
-sc yhat corruption hdi, ylab(0 "Highly corrupt" 10 "Lowly corrupt") ///
-	ysc(rev) connect(l) sort(yhat) name(r_linear, replace)
+sc corruption yhat hdi, yla(0 "Highly corrupt" 10 "Lowly corrupt") ///
+	ysc(rev) connect(i l) sort(yhat) ///
+	name(r_linear, replace)
 
 * The curvilinearity, which approaches a y = x^2 function, can be taken care 
-* of by squaring HDI and fitting the model again to the trasnformed data.
+* of by squaring HDI and fitting the model again to the transformed data.
 gen hdi2=hdi^2
 reg corruption hdi hdi2
+cap drop yhat2
 predict yhat2
-sc yhat2 corruption hdi, ylab(0 "Highly corrupt" 10 "Lowly corrupt") ///
-	ysc(rev) connect(l) sort(yhat) name(r_curvilinear, replace)
+sc corruption yhat2 hdi, yla(0 "Highly corrupt" 10 "Lowly corrupt") ///
+	ysc(rev) connect(i l) sort(yhat) || sc yhat hdi, legend(order(2 3) ///
+	lab(2 "Quadratic fit") lab(3 "Linear fit")) name(r_curvilinear, replace)
 
 
 * (4) Female Government Ministers and Corruption
@@ -122,22 +172,39 @@ sc yhat2 corruption hdi, ylab(0 "Highly corrupt" 10 "Lowly corrupt") ///
 * A confidence interval was added to the regression line in order to show how
 * poorly it accounts for the relationship between the variables: only a few
 * data points are actually included in the interval, showing a mediocre fit.
-tw (lfitci corruption femgovs) (sc corruption femgovs, $ccode), ///
-	legend(off) ylab(1 "Highly corrupt" 10 "Lowly corrupt") ///
+tw (lfitci corruption femgov) (sc corruption femgov, $ccode), ///
+	legend(off) yla(1 "Highly corrupt" 10 "Lowly corrupt") ///
 	name(cpi_femgov, replace)
 
 * Despite a less-than-optimal fit, the model yet returns a "good", by which
 * we mean a satisfactory p-value lower than our alpha level of statistical
 * significance. Hence, caution!
-reg corruption femgovs
+reg corruption femgov
 
 * The same information can be shown with a residuals-versus-fitted plot,
 * which displays the regression line as a horizontal line at zero. The
 * distance from that line indicates the fit of each data point. The other
 * option is naturally the residuals-versus-predictor plot, which shows the
 * residuals against values of the predictor (or independent variable).
-rvfplot, $ccode yline(0) name(cpi_femgov_rvf, replace)
-rvpplot femgovs, $ccode yline(0) name(cpi_femgov_rvp, replace)
+rvfplot, $ccode yline(0) ///
+	name(cpi_femgov_rvf, replace)
+
+rvpplot femgov, $ccode yline(0) ///
+	name(cpi_femgov_rvp, replace)
+
+
+* (5) Regional models
+* -------------------
+
+* Draw scatterplots and linear fits for each region. Visualizing small multiples
+* requires using an independent variable with a limited number of categories and
+* might reveal additional strengths or weaknesses of your model.
+sc births schooling || lfit births schooling, by(region)
+
+* Run the linear regression models for each region. Observe how the standard
+* errors and p-values of the regression coefficients widen when the regional
+* sample size falls at lower numbers of observations.
+bys region: reg births schooling
 
 
 * ========
@@ -146,7 +213,7 @@ rvpplot femgovs, $ccode yline(0) name(cpi_femgov_rvp, replace)
 
 
 * Close log (if opened).
-cap log close week9
+cap log close
 
 * We are done. Just quit the application, have a nice week, and see you soon :)
 * exit, clear

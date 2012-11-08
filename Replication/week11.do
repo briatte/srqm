@@ -3,24 +3,25 @@
 * When: 2011-12-01
 
 
-* ================
-* = INTRODUCTION =
-* ================
+* =========
+* = SETUP =
+* =========
 
 
-* Create a folder to export all files.
-global wd "Replication/week11-files"
-cap cd "$srqm_wd"
-cap mkdir "$wd"
-
-* Required packages.
-foreach p in estout {
+* Required commands.
+foreach p in fre estout {
 	cap which `p'
-	if _rc==111 ssc install `p'
+	if _rc==111 cap noi ssc install `p' // install from online if missing
 }
 
-* Log.
-cap log using "week11.log", name(week11) replace
+* Export log.
+cap log using "Replication/week11.log", replace
+
+
+* ===========
+* = DATASET =
+* ===========
+
 
 * Data: Quality of Government (2011).
 use "Datasets/qog2011.dta", clear
@@ -36,6 +37,7 @@ ren wdi_fr births
 
 * IV: Educational attainment (years of schooling).
 ren bl_asyt25 schooling
+
 * Transformation to square root units.
 gen sqrt_schooling = sqrt(schooling)
 la var sqrt_schooling "Average Schooling Years (Total) (sqrt units)"
@@ -43,6 +45,7 @@ la var sqrt_schooling "Average Schooling Years (Total) (sqrt units)"
 * IV: Gross Domestic Product per capita (contant USD).
 gen gdpc = unna_gdp/unna_pop
 la var gdpc "Real GDP/capita (constant USD)"
+
 * Transformation to log units.
 gen log_gdpc = ln(gdpc)
 la var log_gdpc "Real GDP/capita (log units)"
@@ -50,6 +53,7 @@ la var log_gdpc "Real GDP/capita (log units)"
 * IV: HIV prevalence rate.
 ren wdi_hiv hiv
 su hiv, d
+
 * Coding a dummy for the last quartile with highest prevalence rates.
 gen aids=(hiv > 1.5) if !mi(hiv)
 la var aids "High prevalence of HIV (dummy)"
@@ -57,8 +61,10 @@ fre aids
 
 * Adding a categorical variable on geographical location.
 tab ht_region, gen(region_)
+
 * Method 1: automatially generated dummies.
 d region_*
+
 * Method 2: recoding to set Asia as the reference category.
 recode ht_region ///
 	(1=2 "Eastern Europe & post-Soviet Union") ///
@@ -67,14 +73,6 @@ recode ht_region ///
 	(5=5 "Western Europe & North America") ///
 	(6/10=1 "Asia & Pacific"), gen(region)
 la var region "Geographical region"
-
-
-* ======================
-* = SUMMARY STATISTICS =
-* ======================
-
-* Export with tsst command.
-tsst using stats.txt, su(births schooling sqrt_schooling log_gdpc) fre(region aids) replace
 
 
 * ===============
@@ -88,7 +86,7 @@ gr mat births sqrt_schooling log_gdpc, half
 * Export correlation matrix (requires estout package)
 eststo clear
 qui estpost correlate births sqrt_schooling log_gdpc aids, matrix listwise
-esttab using corr.csv, unstack not compress label replace // export
+esttab using week11_correlations.txt, unstack not compress label replace
 
 * Drop missing data.
 drop if mi(births, sqrt_schooling, log_gdpc, aids)
@@ -330,7 +328,7 @@ eststo M2: qui reg births schooling log_gdpc aids##region, r beta
 eststo M3: qui reg births c.schooling##c.log_gdpc aids##region, r beta
 
 * Export all models for comparison and reporting.
-esttab M1 M2 M3 using "$wd/reg.csv", csv replace constant beta(2) se(2) r2(2) ///
+esttab M1 M2 M3 using "week11_regressions.txt", replace constant beta(2) se(2) r2(2) ///
 	label mtitles("Baseline" "Controls for HIV/AIDS" "Interaction effects")
 
 
@@ -341,6 +339,9 @@ esttab M1 M2 M3 using "$wd/reg.csv", csv replace constant beta(2) se(2) r2(2) //
 
 * Close log (if opened).
 cap log close week11
+
+* Replicate (creates a replication material folder).
+repl week11
 
 * We are done. Just quit the application, have a nice week, and see you soon :)
 * exit, clear

@@ -1,4 +1,11 @@
-*! http://f.briatte.org/teaching/quanti/  Sciences Po, Spring 2013  Version 1.1
+// --- SRQM --------------------------------------------------------------------
+
+// This file sets up a computer for use with the SRQM course. It creates another
+// profile.do file in the Stata application folder. See README file for details.
+
+*! http://f.briatte.org/teaching/quanti/  Sciences Po, Spring 2013  Version 1.3
+
+set more off, perm
 
 // --- LOG ---------------------------------------------------------------------
 
@@ -13,6 +20,7 @@ else {
 
 // --- COURSE ------------------------------------------------------------------
 
+// folder
 cap adopath + "`c(pwd)'/Programs"
 cap noi srqm check folder, nolog
 if _rc != 0 exit -1
@@ -29,7 +37,7 @@ if c(update_query)=="on" | c(more)=="on" | c(scheme) != "burd" {
 	cap noi srqm setup, nolog
 }
 
-// folder
+// link
 
 if "$srqm_wd" != c(pwd) {
 	noi di as txt _n ///

@@ -1,8 +1,11 @@
-*! http://f.briatte.org/teaching/quanti/
+// --- SRQM --------------------------------------------------------------------
+
+// This file creates the setup utilities used in the profile.do file of the SRQM
+// folder. See README file for details on how to run the utilities with options.
 
 cap pr drop srqm
 program srqm
-	syntax anything [, noLOG]
+	syntax anything [, noLOG Clean UPDate]
 
 	// ========
 	// = LOAD =
@@ -22,10 +25,10 @@ program srqm
 	local course = ("`2'"=="course")
 	
 	// package list
-	local install = "catplot ciplot estout fre kountry leanout log2do2 lookfor_all mkcorr revrs spineplot tab_chi tabout clarify"
+	local install = "catplot ciplot estout fre kountry leanout log2do2 lookfor_all mkcorr revrs spineplot outreg2 tab_chi tabout clarify"
 
 	// dataset list
-	local datasets = "ebm2009 ess2008 gss2010 lobbying2010 nhis2009 qog2011 trust2012 wvs2000"
+	local datasets = "ebm2009 ess2008 gss2010 nhis2009 qog2011 wvs2000"
 
 	// interrupt backup log if any
 	if `log' cap log off backlog
@@ -145,6 +148,9 @@ program srqm
 						cap which simqi
 						if _rc==111 cap noi net install clarify, from("http://gking.harvard.edu/clarify")
 					}
+					// which _gstd01
+					// net install _gstd01, from(http://web.missouri.edu/~kolenikovs/stata)
+					//
 					else {
 						cap noi ssc install `t', replace						
 					}
@@ -185,7 +191,7 @@ program srqm
 			}
 			
 			* Screen breaks.
-			cap set more off, perm
+			noi set more off, perm
 			if _rc==0 di as txt "Screen breaks set to", c(more)
 			
 			* Maximum variables.
@@ -268,25 +274,39 @@ program srqm
 			// FULL MONTY
 			//
 			di as inp _n "Course demo:"
+
+			gr drop _all
+			win man close viewer _all
+			clear all
 			
 			local start = c(current_time)
 
 			forvalues y=1/15 {
-				gr drop _all			
-				set scheme s2color
+
+				gr drop _all
+				win man close viewer _all
+				clear all
+
+				// to test the package installation loops
+				// and/or get plots in s2color default scheme:
+				// srqm clean packages
+				// set scheme s2color
+
 				if `y' < 13 {
 					do Replication/week`y'.do
+					repl week`y'
 				}
 				else {
 					local y2 = `y' - 12
-					do Replication/draft`y2'.do
+					do Replication/template`y2'.do
 				}
-			}					
+			}
 
 			gr drop _all
-			win man close viewer _all // nifty
+			win man close viewer _all
 			clear all
-			di as txt _n "Done! Routine launched at `start' and finished at " c(current_time) "."
+
+			di as txt _n "Done! Routine launched at `start' and finished at", c(current_time) "."
 
 		}
 		else {
@@ -336,15 +356,21 @@ program srqm
 			//
 			di as inp _n "Cleaning work files..." // requires X Window System
 
+			local expr = "week*.log" // pretty destructive
+			cap !rm `expr'
+
 			local expr = "Programs/*.log"
 			cap !rm `expr'
 
 			local expr = "Replication/*.log"
 			cap !rm `expr'
 
-			local expr = "Replication/*-files"
-			cap !rm -R `expr'
-
+			forval i=1/12 {
+				// erase replication folders created by repl
+				local expr = "Replication/week`i'"
+				cap !rm -R `expr'
+			}
+			
 			local expr = "Replication/BriattePetev"
 			cap !rm -R `expr'
 		}

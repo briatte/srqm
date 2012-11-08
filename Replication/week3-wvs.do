@@ -3,9 +3,26 @@
 * When: 2012-02-06
 
 
-* ================
-* = INTRODUCTION =
-* ================
+* =========
+* = SETUP =
+* =========
+
+
+* Required commands.
+foreach p in fre spineplot {
+	cap which `p'
+	if _rc==111 cap noi ssc install `p' // install from online if missing
+}
+
+
+* Log.
+cap log using "Replication/week3.log" replace
+
+
+* ===========
+* = DATASET =
+* ===========
+
 
 * Egypt underwent a social revolution in 2011. Who were the revolutionaries?
 * What fraction of Egyptian society was willing to undergo radical reform?
@@ -19,21 +36,8 @@
 * WVS 2000 dataset by concentrating on respondents from Egypt. The analysis
 * will illustrate how to recode variables and missing values.
 
-* Log.
-cap log using "Replication/week3.log", name(week3) replace
-
 * Data: World Values Survey (2000).
 use "Datasets/wvs2000.dta", clear
-
-* To run this do-file, you might need to install some packages first. The next
-* lines will check this: select the whole loop and execute them. If you have 
-* run the setup for the course, everything is already in place. Otherwise, if
-* you are online, a few additional packages will be installed into Stata. If
-* you skip the setup and loops, you will get 'unrecognized command' errors.
-foreach p in fre spineplot {
-	cap which `p'
-	if _rc==111 cap ssc install `p'
-}
 
 * Finally, if you need to use survey weights:
 svyset [pw=v245]
@@ -254,7 +258,7 @@ la var city3 "City size"
 gr dot sq, over(city3) name(sq_city3, replace)
 
 * Alternative visualization.
-spineplot city3 sq, scheme(burd7) name(sq_city3, replace)
+spineplot city3 sq, scheme(burd6) name(sq_city3, replace)
 
 * Crosstabulation.
 tab sq city3, col nofreq
@@ -304,7 +308,7 @@ restore
 
 
 * Close log (if opened).
-cap log close week3
+cap log close
 
 * We are done. Just quit the application, have a nice week, and see you soon :)
 * exit, clear

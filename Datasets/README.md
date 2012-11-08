@@ -13,10 +13,8 @@ Please also remember to **systematically cite the data source and authors**, aft
 | `ebm2009`		 | Eurobarometer Special Report			 | 2009							 |
 | `ess2008`		 | European Social Survey				 | 2008							 |
 | `gss2010`		 | General Social Survey				 | 2010							 |
-| `lobbying2010` | 'Lobbying and Policy Change'		 	 | (Baumgartner *et al.* 2010)	 |
 | `nhis2009`	 | National Health Interview Survey		 | 2009							 |
 | `qog2011`		 | Quality of Government				 | 2011							 |
-| `trust2012`	 | 'Bread and Peace'					 | (Hibbs 2012)					 |
 | `wvs2000`		 | World Values Survey					 | 2000							 |
 
 A selection of other sources is shown at the end of this document. Please remember that other sources are allowed for research projects *if and only if you can quickly show skills in data management*.
@@ -77,7 +75,7 @@ The dataset was created by subsetting the ESS cumulative dataset to Round 4, and
 	
 	save ess2008.dta, replace
 
-Variables that appear in the documentation but not in the dataset are part of the overall ESS rotating module.
+Variables that appear in the documentation but not in the dataset are part of the overall ESS rotating module (thanks to the ESS data team for the precision).
 
 * * *
 
@@ -120,18 +118,6 @@ The dataset is a subset from the [GSS 1972-2010 cross-sectional cumulative datas
 	
 * * *
 
-## lobbying2010
-
-The `lobbying2010` dataset contains the variables required to replicate part of the analysis published in Frank R. Baumgartner, Jeffrey M. Berry, Marie Hojnacki, David C. Kimball and Beth L. Leech, *[Lobbying and Policy Change. Who Wins, Who Loses, and Why](http://www.unc.edu/~fbaum/books/lobby/lobbying.htm)* (University of Chicago Press, 20009).
-
-### Additional documentation:
-
-<http://lobby.la.psu.edu/>
-
-The issue-level dataset is used in Chapter 5 of the book.
-
-* * *
-
 ## nhis2009
 
 The `nhis2009` dataset holds sample adult data for years 2000--2009 of the U.S. National Health Interview Survey (NHIS):
@@ -161,28 +147,6 @@ The `qog2011` dataset holds the Quality of Government (QOG) Standard dataset in 
 	use "Datasets/qog2011.dta", clear
 
 A simpler version of the dataset, [QOG Basic](http://www.qog.pol.gu.se/data/qogbasicdataset/), is also available for students who prefer to work on a more accessible and less extensive version of the data.
-
-* * *
-
-## trust2012
-
-The `trust2012` dataset contains the variables required to replicate Douglas Hibbs' 'Bread and Peace' model of the U.S. presidential election:
-
-> Aggregate votes for president in postwar elections are well explained by just two fundamental determinants: (1) weighted-average growth of per capita real disposable personal income over the term, and (2) cumulative US military fatalities owing to unprovoked, hostile deployments of American armed forces in foreign conflicts.  
-<http://www.douglas-hibbs.com/Election2012/2012Election-MainPage.htm>
-
-### Additional documentation:
-
-Douglas Hibbs, "[The 2012 US Presidential Election: Implications of the ‘Bread and Peace’ Model For Obama’s Re-election Prospects as of 2011:q4][trust2012_paper]", 29 February 2012 (with [slides][trust2012_slides] material).
-
-[trust2012_paper]: http://www.douglas-hibbs.com/Election2012/2012Election-MainPage.htm "HTML"
-[trust2012_slides]: http://www.douglas-hibbs.com/Election2012/HIBBS-SLIDES-PCS-2012-02-29.pdf "PDF"
-
-### Usage in Stata:
-
-	use "Datasets/trust2012.dta", clear
-
-The data were kindly provided by John Sides, following his blog post "[What Will Make People Trust Goverment Again?](http://themonkeycage.org/blog/2010/02/14/what_will_make_people_love_gov/)" published at *The Monkey Cage* on February 14, 2010.
 
 * * *
 

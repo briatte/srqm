@@ -1,4 +1,4 @@
-* What: Example do-file for draft 2
+* What: Example do-file for draft 2 (new: 9)
 * Who:  François Briatte and Ivaylo Petev
 * When: 2012-11-04
 

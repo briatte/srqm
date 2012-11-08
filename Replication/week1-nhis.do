@@ -42,13 +42,19 @@
 * all commands, the results of which will show in the Results window. Your
 * past commands will also show in the Review window. Finally, the Variables
 * window should be empty at that stage, because no dataset is currently loaded
-* in Stata. More windows will be opended as we go on.
+* in Stata. More windows will be opened as we go on.
 
 * Note that we will use windows but not, as you are used to, menus. The menu
 * interface in Stata offers point-and-click accessibility but is not suited
 * for programming purposes. Instead, everything we do will be command-based.
 
-* To start, type or copy and paste the following line to the Command window:
+
+* ====================
+* = WARM-UP EXERCISE =
+* ====================
+
+
+* Type or copy and paste the following line to the Command window:
 pwd
 
 * The previous command returns the path to your working directory. It prints
@@ -83,7 +89,7 @@ sc lexp safewater
 clear
 
 * Notice that the syntax used for the 'scatter' command is different because
-* it has been abbreviated to 'sc'. The first line is a comment that uses the
+* it has been abbreviated to 'sc'. The first line is a comment that uses an
 * alternative way to tell Stata that the line is a comment. Save and close
 * the do-file window when you have copied the full code to it.
 
@@ -104,12 +110,15 @@ clear
 
 * Tip (1): Get to learn some syntax
 
-* - Stata commands share a similar syntax, most commonly: 
-*   command <argument>
-* - Most Stata commands will call one or several variables as the main argument:
-*   command <variable>
-* - Most Stata commands will also allow one or more options, after a comma:
-*   command <variable>, <options>
+* Most Stata commands share an identical syntax that calls one or several
+* variables as the main argument:
+
+*   command variable
+
+* Most Stata commands will also allow one or more options after a comma.
+* Optional arguments are shown in brackets in the Stata help pages:
+
+*   command variable [, options]
 
 
 * Tip (2): Run all lines in sequential order
@@ -117,7 +126,7 @@ clear
 * - Applies to all do-files.
 * - Requires you execute do-files in full.
 * - Requires you know where you are in your code.
-*
+
 clear
 set obs 100
 gen test=1
@@ -127,18 +136,20 @@ ren test x // This line will not run if you do not run the previous ones.
 * Tip (3): Run multiple lines together
 
 * - Applies every time you see '///' at the end of a line.
-* - Requires you select all adjacent lines. Use Ctrl-L (Win) or Cmmd-L (Mac).
+* - Requires you select more than one line. Use Ctrl-L (Win) or Cmmd-L (Mac).
 * - Requires you run them with Ctrl-D (Win) or Cmmd-Shift-D (Mac).
-*
+
 di "This is a test. Execute me by selecting this line, " ///
 	"and this line too, " _newline ///
 	"and this line too. Well done :)"
 
-* You will have to do the same for code loops, such as "foreach {}" loops.
-* You will ususually be warned before in the comments.
+* You will have to do the same for code loops, such as 'foreach {}' loops.
+* You will usually be warned before in the comments. Finally, note that these
+* multiple-line commands do *not* work if you copy-paste from the do-file to
+* the Command window.
 
 
-* Tip (4): Keyboard shortcuts
+* Tip (4): Keyboard shortcuts for Mac (Win)
 
 * - Cmmd-L (Ctrl-L) selects a whole line
 * - Shift + Up/Down arrows selects or deselects neighbouring lines
@@ -160,14 +171,9 @@ di "This is a test. Execute me by selecting this line, " ///
 * =========
 
 
-* The following steps teach you about setting up Stata on any computer. It is
-* recommended that you use your own computer for this class, because this setup
-* works best if you have extensive privileges over your computer system. The
-* computers at Sciences Po grant you user but not admin privileges, which makes
-* setting up Stata much less convenient.
-
-* For starters, make sure that you just launched Stata and have nothing stored
-* in memory. This command will ensure that this is the case:
+* The following steps teach you about setting up Stata on any computer. Start
+* by making sure that you just launched Stata and have nothing stored in memory.
+* The next command will ensure that this is the case:
 clear 
 
 
@@ -198,62 +204,39 @@ set mem 500m, perm
 * will do it automatically.
 
 
-* (2) Breaks
-* ----------
+* (2) Screen breaks
+* -----------------
 
 * By default, Stata uses screen breaks. If you forget to disable those, the
 * 'Results' window will nag you with useless prompts. Save yourself the hassle
 * of screen breaks by disabling them:
 set more off
 
-* Identically to memory, you can disable screen breaks permanently if you are
-* running Stata from your own computer:
+* In fact, let's try to disable them permanently on your computer:
 set more off, perm
 
 
-* (3) Packages
-* ------------
+* (3) Additional commands
+* -----------------------
 
 * Stata can be extended by installing packages, just like you would install a
-* plugin or an extension for another software. Installing packages in Stata is
-* pretty straightforward thanks to its centralised, online server called 'SSC'.
-* Make sure that you are connected to the Internet before continuing, and refer
-* to tutorials or to Stata help pages for additional documentation on packages.
+* plugin or an extension for another software. The packages add new commands or
+* graph schemes to Stata.
 
-* You should be able to permanently install packages on your own computer, but
-* not on Sciences Po computers. In the latter case, you will need to perform a
-* temporary installation at the beginning of each session. To do so, uncomment
-* the following line by removing the '*', and run the command:
+* Make sure that you are connected to the Internet before continuing, so that
+* Stata can connect to the SSC archive and to other online sources. If you are
+* using a Sciences Po workstation, you will also need to uncomment and run the
+* following command to avoid an issue with admin privileges:
 
 * sysdir set PLUS "c:\temp"
 
 * This course makes heavy use of the 'fre' package to view frequencies.
-* Install the package with this command (requires that you are online):
-ssc install fre, replace
+* Install the package by uncommenting and running this command while online:
 
-* The code below will install a selection of packages that should be installed
-* to run the course do-files properly. These packages should have already been
-* installed by the 'srqm setup' command that you should have run when starting
-* to use the SRQM Teaching Pack, but this additional check might avoid running
-* into 'unrecognized command' errors later in class. You will have to select 
-* the complete loop below to execute the code properly.
-foreach p in catplot estout fre lookfor_all spineplot tabout {
-	cap which `p'
-	if _rc==111 cap noi ssc install `p'
-}
+* ssc install fre
 
-* The settings covered in this section of the do-file should now be permanently
-* stored on your computer. You will not need to come back to them. The settings
-* covered in the next section are different in that respect.
-
-
-* ===========
-* = STARTUP =
-* ===========
-
-
-* The following steps cover starting up Stata for this specific course session.
-* You will need to adapt them to your computer system, so pay extra attention.
+* Read the package description:
+ado de fre
 
 
 * (4) Working directory
@@ -263,34 +246,111 @@ foreach p in catplot estout fre lookfor_all spineplot tabout {
 * datasets or logs. Use the 'pwd' command to see where Stata is looking now.
 pwd
 
+* Use 'ls' command to list the files where Stata is looking. The 'w' option will
+* cause the command to print only the filenames without system information.
+ls, w
+
 * For this course, you need to set the working directory to the SRQM folder.
-* This line does that on my (François) computer:
-cap noi cd "/Users/fr/Documents/Teaching/SRQM/"
+* Use the 'File > Change Working Directory...' menu item in the Stata graphical
+* user interface to select the SRQM folder. The path to that foldr will show in
+* the Results window. It might look like this:
+
+* cd "/Users/fr/Documents/Teaching/SRQM/"
 
 * I use Mac OS X, which is why my file path takes that form. Ivaylo uses a PC,
-* and his own working directory is located at "C:\Users\Ivo\Desktop\SRQM". You
-* will need to identify that file path on your own computer. We recommend that
-* you choose a simple location for the SRQM folder and then keep it there.
+* and his own working directory might be set like this:
 
-* Use the 'File > Change Working Directory...' menu item in the Stata graphical
-* user interface to select the SRQM folder. When the course starts, we will run
-* a setup utility that will set your working directory automatically.
+* cd "C:\Users\Ivo\Desktop\SRQM"
 
-* The 'cd' command navigates through your folders. The next example selects
-* the folder that contains the course dataset. The quotes can be omitted when
-* the path contains no spaces, but we will use them systematically to keep the
-* course code consistent.
-cd "Replication"
+* You will need to identify that file path on your own computer. Choose a simple
+* location for the SRQM folder and then keep it there without renaming it or any
+* of the folders that lead to it. Be careful with that, or you will get errors
+* when trying to study for the course.
 
-* Go back one directory, which returns to the SRQM folder.
-cd ..
+* The 'cd' command shown above navigates through your folders. The next example
+* assumes that you are now in the SRQM folder. It will select the folder that
+* contains the course do-files. The quotes can be omitted when the path contains
+* no spaces, but we will use them systematically for consistency:
 
-* The complement to the 'cd' command is the 'ls' command to list files.
-ls
+* cd "Replication"
+
+* Now go back one level to return to the SRQM folder:
+
+* cd ..
+
+* Finally, list the files without moving to a directory
+
+* The settings covered in this section of the do-file should now be permanently
+* stored on your computer. You will not need to come back to them. Furthermore,
+* the course uses a setup utility program that silently checks on them for you.
 
 
-* (5) Dataset
-* -----------
+* (5) Log
+* -------
+
+* You can save the commands and results from this do-file to a log file, which
+* will serve as a backup of your work. To log this session, type:
+log using "Replication/week1.log", replace
+
+* The log command will now create a history of your work on this do-file. You
+* should keep it for replication purposes. It will log all your commands and
+* their results, including commands that returned an error. Refer to the Stata
+* Guide for further guidance on log files, and do not forget to produce logs in
+* the .log plain text format rather than in the less handy SMCL default format.
+* Also make sure that you specify the 'replace' option to overwite any previous
+* log file that might have been created by running this do-file in the past.
+* The 'name' option can be omitted.
+
+* Now run these example commands (do not worry about the comments, you can leave
+* them where they are and 'execute' them too, Stata will just ignore them):
+
+d year sex weight raceb  // describe a few variables
+keep if year==2009       // keep observations for year 2009
+
+* Calculate the frequencies for each racial-ethnic group.
+fre raceb
+
+* Obtain summary statistics for the weight variable.
+su weight
+
+* List gender groups from the sex variable.
+tab sex
+
+* Crosstabulate sex and race.
+tab raceb
+
+* Plot average weight by sex and race.
+gr dot weight, over(raceb) over(sex) name(weight_race_sex, replace)
+
+* To close the log file previously opened, type the following command:
+cap log close
+
+* You will not be able to run the above command if no log is opened. The 'cap'
+* prefix allows you to run the command and continue even if it returns an error.
+* To close any other opened log, uncomment and run the following command:
+
+* log close _all
+
+* If you now go to your 'Replication' folder and open the week1.log file with 
+* any plain text editor, you will find a copy of everything that was entered 
+* between the 'log using' and 'log close' commands, including comments, the 
+* example above and its output for each command. You can view the file in Stata:
+view "Replication/week1.log"
+
+* The dot graph will need to be saved separately: this can be done in several
+* ways that are documented in the course slides and in the Stata Guide. The
+* Stata help pages also cover each graph command. Have a look at them:
+help graph
+
+* Identically, there is more about logs in the Stata Guide and in several of
+* the tutorials included in the course material, but we also recommend that you
+* use the Stata help pages, as explained below.
+
+
+* ============
+* = DATASETS =
+* ============
+
 
 * Show all datasets for this course. The asterisk in the command is an escape 
 * character that causes the command to return all matches (within .dta files).
@@ -327,66 +387,6 @@ use "Datasets/nhis2009.dta", clear
 * Stata can only open one dataset at once.
 
 
-
-* (6) Log
-* -------
-
-* You can save the commands and results from this do-file to a log file, which
-* will serve as a backup of your work. To log this session, type:
-log using "Replication/week1.log", name(week1) replace
-
-* The log command will now create a history of your work on this do-file. You
-* should keep it for replication purposes. It will log all your commands and
-* their results, including commands that returned an error. Refer to the Stata
-* Guide for further guidance on log files, and do not forget to produce logs in
-* the .log plain text format rather than in the less handy SMCL default format.
-* Also make sure that you specify the 'replace' option to overwite any previous
-* log file that might have been created by running this do-file in the past.
-* The 'name' option can be omitted.
-
-* Now run these example commands (do not worry about the comments):
-
-d year sex weight raceb  // describe a few variables
-keep if year==2009       // keep observations for year 2009
-
-* Calculate the frequencies for each racial-ethnic group.
-fre raceb
-
-* Obtain summary statistics for the weight variable.
-su weight
-
-* List gender groups from the sex variable.
-tab sex
-
-* Crosstabulate sex and race.
-tab raceb
-
-* Plot average weight by sex and race.
-gr dot weight, over(raceb) over(sex) name(weight_race_sex, replace)
-
-* To close the 'week1' log file previously opened, type the following command:
-log close week1
-
-* You will not be able to run the above command if no 'week1' log is opened.
-* To close all potentially opened logs, use the following command (uncomment
-* it first by removing the asterisk at the beginning of the command line):
-* cap log close _all
-
-* If you now go to your 'Replication' folder and open the week1.log file with 
-* any plain text editor, you will find a copy of everything that was entered 
-* between the 'log using' and 'log close' commands, including comments, the 
-* example above and its output for each command.
-
-* The dot graph will need to be saved separately: this can be done in several
-* ways that are documented in the course slides and in the Stata Guide. The
-* Stata help pages also cover each graph command. Have a look at them:
-help graph
-
-* Identically, there is more about logs in the Stata Guide and in several of
-* the tutorials included in the course material, but we also recommend that you
-* use the Stata help pages, as explained below.
-
-
 * ========
 * = HELP =
 * ========
@@ -414,15 +414,10 @@ help if
 * to realise how quick accessing Stata help pages can be:
 h su
 
-* Finally, take a look at the help page for 'cap' prefix that we used with the
-* 'log close' command above. You will not need to use this command yourself, 
-* but it comes in handy if you engage in more advanced Stata programming.
-h cap  
 
-
-* ========
-* = EXIT =
-* ========
+* =======
+* = END =
+* =======
 
 
 * The course will teach you to write commands like the ones featured in this
@@ -437,7 +432,7 @@ h cap
 * additional help, please turn again to the Stata Guide.
 
 * Close log (if still opened, which it should not).
-cap log close week1
+cap log close
 
 * We are done. Just quit the application, have a nice week, and see you soon :)
 * exit, clear

@@ -3,22 +3,29 @@
 * When: 2012-01-26
 
 
-* ================
-* = INTRODUCTION =
-* ================
+* =========
+* = SETUP =
+* =========
+
+
+* Required commands.
+foreach p in estout {
+	cap which `p'
+	if _rc==111 cap noi ssc install `p' // install from online if missing
+}
+
+* Export log.
+cap log using "Replication/week12.log" replace
+
+
+* ===========
+* = DATASET =
+* ===========
 
 
 * Data: Quality of Government (2011).
 use "Datasets/qog2011.dta", clear
 
-* Log.
-cap log using "Replication/week12.log", name(week12) replace
-
-* Additional packages
-foreach p in estout {
-	cap which `p'
-	if _rc==111 ssc install `p'
-}
 
 * ================
 * = DESCRIPTIONS =
@@ -398,7 +405,7 @@ esttab, constant label beta(2) se(2) r2(2) nonumber ///
 * That's all folks!
 
 * Close log (if opened).
-cap log close week12
+cap log close
 
 * We are done. Just quit the application, have a nice life, and see you later!
 * exit, clear

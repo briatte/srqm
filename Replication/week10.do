@@ -3,10 +3,28 @@
 * When: 2011-11-21
 
 
-* ================
-* = INTRODUCTION =
-* ================
+* =========
+* = SETUP =
+* =========
 
+
+* Required commands.
+foreach p in fre {
+	cap which `p'
+	if _rc==111 cap noi ssc install `p' // install from online if missing
+}
+
+* Log results.
+cap log using "Replication/week10.log", replace
+
+
+* ===========
+* = DATASET =
+* ===========
+
+
+* Dataset: U.S. General Social Survey from 2010.
+use "Datasets/gss2010.dta", clear
 
 * RESEARCH QUESTION:
 * Do men have more sexual partners than women?
@@ -20,18 +38,6 @@
 * IVs:
 * Gender, age, family income, education, marital status, working status, and
 * size of residential area.
-
-* Dataset: U.S. General Social Survey from 2010.
-use "Datasets/gss2010.dta", clear
-
-* Log.
-cap log using "Replication/week10.log", name(week10) replace
-
-
-* =========================
-* = FINALIZING THE SAMPLE =
-* =========================
-
 
 * Keep variables of interest and respondent ID.
 keep id partnrs5 sex age coninc educ marital wrkstat size
@@ -53,9 +59,9 @@ recode sex (1=0 "Male") (2=1 "Female"), gen(female)
 drop sex
 
 
-* =============
-* = ANALYSIS =
-* =============
+* ================
+* = DESCRIPTIONS =
+* ================
 
 
 * Explore the DV.
@@ -66,6 +72,12 @@ hist partnrs5, bin(10) percent addl
 tab partnrs5 female, nofreq col chi2
 gr hbar partnrs5, over(female)
 ttest partnrs5, by(female)
+
+
+* ==========
+* = MODELS =
+* ==========
+
 
 * A simple linear regression model test.
 reg partnrs5 i.female
@@ -98,6 +110,10 @@ fre marital
 
 * Finally, let's control for age.
 reg partnrs5 i.female coninc2 educ size i.wrkstat i.marital age
+
+
+* Reinterpretation of the constant
+* --------------------------------
 
 * Lastly, the constant reflects the value of y when the IVs are equal to the 
 * reference category for the categorical IVs (i.e., males, full-time employment,
@@ -138,7 +154,7 @@ reg partnrs5 i.female zconinc2 zeduc zsize i.wrkstat i.marital zage
 
 
 * Close log (if opened).
-cap log close week10
+cap log close
 
 * We are done. Just quit the application, have a nice week, and see you soon :)
 * exit, clear

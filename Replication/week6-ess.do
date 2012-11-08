@@ -1,27 +1,41 @@
-* What: SRQM Session 7
+* What: SRQM Session 6
 * Who:  F. Briatte and I. Petev
-* When: 2011-10-12
+* When: 2012-11-05
 
 
-* ================
-* = INTRODUCTION =
-* ================
+* =========
+* = SETUP =
+* =========
+
+
+* Required commands.
+foreach p in fre catplot {
+	cap which `p'
+	if _rc==111 cap noi ssc install `p' // install from online if missing
+}
+
+* Log results.
+cap log using "Replication/week7.log", replace
+
+
+* ===========
+* = DATASET =
+* ===========
 
 
 * Data: European Social Survey, Round 4 (2008).
 use "Datasets/ess2008.dta", clear
 
-* Log.
-cap log using "Replication/week7.log", name(week7) replace
-
-* Weights.
+* Survey weights.
 svyset [pw=dweight] // weighting scheme set to country-specific population
 
-* Additional packages.
-foreach p in fre catplot {
-	cap which `p'
-	if _rc==111 ssc install `p'
-}
+* Rename variables to short handles.
+ren (cntry) (country)
+ren (agea gndr hinctnta eduyrs) (age sex income edu) // socio-demographics
+ren (rlgblg rlgdnm lrscale tvpol) (rel denom pol tv) // religion, politics
+
+* Have a quick look.
+codebook country age sex income edu rel denom pol tv, c
 
 
 * ================
@@ -29,10 +43,9 @@ foreach p in fre catplot {
 * ================
 
 
-* DV: Justifiability of torture
-* -----------------------------
+* DV: Justifiability of torture in event of preventing terrorism
+* --------------------------------------------------------------
 
-* Attitudes towards torture (hypothetical terrorist scenario).
 fre trrtort
 
 * Binary recoding (1=torture is never justifiable; undecideds removed).
@@ -45,19 +58,20 @@ la var torture "Opposition to torture"
 * Overall opposition to torture in Europe.
 fre torture
 tab torture [aw=dweight*pweight]   // weighted by overall European population
-bys cntry: ci torture [aw=dweight] // weighted by country-specific population
+bys country: ci torture [aw=dweight] // weighted by country-specific population
 
 * Average opposition to torture in each country.
-gr dot torture [aw=dweight], over(cntry, sort(1) des) scale(.7)
+gr dot torture [aw=dweight], over(country, sort(1) des) scale(.7) ///
+	name(torture, replace)
 
 * Detailed breakdown in each country.
-catplot trrtort [aw=dweight], over(cntry, sort(1)des lab(labsize(*.8))) ///
-	asyvars percent(cntry) stack scale(.7) ytitle("") ///
+catplot torture [aw=dweight], over(country, sort(1)des lab(labsize(*.8))) ///
+	asyvars percent(country) stack scale(.7) ytitle("") ///
 	legend(rows(1) label(3 "Neither") region(fc(none) ls(none))) scheme(burd4) ///
 	name(torture, replace)
 
 * Comparing Israel to other European countries.
-gen israel:israel = (cntry=="IL")
+gen israel:israel = (country=="IL")
 la de israel 1 "Israel" 0 "Other EU"
 
 * Comparison of average opposition to torture inside and outside Israel.
@@ -70,7 +84,7 @@ drop if israel
 * IV: Age
 * -------
 
-ren agea age
+su age
 
 * Check normality.
 hist age, bin(15) normal
@@ -102,7 +116,9 @@ ttest age, by(torture)
 * IV: Gender
 * ----------
 
-recode gndr (1=0 "Male") (2=1 "Female") (else=.), gen(female) // dummify
+fre sex
+
+recode sex (1=0 "Male") (2=1 "Female") (else=.), gen(female) // dummify
 la var female "Gender"
 
 * Significance tests:
@@ -115,7 +131,7 @@ prtest torture, by(female)
 * IV: Income deciles
 * ------------------
 
-ren hinctnta income
+fre income
 
 * Average opposition to torture in each income decile.
 gr bar torture, over(income)
@@ -136,7 +152,7 @@ tab torture income4, exp chi2 V
 * IV: Education
 * -------------
 
-ren eduyrs edu
+fre edu
 
 * Verify normality.
 hist edu, bin(15) normal
@@ -148,25 +164,25 @@ ttest edu, by(torture)
 * IV: Religious faith
 * -------------------
 
-fre rlgblg rlgdnm
+fre rel denom
 
 * Comparison of proportions in each category.
-prtest torture, by(rlgblg)
+prtest torture, by(rel)
 
 * Recoding to simpler groups.
-recode rlgdnm (.a=1 "Not religious") (1/4=2 "Christian") ///
-	(5=3 "Jewish") (6=4 "Muslim") (7/8=.) , gen(faith)
-la var faith "Religious faith"
+recode denom (.a=1 "Not religious") (1/4=2 "Christian") ///
+	(5=3 "Jewish") (6=4 "Muslim") (7/8=.) , gen(faith4)
+la var faith4 "Religious faith"
 
 * Conditional probabilities:
-tab torture faith, col nof    // column percentages
-tab torture faith, row nof    // rows percentages
+tab torture faith4, col nof    // column percentages
+tab torture faith4, row nof    // rows percentages
 
 * Significance tests:
-tab torture faith, exp chi2 V
+tab torture faith4, exp chi2 V
 
 * Create a binary variable for each category.
-tab faith, gen(faith_)
+tab faith4, gen(faith_)
 d faith_*
 codebook faith_*, c
 
@@ -186,7 +202,7 @@ prtest torture, by(faith_4)
 * IV: Political positioning
 * -------------------------
 
-ren lrscale pol
+fre pol
 
 * Verifying normality.
 hist pol, discrete percent addl
@@ -212,17 +228,17 @@ prtest torture, by(left)
 * IV: Media exposure
 * ------------------
 
-fre tvpol
+fre tv
 
 * Alternative reading (binary mean). The nolabel (nol) option gets rid of the
 * value labels and makes the output table a tad softer on the reader's eye.
-tab tvpol, summ(torture) nol
+tab tv, summ(torture) nol
 
 * Alternative reading (plot).
-tab tvpol, plot
+tab tv, plot
 
 * Recoding to binary.
-recode tvpol (0/3=0 "Low") (4/7=1 "High"), gen(media)
+recode tv (0/3=0 "Low") (4/7=1 "High"), gen(media)
 la var media "Media exposure"
 
 * Crosstabulation; Fisher's exact test.
@@ -273,20 +289,20 @@ logit torture media
 logit torture media, or     // odds ratio against lo media exposure
 logit torture ib1.media, or // odds ratio against hi media exposure
 
+
 * Complex example
 * ---------------
 
 tab torture income4
-tab torture faith
 
 * Odds across income deciles.
 tabodds torture income, ciplot ///
 	yti("Odds of opposing torture") xti("HH income deciles") ///
-	xlab(1 10)
+	xlab(1 "Lowest" 10 "Highest")
 
 * Smoother results with less income granularity.
 tabodds torture income4, ciplot ///
-	yti("Odds of opposing torture") xti("HH income deciles") ///
+	yti("Odds of opposing torture") xti("HH income quartiles") ///
 	xlab(1 "Lowest" 4 "Highest")
 
 
@@ -296,7 +312,7 @@ tabodds torture income4, ciplot ///
 
 
 * Close log (if opened).
-cap log close week7
+cap log close
 
 * We are done. Just quit the application, have a nice week, and see you soon :)
 * exit, clear

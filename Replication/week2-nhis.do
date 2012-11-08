@@ -3,9 +3,9 @@
 * When: 2012-01-26
 
 
-* ================
-* = INTRODUCTION =
-* ================
+* =========
+* = SETUP =
+* =========
 
 
 * Hi! Welcome to your second SRQM do-file.
@@ -20,8 +20,19 @@
 * NHIS 2009 dataset with a few basic, descriptive Stata commands. This implies
 * that you have acess to the dataset on your current computer.
 
+* To run this do-file, you might need to install additional commands first.
+* The next lines will check this: select the whole block and execute it. If you
+* have run the course setup, everything is already in place. Otherwise, if
+* you are online, a few additional packages will be installed into Stata. If
+* you skip the setup and checks, you will get 'unrecognized command' errors.
+foreach p in fre {
+	cap which `p'
+	if _rc==111 cap noi ssc install `p' // install from online if missing
+}
+
+
 * Log the commands and results from this do-file.
-cap log using "Replication/week2.log", name(week2) replace
+cap log using "Replication/week2.log" replace
 
 * Data: U.S. National Health Interview Survey (2009).
 use "Datasets/nhis2009.dta", clear
@@ -272,7 +283,7 @@ gr dot health, exclude0 yreverse over(sex) over(raceb) ///
 
 
 * Close log (if opened).
-cap log close week2
+cap log close
 
 * The command above closes the log that we opened when we started this do-file.
 * Logs are essential to keep records of your analysis. They complement do-files,

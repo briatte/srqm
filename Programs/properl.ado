@@ -1,3 +1,6 @@
+
+// properl: proper capitalization of value labels
+
 cap pr drop properl
 program properl
 	syntax varlist, [Verbose]
@@ -26,3 +29,5 @@ program properl
 	if `verbose' di _n "Thanks to William Huber for the code." _n ///
 		"http://stackoverflow.com/questions/12591056/capitalizing-value-labels-in-stata"	
 end
+
+// done

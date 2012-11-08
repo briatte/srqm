@@ -1,85 +1,22 @@
 # SRQM: Replication code
 
-This document lists the replication do-files required to follow the [Statistical Reasoning and Quantitative Methods](http://f.briatte.org/teaching/quanti/) (SRQM) course run at Sciences Po by François Briatte and Ivaylo Petev.
+This folder contains the replication do-files required to follow the [Statistical Reasoning and Quantitative Methods](http://f.briatte.org/teaching/quanti/) (SRQM) course run at Sciences Po by François Briatte and Ivaylo Petev.
+
+## Coursework
+
+All students are required to execute the full do-file at home as a review and extension of the practice session that is run every week of class. Executing the code requires running commands sequentially, one after the other, while reading their syntax and comments.
+
+## Commands
+
+The course do-files use built-in Stata commands as well as a few additional ones that are installed from online in the first week of class, as described in the [README](https://github.com/briatte/srqm/blob/master/README.md) file of the `SRQM` folder.
+
+All course do-files use a short `foreach` loop to make sure that their additional commands are properly installed, which means that the code should execute properly even if your workstation is not fully setup for the course.
+
+Once installed, commands are documented from within Stata with the `help` command. The only exceptions are the two following teaching utilities, which are loaded from the `Programs` folder and documented in its [README](https://github.com/briatte/srqm/blob/master/Programs/README.md) file instead: 
+
+- `stab` exports summary statistics, *t*-tests and correlations
+- `repl` exports complete research projects (do-file, log, tables, plots)
+
+## Datasets
 
 The datasets used in the do-files are stored in the `Datasets` folder and are documented in its [README](https://github.com/briatte/srqm/blob/master/Datasets/README.md) file. For the do-files to execute properly, the working directory must be set to the `SRQM` folder.
-
-* * *
-
-## Contents
-
-The following tables list the different files and the datasets that they load.
-
-### Replication homework:
-
-| Filename    | Data |
-|:------------|:-----|
-| `week1.do`  | Many |
-| `week2.do`  | NHIS |
-| `week3.do`  | WVS	 |
-| `week4.do`  | NHIS |
-| `week5.do`  | ESS  |
-| `week6.do`  | ESS  |
-| `week7.do`  | QOG  |
-| `week8.do`  | QOG  |
-| `week9.do`  | GSS  |
-| `week10.do` | EBM  |
-| `week11.do` | QOG  |
-| `week12.do` | Many |
-
-*Note:* the first and last sessions use a mix of external datasets.
-
-### Draft templates:
-
-| Filename    | Data |
-|:------------|:-----|
-| `draft1.do` | NHIS |
-| `draft2.do` | NHIS |
-| `draft3.do` | ESS	 |
-
-## Syntax
-
-Each do-file follows more or less the same code structure. The next table lists common sections and commands, as covered in class during the practice hour of each session:
-
-| Block     | Commands |
-|:----------|:------------------------------------ |
-| Setup     | Folders, packages, log.              |
-|           | `ssc install` |
-|           | `cd`, `ls`, `mkdir` |
-|           | `browse`, `doedit` |
-|           | `do`, `run`, `log` |
-| Data      | Load, subset, weight. |
-|           | `use`, `clear` |
-|           | `d`, `codebook`, `ren` |
-|           | `count`, `if`, `in` |
-|           | `keep`, `drop`, `mi()` |
-|           | `svyset` |
-| Variables | Descriptions, recodes, summary.      |
-|           | `su`, `fre`, `tab` |
-|           | `replace`, `recode`, `irecode` |
-|           | `la`, `decode`, `encode` |
-|           | `ci`, `ciplot` |
-|           | `hist`, `kdensity`, `gladder` |
-|           | `symplot`, `pnorm`, `qnorm` |
-|           | `catplot`, `gr box`, `gr dot` |
-|           | `spineplot`, `sc` |
-|           | `tabout` |
-| Model     | Tests, estimation, diagnosis.        |
-|           | `ttest`, `prtest`, `tabchi` |
-|           | `corr`, `pwcorr`, `mkcorr` |
-|           | `reg`, `predict` |
-|           | `rvfplot`, `rvpplot`, `vif` |
-|           | `logit`, `margins`, `marginsplot`    |
-|           | `tsset`, `xtset` |
-|           | `estout` |
-| End       | Clear, stop, bye.                    |
-|           | `exit` |
-
-In the actual do-files, some commands have been given simpler alternatives further documented in the [README](https://github.com/briatte/srqm/blob/master/Programs/README.md) file of the `Programs` folder:
-
-- `ssc install` commands are replaced with the less intrusive `packages_required` command
-- `tabout` is demonstrated alongside the simpler `tsst` alternative to export summary statistics
-
-* * *
-
-Running the code for this course usually requires that you are connected to the Internet and that you have followed the setup instructions detailed in the [README](https://github.com/briatte/srqm/blob/master/README.md) file of the `SRQM` folder.

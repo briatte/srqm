@@ -2,15 +2,7 @@
 
 This document lists the programs included with the [Statistical Reasoning and Quantitative Methods](http://f.briatte.org/teaching/quanti/) (SRQM) course run at Sciences Po by François Briatte and Ivaylo Petev.
 
-The `Programs` folder contains the following teaching utilities:
-
-- the `burd` graph schemes to obtain the same plots as the ones shown in the course documentation
-- the `require` command to check for the existence of commands installed by additional packages
-- the `properl` command to capitalize the first letters of variable labels
-- the `srqm` commands to set up a computer for the course (see the [README](https://github.com/briatte/srqm/blob/master/README.md) file of the `SRQM` folder)
-- the `tsst` command to export summary statistics tables as tab-separated values
-
-All commands were written to assist students in completing their research projects. The rest of this file describes all commands in more detail than necessary to run them in class.
+All commands were written to assist students in completing their research projects. This file describes all commands in more detail than necessary to run them in class.
 
 * * *
 
@@ -21,6 +13,10 @@ The series of ten `scheme-burd` files contain reversed versions of the `RdBu` [C
 ## `properl`
 
 Sets the labels of a variable to their proper capitalization, using code kindly provided by William A. Huber as an answer to a [StackOverflow question](http://stackoverflow.com/questions/12591056/capitalizing-value-labels-in-stata). Occasionally used for data management.
+
+## `repl`
+
+Creates a replication folder out of a do-file. The folder will contain the do-file, log and all plots that were assigned a `name()` in the code. It will also contain any file exported from the do-file, and a README file.
 
 ## `require`
 
@@ -103,32 +99,31 @@ Unlinks Stata from the `SRQM` folder by erasing the `profile.do` file that is in
 
 Uninstalls course packages. Used for testing purposes.
 
+## `stab`
+
+Produces summary statistics and correlation matrix tables in the format required for course research projects. The command was built on top of the `tsst` command to improve student reports of summary statistics.
+
+The basic syntax for `stab` is:
+
+	stab using week8 [aw,fw], su(v1 v2) corr fr(v3 v4) ttest prtest by() [f(0) replace]
+
+The `su` option is meant produces five-number summaries out of continuous variables. The `fr` option produces frequencies out of categorical variables. Both results are combined in a single table.
+
+The `by(varname)` option can create multiple tables based on the categories of `varname`. The `corr` option adds a correlation matrix of the continuous variables specified in `su`. The `ttest` option adds *t*-tests for all groups.
+
 ## `tsst`
 
 Produces a simple table of summary statistics as required for the course research project. The code draws on [a tutorial by Ben Jann](http://www.stata.com/meeting/uk09/uk09_jann.pdf).
 
 The command is very barebones and means 'tabbed summary statistics table' because it produces tab-separated values in plain text format, for maximum compatibility with text and spreadsheet editors.
 
-### Syntax
+The basic syntax for `tsst` is:
 
-	tsst using stats.txt [weight], su(v1 v2) fr(v3 v4) [f(1) replace verbose]
+	tsst using stats.txt [aw,fw,pw], su(v1 v2) fr(v3 v4) [f(0) replace]
 
 The `su` option is meant produces five-number summaries out of continuous variables. The `fr` option produces frequencies out of categorical variables. Both results are combined in a single table.
 
-#### Options
-
-- The `tsst` command accepts analytical, frequency and probability weights `[aw,fw,pw]`. It does not, however, support the `svy` survey prefix command.
-- The command uses a default precision of one decimal that can be changed by specifying a different number `n` with the `f(n)` option.
-- The command will overwrite the file to which it exports its results if the `replace` option is specified. Note that there is no `append` option.
-- For testing purposes, it is possible to view the plain text result of the command in the Stata Results window by specifying the `verbose` option.
-
 Far more sophisticated output options appear in packages like `estout` or `tabout`. Tamás Bartus is also [developing](http://web.uni-corvinus.hu/bartus/publish.php) the `publish` command, which comes close to the spirit of the `tsst` command.
-
-#### Help
-
-- Type `tsst` to view a quick syntax sheet.
-- Type `tsst using options` for a list of options.
-- Type `tsst using example` for a working example.
 
 Students are referred to the documentation of their text or spreadsheet editor to learn how to import a tab-separated values document, or how to convert tab-delimited text into tabular output.
 

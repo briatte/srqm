@@ -1,24 +1,30 @@
 * What: SRQM Session 4
 * Who:  F. Briatte and I. Petev
-* When: 2011-09-14
+* When: 2012-11-05
 
 
-* ================
-* = INTRODUCTION =
-* ================
+* =========
+* = SETUP =
+* =========
 
 
-* Log.
-cap log using "Replication/week4.log", name(week4) replace
+* Install commands.
+foreach p in fre {
+	cap which `p'
+	if _rc==111 cap noi ssc install `p'
+}
 
-* Data: U.S. National Health Interview Survey (2009).
-use "Datasets/nhis2009.dta", clear
+* Log results.
+cap log using "Replication/week4.log", replace
 
 
 * ====================
 * = DATA PREPARATION =
 * ====================
 
+
+* Data: U.S. National Health Interview Survey (2009).
+use "Datasets/nhis2009.dta", clear
 
 * Subset to most recent year.
 drop if year != 2009
@@ -142,7 +148,7 @@ li bmi sex raceb if bmi < $q1-3*$iqr | bmi > $q3+3*$iqr, N
 * We draw a histogram with three different elements: the actual bins (bars)
 * of the BMI variable, its kernel density, and an overimposed normal curve
 * that we draw in a different colour using a few graph options.
-hist bmi, kdensity normal normopts(lc(red)) name(bmi, replace)
+hist bmi, kdensity normal kdenopts(lc(blue)) name(bmi, replace)
 
 * The histogram shows what we knew from reading the mean and median of the
 * BMI values: the distribution is skewed to the left, implying that there are
@@ -213,7 +219,9 @@ gr hbox bmi, fysize(25) name(bmi2, replace)
 hist logbmi, normal xscale(off) yscale(off) ///
 	title("Transformed") name(bmi3, replace)
 gr hbox logbmi, fysize(25) name(bmi4, replace)
-gr combine bmi1 bmi3 bmi2 bmi4, imargin(small) ysize(3) col(2)
+gr combine bmi1 bmi3 bmi2 bmi4, imargin(small) ysize(3) col(2) ///
+	name(bmi_comparison, replace)
+gr drop bmi1 bmi2 bmi3 bmi4
 
 
 * ==================
@@ -221,13 +229,78 @@ gr combine bmi1 bmi3 bmi2 bmi4, imargin(small) ysize(3) col(2)
 * ==================
 
 
-* Sample size 
+* A few things about confidence intervals. Remember that all this is based on
+* the assumption that the data follow something like a normal distribution. It
+* applies to continuous variables, for which it is relevant to calculate the 
+* mean. The confidence interval reflects the standard error of the mean (SEM),
+* itself a reflection of sample size.
+
+* Average BMI for the full sample with a 95% CI.
 ci bmi
 
-* Ask Stata to drop all but 50 randomly selected observations,
-* and look again at the standard error and confidence interval.
-sample 50, count
-ci bmi
+* Average BMI for the full sample with a 99% CI (more confidence, less precision).
+ci bmi, level(99)
+
+* The confidence intervals for the full sample show a high precision,
+* both at the 95% (alpha = 0.05) and 99% (alpha = 0.01) levels. This
+* is due to the high number of observations provided for the BMI variable.
+
+* If we start computing the average BMI for subsamples of the population,
+* i.e. for restricted categories of the population, the total number of
+* observations will drop and the confidence interval will widen.
+
+* Average BMI for N=10, 100, 1000 and 10,000 with a 95% CI.
+ci bmi in 1/10
+ci bmi in 1/100
+ci bmi in 1/1000
+ci bmi in 1/10000
+
+* Confidence bands can become useful to detect spurious relationships. See, for
+* instance, how the number of years spent in the U.S. seems to affect the BMI
+* of respondents:
+fre yrsinus
+replace yrsinus=. if yrsinus==0
+
+* We know from previous analysis that BMI varies by gender and ethnicity.
+* We now look for the effect of the number of years spent in the U.S. within
+* each gender and ethnic categories.
+graph dot bmi, over(female) over(yrsinus) over(race) asyvars scale(.7)
+
+* The average BMI of Blacks who spent less than one year in the U.S. shows
+* an outstanding difference for males and females, but this category holds
+* so little observations that the difference should not be considered.
+bysort female: ci bmi if race==2 & yrsinus==1
+
+* Identically, the seemingly clean pattern among male and female Asians is
+* calculated on a low number of observations and requires verification of
+* the confidence intervals. The pattern appears to be rather robust.
+bysort yrsinus: ci bmi if race==4
+
+* EXTRA BONUS!
+
+* A few things about confidence intervals with proportions, for which confidence
+* bands follow a different method of calculation. Basically, categorical data is
+* just dummies for a bunch of categories, and the distribution of binary data
+* can hardly be normal. The binomial distributions applies instead.
+ci female, binomial
+
+* Categorical variables, which can be described through proportions, also
+* come with confidence intervals that reflect the range of values that each
+* category might take in the true population. The proportions of ethnic groups
+* in the U.S., for instance, are somehwere in these intervals:
+prop race
+
+* Actually, if you want to be completely correct, you need to weight the data
+* with the svy: prefix to use the weight settings specified earlier. This will
+* have a tremendous effect on your data in this case, shifting the proportion
+* of White respondents from roughly 60% to roughly 70% of all U.S. adults, the
+* reason being that other racial-ethnic groups are oversampled in NHIS data.
+svy: prop race
+
+* Identically to continuous variables, confidence intervals for categorical
+* data will increase when the total number of observations decreases. The
+* 95% CI for ethnicity on morbidly obese respondents illustrates that issue.
+prop race if bmi > 40
 
 
 * ========
@@ -236,7 +309,7 @@ ci bmi
 
 
 * Close log (if opened).
-cap log close week4
+cap log close
 
 * We are done. Just quit the application, have a nice week, and see you soon :)
 * exit, clear
