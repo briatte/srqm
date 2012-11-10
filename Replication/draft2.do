@@ -11,7 +11,7 @@
 * also requires that you run it from the SRQM working directory.
 
 * Required commands.
-foreach p in fre spineplot catplot tabout tab_chi {
+foreach p in fre spineplot tabout tab_chi {
 	cap which `p'
 	if _rc==111 cap noi ssc install `p' // install from online if missing
 }

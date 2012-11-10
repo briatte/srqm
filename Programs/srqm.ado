@@ -25,10 +25,11 @@ program srqm
 	local course = ("`2'"=="course")
 	
 	// package list
-	local install = "catplot ciplot estout fre kountry leanout log2do2 lookfor_all mkcorr revrs spineplot outreg2 tab_chi tabout clarify"
+	local install = "catplot estout fre leanout lookfor_all mkcorr qog spineplot tab_chi tabout clarify"
+	local extras = "ciplot kountry log2do2 outreg2 revrs _gstd01"
 
 	// dataset list
-	local datasets = "ebm2009 ess2008 gss2010 nhis2009 qog2011 wvs2000"
+	local datasets = "ess2008 gss2010 nhis2009 qog2011 wvs2000"
 
 	// interrupt backup log if any
 	if `log' cap log off backlog
@@ -136,21 +137,26 @@ program srqm
 			// INSTALL PACKAGES
 			//
 			local i=0
+			if "`3'" == "extras" local install = "`install' `extras'"
 			foreach t of local install {
 				local i=`i'+1
+
 				cap which `t'
+				// qoguse/qogmerge and qog inconsistency
+				if "`t'"=="qog" cap which qoguse
 				// tab_chi and tabchi inconsistency
 				if "`t'"=="tab_chi" cap which tabchi
+
 				if _rc==111 | "`3'" == "forced" {
-					di
 					if "`t'"=="clarify" {
 						// note: keep clarify at the end of the install list
 						cap which simqi
 						if _rc==111 cap noi net install clarify, from("http://gking.harvard.edu/clarify")
 					}
-					// which _gstd01
-					// net install _gstd01, from(http://web.missouri.edu/~kolenikovs/stata)
-					//
+					else if "`t'"=="_gstd01" {
+						cap which _gstd01
+						if _rc==111 cap noi net install _gstd01, from("http://web.missouri.edu/~kolenikovs/stata")
+					}
 					else {
 						cap noi ssc install `t', replace						
 					}
@@ -197,15 +203,15 @@ program srqm
 			* Maximum variables.
 			clear all
 			cap set maxvar 5000, perm
-			if _rc==0 di as txt "Maximum variables set to",c(maxvar)
+			if _rc==0 di as txt "Maximum variables set to", c(maxvar)
 			
 			* Scrollback buffer size.
 			cap set scrollbufsize 500000
-			if _rc==0 di as txt "Scrollback buffer size set to",c(scrollbufsize)
+			if _rc==0 di as txt "Scrollback buffer size set to", c(scrollbufsize)
 				
 			* Software updates.
 			cap set update_query off
-	        if _rc==0 di as txt "Software updates set to",c(update_query)
+	        if _rc==0 di as txt "Software updates set to", c(update_query)
 	
 			* More (and better) themes.
 			cap set scheme bw
@@ -213,7 +219,7 @@ program srqm
 			
 			* Course themes.
 			cap set scheme burd, perm
-			if _rc==0 di as txt "Graphics scheme set to",c(scheme)
+			if _rc==0 di as txt "Graphics scheme set to", c(scheme)
 		}
 
 	}

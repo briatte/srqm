@@ -1,6 +1,6 @@
-* What: Example do-file for the final paper
+* What: SRQM Session 11 (new: was draft3)
 * Who:  F. Briatte and I. Petev
-* When: 2012-08-17
+* When: 2012-11-10
 
 * Topic:  Attitudes towards immigration in Europe
 * Survey: European Social Survey, Round 4 (2008)
@@ -12,7 +12,7 @@
 * your do-file runs from beginning to end without any issues.
 
 * Required packages.
-foreach p in estout fre spineplot tab_chi {
+foreach p in estout fre spineplot {
 	cap which `p'
 	if _rc==111 ssc install `p'
 }
@@ -26,19 +26,8 @@ foreach p in estout fre spineplot tab_chi {
 * Data.
 use "Datasets/ess2008.dta", clear
 
-* Create a folder to export all files.
-global pwd=c(pwd)
-global wd "Replication/draft3-files" // !note: edit to fill in your own names
-cap mkdir "$wd"
-cd "$wd"
-
-* Use the black and white graph scheme by Edwin Leuven for figures.
-cap net from "http://leuven.economists.nl/stata"
-cap net install schemes
-cap set scheme bw
-
 * Log.
-//cap log using "draft3.log", name(draft3) replace
+cap log using "week11new.log" replace
 
 * Subsetting to respondents age 25+ with full data.
 drop if age < 25 | mi(imdfetn,agea,gndr,brncntr,edulvla,hinctnta,lrscale)
@@ -103,7 +92,9 @@ la var edu3 "Education level"
 * ------------------
 
 * Export with tsst command.
-tsst using draft3-stats.txt, su(age rightwing) fre(imdfetn female born edu3) replace
+stab using week11, replace ///
+	su(age rightwing) corr
+	fre(imdfetn female born edu3) ttest
 
 
 * Associations
@@ -114,12 +105,12 @@ tab imdfetn, gen(immig_)
 
 * Create age groups.
 gen cohort = irecode(age,24,34,44,54,64,74)
-replace cohort = 25 + 10*(cohort - 1)
+replace cohort = 15 + 10*cohort
 
 * Crossvisualize DV with basic demographics (age, sex and country of birth).
 gr bar immig_*, stack percent over(cohort) yti("") ///
 	legend(lab(1 "Many") lab(2 "Some") lab(3 "Few") lab(4 "None") rows(1)) ///
-	by(female born, note("")) name(demog, replace)
+	by(female born, note("")) scheme(burd4) name(demog, replace)
 
 * Crosstabulation.
 tab female imdfetn, row nof chi2 V // Chi-squared test and Cramer's V
@@ -141,7 +132,7 @@ la val income inc10
 * Visualization of education with income, sex and country of birth.
 gr bar edu_*, stack percent over(income) yti("") ///
 	legend(lab(1 "Low") lab(2 "Medium") lab(3 "High") rows(1)) ///
-	by(female born, note("")) name(edu_inc, replace)
+	by(female born, note("")) scheme(burd3) name(edu_inc, replace)
 
 * Crosstabulation.
 bys female born: tab income edu3, row nof chi2 V // computed for each subgroup
@@ -154,7 +145,7 @@ tab wing, gen(wing_)
 * Visualization of left-right political leaning by income decile and age cohort.
 gr bar wing_*, stack percent over(income) yti("") ///
 	legend(lab(1 "Left-wing") lab(2 "Centre") lab(3 "Right-wing")) ///
-	by(cohort, note("")) legend(rows(1)) name(pol_inc, replace)
+	by(cohort, note("")) legend(rows(1)) scheme(burd3) name(pol_inc, replace)
 
 * Crosstabulation.
 tab income wing, row nof chi2 V
@@ -169,7 +160,7 @@ pwcorr imdfetn age edu3 income rightwing
 * Export correlation matrix.
 eststo clear
 estpost correlate imdfetn age edu3 income rightwing, matrix listwise
-esttab using draft3-corr.csv, unstack not compress label replace
+esttab using week11_correlations.csv, unstack not compress label replace
 
 
 * =========
@@ -217,7 +208,7 @@ rvfplot, name(rvf, replace)     // residuals versus fitted values
 eststo clear
 eststo lin_1: qui reg imdfetn $bl [pw=dpw], b
 eststo lin_2: qui reg imdfetn $bl [pw=dpw], vce(cluster cid)
-esttab lin_* using draft3-lin.csv, mtitles("Baseline OLS" "Adjusted OLS") replace
+esttab lin_* using week11_regressions.csv, mtitles("Baseline OLS" "Adjusted OLS") replace
 
 * The diagnostics clearly identify the issue here: the limited number of levels
 * in the DV is causing residuals to follow a low-dimensional pattern that does
@@ -267,7 +258,7 @@ logit diff $bl [pw=dpw], vce(cluster cid) or
 eststo clear
 eststo log_1: qui logit diff $bl [pw=dpw]
 eststo log_2: qui logit diff $bl [pw=dpw], vce(cluster cid)
-esttab log_* using draft3-log.csv, mtitles("Baseline logit" "Adjusted logit") replace
+esttab log_* using week11_logits.csv, mtitles("Baseline logit" "Adjusted logit") replace
 
 
 * Marginal effects
@@ -290,7 +281,7 @@ marginsplot, xlab(minmax) by(female born) name(mfx_demog, replace)
 * value of age as a predictor for the DV: the marginal effect of age is residual
 * in the model, at least in comparison to other predictors.
 margins born#female, at(age=(25(5)85))
-marginsplot, by(female) name(mfx_age, replace)
+marginsplot, by(female) recast(line) recastci(rarea) ciopts(col(*.6)) name(mfx_age, replace)
 
 
 * Sensitivity analysis
@@ -315,7 +306,7 @@ eststo lin_2: qui reg imdfetn $bl [pw=dpw], vce(cluster cid)
 eststo log_1: qui logit diff $bl [pw=dpw]
 eststo log_2: qui logit diff $bl [pw=dpw], vce(cluster cid)
 eststo log_3: qui ologit imdfetn $bl [pw=dpw], vce(cluster cid)
-esttab lin_* log_* using draft3-models.csv, constant label beta(2) se(2) r2(2) ///
+esttab lin_* log_* using week11_models.csv, constant label beta(2) se(2) r2(2) ///
 	mtitles("Baseline OLS" "Adjusted OLS" "Baseline logit" "Adjusted logit" "Ordered logit") replace
 
 
@@ -325,10 +316,7 @@ esttab lin_* log_* using draft3-models.csv, constant label beta(2) se(2) r2(2) /
 
 
 * Close log (if opened).
-cap log close draft3
-
-* Reset working directory.
-cd "$pwd"
+cap log close week11
 
 * We are done. Thanks for following! And all the best for the future.
 * exit, clear

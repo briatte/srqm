@@ -52,6 +52,7 @@ linewidth pbar               vthin
 anglestyle vertical_tick     horizontal
 
 // From the ColorBrewer 2.0 diverging classes:
+// Bu, Rd, Gn, Or, BG, Pi, 
 // Bu, Rd, Gn, Pr, BG, Br, Gy
 // See other scheme files for reversed BuRd on
 // 4 to 11 scales.
@@ -59,10 +60,13 @@ color p red
 color p1              "33 102 172"
 color p2              "178 24 43"
 color p3              "27 120 55"
-color p4              "118 42 131"
-color p5              "140 81 10"
-color p6              "1 102 94"
-color p7              "77 77 77"
+color p4              "230 97 1"
+color p5              "1 102 94"
+color p6              "197 27 125"
+color p7              "118 42 131"
+color p8              "140 81 10"
+color p9              "77 77 77"
+intensity bar 75
 
 // Marker symbols
 symbol p      circle_hollow

@@ -132,10 +132,10 @@ program stab
 		
 		foreach v of varlist `frequencies' {
 			if "`weight'" == "" {
-				qui cap tab `v' `if' `in', gen(`v'_) matcell(m)
+				qui cap tab `v' `iff' `in', gen(`v'_) matcell(m)
 			}
 			else {
-				qui cap tab `v' `if' `in' [`weight'=`exp'], gen(`v'_) matcell(m)
+				qui cap tab `v' `iff' `in' [`weight'=`exp'], gen(`v'_) matcell(m)
 				// mat li m
 			}
 		    local l: var l `v'
@@ -176,12 +176,12 @@ program stab
 				local diff ""
 				
 				if "`ttest'" != "" {
-					cap qui ttest `dv', by(`v'_`i')
+					cap qui ttest `dv' `iff' `in', by(`v'_`i')
 					if r(p) < .05  local stars = "*"
 					if r(p) < .01  local stars = "**"
 					if r(p) < .001 local stars = "***"
-					local diff = round((r(mu_2)-r(mu_1)),`fl1')
-					local diff = round(`diff',`fl0')
+					local diff = r(mu_2) - r(mu_1)
+					local diff = round(`diff',`fl1')
 					if _rc != 0 local diff = "NA"
 					if _rc != 0 local stars = ""
 					file write `fh' _tab "`diff'" "`stars'" 
@@ -267,7 +267,8 @@ program stab
 					if `p' < .001 local stars = "***"
 					file write `fh' (round(r(rho),`fl1')) "`stars'" _tab 
 				}
-				else if (r(rho) >= 1 | `row'==`col') & (r(rho) != .) {					file write `fh' "1" _tab
+				else if (r(rho) >= 1 | `row'==`col') & (r(rho) != .) {
+					file write `fh' "1" _tab
                 }
 				else file write `fh' "NA" _tab
 
@@ -290,6 +291,6 @@ program stab
 	
 	}
 	
-	di as txt _n "Now look into your working directory for the exported file(s)." _n ///
+	di as txt _n "Now look for the exported file(s) in {browse `c(pwd)'}" _n ///
 		"Remember to describe all variables properly! Enjoy life."
 end

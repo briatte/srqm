@@ -15,7 +15,7 @@ foreach p in fre catplot {
 }
 
 * Log results.
-cap log using "Replication/week7.log", replace
+cap log using "Replication/week6.log", replace // new: 6
 
 
 * ===========
@@ -30,12 +30,11 @@ use "Datasets/ess2008.dta", clear
 svyset [pw=dweight] // weighting scheme set to country-specific population
 
 * Rename variables to short handles.
-ren (cntry) (country)
 ren (agea gndr hinctnta eduyrs) (age sex income edu) // socio-demographics
 ren (rlgblg rlgdnm lrscale tvpol) (rel denom pol tv) // religion, politics
 
 * Have a quick look.
-codebook country age sex income edu rel denom pol tv, c
+codebook cntry age sex income edu rel denom pol tv, c
 
 
 * ================
@@ -49,6 +48,7 @@ codebook country age sex income edu rel denom pol tv, c
 fre trrtort
 
 * Binary recoding (1=torture is never justifiable; undecideds removed).
+cap drop torture
 recode trrtort ///
 	(1/2=1 "Never justifiable") ///
 	(4/5=0 "Sometimes justifiable") ///
@@ -58,20 +58,41 @@ la var torture "Opposition to torture"
 * Overall opposition to torture in Europe.
 fre torture
 tab torture [aw=dweight*pweight]   // weighted by overall European population
-bys country: ci torture [aw=dweight] // weighted by country-specific population
+bys cntry: ci torture [aw=dweight] // weighted by country-specific population
 
 * Average opposition to torture in each country.
-gr dot torture [aw=dweight], over(country, sort(1) des) scale(.7) ///
-	name(torture, replace)
+gr dot torture [aw=dweight], over(cntry, sort(1) des) scale(.7) ///
+	name(torture1, replace)
 
-* Detailed breakdown in each country.
-catplot torture [aw=dweight], over(country, sort(1)des lab(labsize(*.8))) ///
-	asyvars percent(country) stack scale(.7) ytitle("") ///
-	legend(rows(1) label(3 "Neither") region(fc(none) ls(none))) scheme(burd4) ///
-	name(torture, replace)
+
+* Detailed breakdown in each country
+* ----------------------------------
+
+* Delete any previous variable called 'torture_*' where '*' can be anything.
+cap drop torture_*
+
+* Generate dummies called 'torture_1 torture_2' etc. for each DV category.
+tab trrtort, gen(torture_)
+
+* Plot using stacked horizontal bars and a 5-pt scale graph scheme.
+gr hbar torture_* [aw=dweight], stack over(cntry, sort(1)des lab(labsize(*.8))) ///
+	yti("Torture is never justified even to prevent terrorism") ///
+	legend(rows(1) order(1 "Strongly agree" 2 "" 3 "Neither" 4 "" 5 "Strongly disagree")) ///
+	name(torture2, replace) scheme(burd5)
+
+* Let's go a step further and plot the 'Strongly agree/disagree' categories for
+* each country in the sample. The code to get there is tugly: terrifyingly ugly.
+cap drop mean1 mean2 cid
+bys cntry: egen mean1 = mean(torture_1 + torture_2)
+bys cntry: egen mean2 = mean(torture_4 + torture_5)
+bys cntry: gen cid = _n // hack
+sc mean1 mean2 if cid==1, ms(i) mlab(cntry) xsc(r(.15 .4)) ///
+	yti("Opposition to torture") xti("Openness to torture") ///
+	name(torture3, replace)
+
 
 * Comparing Israel to other European countries.
-gen israel:israel = (country=="IL")
+gen israel:israel = (cntry=="IL")
 la de israel 1 "Israel" 0 "Other EU"
 
 * Comparison of average opposition to torture inside and outside Israel.
@@ -87,7 +108,8 @@ drop if israel
 su age
 
 * Check normality.
-hist age, bin(15) normal
+hist age, bin(15) normal ///
+	name(age, replace)
 
 * Recoding to 4 age groups.
 recode age ///
@@ -133,9 +155,6 @@ prtest torture, by(female)
 
 fre income
 
-* Average opposition to torture in each income decile.
-gr bar torture, over(income)
-
 * Recoding to 4 income groups.
 recode income (1/3=1 "D1-D3") (4/6=2 "D4-D6") ///
 	(7/9=3 "D7-D9") (10=4 "D10"), gen(income4)
@@ -155,7 +174,8 @@ tab torture income4, exp chi2 V
 fre edu
 
 * Verify normality.
-hist edu, bin(15) normal
+hist edu, bin(15) normal ///
+	name(edu, replace)
 
 * Comparison of average educational attainment in each category.
 ttest edu, by(torture)
@@ -246,64 +266,6 @@ tab torture media, col nof exact
 
 * Comparing respondents with high TV exposure to others.
 prtest torture, by(media)
-
-
-* ===============
-* = ODDS RATIOS =
-* ===============
-
-
-* Odds ratios are common in biostatistics, where analysts are often interested
-* in calculating the risk ratio of exposure to a given pathological factor. We
-* used the odds ratios here to change our initial perspective on the variable:
-* instead of measuring opposition to torture, the odds ratios above relate to
-* supporters of torture among those exposed to TV news, as compared to support
-* among unexposed respondents.
-
-
-* Simple example
-* --------------
-
-tab torture media
-
-* Handiest way to get odds:
-tabodds torture media // shows the odds of being a 'case' instead of a 'control'
-tabodds torture media, ciplot
-
-* Odds ratios:
-tabodds torture media, or base(1) // odds ratio against lo media exposure
-tabodds torture media, or base(2) // odds ratio against hi media exposure
-
-* Save the crosstabulated frequencies to a matrix.
-tab torture media, col nof exact matcell(odds)
-
-* Build an odds-ratios statement.
-di as txt _n "Respondents with low political TV news exposure were about " ///
-	round((odds[2,1]*odds[1,2])/(odds[1,1]*odds[2,2]),.01) " times " ///
-	_n "less likely to systematically support torture than other respondents."
-
-* Simple logistic regression provides the same result, except it uses log-odds
-* to simplify interpretation: negative log-odds are odds under 1, i.e. lesser
-* likelihood, while positive log-odds indicvate higher likelihood.
-logit torture media
-logit torture media, or     // odds ratio against lo media exposure
-logit torture ib1.media, or // odds ratio against hi media exposure
-
-
-* Complex example
-* ---------------
-
-tab torture income4
-
-* Odds across income deciles.
-tabodds torture income, ciplot ///
-	yti("Odds of opposing torture") xti("HH income deciles") ///
-	xlab(1 "Lowest" 10 "Highest")
-
-* Smoother results with less income granularity.
-tabodds torture income4, ciplot ///
-	yti("Odds of opposing torture") xti("HH income quartiles") ///
-	xlab(1 "Lowest" 4 "Highest")
 
 
 * ========

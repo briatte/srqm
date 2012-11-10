@@ -3,7 +3,7 @@
 // This file sets up a computer for use with the SRQM course. It creates another
 // profile.do file in the Stata application folder. See README file for details.
 
-*! http://f.briatte.org/teaching/quanti/  Sciences Po, Spring 2013  Version 1.3
+*! http://f.briatte.org/teaching/quanti/  Sciences Po, Spring 2013  Version 1.4
 
 set more off, perm
 
@@ -39,7 +39,7 @@ if c(update_query)=="on" | c(more)=="on" | c(scheme) != "burd" {
 
 // link
 
-if "$srqm_wd" != c(pwd) {
+if "$srqm_wd" != "`c(pwd)'" {
 	noi di as txt _n ///
 		"(It looks like we need to (re)locate the SRQM folder.)"
 	cap noi srqm setup folder, nolog

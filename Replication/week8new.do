@@ -1,4 +1,4 @@
-* What: SRQM Session 9
+* What: SRQM Session 9 (new: 8)
 * Who:  F. Briatte and I. Petev
 * When: 2012-11-05
 
@@ -24,14 +24,14 @@ cap log using "Replication/week9.log", replace
 * Graph macro.
 global ci "legend(off) lp(dash)"
 
-gen region:region = ht_region
+//gen region:region = ht_region // new: moved to w8
 
 * Recode and relabel values.
-recode region (6/10=6)
-la de region 1 "E. Europe and PSU" 2 "Lat. America" ///
-	3 "N. Africa and M. East" 4 "Sub-Sah. Africa" ///
-	5 "W. Europe and N. America" 6 "Asia, Pacific and Carribean" ///
-	, modify
+//recode region (6/10=6)
+//la de region 1 "E. Europe and PSU" 2 "Lat. America" ///
+//	3 "N. Africa and M. East" 4 "Sub-Sah. Africa" ///
+//	5 "W. Europe and N. America" 6 "Asia, Pacific and Carribean" ///
+//	, modify
 
 
 * ==========
