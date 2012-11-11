@@ -32,7 +32,7 @@ foreach p in fre {
 
 
 * Log the commands and results from this do-file.
-cap log using "Replication/week2.log" replace
+cap log using "Replication/week2.log", replace
 
 * Data: U.S. National Health Interview Survey (2009).
 use "Datasets/nhis2009.dta", clear
