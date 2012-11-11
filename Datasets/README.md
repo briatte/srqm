@@ -10,37 +10,17 @@ Please also remember to **systematically cite the data source and authors**, aft
 
 | Filename		 | Data							         | Author/Year of release		 |
 |:---------------|:--------------------------------------|:------------------------------|
-| `ebm2009`		 | Eurobarometer Special Report			 | 2009							 |
 | `ess2008`		 | European Social Survey				 | 2008							 |
 | `gss2010`		 | General Social Survey				 | 2010							 |
 | `nhis2009`	 | National Health Interview Survey		 | 2009							 |
 | `qog2011`		 | Quality of Government				 | 2011							 |
 | `wvs2000`		 | World Values Survey					 | 2000							 |
 
-A selection of other sources is shown at the end of this document. Please remember that other sources are allowed for research projects *if and only if you can quickly show skills in data management*.
-
 ### Usage commands:
 
-The Stata commands included at the end of each dataset description require that the `SRQM` folder has been set as the working directory, as explained in a separate [README](https://github.com/briatte/srqm/blob/master/README.md) file.
+The Stata commands included at the end of each dataset description require that the `SRQM` folder has been set as the working directory, as explained in its [README](https://github.com/briatte/srqm/blob/master/README.md) file.
 
-* * *
-
-## ebm2009
-
-The `ebm2009` dataset holds data from the Special Eurobarometer, [Ref. 311 Wave 71.1](http://ec.europa.eu/public_opinion/archives/eb_special_320_300_en.htm) (2009), on "Europeans and the Economic crisis":
-
-> Special Eurobarometer reports are based on in-depth thematical studies carried out for various services of the European Commission or other EU Institutions and integrated in Standard Eurobarometer's polling waves. Reproduction is authorized, except for commercial purposes, provided the source is acknowledged.  
-<http://ec.europa.eu/public_opinion/archives/eb_special_en.htm>
-
-### Additional documentation:
-
-<http://www.gesis.org/en/eurobarometer/home/>
-
-### Usage in Stata:
-
-	use "Datasets/ebm2009.dta", clear
-
-The sample can be weighted with the `v8` and `v38` variables.
+Students are encouraged to use the `lookfor` and `lookfor_all` commands to explore the course datasets.
 
 * * *
 
@@ -55,11 +35,13 @@ The `ess2008` dataset holds [Round 4](http://ess.nsd.uib.no/ess/round4/) (2008) 
 
 <http://ess.nsd.uib.no/>
 
+Variables that appear in the documentation but not in the dataset are part of the overall ESS rotating module (thanks to the ESS data team for the precision).
+
 ### Usage in Stata:
 
 	use "Datasets/ess2008.dta", clear
 
-The sample can be weighted with the `dweight` and `pweight` variables.
+The sample can be weighted with the `dweight` and `pweight` variables, as explained in the [ESS weighting guide](http://ess.nsd.uib.no/ess/doc/weighting.pdf).
 
 The dataset was created by subsetting the ESS cumulative dataset to Round 4, and then by removing variables with no observations. The code follows:
 
@@ -74,8 +56,6 @@ The dataset was created by subsetting the ESS cumulative dataset to Round 4, and
 	}
 	
 	save ess2008.dta, replace
-
-Variables that appear in the documentation but not in the dataset are part of the overall ESS rotating module (thanks to the ESS data team for the precision).
 
 * * *
 
@@ -164,70 +144,3 @@ The `wvs2000` dataset holds data from the 1999-2004 wave of the World Values Sur
 The data were extracted from the WVS cumulative dataset. The code to capitalize country names is available as the `proper_labels` command (see the [README](https://github.com/briatte/srqm/blob/master/Programs/README.md) file of the `Programs` folder).
 
 * * *
-
-## Sources
-
-The following list was inspired by Robert J. Franzese, Jr., “[Empirical Strategies for Various Manifestations of Multilevel Data](http://pan.oxfordjournals.org/cgi/content/short/13/4/430),” *Political Analysis* 13:430–446, 2005; Paul Pennings *et al.*, *Doing Research in Political Science: An Introduction to Comparative Methods and Statistics*, Sage, 2005; Berenica Vejvoda, “[Selected Data Resources for Political Science Research](http://libraries.ucsd.edu/ssds/polhon.pdf),” UC San Diego [Social Science Data Services](http://libraries.ucsd.edu/ssds/); [Emiliano Grossman and Nicolas Sauger](http://emiliano-grossman.webou.net/hoprubrique.php?id_rub=26); friends, students, colleagues, etc.
-
-More sources can be identified using websites like [CKAN](http://ckan.org/), the [Council of European Social Science Data Archives](http://www.cessda.org/), [DataMarket](http://datamarket.com/), [EUROLAB](http://www.gesis.org/das-institut/kompetenzzentren/european-data-laboratory/data-resources/) and [GESIS](http://www.gesis.org/das-institut/kompetenzzentren/european-data-laboratory/data-resources/data-for-comparative-research/), [IPSAportal](http://ipsaportal.unina.it/?cat=16), the [Macro Data Guide](http://www.nsd.uib.no/macrodataguide/) and data libraries from your home universities (see e.g. the [Data Libary](http://www.ed.ac.uk/schools-departments/information-services/services/research-support/data-library) at the University of Edinburgh).
-
-### Intergovernmental organizations
-
-- [Eurostat](http://epp.eurostat.ec.europa.eu/portal/page/portal/eurostat/home/)
-- [International Monetary Fund](http://www.imf.org/external/data.htm) (IMF)
-- [World Bank](http://data.worldbank.org/) ([World Development Indicators](http://data.worldbank.org/indicator))
-- [OECD](http://www.oecd.org/) ([OECD Health](http://www.oecd.org/health/healthdata), [OECD Social Expenditure](http://www.oecd.org/els/social/expenditure))
-- [ILO](http://www.ilo.org/dyn/lfsurvey/lfsurvey.home) (labour force surveys)
-- [United Nations](http://data.un.org/) ([Statistics Division](http://unstats.un.org/unsd/databases.htm), [Millennium Development Goals](http://mdgs.un.org/))
--  [World Health Organization](http://data.euro.who.int/) (WHO) ([Global Health Observatory](http://www.who.int/gho/en/), [WHO Health for All Database](http://data.euro.who.int/hfadb/)); [Gapminder](http://www.gapminder.org/) (excellent graphing)
-
-### Nongovermental organizations
-
-- [Freedom House](http://www.freedomhouse.org/template.cfm?page=274) (freedom of the press)
-- [Reporters Without Borders](http://en.rsf.org/) (Press Freedom Index)
-- [Transparency International](http://www.transparency.org/policy_research/surveys_indices) (corruption perception indexes)
-
-### National providers
-
-- United Kingdom:
-	- [Office of National Statistics](http://www.statistics.gov.uk/hub/index.html) (ONS)
-	- [UK Data Archive](http://www.data-archive.ac.uk/), browsable at [ESDS](http://www.esds.ac.uk/); see e.g. [British Social Attitudes](http://www.britsocat.com/) (BSA) or [British Household Panel Survey](http://www.iser.essex.ac.uk/survey/bhps) (BHPS)
-	- [Survey Question Bank](http://www.surveynet.ac.uk/) (ESRC Survey Resources Network)
-- United States:
-	- [Census Bureau](http://www.census.gov/)
-	- [General Social Survey](http://www.norc.org/GSS/GSS+Resources.htm) (GSS)
-	- [American National Election Studies](http://www.electionstudies.org/) (ANES)
-	- [Federal Reserve](http://research.stlouisfed.org/fred2/) (U.S. economic time series)
-	- [Pew Research Center for the People & the Press](http://people-press.org/)
-	- [Pew Research Center's Social & Demographic Trends](http://pewsocialtrends.org/)
-	- [Cultural Policy & the Arts National Data Archive](http://www.cpanda.org/) (CPANDA)
-- France:
-	- [INSEE](http://www.insee.fr/) (very large and detailed data)
-	- [Réseau Quételet](http://www.reseau-quetelet.cnrs.fr/spip/) (strict access conditions)
-
-### Comparative politics
-
-- [Parties and elections](http://www.parties-and-elections.de/) (elections and political parties in Europe since 1945)
-- [Comparative political data sets](http://www.ipw.unibe.ch/mitarbeiter/ru_armingeon/CPD_Set_en.asp) (politics and expenditures in OECD and European countries)
-- [ICPSR](http://www.icpsr.umich.edu/) (includes comparative datasets used by American political scientists)
-- [IPU](http://www.ipu.org/) (parliaments and electoral systems)
-- [Worldwide Elections](http://sshl.ucsd.edu/election/world.html) (electoral competition and outcomes)
-- [Comparative Study of Electoral Systems](http://www.umich.edu/~cses/)
-- [Comparative Manifestos](http://www.wzb.eu/zkd/dsl/pdf/manifesto-project.pdf) (pools parties’ election manifestos by election across several democracies)
-- [Quality of Government](http://www.qog.pol.gu.se/) (used in course)
-- [Polity IV](http://www.systemicpeace.org/polity/polity4.htm) (regime characteristics and transitions)
-- [Comparative Policy Agendas](http://www.comparativeagendas.org/) (initially an [American project](http://www.policyagendas.org/))
-
-### Comparative public opinion
-
-- [Afrobarometers](http://www.afrobarometer.org/)
-- [Eurobarometers](http://ec.europa.eu/public_opinion/index_en.htm) (EB)
-- [European Social Survey](http://www.europeansocialsurvey.org/) (ESS) (used in course)
-- [European Values Surveys](http://www.europeanvaluesstudy.eu/) (EVS) -- see [download guide](http://www.europeanvaluesstudy.eu/evs/data-and-downloads/manual_EVS_Zacat.pdf)
-- [International Social Survey Program](http://www.issp.org/) (ISSP)
-- [World Values Surveys](http://www.worldvaluessurvey.org/) (WVS)
-
-### International relations
-
-- [SIPRI](http://databases.sipri.se/) (Stockholm International Peace Research Institute; world armament and disarmament)
-- [Correlates of War](http://www.correlatesofwar.org/) (includes Militarized Interstate Disputes)

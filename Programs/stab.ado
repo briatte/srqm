@@ -8,7 +8,7 @@ program stab
 
     syntax using/ [if] [in] [aweight fweight/] ///
     	[, SUmmarize(varlist) FRequencies(varlist) ///
-    	CORRelate ttest prtest Float(int 0) by(varname) replace] 
+    	CORRelate ttest Float(int 0) by(varname) replace] 
     tempname fh
 
 	tokenize `summarize'

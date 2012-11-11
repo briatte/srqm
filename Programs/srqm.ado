@@ -5,28 +5,26 @@
 
 cap pr drop srqm
 program srqm
-	syntax anything [, noLOG Clean UPDate]
+	syntax anything [, noLOG forced]
 
 	// ========
 	// = LOAD =
 	// ========
 	
-	// strip option comma
-	if strpos("`1'",",") != 0 local 1 = substr("`1'",1,length("`1'")-1)
-	if strpos("`2'",",") != 0 local 2 = substr("`2'",1,length("`2'")-1)
-
+	tokenize `anything'
+	
 	// parse syntax
-	local log = ("`log'"=="")
-	local setup = (strpos("`1'","setup") > 0)
-	local check = (strpos("`1'","check") > 0)
-	local clean = (strpos("`1'","clean") > 0)
+	local log =    ("`log'"=="")
+	local forced = ("`forced'"!="")
+	local setup =  ("`1'"=="setup")
+	local check =  ("`1'"=="check")
+	local clean =  ("`1'"=="clean")
 	local folder = ("`2'"=="folder")
 	local packages = ("`2'"=="packages")
 	local course = ("`2'"=="course")
 	
 	// package list
-	local install = "catplot estout fre leanout lookfor_all mkcorr qog spineplot tab_chi tabout clarify"
-	local extras = "ciplot kountry log2do2 outreg2 revrs _gstd01"
+	local install = "catplot estout fre leanout lookfor_all mkcorr qog spineplot tab_chi tabout ciplot kountry log2do2 outreg2 revrs _gstd01 clarify"
 
 	// dataset list
 	local datasets = "ess2008 gss2010 nhis2009 qog2011 wvs2000"
@@ -95,7 +93,7 @@ program srqm
 				file write fh _tab _tab _char(34) "This error occurs when you rename or relocate the SRQM folder." _char(34) " _n ///" _n
 				file write fh _tab _tab _char(34) "Use the 'File > Change Working Directory...' menu to manually" _char(34) " _n ///" _n
 				file write fh _tab _tab _char(34) "select the SRQM folder, then execute the {stata run profile} command." _char(34) " _n ///" _n
-				file write fh _tab _tab _char(34) "For further help, see the README file of the SRQM folder." _char(34) _n
+				file write fh _tab _tab _char(34) "For more help, see the README file of the SRQM folder." _char(34) _n
 				file write fh _tab "exit -1" _n "}" _n "else {" _n
 				file write fh _tab "cap cd " _char(34) _char(36) "srqm_wd" _char(34) _n
 				file write fh _tab "cap noi run profile" _n
@@ -137,14 +135,15 @@ program srqm
 			// INSTALL PACKAGES
 			//
 			local i=0
-			if "`3'" == "extras" local install = "`install' `extras'"
 			foreach t of local install {
 				local i=`i'+1
 
 				cap which `t'
-				// qoguse/qogmerge and qog inconsistency
+				
+				// qoguse/qogmerge and qog
 				if "`t'"=="qog" cap which qoguse
-				// tab_chi and tabchi inconsistency
+				
+				// tab_chi and tabchi
 				if "`t'"=="tab_chi" cap which tabchi
 
 				if _rc==111 | "`3'" == "forced" {
@@ -213,10 +212,6 @@ program srqm
 			cap set update_query off
 	        if _rc==0 di as txt "Software updates set to", c(update_query)
 	
-			* More (and better) themes.
-			cap set scheme bw
-			if _rc==111 cap noi net install schemes, from("http://leuven.economists.nl/stata")
-			
 			* Course themes.
 			cap set scheme burd, perm
 			if _rc==0 di as txt "Graphics scheme set to", c(scheme)
@@ -340,6 +335,7 @@ program srqm
 			cap rm "`c(sysdir_stata)'profile.do"
 			if _rc ==0 di as txt _n "Successfully removed", "`c(sysdir_stata)'profile.do." _n "Farewell, enjoy life and Stata!"
 			if _rc !=0 di as err _n "Nothing to remove at", "`c(sysdir_stata)'profile.do." _n "You have already left. Be well!"
+			cd "c(sysdir_stata)" // to avoid profile.do re-setting up on Macs
 		}
 		else if `packages' {
 			//
@@ -397,3 +393,9 @@ program srqm
 	}
 
 end
+
+srqm check
+srqm setup course
+srqm setup course, nolog
+srqm setup packages, forced
+srqm clean, nolog

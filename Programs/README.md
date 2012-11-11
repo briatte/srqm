@@ -8,7 +8,7 @@ All commands were written to assist students in completing their research projec
 
 ## `burd`
 
-The series of ten `scheme-burd` files contain reversed versions of the `RdBu` [ColorBrewer](http://colorbrewer2.org/) theme, as well as a replacement for the `s2color` scheme. Used to scheme the course plots.
+The series of ten `scheme-burd` files contain reversed versions of the `RdBu` [ColorBrewer](http://colorbrewer2.org/) theme, as well as a replacement for the `s2color` scheme. Used to scheme the course plots. Some example plots appear on the [course wiki](https://github.com/briatte/srqm/wiki/BuRd).
 
 ## `properl`
 
@@ -16,7 +16,7 @@ Sets the labels of a variable to their proper capitalization, using code kindly 
 
 ## `repl`
 
-Creates a replication folder out of a do-file. The folder will contain the do-file, log and all plots that were assigned a `name()` in the code. It will also contain any file exported from the do-file, and a README file.
+Creates a replication folder out of a do-file. The folder will contain the do-file, log and all plots that were assigned a `name()` in the code. It will also contain any file exported by the do-file and a short file manifest in a `README` file.
 
 ## `require`
 
@@ -53,7 +53,7 @@ Unless the additional `nolog` option is specified, all commands send moderately 
 
 ### `srqm setup`
 
-Tries to permanently set up a few options like screen breaks and scrollback buffer size in Stata, including `memory` on software versions older than Stata 12.
+Tries to permanently set up a few options like screen breaks and scrollback buffer size in Stata, including `memory` on software versions older than Stata 12. Also sets the `burd` scheme (documented above).
 
 #### `srqm setup folder`
 
@@ -61,13 +61,11 @@ Tries to tell Stata to automatically run from the `SRQM` folder by copying its p
 
 The `profile.do` file saved to the Stata application folder acts as a symbolic link that also runs the `profile.do` file from the SRQM folder, to perform further integrity checks on the course setup.
 
-This command requires to run Stata as administrator on Windows Vista and Windows 7, or it will fail due to a [system restriction](http://www.stata.com/support/faqs/windows/updating-on-vista/).
-
-If the `SRQM` folder has been renamed to `SRQM-USB`, the subcommand ignores the Stata application folder and sets instead packages to be installed to a temporary `Packages` folder in the `SRQM` folder.
+This command requires to run Stata as administrator on Windows Vista and 7, or it will fail due to a [system restriction](http://www.stata.com/support/faqs/windows/updating-on-vista/) in recent versions of Windows.
 
 #### `srqm setup packages`
 
-Installs the additional Stata packages and [graph schemes by Edwin Leuven](http://leuven.economists.nl/stata.php) used in the course do-files. Requires Internet access to execute properly. Usually runs in less than five minutes.
+Installs the additional Stata packages used in the course do-files. Requires Internet access to execute properly. Usually runs in less than five minutes.
 
 The subcommand will try to run as quickly as possible by skipping packages that are [already installed][statalist-tip]. This behaviour can be overriden by passing the `forced` option.
 
@@ -101,21 +99,23 @@ Uninstalls course packages. Used for testing purposes.
 
 ## `stab`
 
-Produces summary statistics and correlation matrix tables in the format required for course research projects. The command was built on top of the `tsst` command to improve student reports of summary statistics.
+Produces summary statistics and correlation matrix tables in plain text format, for maximum compatibility with text and spreadsheet editors (the course recommendation is to use Google Documents).
 
 The basic syntax for `stab` is:
 
-	stab using week8 [aw,fw], su(v1 v2) corr fr(v3 v4) ttest prtest by() [f(0) replace]
+	stab using week8 [aw,fw] [, su(v1 v2) corr fr(v3 v4) ttest by(varname) f(0) replace]
 
-The `su` option is meant produces five-number summaries out of continuous variables. The `fr` option produces frequencies out of categorical variables. Both results are combined in a single table.
+The `su` option produces five-number summaries for continuous variables. The `fr` option produces frequencies for categorical variables. Both results are combined into a single table.
 
-The `by(varname)` option can create multiple tables based on the categories of `varname`. The `corr` option adds a correlation matrix of the continuous variables specified in `su`. The `ttest` option adds *t*-tests for all groups.
+The `by(varname)` option creates multiple tables based on the categories of `varname`. The `corr` option adds a correlation matrix of the continuous variables specified in `su`.
+
+Less frequent options are `ttest` to add *t*-tests for all groups, and `float(n)` to modify the level of decimal precision.
 
 ## `tsst`
 
 Produces a simple table of summary statistics as required for the course research project. The code draws on [a tutorial by Ben Jann](http://www.stata.com/meeting/uk09/uk09_jann.pdf).
 
-The command is very barebones and means 'tabbed summary statistics table' because it produces tab-separated values in plain text format, for maximum compatibility with text and spreadsheet editors.
+The command is very barebones and means 'tabbed summary statistics table' because it produces tab-separated values 
 
 The basic syntax for `tsst` is:
 
