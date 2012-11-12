@@ -4,11 +4,9 @@ This file listing covers the datasets distributed as part of the [Statistical Re
 
 All datasets are provided in `dta` Stata format on an "as-is" basis. Please use these datasets for replication purposes only and do not redistribute them for any other reason.
 
-Please also remember to **systematically cite the data source and authors**, after retrieving the bibliographic information from the source and formatting it as required by academic standards.
-
 ### Data sources:
 
-| Filename		 | Data							         | Author/Year of release		 |
+| Filename		 | Data							         | Year of release		 |
 |:---------------|:--------------------------------------|:------------------------------|
 | `ess2008`		 | European Social Survey				 | 2008							 |
 | `gss2010`		 | General Social Survey				 | 2010							 |
@@ -16,11 +14,13 @@ Please also remember to **systematically cite the data source and authors**, aft
 | `qog2011`		 | Quality of Government				 | 2011							 |
 | `wvs2000`		 | World Values Survey					 | 2000							 |
 
+Remember to **systematically cite the data source and authors** after retrieving the bibliographic information from the source and formatting it into an academic citation.
+
 ### Usage commands:
 
-The Stata commands included at the end of each dataset description require that the `SRQM` folder has been set as the working directory, as explained in its [README](https://github.com/briatte/srqm/blob/master/README.md) file.
+The Stata `use` commands included at the end of each dataset description require that the `SRQM` folder has been set as the working directory, as explained in its [README](https://github.com/briatte/srqm/blob/master/README.md) file.
 
-Students are encouraged to use the `lookfor` and `lookfor_all` commands to explore the course datasets.
+Students are encouraged to use the `lookfor` and `lookfor_all` commands to explore the course datasets, and to weight the data by using the `syvset` command with the appropriate weight.
 
 * * *
 
@@ -40,8 +40,11 @@ Variables that appear in the documentation but not in the dataset are part of th
 ### Usage in Stata:
 
 	use "Datasets/ess2008.dta", clear
+	svyset [aw=dweight]
 
-The sample can be weighted with the `dweight` and `pweight` variables, as explained in the [ESS weighting guide](http://ess.nsd.uib.no/ess/doc/weighting.pdf).
+First multiply `dweight` by `pweight` if you are working on combined countries or averages. See the [ESS weighting guide](http://ess.nsd.uib.no/ess/doc/weighting.pdf) for more details.
+
+### Technical note:
 
 The dataset was created by subsetting the ESS cumulative dataset to Round 4, and then by removing variables with no observations. The code follows:
 
@@ -80,6 +83,11 @@ To extract a quick codebook out of the dataset, run the following:
 ### Usage in Stata:
 
 	use "Datasets/gss2010.dta", clear
+	svyset sampcode [pw=wtssnr]
+
+There is no stratum variable in the GSS dataset, but the sampling design does include stratification. See [Appendix A](http://publicdata.norc.org:41000/gss/.%5CDocuments%5CCodebook%5CA.pdf) of the GSS documentation for more details.
+
+### Technical note:
 
 The dataset is a subset from the [GSS 1972-2010 cross-sectional cumulative dataset](http://www3.norc.org/GSS+Website/Download/STATA+v8.0+Format/) (Release 1.1, Feb. 2011). The code used to trim the data follows:
 
@@ -108,10 +116,7 @@ The `nhis2009` dataset holds sample adult data for years 2000--2009 of the U.S. 
 ### Usage in Stata:
 
 	use "Datasets/nhis2009.dta", clear
-
-If you want to use the data with individual weights, the code should probably look like this:
-
-	svyset psu [pweight=perweight], strata(strata) vce(linearized) singleunit(missing)
+	svyset psu [pweight=perweight], strata(strata)
 
 * * *
 
@@ -140,6 +145,11 @@ The `wvs2000` dataset holds data from the 1999-2004 wave of the World Values Sur
 ### Usage in Stata:
 
 	use "Datasets/wvs2000.dta", clear
+	svyset [aw=s017]
+
+Use `s017a` if you are using country split-ups. See the [WVS weighting guide](http://www.jdsurvey.net/jds/jdsurveyActualidad.jsp?Idioma=I&SeccionTexto=0405) for more details.
+
+### Technical note:
 
 The data were extracted from the WVS cumulative dataset. The code to capitalize country names is available as the `proper_labels` command (see the [README](https://github.com/briatte/srqm/blob/master/Programs/README.md) file of the `Programs` folder).
 

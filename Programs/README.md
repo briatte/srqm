@@ -28,7 +28,7 @@ The `srqm` utilities rely on the architecture of the `SRQM` folder, a.k.a the '[
 
 The `srqm` utilities require one command and optionally one subcommand to execute:
 
-	srqm command [subcommand] [, nolog]
+	srqm command [subcommand] [, nolog forced]
 
 The commands and subcommands form three blocks. The first of them, `setup`, is called from the `profile.do` file of the `SRQM` folder and is used to set up computers for the course:
 
@@ -103,28 +103,12 @@ Produces summary statistics and correlation matrix tables in plain text format, 
 
 The basic syntax for `stab` is:
 
-	stab using week8 [aw,fw] [, su(v1 v2) corr fr(v3 v4) ttest by(varname) f(0) replace]
+	stab using week8 [aw,fw] [if,in] [, su(v1 v2) corr fr(v3 v4) ttest by(varname) f(0) replace]
 
 The `su` option produces five-number summaries for continuous variables. The `fr` option produces frequencies for categorical variables. Both results are combined into a single table.
 
 The `by(varname)` option creates multiple tables based on the categories of `varname`. The `corr` option adds a correlation matrix of the continuous variables specified in `su`.
 
-Less frequent options are `ttest` to add *t*-tests for all groups, and `float(n)` to modify the level of decimal precision.
-
-## `tsst`
-
-Produces a simple table of summary statistics as required for the course research project. The code draws on [a tutorial by Ben Jann](http://www.stata.com/meeting/uk09/uk09_jann.pdf).
-
-The command is very barebones and means 'tabbed summary statistics table' because it produces tab-separated values 
-
-The basic syntax for `tsst` is:
-
-	tsst using stats.txt [aw,fw,pw], su(v1 v2) fr(v3 v4) [f(0) replace]
-
-The `su` option is meant produces five-number summaries out of continuous variables. The `fr` option produces frequencies out of categorical variables. Both results are combined in a single table.
-
-Far more sophisticated output options appear in packages like `estout` or `tabout`. Tamás Bartus is also [developing](http://web.uni-corvinus.hu/bartus/publish.php) the `publish` command, which comes close to the spirit of the `tsst` command.
-
-Students are referred to the documentation of their text or spreadsheet editor to learn how to import a tab-separated values document, or how to convert tab-delimited text into tabular output.
+Less frequent options are `ttest` to add *t*-tests for all groups, and `float(n)` to modify the level of decimal precision. The command also supports analytical and frequency survey weights, `if` and `in`.
 
 [statalist-tip]: http://www.stata.com/statalist/archive/2009-12/msg00461.html

@@ -5,7 +5,7 @@
 
 *! http://f.briatte.org/teaching/quanti/  Sciences Po, Spring 2013  Version 1.4
 
-set more off, perm
+cap qui set more off, perm
 
 // --- LOG ---------------------------------------------------------------------
 

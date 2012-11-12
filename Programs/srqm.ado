@@ -1,38 +1,42 @@
 // --- SRQM --------------------------------------------------------------------
 
-// This file creates the setup utilities used in the profile.do file of the SRQM
-// folder. See README file for details on how to run the utilities with options.
+// This file creates the utilities called at startup by the profile.do file of
+// the SRQM folder. See the README file of the Programs folder for details.
 
 cap pr drop srqm
 program srqm
 	syntax anything [, noLOG forced]
 
-	// ========
-	// = LOAD =
-	// ========
-	
-	tokenize `anything'
-	
 	// parse syntax
-	local log =    ("`log'"=="")
-	local forced = ("`forced'"!="")
+
+	tokenize `anything'
 	local setup =  ("`1'"=="setup")
 	local check =  ("`1'"=="check")
 	local clean =  ("`1'"=="clean")
 	local folder = ("`2'"=="folder")
 	local packages = ("`2'"=="packages")
 	local course = ("`2'"=="course")
+	local log =    ("`log'"=="")
+	local forced = ("`forced'"!="")
 	
 	// package list
-	local install = "catplot estout fre leanout lookfor_all mkcorr qog spineplot tab_chi tabout ciplot kountry log2do2 outreg2 revrs _gstd01 clarify"
 
+	local install = "lookfor_all fre spineplot tab_chi mkcorr tabout estout leanout gstd01 clarify"
+
+		* catplot ciplot log2do2 outreg2 revrs
+		* kountry qog wbopendata
+		* tufte lean2 schemes from http://leuven.economists.nl/stata/
+	
 	// dataset list
+
 	local datasets = "ess2008 gss2010 nhis2009 qog2011 wvs2000"
 
 	// interrupt backup log if any
+
 	if `log' cap log off backlog
 
 	// check syntax
+
 	if `setup' | `check' | `clean' {
 		if `log' {
 			if "`2'"!="" local x = "-`2'"
@@ -46,13 +50,12 @@ program srqm
 			di as txt "Software: Stata", as res c(stata_version)
 			di as txt "System:", as res c(os), c(osdtl)
 			di as txt "Computer:", as res c(machine_type)
-			di as txt "Command:", as res "srqm " "`1' `2'"
+			di as txt "Command:", as res "srqm `1' `2'"
 
-			di as inp _n "Working directory:" _n as res c(pwd) _n
+			di as inp _n "Working directory:", as res c(pwd)
 
-			di as inp "Log path:"
 	 		cap qui log query SRQM
-	 		if _rc==0 di as res r(filename) _n	
+	 		if _rc==0 di as inp "Log path:", as res r(filename) _n	
 			if _rc!=0 di as err "Log creation failed." _n
 		
 			di as inp "System directories:"
@@ -60,7 +63,7 @@ program srqm
 		}
 	}
 	else {
-		di as txt "Unrecognized option. See the {browse Programs/README.pdf:README} file."
+		di as txt "Unrecognized subcommand. See the {browse Programs/README.pdf:README} file for syntax help."
 		exit 0
 	}
 
@@ -80,25 +83,25 @@ program srqm
 			// PROFILE LINK
 			//
 			tempname fh
-			di as txt "Writing SRQM link to the Stata application folder:" _n "`c(sysdir_stata)'profile.do"
+			di as txt "Writing SRQM link to the Stata application folder:" _n as res "`c(sysdir_stata)'profile.do"
 			cap file open fh using "`c(sysdir_stata)'profile.do", write replace
 			if _rc == 0 {
-				file write fh "*! This do-file automatically sets the working directory to the SRQM folder:" _n
-				file write fh "*! `c(pwd)'" _n
+				file write fh _n "*! This do-file automatically sets the working directory to the SRQM folder:" _n
+				file write fh "*! `c(pwd)'" _n _n
 				file write fh "global srqm_wd " _char(34) "`c(pwd)'" _char(34) _n
-				file write fh "cap confirm file " _char(34) _char(36) "srqm_wd`c(dirsep)'Programs`c(dirsep)'srqm.ado" _char(34) _n
-				file write fh "if _rc!=0 {" _n _tab "noi di as err _n ///" _n
+				file write fh "cap confirm file " _char(34) _char(36) "srqm_wd`c(dirsep)'Programs`c(dirsep)'srqm.ado" _char(34) _n _n
+				file write fh "if _rc!=0 { // cannot load utilities" _n _tab "noi di as err _n ///" _n
 				file write fh _tab _tab _char(34) "ERROR: The SRQM folder is no longer available at its former location:" _char(34) " as txt _n ///" _n
-				file write fh _tab _tab _char(34) "`c(pwd)'" _char(34) " _n(2) ///" _n
+				file write fh _tab _tab _char(34) _char(36) "srqm_wd" _char(34) " _n(2) ///" _n
 				file write fh _tab _tab _char(34) "This error occurs when you rename or relocate the SRQM folder." _char(34) " _n ///" _n
-				file write fh _tab _tab _char(34) "Use the 'File > Change Working Directory...' menu to manually" _char(34) " _n ///" _n
+				file write fh _tab _tab _char(34) "Use the 'File : Change Working Directory...' menu to manually" _char(34) " _n ///" _n
 				file write fh _tab _tab _char(34) "select the SRQM folder, then execute the {stata run profile} command." _char(34) " _n ///" _n
 				file write fh _tab _tab _char(34) "For more help, see the README file of the SRQM folder." _char(34) _n
 				file write fh _tab "exit -1" _n "}" _n "else {" _n
-				file write fh _tab "cap cd " _char(34) _char(36) "srqm_wd" _char(34) _n
+				file write fh _tab "cap cd " _char(34) _char(36) "srqm_wd" _char(34) _n _n
 				file write fh _tab "cap noi run profile" _n
-				file write fh _tab "if _rc==0 noi type profile.do, starbang" _n
-				file write fh _tab "if _rc!=0 | " _char(34) _char(36) "srqm_wd" _char(34) "==" _char(34) _char(34) " {" _n
+				file write fh _tab "if _rc==0 noi type profile.do, starbang" _n _n
+				file write fh _tab "if _rc!=0 | " _char(34) _char(36) "srqm_wd" _char(34) "==" _char(34) _char(34) " { // folder check failed" _n
 				file write fh _tab _tab "noi di as txt ///" _n
 				file write fh _tab _tab _tab _char(34) "Some essential course material is not available in your working directory." _char(34) " _n(2) ///" _n
 				file write fh _tab _tab _tab _char(34) "This error occurs when you modify the folders or files of the SRQM folder." _char(34) " _n ///" _n
@@ -109,12 +112,11 @@ program srqm
 				file write fh _tab "}" _n
 				file write fh "}" _n
 				file close fh
-				di as txt _n "Setting the redirect link to the current working directory:" _n c(pwd)
+				di as txt _n "Setting the redirect link to the current working directory:" _n as res c(pwd)
 				di as inp ///
-					_n "WARNING: " as txt "Note this folder path and do not move or rename its parts." ///
-					_n "If you modify the elements of this path during the course, you will" ///
-				 	_n "have to manually set the working directory to the SRQM folder, and" /// 
-				 	_n "then execute the {stata run profile} command to fix the link."
+					_n "IMPORTANT: do not modify this folder path!", as txt "If you move or rename its elements," ///
+					_n "Stata will not find the course material when you open it, and you will have to" ///
+					_n "setup your computer again (see the README file of the SRQM folder for help)."
 			}
 			else {
 				//
@@ -124,7 +126,7 @@ program srqm
 				di as err ///
 					_n "ERROR: The Stata application folder is not writable on your system." as txt _n(2) ///
 					_n "Try again while running Stata with admin privileges. If the problem persists," ///
-					_n "you will have to manually select the SRQM folder from the 'File > Change" ///
+					_n "you will have to manually select the SRQM folder from the 'File : Change" ///
 					_n "Working Directory...' menu and then execute the {stata run profile} command."
 					_n "at the beginning of every course session. All apologies to Windows users."
 				exit 0
@@ -140,19 +142,17 @@ program srqm
 
 				cap which `t'
 				
-				// qoguse/qogmerge and qog
-				if "`t'"=="qog" cap which qoguse
-				
 				// tab_chi and tabchi
 				if "`t'"=="tab_chi" cap which tabchi
 
 				if _rc==111 | "`3'" == "forced" {
 					if "`t'"=="clarify" {
-						// note: keep clarify at the end of the install list
+						// note: keep clarify and next at end of install macro
 						cap which simqi
 						if _rc==111 cap noi net install clarify, from("http://gking.harvard.edu/clarify")
 					}
-					else if "`t'"=="_gstd01" {
+					else if "`t'"=="gstd01" {
+						// note: keep the underscore out of install macro
 						cap which _gstd01
 						if _rc==111 cap noi net install _gstd01, from("http://web.missouri.edu/~kolenikovs/stata")
 					}
@@ -164,7 +164,7 @@ program srqm
 						// workaround: install to personal folder (create if necessary)
 						// on Sciences Po computers, path will be c:\ado\personal\
 						// iterative (do that for every package that does not work)
-						// so probably slow and desperate
+						// so probably slow and desperate, but actually works
 						local here = c(pwd)
 						qui cd "`c(sysdir_plus)'"
 						qui cd ..
@@ -179,6 +179,9 @@ program srqm
 						// shoot again
 						cap qui ssc install `t', replace
 					}
+				}
+				else {
+				 // di "`t' is already installed"
 				}
 				if _rc!=0 di as err "Installation failed with error code", _rc
 			}
@@ -196,7 +199,7 @@ program srqm
 			}
 			
 			* Screen breaks.
-			noi set more off, perm
+			cap set more off, perm
 			if _rc==0 di as txt "Screen breaks set to", c(more)
 			
 			* Maximum variables.
@@ -282,7 +285,7 @@ program srqm
 			
 			local start = c(current_time)
 
-			forvalues y=1/15 {
+			forvalues y=1/12 {
 
 				gr drop _all
 				win man close viewer _all
@@ -293,14 +296,8 @@ program srqm
 				// srqm clean packages
 				// set scheme s2color
 
-				if `y' < 13 {
-					do Replication/week`y'.do
-					repl week`y'
-				}
-				else {
-					local y2 = `y' - 12
-					do Replication/template`y2'.do
-				}
+				do Replication/week`y'.do
+				repl week`y'
 			}
 
 			gr drop _all
@@ -335,7 +332,7 @@ program srqm
 			cap rm "`c(sysdir_stata)'profile.do"
 			if _rc ==0 di as txt _n "Successfully removed", "`c(sysdir_stata)'profile.do." _n "Farewell, enjoy life and Stata!"
 			if _rc !=0 di as err _n "Nothing to remove at", "`c(sysdir_stata)'profile.do." _n "You have already left. Be well!"
-			cd "c(sysdir_stata)" // to avoid profile.do re-setting up on Macs
+			cd "`c(sysdir_stata)'" // to avoid profile.do re-setting up on Macs
 		}
 		else if `packages' {
 			//
@@ -348,8 +345,9 @@ program srqm
 			}
 			
 			di as txt _n "Uninstalling a few more things..."
-			cap ssc uninstall clarify	
-			cap ssc uninstall schemes
+			cap ssc uninstall clarify
+			cap ssc uninstall _gstd01
+
 			set scheme s2color // set scheme back to default
 		}
 		else {
@@ -372,30 +370,13 @@ program srqm
 				local expr = "Replication/week`i'"
 				cap !rm -R `expr'
 			}
-			
-			local expr = "Replication/BriattePetev"
-			cap !rm -R `expr'
 		}
-
 	}
 
-	// ========
-	// = EXIT =
-	// ========
-
 	if `log' {
-		cap log query SRQM
-		di _n as txt "Done!", ///
-			"The log for this operation is at the following location:" ///
-			_n r(filename) _n(2) "Have a nice day."
+		di _n as inp "Done.", as txt "Have a nice day."
 		cap log close SRQM
 		cap log on backlog
 	}
 
 end
-
-srqm check
-srqm setup course
-srqm setup course, nolog
-srqm setup packages, forced
-srqm clean, nolog

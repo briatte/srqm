@@ -1,7 +1,6 @@
 #include s2color
 
-// Base options from Edwin Leuven's translation
-// of several ColorBrewer qualitative schemes:
+// Base options from Edwin Leuven's schemes:
 // net from http://leuven.economists.nl/stata
 
 graphsize x           3.575
@@ -52,10 +51,11 @@ linewidth pbar               vthin
 anglestyle vertical_tick     horizontal
 
 // From the ColorBrewer 2.0 diverging classes:
-// Bu, Rd, Gn, Or, BG, Pi, 
-// Bu, Rd, Gn, Pr, BG, Br, Gy
-// See other scheme files for reversed BuRd on
-// 4 to 11 scales.
+// Bu, Rd, Gn, Or, BG, Pi, Pr, Br, Gy
+
+// See other scheme files for blue-red gradient
+// on 3 to 11 classes.
+
 color p red
 color p1              "33 102 172"
 color p2              "178 24 43"

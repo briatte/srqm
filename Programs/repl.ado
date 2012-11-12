@@ -1,5 +1,5 @@
 
-// repl: produce replication material folders
+*! repl: produce replication material folders
 
 cap pr drop repl
 program repl
@@ -7,15 +7,30 @@ program repl
 
 // --- INIT --------------------------------------------------------------------
 
+cap cd "$srqm_wd"
 local pwd = c(pwd)
 
-cap use `c(filename)', clear
-if _rc != 0 di as err "`c(filename)' returned an error:", _rc
+di as txt "Replication dataset: `c(filename)'"
+di as txt "Replication do-file: `namelist'.do"
 
-cd Replication // will fail if trying to run repl from within a do-file
+cap use "`c(filename)'", clear
+if _rc != 0 {
+	di as err "Dataset error", _rc
+	di as err "Please run -repl- at the end of a do-file, or load the data before running it."
+	cap cd "`pwd'"
+	exit -1
+}
+
+qui cd Replication // will fail if trying to run repl recursively
 
 cap confirm file `namelist'.do
-if _rc != 0 di as err "`namelist'.do returned an error:", _rc
+if _rc != 0 {
+	di as err "Do-file error", _rc
+	di as err "Please provide -repl- with the name of a do-file from the Replication folder."
+	di as err "Move your project do-file there if needed."
+	cap cd "`pwd'"
+	exit -1
+}
 
 gr drop _all
 
@@ -43,7 +58,7 @@ tempname fh
 cap file open fh using README.txt, write replace
 cap file write fh ///
 	"What: `namelist'"  _n ///
-	"When:`c(current_date)'" _n _n
+	"When:","`c(current_date)'" _n _n
 
 confirm file "`namelist'.do"
 if _rc == 0 cap file write fh "- `namelist'.do" _n
@@ -77,7 +92,7 @@ di _n as txt "Replication material exported to folder", as inp "`namelist'"
 di "{browse `c(pwd)'}" _n
 type README.txt
 
-qui cd `pwd'
+qui cd "`pwd'"
 
 end
 
