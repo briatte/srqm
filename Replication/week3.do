@@ -3,6 +3,27 @@
 * When: 2012-02-06
 
 
+/* Hi! Welcome to your third SRQM do-file.
+
+ - Now is the point where you need to make a choice of dataset for your project.
+   Start writing the commands that you used to select your data and variables to
+   a do-file. Use the course do-files for inspiration: start with a short header
+   in the comments, then load the data, then explore and recode the variables.
+
+ - If you want to study one country or compare two of them, turn to survey data
+   from the European Social Survey (ESS), U.S. General Social Survey (GSS) or
+   World Values Survey (WVS). If you want to study country-level data, turn to
+   the Quality of Government data (your sample will then be all world countries;
+   do not restrict the sample further by subsetting to less observations).
+
+ - When selecting variables, make sure that the dependent variable is continuous
+   or pseudo-continuous. The dependent variable (DV) is the one that you want to
+   explain through a selection of independent variables (IVs). Your introduction
+   will offer a general theory to state the articulation between your variables.
+
+*/
+
+
 * =========
 * = SETUP =
 * =========
@@ -19,9 +40,9 @@ foreach p in fre spineplot {
 cap log using "Replication/week3.log" replace
 
 
-* ===========
-* = DATASET =
-* ===========
+* ========
+* = DATA =
+* ========
 
 
 * Egypt underwent a social revolution in 2011. Who were the revolutionaries?

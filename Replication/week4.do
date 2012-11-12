@@ -3,6 +3,26 @@
 * When: 2012-11-05
 
 
+/* Introductory notes:
+
+ - Since last week, you should now know what dataset and variables you plan to
+   use for your research project. Please register your project online by writing
+   your names, keywords, data source and class ID to the student projects table.
+
+ - This week focuses on inspecting the normality of your dependent variable. The
+   DV should be continuous for best results, or at least pseudo-continuous like
+   a 10-point index scale. Avoid variables with four dimensions or less, unless
+   you have some prior experience with introductory statistics and can learn to
+   interpret logistic regression in just a few weeks at the end of the course.
+
+ - Assessing the normality of a variable is first and foremost a visual process.
+   You will need to visualize your DV a lot at that stage of your work. There is
+   no systematic way to assess normality, but your decision should take skewness
+   and kurtosis into account.
+   
+*/
+
+
 * =========
 * = SETUP =
 * =========
@@ -18,9 +38,9 @@ foreach p in fre {
 cap log using "Replication/week4.log", replace
 
 
-* ====================
-* = DATA PREPARATION =
-* ====================
+* ========
+* = DATA =
+* ========
 
 
 * Data: U.S. National Health Interview Survey (2009).

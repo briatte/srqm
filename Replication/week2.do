@@ -3,22 +3,30 @@
 * When: 2012-01-26
 
 
+/* Hi! Welcome to your second SRQM do-file.
+
+ - All do-files for this course assume that you have set up Stata for your
+   computer. This includes setting up several parameters, most importantly
+   setting the working directory to your SRQM folder. Please refer to the
+   do-file from Session 1 for guidance on setup.
+
+ - Welcome again to Stata. This do-file contains the commands used during our 
+   second session. Read the comment lines as you go along, and execute the code
+   by running commands sequentially. Select lines with Cmmd-L (Mac) or Ctrl-L
+   (Win), and execute them with Cmmd-Shift-D (Mac) or Ctrl-D (Win).
+  
+ - We will explore the National Health Interview Survey with a few basic Stata
+   commands. This is to show you how to explore a dataset and its variables.
+   You will need to select a dataset for your own research project in the next
+   couple of weeks, so learning how to explore data is essential at that point.
+
+*/
+
+
 * =========
 * = SETUP =
 * =========
 
-
-* Hi! Welcome to your second SRQM do-file.
-
-* All do-files for this course assume that you have set up Stata for your
-* computer. This includes setting up several parameters, most importantly
-* setting the working directory to your SRQM folder. Please refer to the
-* do-file from Session 1 for guidance on setup.
-
-* Welcome again to Stata. This do-file contains the commands used during our 
-* second session. Read the comment lines as you go along. We will explore the
-* NHIS 2009 dataset with a few basic, descriptive Stata commands. This implies
-* that you have acess to the dataset on your current computer.
 
 * To run this do-file, you might need to install additional commands first.
 * The next lines will check this: select the whole block and execute it. If you
@@ -34,6 +42,12 @@ foreach p in fre {
 * Log the commands and results from this do-file.
 cap log using "Replication/week2.log", replace
 
+
+* ========
+* = DATA =
+* ========
+
+
 * Data: U.S. National Health Interview Survey (2009).
 use "Datasets/nhis2009.dta", clear
 
@@ -43,15 +57,10 @@ use "Datasets/nhis2009.dta", clear
 * its data structure shows observations in rows and variables in columns.
 * Also make sure that you understand what a cross-sectional dataset is.
 
-
-* ====================
-* = DATA EXPLORATION =
-* ====================
-
-
-* Our first step verifies whether the survey is cross-sectional. If we find 
-* that the data spans over several years, we will suppress observations for 
-* all but one year of data. We will talk again about cross-sectional data.
+* Our first step verifies whether the survey is cross-sectional. As we find 
+* that the data contains more than one survey wave and spans over several years,
+* we keep only most recent observations. This step applies only to datasets that
+* contain multiple survey years, which is not the case of other course datasets.
 
 * List all variables in the dataset.
 describe
@@ -277,9 +286,9 @@ gr dot health, exclude0 yreverse over(sex) over(raceb) ///
 * alone. The rest of the course will advance with that word of caution in mind.
 
 
-* ========
-* = EXIT =
-* ========
+* =======
+* = END =
+* =======
 
 
 * Close log (if opened).

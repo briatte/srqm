@@ -87,7 +87,7 @@ Runs the whole course (weekly sessions and draft assignments) as a single sequen
 
 ### `srqm clean`
 
-Cleans up the `SRQM` folder by erasing temporary workfiles produced by the course do-files. The workfiles consist of logs and folders with the `-files` suffix.
+Cleans up the `SRQM` folder by erasing temporary workfiles produced by the course do-files. The workfiles consist of logs.
 
 #### `srqm clean folder`	
 

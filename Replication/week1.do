@@ -3,12 +3,24 @@
 * When: 2012-01-26
 
 
-* Hi! Welcome to your first SRQM do-file.
+/* Hi! Welcome to your first SRQM do-file.
 
-* You are probably viewing this file from the Stata do-file editor, after 
-* opening it with the 'doedit replication/week1' command. If so, you are
-* doing it right: congratulations! Let us guide you through your first
-* do-file.
+ - You are probably viewing this file from the Stata do-file editor, after 
+   opening it with the 'doedit replication/week1' command. If so, you are
+   doing it right: congratulations!
+   
+ - You will be reading through your first do-file in just a minute. It is
+   essential that you read through each week's do-file to become familiar
+   with Stata commands. We will start exploring them in class, and you get
+   to finish them on your own as homework, along with reading one chapter
+   from the course handbook and a few sections from the Stata Guide.
+   
+ - Everything that you learn from the course do-files will be put to use
+   into your research project. Practice with Stata by trying out commands
+   as you learn them. If things do not work straight out, try again after
+   checking the command syntax.
+  
+*/
 
 
 * Comments
@@ -75,6 +87,7 @@ scatter lexp safewater
 * This command creates your first Stata graph. Close the Graph window when
 * you are done inspecting the graph. Finally, type the following command after
 * uncommenting it (remove the asterisk and trailing space):
+
 * doedit example
 
 * The previous command creates an empty do-file called 'example.do'. The file
@@ -172,9 +185,13 @@ di "This is a test. Execute me by selecting this line, " ///
 
 
 * The following steps teach you about setting up Stata on any computer. Start
-* by making sure that you just launched Stata and have nothing stored in memory.
-* The next command will ensure that this is the case:
+* by making sure that you have nothing stored in Stata memory by wiping off
+* any data in memory:
 clear 
+
+* The settings covered in this section of the do-file can be taken care of by
+* a setup utility written for the course. Please turn to the README file of the
+* SRQM folder for instructions, or follow the procedure in our first classes.
 
 
 * (1) Memory
@@ -208,8 +225,8 @@ set mem 500m, perm
 * -----------------
 
 * By default, Stata uses screen breaks. If you forget to disable those, the
-* 'Results' window will nag you with useless prompts. Save yourself the hassle
-* of screen breaks by disabling them:
+* 'Results' window will nag you with useless 'more' prompts and you will have
+* to scroll results manually. Save yourself the hassle by disabling them:
 set more off
 
 * In fact, let's try to disable them permanently on your computer:
@@ -230,8 +247,8 @@ set more off, perm
 
 * sysdir set PLUS "c:\temp"
 
-* This course makes heavy use of the 'fre' package to view frequencies.
-* Install the package by uncommenting and running this command while online:
+* This course makes heavy use of the 'fre' command to view frequencies.
+* Install the command by uncommenting and running this command while online:
 
 * ssc install fre
 
@@ -270,19 +287,19 @@ ls, w
 * The 'cd' command shown above navigates through your folders. The next example
 * assumes that you are now in the SRQM folder. It will select the folder that
 * contains the course do-files. The quotes can be omitted when the path contains
-* no spaces, but we will use them systematically for consistency:
+* no spaces, but we will use them systematically for consistency, as in:
 
 * cd "Replication"
 
-* Now go back one level to return to the SRQM folder:
+* Uncomment and run the line above, then uncomment and run the next command to
+* go back one level and return to the SRQM folder:
 
 * cd ..
 
-* Finally, list the files without moving to a directory
+* Finally, you can list the files without moving to a directory. The following
+* command shows the contents of the Replication folder:
 
-* The settings covered in this section of the do-file should now be permanently
-* stored on your computer. You will not need to come back to them. Furthermore,
-* the course uses a setup utility program that silently checks on them for you.
+ls "Replication", w
 
 
 * (5) Log
@@ -327,9 +344,6 @@ cap log close
 
 * You will not be able to run the above command if no log is opened. The 'cap'
 * prefix allows you to run the command and continue even if it returns an error.
-* To close any other opened log, uncomment and run the following command:
-
-* log close _all
 
 * If you now go to your 'Replication' folder and open the week1.log file with 
 * any plain text editor, you will find a copy of everything that was entered 
@@ -375,6 +389,8 @@ lookfor army homo
 // etc. (this line is also a comment)
 
 * Tip: an additional package can help you search for variables across datasets.
+* It should have been installed by the course setup utility. If not, install it
+* yourself 
 lookfor_all health, dir(Datasets)
 
 * The command above, like all commands that calls datasets or do-files,

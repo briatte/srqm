@@ -3,6 +3,40 @@
 * When: 2012-11-04
 
 
+/* Introductory notes:
+
+ - This is the stage where you submit your first draft. Please make sure that
+   your do-file is named like 'Briatte_Petev_1.do' (use your own family names
+   in alphabetical order). Name your paper the same way, and print it to PDF.
+ 
+ - Your first do-file must imitate the course do-files: start with a header,
+   then open the data, rename variables to legible names, recode when needed,
+   assess DV normality and try out a few interactions with graphs and confidence
+   intervals over categories. Describe interesting results in your paper.
+ 
+ - Use the -stab- command at the end of this do-file to export summary stats
+   to a simple table. The result will be a plain text file that you can copy
+   and paste into Google Documents, or import into any other text editor.
+
+ - Your first draft must inform the reader about simple things: What is your
+   research question? Where does your data come from, how large is the sample
+   and how was it designed? What choice of variables have you made, and with
+   what theory to support it? Here's an example:
+   
+ * TOPIC:  Social Determinants of Adult Obesity in the United States
+
+    * DV: Body Mass Index (BMI)
+    * IV: age, sex, education, health status, physical exercise, race, exercise
+
+ * DATA:   National Health Interview Survey 2009
+
+    * Sample size:   N = 24,291 observations
+    * Sample design: state-level stratified random sample
+
+*/
+
+
+
 * =========
 * = SETUP =
 * =========
