@@ -1,9 +1,7 @@
-* What: SRQM Session 3
-* Who:  F. Briatte and I. Petev
-* When: 2012-02-06
 
+/* ------------------------------------------ SRQM Session 3 -------------------
 
-/* Hi! Welcome to your third SRQM do-file.
+   F. Briatte and I. Petev
 
  - Now is the point where you need to make a choice of dataset for your project.
    Start writing the commands that you used to select your data and variables to
@@ -21,20 +19,16 @@
    explain through a selection of independent variables (IVs). Your introduction
    will offer a general theory to state the articulation between your variables.
 
-*/
+   Last updated 2012-11-13.
+
+----------------------------------------------------------------------------- */
 
 
-* =========
-* = SETUP =
-* =========
-
-
-* Required commands.
+* Install required commands.
 foreach p in fre spineplot {
 	cap which `p'
-	if _rc==111 cap noi ssc install `p' // install from online if missing
+	if _rc==111 cap noi ssc install `p'
 }
-
 
 * Log.
 cap log using "Replication/week3.log" replace
@@ -52,7 +46,7 @@ cap log using "Replication/week3.log" replace
 * oppose the strongest level of resistance to change? What socio-economic
 * characteristics predict a high level of support in the existing regime?
 
-* Welcome again to Stata. This do-file contains the commands used during our 
+* Welcome again to Stata. This do-file contains the commands used during our
 * third session. Read the comment lines as you go along. We will explore the
 * WVS 2000 dataset by concentrating on respondents from Egypt. The analysis
 * will illustrate how to recode variables and missing values.

@@ -1,9 +1,7 @@
-* What: SRQM Session 4
-* Who:  F. Briatte and I. Petev
-* When: 2012-11-05
 
+/* ------------------------------------------ SRQM Session 4 -------------------
 
-/* Introductory notes:
+   F. Briatte and I. Petev
 
  - Since last week, you should now know what dataset and variables you plan to
    use for your research project. Please register your project online by writing
@@ -20,15 +18,12 @@
    no systematic way to assess normality, but your decision should take skewness
    and kurtosis into account.
    
-*/
+   Last updated 2012-11-13.
+
+----------------------------------------------------------------------------- */
 
 
-* =========
-* = SETUP =
-* =========
-
-
-* Install commands.
+* Install required commands.
 foreach p in fre {
 	cap which `p'
 	if _rc==111 cap noi ssc install `p'
@@ -129,21 +124,21 @@ count if bmi > $mean - 1*$sd & bmi < $mean + 1*$sd
 di %9.3g r(N)/$total
 
 * The corresponding result is indeed close to 68% of all observations, and the
-* same verification with the [mean-2sd,mean+2sd] range of BMI values is also 
+* same verification with the [mean-2sd,mean+2sd] range of BMI values is also
 * satisfactorily close to including 95% of all observations.
 count if bmi > $mean - 2*$sd & bmi < $mean + 2*$sd
 di %9.3g r(N)/$total
 
-* We could go further and calculate the [mean-3sd,mean+3sd] range, but the 
+* We could go further and calculate the [mean-3sd,mean+3sd] range, but the
 * most extreme values of a distribution are more conveniently captured by
-* the notion of outliers, i.e. observations that fall far from the median. 
+* the notion of outliers, i.e. observations that fall far from the median.
 
 
 * (2) Outliers
 * ------------
 
 * The interquartile range (IQR) is the range between Q3 (p75) and Q1 (p25).
-* We detect mild (1.5*IQR) or extreme (3*IQR) outliers below Q1 and above Q3: 
+* We detect mild (1.5*IQR) or extreme (3*IQR) outliers below Q1 and above Q3:
 li bmi sex raceb if bmi < $q1-1.5*$iqr | bmi > $q3+1.5*$iqr, N
 li bmi sex raceb if bmi < $q1-3*$iqr | bmi > $q3+3*$iqr, N
 
@@ -153,7 +148,7 @@ li bmi sex raceb if bmi < $q1-3*$iqr | bmi > $q3+3*$iqr, N
 * ===================
 
 
-* The BMI variable is our dependent variable. Every statistical test or 
+* The BMI variable is our dependent variable. Every statistical test or
 * quantitative method that we are going to use in this course is based on
 * the assumption that this variable is close to being normally distributed.
 
@@ -161,7 +156,7 @@ li bmi sex raceb if bmi < $q1-3*$iqr | bmi > $q3+3*$iqr, N
 * (1) Visual tests
 * ----------------
 
-* Let's check if the distribution of BMI values approaches normality, and 
+* Let's check if the distribution of BMI values approaches normality, and
 * if not, let's transform the variable to bring it closer to normality.
 * We start with visual interpretations and then to statistical operations.
 
@@ -179,8 +174,8 @@ hist bmi, kdensity normal kdenopts(lc(blue)) name(bmi, replace)
 * Perfect symmetry corresponds to the theoretical straight line in the plot.
 symplot bmi, name(bmi_sym, replace)
 
-* Another technique, the quintile plot, emphasizes sudden variation in the 
-* values taken by the variable. Again, perfect variation corresponds to the 
+* Another technique, the quintile plot, emphasizes sudden variation in the
+* values taken by the variable. Again, perfect variation corresponds to the
 * theoretical straight line in the plot.
 quantile bmi, name(bmi_qnt, replace)
 
@@ -193,7 +188,7 @@ qnorm bmi, name(bmi_qnorm, replace)
 * ---------------------
 
 * Moving to statistical measures of normality, we can measure skewness, which
-* measures symmetry and approaches 0 in quasi-normal distributions, along with 
+* measures symmetry and approaches 0 in quasi-normal distributions, along with
 * kurtosis, which measures the size of the distribution tails and approaches 3
 * in quasi-normal distributions. Use the 'summarize' command with the 'detail'
 * option, respectively abbreviated as 'su' and 'd'.
@@ -209,13 +204,13 @@ su bmi, d
 * ============================
 
 
-* A technique used to approach normality with a continuous variable consists 
-* in 'transforming' the variable with a mathematical operator that modifies 
+* A technique used to approach normality with a continuous variable consists
+* in 'transforming' the variable with a mathematical operator that modifies
 * its basic unit of measurement. We learnt that the distribution of BMI for
 * its standard unit measurement is not normal, but perhaps the distribution
 * of the same values is closer to normality if we take a different measure.
 
-* The 'gladder' command visualizes several common transformations all at once. 
+* The 'gladder' command visualizes several common transformations all at once.
 gladder bmi
 
 * The logarithm transformation appears to approximate a normal distribution.
@@ -251,7 +246,7 @@ gr drop bmi1 bmi2 bmi3 bmi4
 
 * A few things about confidence intervals. Remember that all this is based on
 * the assumption that the data follow something like a normal distribution. It
-* applies to continuous variables, for which it is relevant to calculate the 
+* applies to continuous variables, for which it is relevant to calculate the
 * mean. The confidence interval reflects the standard error of the mean (SEM),
 * itself a reflection of sample size.
 

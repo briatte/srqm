@@ -64,16 +64,17 @@ program stab
 		local by_text = "for `by_vlbl'"
 		if "`by'" == "by_fullsample" {
 			local by_text = ""
-			file open `fh' using `using'_descriptions.txt, write `replace'
+			file open `fh' using `using'_stats.txt, write `replace'
 			noi di as txt _n "Exporting summary statistics to", as inp ///
-				"{browse `using'_descriptions.txt}" _n
+				"{browse `using'_stats.txt}" _n
 		}
 		else {
 			if "`if'" == "" local iff = "if _`by'_`by_i'" 
 			if "`if'" != "" local iff = "`if' & _`by'_`by_i'"
-			file open `fh' using `using'_descriptions`by_i'.txt, write `replace'
+			local by_name = strtoname("`by_vlbl'")
+			file open `fh' using `using'_stats_`by_name'.txt, write `replace'
 			noi di as txt _n "Exporting summary statistics to", ///
-				"{browse `using'_descriptions`by_i'.txt}" _n "for category" ///
+				"{browse `using'_stats_`by_name'.txt}" _n "for category" ///
 				, as inp "`by_vlbl':"
 		}
 		
@@ -214,6 +215,7 @@ program stab
 		// watered down version of mkcorr
 		
 		marksample touse
+		di "\`touse'"
 		if "`if'" != "" {
 			local if="`if'" + " & \`touse'"
 		}

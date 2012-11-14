@@ -1,21 +1,25 @@
-* What: SRQM Session 6
-* Who:  F. Briatte and I. Petev
-* When: 2012-11-05
+
+/* ------------------------------------------ SRQM Session 6 -------------------
+
+   F. Briatte and I. Petev
+
+ - TOPIC:  Opposition to Torture in European Countries
+ 
+ - DATA:   European Social Survey Round 4 (2008)
+ 
+   Last updated 2012-11-13.
+
+----------------------------------------------------------------------------- */
 
 
-* =========
-* = SETUP =
-* =========
-
-
-* Required commands.
+* Install required commands.
 foreach p in fre catplot {
-	cap which `p'
-	if _rc==111 cap noi ssc install `p' // install from online if missing
+    cap which `p'
+    if _rc==111 cap noi ssc install `p' // install from online if missing
 }
 
 * Log results.
-cap log using "Replication/week6.log", replace // new: 6
+cap log using "Replication/week6.log", replace
 
 
 * ===========
@@ -50,9 +54,9 @@ fre trrtort
 * Binary recoding (1=torture is never justifiable; undecideds removed).
 cap drop torture
 recode trrtort ///
-	(1/2=1 "Never justifiable") ///
-	(4/5=0 "Sometimes justifiable") ///
-	(3=.) (miss=.), gen(torture)
+    (1/2=1 "Never justifiable") ///
+    (4/5=0 "Sometimes justifiable") ///
+    (3=.) (miss=.), gen(torture)
 la var torture "Opposition to torture"
 
 * Overall opposition to torture in Europe.
@@ -62,7 +66,7 @@ bys cntry: ci torture [aw=dweight] // weighted by country-specific population
 
 * Average opposition to torture in each country.
 gr dot torture [aw=dweight], over(cntry, sort(1) des) scale(.7) ///
-	name(torture1, replace)
+    name(torture1, replace)
 
 
 * Detailed breakdown in each country
@@ -76,9 +80,9 @@ tab trrtort, gen(torture_)
 
 * Plot using stacked horizontal bars and a 5-pt scale graph scheme.
 gr hbar torture_* [aw=dweight], stack over(cntry, sort(1)des lab(labsize(*.8))) ///
-	yti("Torture is never justified even to prevent terrorism") ///
-	legend(rows(1) order(1 "Strongly agree" 2 "" 3 "Neither" 4 "" 5 "Strongly disagree")) ///
-	name(torture2, replace) scheme(burd5)
+    yti("Torture is never justified even to prevent terrorism") ///
+    legend(rows(1) order(1 "Strongly agree" 2 "" 3 "Neither" 4 "" 5 "Strongly disagree")) ///
+    name(torture2, replace) scheme(burd5)
 
 * Let's go a step further and plot the 'Strongly agree/disagree' categories for
 * each country in the sample. The code to get there is tugly: terrifyingly ugly.
@@ -87,8 +91,8 @@ bys cntry: egen mean1 = mean(torture_1 + torture_2)
 bys cntry: egen mean2 = mean(torture_4 + torture_5)
 bys cntry: gen cid = _n // hack
 sc mean1 mean2 if cid==1, ms(i) mlab(cntry) xsc(r(.15 .4)) ///
-	yti("Opposition to torture") xti("Openness to torture") ///
-	name(torture3, replace)
+    yti("Opposition to torture") xti("Openness to torture") ///
+    name(torture3, replace)
 
 
 * Comparing Israel to other European countries.
@@ -101,6 +105,9 @@ prtest torture, by(israel)
 * Subset to all European countries but Israel.
 drop if israel
 
+* Final sample size.
+count
+
 
 * IV: Age
 * -------
@@ -109,15 +116,15 @@ su age
 
 * Check normality.
 hist age, bin(15) normal ///
-	name(age, replace)
+    name(age, replace)
 
 * Recoding to 4 age groups.
 recode age ///
-	(18/35=1 "18-35 years") ///
-	(36/49=2 "36-49 years") ///
-	(50/64=3 "50-64 years") ///
-	(65/max=4 "65+ years") ///
-	(else=.), gen(age4)
+    (18/35=1 "18-35 years") ///
+    (36/49=2 "36-49 years") ///
+    (50/64=3 "50-64 years") ///
+    (65/max=4 "65+ years") ///
+    (else=.), gen(age4)
 la var age4 "Age (4 groups)"
 
 * Crosstabulations:
@@ -157,7 +164,7 @@ fre income
 
 * Recoding to 4 income groups.
 recode income (1/3=1 "D1-D3") (4/6=2 "D4-D6") ///
-	(7/9=3 "D7-D9") (10=4 "D10"), gen(income4)
+    (7/9=3 "D7-D9") (10=4 "D10"), gen(income4)
 la var income4 "HH income"
 
 * Conditional probabilities:
@@ -175,7 +182,7 @@ fre edu
 
 * Verify normality.
 hist edu, bin(15) normal ///
-	name(edu, replace)
+    name(edu, replace)
 
 * Comparison of average educational attainment in each category.
 ttest edu, by(torture)
@@ -191,7 +198,7 @@ prtest torture, by(rel)
 
 * Recoding to simpler groups.
 recode denom (.a=1 "Not religious") (1/4=2 "Christian") ///
-	(5=3 "Jewish") (6=4 "Muslim") (7/8=.) , gen(faith4)
+    (5=3 "Jewish") (6=4 "Muslim") (7/8=.) , gen(faith4)
 la var faith4 "Religious faith"
 
 * Conditional probabilities:

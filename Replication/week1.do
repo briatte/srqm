@@ -1,26 +1,29 @@
-* What: SRQM Session 1
-* Who:  F. Briatte and I. Petev
-* When: 2012-01-26
 
+/* ------------------------------------------ SRQM Session 1 -------------------
 
-/* Hi! Welcome to your first SRQM do-file.
+   F. Briatte and I. Petev
 
- - You are probably viewing this file from the Stata do-file editor, after 
+   Hi! Welcome to your first SRQM do-file.
+
+ - You are probably viewing this file from the Stata do-file editor, after
    opening it with the 'doedit replication/week1' command. If so, you are
    doing it right: congratulations!
    
  - You will be reading through your first do-file in just a minute. It is
    essential that you read through each week's do-file to become familiar
-   with Stata commands. We will start exploring them in class, and you get
-   to finish them on your own as homework, along with reading one chapter
-   from the course handbook and a few sections from the Stata Guide.
+   with Stata commands.
+
+ - We will start exploring do-files in class, and you get to finish them on your
+   own as homework, along with reading one chapter from the course handbook and
+   a few sections from the Stata Guide. These tasks complement each other.
    
- - Everything that you learn from the course do-files will be put to use
-   into your research project. Practice with Stata by trying out commands
-   as you learn them. If things do not work straight out, try again after
-   checking the command syntax.
-  
-*/
+ - Everything that you learn from the course do-files will be put to use in your
+   research project. Practice with Stata by trying out commands as you learn
+   them. If things do not work out, try again after checking the command syntax.
+
+   Last updated 2012-11-13.
+
+----------------------------------------------------------------------------- */
 
 
 * Comments
@@ -28,16 +31,16 @@
 
 * This line is a comment due to the '*' symbol at its beginning. It takes a
 * green colour in the Stata do-file editor. This do-file is fully commented
-* to guide you through the basics. In your own code, you should also use 
+* to guide you through the basics. In your own code, you should also use
 * comments to document and section your operations.
 
 
 * Practice
 * --------
 
-* Your mission for next week is to replicate this do-file. That means running 
-* it in full, reading the comments along as you execute its commands. Use the 
-* course slides to learn about running do-files and read from the Stata Guide 
+* Your mission for next week is to replicate this do-file. That means running
+* it in full, reading the comments along as you execute its commands. Use the
+* course slides to learn about running do-files and read from the Stata Guide
 * to understand the commands used.
 
 * There is no substitute to practice to learn statistical software. Code is
@@ -114,7 +117,7 @@ clear
 
 * These commands quickly show you how we are going to use the software: by
 * running (executing) code from Stata do-files, so that you can write your
-* own do-file for your research projects. 
+* own do-file for your research projects.
 
 
 * Commands
@@ -171,8 +174,8 @@ di "This is a test. Execute me by selecting this line, " ///
 
 * If you get lost while replicating a do-file, the safest option is to run it
 * again from the top. To do that, keyboard shortcuts make your life easy: from
-* the line where you want to start again, just press Cmmd-L (Ctrl-L), then 
-* Cmmd-Shift-Up (Ctrl-Shift-Up), and finally press Cmmd-Shift-D (Ctrl-D) to 
+* the line where you want to start again, just press Cmmd-L (Ctrl-L), then
+* Cmmd-Shift-Up (Ctrl-Shift-Up), and finally press Cmmd-Shift-D (Ctrl-D) to
 * rerun the code down to your initial line.
 
 * Additionally, you can navigate your past commands from the Command window,
@@ -187,7 +190,7 @@ di "This is a test. Execute me by selecting this line, " ///
 * The following steps teach you about setting up Stata on any computer. Start
 * by making sure that you have nothing stored in Stata memory by wiping off
 * any data in memory:
-clear 
+clear
 
 * The settings covered in this section of the do-file can be taken care of by
 * a setup utility written for the course. Please turn to the README file of the
@@ -213,7 +216,7 @@ set mem 500m
 * only if Stata has no data in storage: if you already have a dataset opened,
 * then Stata will reply with an error message. Fortunately, if you are running
 * Stata from your own computer, you can set memory permanently:
-set mem 500m, perm 
+set mem 500m, perm
 
 * There is more to learn about memory size and default settings in Stata, but
 * for the purpose of this course, this will largely suffice. Furthermore, if
@@ -259,7 +262,7 @@ ado de fre
 * (4) Working directory
 * ---------------------
 
-* The working directory is where Stata will look to open and save stuff like 
+* The working directory is where Stata will look to open and save stuff like
 * datasets or logs. Use the 'pwd' command to see where Stata is looking now.
 pwd
 
@@ -345,9 +348,9 @@ cap log close
 * You will not be able to run the above command if no log is opened. The 'cap'
 * prefix allows you to run the command and continue even if it returns an error.
 
-* If you now go to your 'Replication' folder and open the week1.log file with 
-* any plain text editor, you will find a copy of everything that was entered 
-* between the 'log using' and 'log close' commands, including comments, the 
+* If you now go to your 'Replication' folder and open the week1.log file with
+* any plain text editor, you will find a copy of everything that was entered
+* between the 'log using' and 'log close' commands, including comments, the
 * example above and its output for each command. You can view the file in Stata:
 view "Replication/week1.log"
 
@@ -366,7 +369,7 @@ help graph
 * ============
 
 
-* Show all datasets for this course. The asterisk in the command is an escape 
+* Show all datasets for this course. The asterisk in the command is an escape
 * character that causes the command to return all matches (within .dta files).
 * The 'w' option is to make the output less verbose.
 ls "Datasets/*.dta", w
@@ -390,7 +393,7 @@ lookfor army homo
 
 * Tip: an additional package can help you search for variables across datasets.
 * It should have been installed by the course setup utility. If not, install it
-* yourself 
+* yourself
 lookfor_all health, dir(Datasets)
 
 * The command above, like all commands that calls datasets or do-files,

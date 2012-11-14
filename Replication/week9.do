@@ -135,8 +135,8 @@ reg births sqrt_schooling
 
 * Reading the regression coefficient for schooling is less intuitive when it is
 * computed on the square root of the variable: it requires a short equation to
-* produce real-world examples of what the model means. However, more variance 
-* in the data is explained when the model is written in this more complex form. 
+* produce real-world examples of what the model means. However, more variance
+* in the data is explained when the model is written in this more complex form.
 
 * Visualization with solved square root units.
 tw (sc births sqrt_schooling, $ccode) (lfit births sqrt_schooling), ///
@@ -175,7 +175,7 @@ reg corruption hdi
 
 * The following commands rely on a visual inspection of the model residuals.
 * A more thorough exploration of residuals will be covered in later sessions
-* on regression diagnostics, but here is a snapshot of what we can do and 
+* on regression diagnostics, but here is a snapshot of what we can do and
 * understand by studying them in a bit more depth.
 cap drop yhat
 predict yhat
@@ -183,7 +183,7 @@ sc corruption yhat hdi, yla(0 "Highly corrupt" 10 "Lowly corrupt") ///
 	ysc(rev) connect(i l) sort(yhat) ///
 	name(r_linear, replace)
 
-* The curvilinearity, which approaches a y = x^2 function, can be taken care 
+* The curvilinearity, which approaches a y = x^2 function, can be taken care
 * of by squaring HDI and fitting the model again to the transformed data.
 gen hdi2=hdi^2
 reg corruption hdi hdi2

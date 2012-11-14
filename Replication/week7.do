@@ -1,14 +1,18 @@
-* What: SRQM Session 8 (new: 7)
-* Who:  F. Briatte and I. Petev
-* When: 2012-11-05
+
+/* ------------------------------------------ SRQM Session 7 -------------------
+
+   F. Briatte and I. Petev
+
+ - TOPIC:  Fertility and Education, Part 1
+
+ - DATA:   Quality of Government (2011)
+
+   Last updated 2012-11-13.
+
+----------------------------------------------------------------------------- */
 
 
-* =========
-* = SETUP =
-* =========
-
-
-* Required commands.
+* Install required commands.
 foreach p in mkcorr {
 	cap which `p'
 	if _rc==111 cap noi ssc install `p' // install from online if missing
@@ -32,10 +36,6 @@ ren (wdi_fr bl_asyt25 undp_hdi ti_cpi gid_fgm) (births schooling hdi corruption 
 * Compute GDP per capita.
 gen gdpc = unna_gdp/unna_pop
 la var gdpc "Real GDP per capita (constant USD)"
-
-* Geographical regions.
-gen region:region = ht_region //! new: moved to this file
-la var region "Geographical region"
 
 * Recode to less, shorter labels.
 recode ht_region (6/10=6), gen(region) l(region)
@@ -190,7 +190,7 @@ mkcorr births schooling gdpc corruption femgov, ///
 * more informative by showing country codes instead of anonymous data points:
 global ccode "ms(i) mlabpos(0) mlab(ccodewb) legend(off)"
 
-* The options contained in the global macro make the marker symbol invisible, 
+* The options contained in the global macro make the marker symbol invisible,
 * then center the marker label and fill it with the ccodewb variable (holding
 * country codes from the World Bank) in replacement of the usual dot markers.
 * In the following plots, passing the $ccode option will result in actually
@@ -203,7 +203,7 @@ global ccode "ms(i) mlabpos(0) mlab(ccodewb) legend(off)"
 sc births schooling, $ccode ///
 	name(fert_edu1, replace)
 
-* Add a color difference to Western states by overlaying multiple scatterplots. 
+* Add a color difference to Western states by overlaying multiple scatterplots.
 sc births schooling, $ccode || ///
 	sc births schooling if region==5, $ccode ///
 	name(fert_edu2, replace)

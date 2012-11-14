@@ -1,16 +1,16 @@
-* What: SRQM Session 2
-* Who:  F. Briatte and I. Petev
-* When: 2012-01-26
 
+/* ------------------------------------------ SRQM Session 2 -------------------
 
-/* Hi! Welcome to your second SRQM do-file.
+   F. Briatte and I. Petev
+
+   Hi! Welcome to your second SRQM do-file.
 
  - All do-files for this course assume that you have set up Stata for your
    computer. This includes setting up several parameters, most importantly
    setting the working directory to your SRQM folder. Please refer to the
    do-file from Session 1 for guidance on setup.
 
- - Welcome again to Stata. This do-file contains the commands used during our 
+ - Welcome again to Stata. This do-file contains the commands used during our
    second session. Read the comment lines as you go along, and execute the code
    by running commands sequentially. Select lines with Cmmd-L (Mac) or Ctrl-L
    (Win), and execute them with Cmmd-Shift-D (Mac) or Ctrl-D (Win).
@@ -20,12 +20,9 @@
    You will need to select a dataset for your own research project in the next
    couple of weeks, so learning how to explore data is essential at that point.
 
-*/
+   Last updated 2012-11-13.
 
-
-* =========
-* = SETUP =
-* =========
+----------------------------------------------------------------------------- */
 
 
 * To run this do-file, you might need to install additional commands first.
@@ -35,9 +32,8 @@
 * you skip the setup and checks, you will get 'unrecognized command' errors.
 foreach p in fre {
 	cap which `p'
-	if _rc==111 cap noi ssc install `p' // install from online if missing
+	if _rc==111 cap noi ssc install `p'
 }
-
 
 * Log the commands and results from this do-file.
 cap log using "Replication/week2.log", replace
@@ -51,13 +47,13 @@ cap log using "Replication/week2.log", replace
 * Data: U.S. National Health Interview Survey (2009).
 use "Datasets/nhis2009.dta", clear
 
-* Once the dataset is loaded, the Variables window will fill up, and you will 
-* be able to look at the actual dataset from the Data Editor. Read from the 
+* Once the dataset is loaded, the Variables window will fill up, and you will
+* be able to look at the actual dataset from the Data Editor. Read from the
 * course material to make sure that you know how to read through a dataset:
 * its data structure shows observations in rows and variables in columns.
 * Also make sure that you understand what a cross-sectional dataset is.
 
-* Our first step verifies whether the survey is cross-sectional. As we find 
+* Our first step verifies whether the survey is cross-sectional. As we find
 * that the data contains more than one survey wave and spans over several years,
 * we keep only most recent observations. This step applies only to datasets that
 * contain multiple survey years, which is not the case of other course datasets.
@@ -70,27 +66,27 @@ lookfor year
 tab year
 
 * The data should be cross-sectional for the purpose of this course. However,
-* the dataset contains observations for more than one year. We will solve that 
+* the dataset contains observations for more than one year. We will solve that
 * issue by keeping observations for the 2009 survey year only.
 
 * Delete all observations except for 2009.
 drop if year != 2009
 
-* The 'drop' command deleted all observations for which the variable 'year' is 
+* The 'drop' command deleted all observations for which the variable 'year' is
 * different (!=) from 2009. An equivalent command would be:
 *
 * keep if year==2009
 *
-* This command keeps only observations for which the 'year' variable is equal 
-* (==) to 2009. Notice that the 'equal to' operator in Stata is a double equal 
+* This command keeps only observations for which the 'year' variable is equal
+* (==) to 2009. Notice that the 'equal to' operator in Stata is a double equal
 * sign (==). Logical operators apply to many commands: read on to find out.
 * Also note that the spaces around logical operators are optional.
 
 * Locate some variables of interest by looking for keywords in the variables.
 * You can explore your dataset by looking for particular keywords in the
 * variable names and labels. This is particularly useful when your dataset
-* comes with variable names that are hard or impossible to understand by 
-* themselves, such as 'v1' or 'epi_epi'. The example below will identify 
+* comes with variable names that are hard or impossible to understand by
+* themselves, such as 'v1' or 'epi_epi'. The example below will identify
 * several variables with either 'height' or 'weight' in their descriptors.
 lookfor height weight
 
@@ -103,7 +99,7 @@ list height weight in 1/10
 * ===========================
 
 
-* Our next step is to compute the Body Mass Index for each observation in the 
+* Our next step is to compute the Body Mass Index for each observation in the
 * dataset (i.e. for each respondent to the survey) from their height and weight
 * by using the 'height' and 'weight' variables, and the formula for BMI.
 
@@ -112,7 +108,7 @@ list height weight in 1/10
 gen bmi = weight*703/(height^2)
 
 * If something looks wrong later on in your analysis, check your BMI equation.
-* Also note that Stata is case-sensitive: we will write 'BMI' in the comments, 
+* Also note that Stata is case-sensitive: we will write 'BMI' in the comments,
 * but the variable itself is called 'bmi' and should be written in lowercase.
 
 * Add a description label to the variable. We will come back to labels, as
@@ -129,7 +125,7 @@ d bmi
 * to generate the variable again, hence making your calculation of BMI fully
 * understandable and replicable by an exterior observer, like us, or anyone.
 
-* Take a look at the BMI of a few respondents. Values between 15 and 40 are 
+* Take a look at the BMI of a few respondents. Values between 15 and 40 are
 * expected for human beings as we know them on this planet. We also list a
 * few other variables to start thinking about possible relationships.
 list sex age health bmi in 50/60
@@ -141,8 +137,8 @@ list sex age health bmi in -10/l
 * ======================
 
 
-* We now turn to analysing the newly created 'bmi' variable, using the 
-* 'summarize' command (shorthand 'su') to obtain its mean, min and max values, 
+* We now turn to analysing the newly created 'bmi' variable, using the
+* 'summarize' command (shorthand 'su') to obtain its mean, min and max values,
 * as well as standard deviation, which we will cover later on.
 su bmi
 
@@ -151,11 +147,11 @@ su bmi
 su bmi, d
 
 * Further sessions will gradually explain how to read each statistic displayed.
-* For now, just note that the median respondent in the dataset, which is meant 
-* to be representative of the United States adult population in 2009, has a 
+* For now, just note that the median respondent in the dataset, which is meant
+* to be representative of the United States adult population in 2009, has a
 * BMI of 26, which indicates overweight. The average (mean) BMI is over that
-* value, which indicates that higher BMI values are either more frequent 
-* and/or more extreme than lower BMI values. You can also note that the top 1% 
+* value, which indicates that higher BMI values are either more frequent
+* and/or more extreme than lower BMI values. You can also note that the top 1%
 * respondents has a BMI between 41 and 50, which indicates morbid obesity.
 
 * Visualizing the distribution of BMI values among the observations contained
@@ -164,9 +160,9 @@ su bmi, d
 hist bmi, freq normal name(bmi, replace)
 
 * A histogram describes the distribution of the variable in the sample, i.e.
-* the distribution of different values of BMI among the respondents to the 
-* survey. The 'freq' option specifies to use percentages, and the 'normal' 
-* option overlays a normal distribution to the histogram, a curve to which 
+* the distribution of different values of BMI among the respondents to the
+* survey. The 'freq' option specifies to use percentages, and the 'normal'
+* option overlays a normal distribution to the histogram, a curve to which
 * we will soon come back when we cover essential statistical theory. The
 * 'name' option saves the graph in Stata temporary memory.
 
@@ -183,7 +179,7 @@ gr hbox bmi if uninsured != 9, ///
 	over(sex) asyvars over(uninsured) name(bmi_sex_ins, replace)
 
 * Note how the 'DNK' category for insurance status was excluded by using a call
-* to a conditional operator (if), which excluded observations with an insurance 
+* to a conditional operator (if), which excluded observations with an insurance
 * status equal to 9 when drawing the plot. This part of the command reads as:
 * 'draw a boxplot for all observations with an insurance status not equal to 9'.
 
@@ -191,7 +187,7 @@ gr hbox bmi if uninsured != 9, ///
 
 su bmi if age >= 20 & age < 25
 * This command reads as: 'run the 'summarize' command on the 'bmi' variable,
-* but only for observations for wich the 'age' variable takes a value greater 
+* but only for observations for wich the 'age' variable takes a value greater
 * than or equal to 20 and ('&') lesser than 25.'
 
 su bmi if sex==1 & age >= 65
@@ -207,7 +203,7 @@ su bmi if raceb==2 | raceb==3
 * If you have many categories to select, then using the -inlist- operator might
 * be much quicker. The example below selects a series of income categories that
 * fall either below the minimum wage in 2009 (15,000 dollars/year) or that fall
-* five times over that or more (i.e. earnings==11, the highest income category 
+* five times over that or more (i.e. earnings==11, the highest income category
 * in the dataset).
 tab earnings if inlist(earnings,1,2,3,11)
 
@@ -223,8 +219,8 @@ tab earnings if inlist(earnings,1,2,3,11)
 * =========================
 
 
-* Body Mass Index is our "dependent" variable, i.e. the one that we want to 
-* explain. We have reason to believe that some 'independent' variables like 
+* Body Mass Index is our "dependent" variable, i.e. the one that we want to
+* explain. We have reason to believe that some 'independent' variables like
 * gender, health status and race could be influencing BMI. In other words,
 * we assume that BMI can be partially 'predicted' by sex, health and race.
 lookfor sex health race
@@ -262,10 +258,10 @@ gr dot bmi, over(raceb) ytitle("Average Body Mass Index") name(bmi_race, replace
 gr dot bmi, over(sex) over(raceb) ytitle("Average Body Mass Index") name(bmi_race, replace)
 
 * Each independent variable might influence BMI, but can also interact with
-* another independent variable, making the explanation of BMI more complex 
+* another independent variable, making the explanation of BMI more complex
 * and detailed because its predictors might also significantly interact with
 * each other. Visualization allows to explore that intuition in the same way
-* that it helped thinking about predictors to the dependent variable. 
+* that it helped thinking about predictors to the dependent variable.
 
 * The graph below explores a relationship between three independent variables.
 * An additional trick in this graph is that its command runs over three lines.
