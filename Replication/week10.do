@@ -91,7 +91,7 @@ reg partnrs5 i.female coninc
 * Let's transform income into a more meaningful scale.
 * A dollar change in income is not large enough to expect a large effect.
 * Let's change income to tens of thousands of dollars.
-gen coninc2=coninc/10000
+gen coninc2 = coninc/10000
 
 reg partnrs5 i.female coninc2
 
@@ -111,6 +111,12 @@ fre marital
 
 * Finally, let's control for age.
 reg partnrs5 i.female coninc2 educ size i.wrkstat i.marital age
+
+
+* Standardized coefficients
+* -------------------------
+
+reg partnrs5 i.female coninc2 educ size i.wrkstat i.marital age, b
 
 
 * Reinterpretation of the constant
@@ -140,6 +146,7 @@ reg partnrs5 i.female zconinc2 zeduc zsize i.wrkstat i.marital zage
 
 * The results do not change except for the constant. For this model, the constant
 * stands for the average number of partners of respondents who are:
+*
 * - Male
 * - With average income
 * - With average education
@@ -147,33 +154,6 @@ reg partnrs5 i.female zconinc2 zeduc zsize i.wrkstat i.marital zage
 * - Employed full-time
 * - Married
 * - Mid-age
-
-
-* Robust standard errors
-* ----------------------
-
-reg partnrs5 i.female zconinc2 zeduc zsize i.wrkstat i.marital zage
-reg partnrs5 i.female zconinc2 zeduc zsize i.wrkstat i.marital zage, r
-
-
-* Standardized coefficients
-* -------------------------
-
-reg partnrs5 i.female zconinc2 zeduc zsize i.wrkstat i.marital zage
-reg partnrs5 i.female zconinc2 zeduc zsize i.wrkstat i.marital zage, b
-
-
-* Residuals
-* ---------
-
-rvfplot
-rvpplot
-
-
-* Variance inflation
-* ------------------
-
-vif
 
 
 * ========
