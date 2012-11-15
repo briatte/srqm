@@ -104,7 +104,7 @@ sysuse lifeexp, clear
 sc lexp safewater
 clear
 
-* Notice that the syntax used for the 'scatter' command is different because
+* Notice that the syntax used for the -scatter- command is different because
 * it has been abbreviated to 'sc'. The first line is a comment that uses an
 * alternative way to tell Stata that the line is a comment. Save and close
 * the do-file window when you have copied the full code to it.
@@ -120,11 +120,13 @@ clear
 * own do-file for your research projects.
 
 
-* Commands
-* --------
+* ============
+* = COMMANDS =
+* ============
 
 
 * Tip (1): Get to learn some syntax
+* ---------------------------------
 
 * Most Stata commands share an identical syntax that calls one or several
 * variables as the main argument:
@@ -138,34 +140,21 @@ clear
 
 
 * Tip (2): Run all lines in sequential order
+* ------------------------------------------
 
-* - Applies to all do-files.
-* - Requires you execute do-files in full.
-* - Requires you know where you are in your code.
+* You need to execute all lines of a do-file in order to avoid execution errors.
+* The example below illustrates the point:
 
 clear
 set obs 100
 gen test=1
-ren test x // This line will not run if you do not run the previous ones.
+ren test x // This line will not run if you do not run the previous ones first.
+           // The command intends to rename the 'test' variable, but 'test' does
+           // not exist unless you create it first by running the previous line.
 
 
-* Tip (3): Run multiple lines together
-
-* - Applies every time you see '///' at the end of a line.
-* - Requires you select more than one line. Use Ctrl-L (Win) or Cmmd-L (Mac).
-* - Requires you run them with Ctrl-D (Win) or Cmmd-Shift-D (Mac).
-
-di "This is a test. Execute me by selecting this line, " ///
-	"and this line too, " _newline ///
-	"and this line too. Well done :)"
-
-* You will have to do the same for code loops, such as 'foreach {}' loops.
-* You will usually be warned before in the comments. Finally, note that these
-* multiple-line commands do *not* work if you copy-paste from the do-file to
-* the Command window.
-
-
-* Tip (4): Keyboard shortcuts for Mac (Win)
+* Tip (3): Keyboard shortcuts for Mac (Win)
+* -----------------------------------------
 
 * - Cmmd-L (Ctrl-L) selects a whole line
 * - Shift + Up/Down arrows selects or deselects neighbouring lines
@@ -178,8 +167,37 @@ di "This is a test. Execute me by selecting this line, " ///
 * Cmmd-Shift-Up (Ctrl-Shift-Up), and finally press Cmmd-Shift-D (Ctrl-D) to
 * rerun the code down to your initial line.
 
-* Additionally, you can navigate your past commands from the Command window,
-* using the PageUp/PageDown keys. One last tip at that stage: practice a lot!
+
+* Tip (4): Command navigation
+* ---------------------------
+
+* You can navigate through past commands from the Command window by using the
+* PageUp and PageDown keys. Try running the following command:
+
+* memory6
+
+* You should get an error: the right command is -memory- without the final '6'.
+* To quickly correct your mistake, press PageUp and Stata will print the command
+* again to your Command window, allowing you to quickly correct the syntax of
+* your command and try it again without the final '6'.
+
+
+* Tip (5): Run multiple lines together
+* ------------------------------------
+
+* When you see '///' at the end of a line, you have to select the next line too
+* and execute the lines together from the do-file: copy-pasting to the Command
+* window will not work. Use Ctrl-L (Win) or Cmmd-L (Mac) and Shift+DownArrow to
+* select the lines, then run them with Ctrl-D (Win) or Cmmd-Shift-D (Mac).
+
+di "This is a test. Execute me by selecting this line, " ///
+    "and this line too, " _newline ///
+    "and this line too. Well done :)"
+
+* You will have to do the same for code loops, such as 'foreach {}' loops.
+* You will usually be warned before in the comments. Finally, note that these
+* multiple-line commands do *not* work if you copy-paste from the do-file to
+* the Command window.
 
 
 * =========
@@ -189,7 +207,7 @@ di "This is a test. Execute me by selecting this line, " ///
 
 * The following steps teach you about setting up Stata on any computer. Start
 * by making sure that you have nothing stored in Stata memory by wiping off
-* any data in memory:
+* any data in memory with the -clear- command:
 clear
 
 * The settings covered in this section of the do-file can be taken care of by
@@ -207,10 +225,6 @@ clear
 * large datasets: if you forget to set memory, Stata will reply with an error
 * message. The basic command to allocate 500MB memory follows:
 set mem 500m
-
-* Note: the 'cap' (capture) prefix is not part of the command, it is an extra
-* safety to allow this do-file to run through the line even if it returns an
-* error, as it should if you are using Stata 12+.
 
 * You need to repeat that command every time you run Stata. The command works
 * only if Stata has no data in storage: if you already have a dataset opened,
@@ -250,7 +264,7 @@ set more off, perm
 
 * sysdir set PLUS "c:\temp"
 
-* This course makes heavy use of the 'fre' command to view frequencies.
+* This course makes heavy use of the -fre- command to view frequencies.
 * Install the command by uncommenting and running this command while online:
 
 * ssc install fre
@@ -263,7 +277,7 @@ ado de fre
 * ---------------------
 
 * The working directory is where Stata will look to open and save stuff like
-* datasets or logs. Use the 'pwd' command to see where Stata is looking now.
+* datasets or logs. Use the -pwd- command to see where Stata is looking now.
 pwd
 
 * Use 'ls' command to list the files where Stata is looking. The 'w' option will
@@ -287,7 +301,7 @@ ls, w
 * of the folders that lead to it. Be careful with that, or you will get errors
 * when trying to study for the course.
 
-* The 'cd' command shown above navigates through your folders. The next example
+* The -cd- command shown above navigates through your folders. The next example
 * assumes that you are now in the SRQM folder. It will select the folder that
 * contains the course do-files. The quotes can be omitted when the path contains
 * no spaces, but we will use them systematically for consistency, as in:
@@ -418,18 +432,18 @@ use "Datasets/nhis2009.dta", clear
 * This command will serve as an example:
 su weight if raceb==1, d
 
-* To understand what 'su' means and does, type 'help' followed by 'su':
+* To understand what 'su' means and does, type -help- followed by 'su':
 help su
 
-* The underline tells you that 'su' is shorthand for 'summarize', which returns
+* The underline tells you that 'su' is shorthand for -summarize-, which returns
 * a few summary statistics for the variable 'weight' in this example. The 'if'
 * component of the command is also documented in Stata:
 help if
 
-* The 'd' option is documented on the help page for 'summarize'. It specifies
+* The 'd' option is documented on the help page for -summarize-. It specifies
 * that you want more detailed statistics: 'd' is shorthand for 'detail' here.
 
-* The 'help' command itself can be abbreviated to simply 'h'. Try this example
+* The -help- command itself can be abbreviated to simply 'h'. Try this example
 * to realise how quick accessing Stata help pages can be:
 h su
 

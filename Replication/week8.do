@@ -1,15 +1,6 @@
-
-/* ------------------------------------------ SRQM Session 8 -------------------
-
-   F. Briatte and I. Petev
-
- - TOPIC:  Fertility and Education
-
- - DATA:   Quality of Government (2011)
- 
-   Last updated 2012-11-13.
-
------------------------------------------------------------------------------ */
+* What: SRQM Session 8
+* Who:  F. Briatte and I. Petev
+* When: 2012-11-05
 
 
 * Install required commands.
@@ -37,26 +28,15 @@ ren (wdi_fr bl_asyt25 undp_hdi ti_cpi gid_fgm) (births schooling hdi corruption 
 gen gdpc = unna_gdp/unna_pop
 la var gdpc "Real GDP per capita (constant USD)"
 
-* Geographical regions.
-gen region:region = ht_region //! new: moved to this file
-la var region "Geographical region"
-
-* Recode to less, shorter labels.
-recode region (6/10=6)
-la de region 1 "E. Europe and PSU" 2 "Lat. America" ///
-	3 "N. Africa and M. East" 4 "Sub-Sah. Africa" ///
-	5 "W. Europe and N. America" 6 "Asia, Pacific and Carribean" ///
-	, replace
-
 
 * Finalized sample
 * ----------------
 
 * Have a quick look.
-codebook births schooling gdpc hdi corruption femgov region, c
+codebook births schooling gdpc hdi corruption femgov, c
 
 * Check missing values.
-misstable pat births schooling gdpc hdi corruption femgov region ccodewb
+misstable pat births schooling gdpc hdi corruption femgov ccodewb
 
 * You would usually delete incomplete observations at that stage, but we will
 * exceptionally keep them here to illustrate how pairwise correlation works.
@@ -159,7 +139,7 @@ gr mat births schooling log_gdpc corruption femgov, ///
 
 * You could also look at a sparser version of the matrix that shows only half of
 * all plots for a subset of geographical regions.
-gr mat births schooling log_gdpc corruption femgov if inlist(region,4,5), half ///
+gr mat births schooling log_gdpc corruption femgov if inlist(ht_region,4,5), half ///
 	name(gr_matrix, replace)
 
 * The most practical way to consider all possible correlations in a list of
@@ -209,12 +189,12 @@ sc births schooling, $ccode ///
 
 * Add a color difference to Western states by overlaying multiple scatterplots.
 sc births schooling, $ccode || ///
-	sc births schooling if region==5, $ccode ///
+	sc births schooling if ht_region==5, $ccode ///
 	name(fert_edu2, replace)
 
 * Add a tone and color difference to subsaharan African states (more options!).
 sc births schooling, mlabc(gs10) $ccode || ///
-	sc births schooling if region==4, $ccode ///
+	sc births schooling if ht_region==4, $ccode ///
 	name(fert_edu3, replace)
 
 * There are binders full of Stata graph options like these. Have a look at the

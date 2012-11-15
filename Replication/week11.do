@@ -310,7 +310,7 @@ reg births c.schooling##c.log_gdpc aids##region, r beta
 * This section shows how to export regression results, in order to avoid having
 * to copy out the results by hand, copy-paste or any other risky (non)technique
 * that you might come up with at that stage. Exporting regression results also
-* make it easier to build several regression models based on varying sets of 
+* make it easier to build several regression models based on varying sets of
 * covariates (independent variables), in order to compare their coefficients.
 
 * The next commands require that you install the estout package first.
@@ -339,9 +339,6 @@ esttab M1 M2 M3 using "week11_regressions.txt", replace constant beta(2) se(2) r
 
 * Close log (if opened).
 cap log close week11
-
-* Replicate (creates a replication material folder).
-repl week11
 
 * We are done. Just quit the application, have a nice week, and see you soon :)
 * exit, clear

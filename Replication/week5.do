@@ -20,7 +20,7 @@
  - (H3): We finally expect health insurance coverage to limit health consumption
    in poorer households, possibly affecting BMI across the life course.
    
-   Our data come from the most recent year of the National Health Interview 
+   Our data come from the most recent year of the National Health Interview
    Survey (NHIS). The sample used in the analysis contains = ..,... individuals
    selected through state-level stratified probability sampling.
  
@@ -130,7 +130,7 @@ mvdecode ybarcare uninsured, mv(9)
 * ----------
 
 * Select data from most recent year.
-drop if year!=2009	
+drop if year!=2009
 
 * Patterns of missing data.
 misstable pat bmi age female raceb educrec1 earnings uninsured ybarcare
@@ -194,7 +194,7 @@ bys female: ci bmi    // confidence bands
 
 * Plot BMI groups for each racial background:
 spineplot bmi6 raceb, scheme(burd6) ///
-    name(race, replace) 
+    name(race, replace)
 
 * Histogram by race and gender groups.
 hist bmi, bin(10) xline(27) ///
@@ -253,7 +253,6 @@ bys inc: ci bmi    // confidence bands
 * IV: Health insurance
 * --------------------
 
-
 * Plot BMI distribution for groups who have or do not have health coverage.
 kdensity bmi if uninsured==1, addplot(kdensity bmi if uninsured==2) ///
 	legend(order(1 "Not covered" 2 "Covered") row(1)) ///
@@ -282,10 +281,10 @@ bys ybarcare: ci bmi    // confidence bands
 * ==================
 
 
-* The next commands are part of the SRQM folder. If Stata returns an error when
-* you run them, set the folder as your working directory and type 'run profile'
-* to run the course setup, then try the commands again. If you still experience
-* problems with -stab- or -repl-, please send me a detailed email on the issue.
+* The next command is part of the SRQM folder. If Stata returns an error when
+* you run it, set the folder as your working directory and type 'run profile'
+* to run the course setup, then try the command again. If you still experience
+* problems with the -stab- command, please send a detailed email on the issue.
 
 stab using week5 [aw=perweight], replace ///
 	su(bmi age) ///
@@ -305,23 +304,6 @@ stab using week5 [aw=perweight], replace ///
   for the final sample. We will expand the use of that command at a later
   stage to also export correlation tables in a few weeks. */
  
- 
-* Export all replication files
-* ----------------------------
-
-repl week5
-
-/* Basic usage of -repl- command:
-
-1- set the SRQM folder as the working directory
-2- put your do-file in the Replication folder
-3- put the -repl- command at the end of your do-file
-4- select all your do-file and execute it
-
-   Stata will replicate your do-file and send all tables and saved graphs to a
-   folder. Saved graphs are those identified with the name() option. A list of
-   exported files will also be saved to the folder as a README file. */
-
 
 * =======
 * = END =

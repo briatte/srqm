@@ -31,8 +31,20 @@ recode region (6/10=6)
 la de region 1 "E. Europe and PSU" 2 "Lat. America" ///
 	3 "N. Africa and M. East" 4 "Sub-Sah. Africa" ///
 	5 "W. Europe and N. America" 6 "Asia, Pacific and Carribean" ///
-	, modify
+	, replace
 
+
+* Finalized sample
+* ----------------
+
+* Have a quick look.
+codebook births schooling gdpc hdi corruption femgov region, c
+
+* Check missing values.
+misstable pat births schooling gdpc hdi corruption femgov region
+
+* Subset to complete observations (not run for demonstration purposes).
+* drop if mi(births, schooling, gdpc, hdi, corruption, femgov)
 
 * ==========
 * = MODELS =
@@ -156,8 +168,6 @@ tw (sc schooling log_gdpc, $ccode) (lfit schooling log_gdpc), ///
 * difficult here due to the logarithmic unit of GDP, but the transformation
 * was necessary to identify the linear relationship between the two variables.
 reg schooling log_gdpc
-
-//////////
 
 
 * (3) Corruption and Human Development

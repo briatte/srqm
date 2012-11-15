@@ -25,11 +25,9 @@
 ----------------------------------------------------------------------------- */
 
 
-* To run this do-file, you might need to install additional commands first.
-* The next lines will check this: select the whole block and execute it. If you
-* have run the course setup, everything is already in place. Otherwise, if
-* you are online, a few additional packages will be installed into Stata. If
-* you skip the setup and checks, you will get 'unrecognized command' errors.
+* To run this do-file, you might need to install some additional commands first.
+* The next lines will check this: select the whole loop and execute it. The loop
+* spans from 'foreach' to the final '}' a few lines later.
 foreach p in fre {
 	cap which `p'
 	if _rc==111 cap noi ssc install `p'
@@ -72,7 +70,7 @@ tab year
 * Delete all observations except for 2009.
 drop if year != 2009
 
-* The 'drop' command deleted all observations for which the variable 'year' is
+* The -drop- command deleted all observations for which the variable 'year' is
 * different (!=) from 2009. An equivalent command would be:
 *
 * keep if year==2009
@@ -104,7 +102,7 @@ list height weight in 1/10
 * by using the 'height' and 'weight' variables, and the formula for BMI.
 
 * Create the Body Mass Index from height and weight.
-* The 'gen' command is shorthand for 'generate'.
+* The -gen- command is shorthand for -generate-.
 gen bmi = weight*703/(height^2)
 
 * If something looks wrong later on in your analysis, check your BMI equation.
@@ -112,14 +110,14 @@ gen bmi = weight*703/(height^2)
 * but the variable itself is called 'bmi' and should be written in lowercase.
 
 * Add a description label to the variable. We will come back to labels, as
-* they have many different uses. All label commands start with 'label' ('la').
-* The one below applies a label to a variable (shorthanded 'var'):
+* they have many different uses. All label commands start with -label- (-la-).
+* The one below applies a label to a variable (shorthanded -var-):
 la var bmi "Body Mass Index"
 
 * List BMI among the variables included in the current dataset.
 d bmi
 
-* The 'describe' command (shorthanded 'd') shows that the BMI variable is now
+* The -describe- command (shorthanded -d-) shows that the BMI variable is now
 * part of the NHIS dataset. However, DO NOT SAVE your dataset, even when you
 * perform a useful operation like this one. Instead, you will run the do-file
 * to generate the variable again, hence making your calculation of BMI fully
@@ -138,7 +136,7 @@ list sex age health bmi in -10/l
 
 
 * We now turn to analysing the newly created 'bmi' variable, using the
-* 'summarize' command (shorthand 'su') to obtain its mean, min and max values,
+* -summarize- command (shorthand -su-) to obtain its mean, min and max values,
 * as well as standard deviation, which we will cover later on.
 su bmi
 
@@ -156,7 +154,7 @@ su bmi, d
 
 * Visualizing the distribution of BMI values among the observations contained
 * in the dataset will make these first insights more clear and more complete.
-* Create a histogram (shorthanded 'hist') for the distribution of BMI:
+* Create a histogram (shorthanded -hist-) for the distribution of BMI:
 hist bmi, freq normal name(bmi, replace)
 
 * A histogram describes the distribution of the variable in the sample, i.e.
@@ -186,7 +184,7 @@ gr hbox bmi if uninsured != 9, ///
 * Here are more examples of logical operators:
 
 su bmi if age >= 20 & age < 25
-* This command reads as: 'run the 'summarize' command on the 'bmi' variable,
+* This command reads as: 'run the -summarize- command on the 'bmi' variable,
 * but only for observations for wich the 'age' variable takes a value greater
 * than or equal to 20 and ('&') lesser than 25.'
 
@@ -200,7 +198,7 @@ su bmi if raceb==2 | raceb==3
 * two ethnic groups: the '|' symbol is the logical operator for 'or'. It
 * reads as: 'summarize BMI if the respondent is Black or Hispanic.'
 
-* If you have many categories to select, then using the -inlist- operator might
+* If you have many categories to select, then using the 'inlist' operator might
 * be much quicker. The example below selects a series of income categories that
 * fall either below the minimum wage in 2009 (15,000 dollars/year) or that fall
 * five times over that or more (i.e. earnings==11, the highest income category
@@ -219,14 +217,14 @@ tab earnings if inlist(earnings,1,2,3,11)
 * =========================
 
 
-* Body Mass Index is our "dependent" variable, i.e. the one that we want to
+* Body Mass Index is our 'dependent variable', i.e. the one that we want to
 * explain. We have reason to believe that some 'independent' variables like
 * gender, health status and race could be influencing BMI. In other words,
 * we assume that BMI can be partially 'predicted' by sex, health and race.
 lookfor sex health race
 
 * Summarize BMI (as well as height and weight) for each value of 'sex'. The
-* 'su' command presumes that you are describing a variable that can take any
+* -su- command presumes that you are describing a variable that can take any
 * numerical value, and shows a five-number summary of it.
 bysort sex: su bmi age height weight
 
@@ -234,17 +232,17 @@ bysort sex: su bmi age height weight
 codebook health
 
 * The codebook shows that the 'health' variable comes in ordered categories.
-* In that case, the 'su' command will not inspect the variable properly. You
-* will instead need to use either the 'tab' or the 'fre' command to describe
+* In that case, the -su- command will not inspect the variable properly. You
+* will instead need to use either the -tab- or the -fre- command to describe
 * the variable properly, by viewing its frequencies:
 fre health
 
 * Note that health is measured on five levels that come as values (1-5), and
-* labels attached to them (from "Excellent" to "Poor"). We will discuss this
+* labels attached to them (from 'Excellent' to 'Poor'). We will discuss this
 * structure in depth when we introduce variable types and value labels. For
 * the moment, simply note that the 'health' variable holds an ordinal scale
 * of self-reported health status, and that the values attached to its labels
-* are merely a way to create an ordinal scale: "poor" health is not worth 5
+* are merely a way to create an ordinal scale: 'poor' health is not worth 5
 * points of anything. Refer later to the course material to make sure that
 * you are familiar with the terminology and notions of variable description.
 

@@ -5,6 +5,12 @@ cap pr drop repl
 program repl
 	syntax name(id="project name")
 
+	di as txt "Still in development. Bye!"
+	exit -1
+
+if "$srqm_repl" != "" exit 0
+global srqm_repl = 1
+
 // --- INIT --------------------------------------------------------------------
 
 cap cd "$srqm_wd"
@@ -43,7 +49,7 @@ noi cd `namelist'
 cap log close `namelist'.log
 cap log using `namelist'.log, name(`namelist') replace
 
-do temp.do, nostop
+do temp.do
 
 cap log close `namelist' // will contain a few extra error messages
 
