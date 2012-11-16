@@ -109,7 +109,8 @@ sc r yhat, ///
 * Draw scatterplots and linear fits for each region. Visualizing small multiples
 * requires using an independent variable with a limited number of categories and
 * might reveal additional strengths or weaknesses of your model.
-sc births schooling || lfit births schooling, by(region)
+sc births schooling || lfit births schooling, by(region) ///
+	name(lfit_region, replace)
 
 * Run the linear regression models for each region. Observe how the standard
 * errors and p-values of the regression coefficients widen when the regional

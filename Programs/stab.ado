@@ -215,7 +215,7 @@ program stab
 		// watered down version of mkcorr
 		
 		marksample touse
-		di "\`touse'"
+
 		if "`if'" != "" {
 			local if="`if'" + " & \`touse'"
 		}
