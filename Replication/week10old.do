@@ -1,43 +1,43 @@
-
-/* ------------------------------------------ SRQM Session 9 -------------------
-
-   F. Briatte and I. Petev
-
- - TOPIC:  Sexual Partners in the U.S.
-
- - DATA:   U.S. General Social Survey (2010)
- 
-   What makes Americans likely to report high numbers of sexual partners in the
-   last five years? What makes them more likely to report low numbers?
-   
-   We explore that topic this week, as a means of introduction to multiple
-   linear regression with individual-level data. Our first approach of linear
-   regression will be relatively low-tech, as we will focus on fitting the
-   model without diagnosing its validity. Regression diagnostics are explored
-   next week.
-
-   Last updated 2012-11-13.
-
------------------------------------------------------------------------------ */
+* What: SRQM Session 10
+* Who:  F. Briatte and I. Petev
+* When: 2011-11-21
 
 
-* Install required commands.
+* =========
+* = SETUP =
+* =========
+
+
+* Required commands.
 foreach p in fre {
 	cap which `p'
-	if _rc==111 cap noi ssc install `p'
+	if _rc==111 cap noi ssc install `p' // install from online if missing
 }
 
 * Log results.
 cap log using "Replication/week10.log", replace
 
 
-* ====================
-* = DATA DESCRIPTION =
-* ====================
+* ===========
+* = DATASET =
+* ===========
 
 
+* Dataset: U.S. General Social Survey from 2010.
 use "Datasets/gss2010.dta", clear
 
+* RESEARCH QUESTION:
+* Do men have more sexual partners than women?
+
+* HYPOTHESIS:
+* All other things kept equal, men declare more sexual partners than women.
+
+* DV:
+* Number of sex partners respondent had in last 5 years.
+
+* IVs:
+* Gender, age, family income, education, marital status, working status, and
+* size of residential area.
 
 * Keep variables of interest and respondent ID.
 keep id partnrs5 sex age coninc educ marital wrkstat size
@@ -49,18 +49,6 @@ drop if mi(partnrs5)
 * Inspect IVs, drop missing cases.fre sex age coninc educ marital wrkstat size, r(10)
 drop if mi(age,coninc,educ,marital,wrkstat)
 
-* Generate age decades.
-gen age10 = 10*floor(age/10)
-
-* Drop small-N category of age < 20.
-drop if age < 20
-
-* Inspect DV by age.
-spineplot partnrs5 age10, scheme(burd8)
-
-* Inspect DV by age, sex and interviewer's sex.
-gr bar partnrs5, over(female) asyvars over(age10) by(intsex)
-
 * Drop ambiguous wrkstat category "Other".
 drop if wrkstat==8
 
@@ -71,11 +59,6 @@ drop if partnrs5==9
 recode sex (1=0 "Male") (2=1 "Female"), gen(female)
 drop sex
 
-* Final sample size.
-count
-
-* Survey weights.
-svyset vpsu [weight=wtcomb], strata (vstrat)
 
 * ================
 * = DESCRIPTIONS =
@@ -108,7 +91,7 @@ reg partnrs5 i.female coninc
 * Let's transform income into a more meaningful scale.
 * A dollar change in income is not large enough to expect a large effect.
 * Let's change income to tens of thousands of dollars.
-gen coninc2=coninc/10000
+gen coninc2 = coninc/10000
 
 reg partnrs5 i.female coninc2
 
@@ -130,16 +113,22 @@ fre marital
 reg partnrs5 i.female coninc2 educ size i.wrkstat i.marital age
 
 
+* Standardized coefficients
+* -------------------------
+
+reg partnrs5 i.female coninc2 educ size i.wrkstat i.marital age, b
+
+
 * Reinterpretation of the constant
 * --------------------------------
 
-* Lastly, the constant reflects the value of y when the IVs are equal to the
+* Lastly, the constant reflects the value of y when the IVs are equal to the 
 * reference category for the categorical IVs (i.e., males, full-time employment,
 * married) or 0 for the continuous IVs (income=0, education=0, age=0, size=0).
-* However, often for continuous variables, as in this case, the 0 category is
-* unlikely (educ=0 and income=0) or unreal (age=0 and size=0). Therefore, the
-* constant is not meaningful and interpretable. In such cases, it's best to
-* recode your continuous IVs so that their mean is equal to 0, making the
+* However, often for continuous variables, as in this case, the 0 category is 
+* unlikely (educ=0 and income=0) or unreal (age=0 and size=0). Therefore, the 
+* constant is not meaningful and interpretable. In such cases, it's best to 
+* recode your continuous IVs so that their mean is equal to 0, making the 
 * reference category for the constant the sample mean for each continuous IV.
 * To do so, we simply nead to substract from each variable its mean.
 
@@ -157,6 +146,7 @@ reg partnrs5 i.female zconinc2 zeduc zsize i.wrkstat i.marital zage
 
 * The results do not change except for the constant. For this model, the constant
 * stands for the average number of partners of respondents who are:
+*
 * - Male
 * - With average income
 * - With average education
@@ -164,33 +154,6 @@ reg partnrs5 i.female zconinc2 zeduc zsize i.wrkstat i.marital zage
 * - Employed full-time
 * - Married
 * - Mid-age
-
-
-* Robust standard errors
-* ----------------------
-
-reg partnrs5 i.female zconinc2 zeduc zsize i.wrkstat i.marital zage
-reg partnrs5 i.female zconinc2 zeduc zsize i.wrkstat i.marital zage, r
-
-
-* Standardized coefficients
-* -------------------------
-
-reg partnrs5 i.female zconinc2 zeduc zsize i.wrkstat i.marital zage
-reg partnrs5 i.female zconinc2 zeduc zsize i.wrkstat i.marital zage, b
-
-
-* Residuals
-* ---------
-
-rvfplot
-rvpplot
-
-
-* Variance inflation
-* ------------------
-
-vif
 
 
 * ========

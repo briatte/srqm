@@ -24,7 +24,7 @@ foreach p in mkcorr {
 }
 
 * Log results.
-cap log using "Replication/week8.log", replace
+cap log using "Replication/week7.log", replace
 
 
 * ===========

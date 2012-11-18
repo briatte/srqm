@@ -1,237 +1,387 @@
-* What: SRQM Session 9
-* Who:  F. Briatte and I. Petev
-* When: 2012-11-05
+
+/* ------------------------------------------ SRQM Session 10 ------------------
+
+   F. Briatte and I. Petev
+
+ - TOPIC:  Satisfaction with Health Services in Britain and France
+ 
+ - DATA:   European Social Survey Round 4 (2008)
+    
+   We explore patterns of satisfaction with the state of health services in
+   the UK and France, two countries with extensive public healthcare systems
+   and where health services play different roles in political competition.
+
+ - (H1): We expect to observe high satisfaction on average, except among those
+   in ill health, who we expect to report lower satisfaction regardless of age,
+   sex, income or political views.
+
+ - (H2): We also expect respondents in political opposition to the government to
+   report less satisfaction with the state of health services in the country,
+   independently of all other characteristics.
+
+ - (H3): We finally expect to find lower patterns of satisfaction among those
+   who report financial difficulties, as evidence of an income effect that
+   we expect to exist in isolation of all others.
+
+   We use data from the European Social Survey (ESS) Round 4. The sample used in
+   the analysis contains N = 1,942 French and N = 2,079 UK individuals selected
+   through stratified probability sampling and interviewed face-to-face in 2008.
+
+   We run linear regressions for each country to assess whether satisfaction
+   with health services can be predicted from political factors, controlling
+   for age, sex, health status and financial situation.
+
+   Last updated 2012-11-13.
+
+----------------------------------------------------------------------------- */
 
 
-* =========
-* = SETUP =
-* =========
-
-
-* Replicate last week and clear graphs (also loads and prepares the data)
-do "Replication/week8.do"
-gr drop _all
-
-* Required commands.
-foreach p in mkcorr {
-	cap which `p'
-	if _rc==111 cap noi ssc install `p' // install from online if missing
+* Install required commands.
+foreach p in estout fre leanout {
+    cap which `p'
+    if _rc==111 cap noi ssc install `p'
 }
 
 * Log results.
-cap log using "Replication/week9.log", replace
-
-* Graph macro.
-global ci "legend(off) lp(dash)"
-
-gen region:region = ht_region
-
-* Recode and relabel values.
-recode region (6/10=6)
-la de region 1 "E. Europe and PSU" 2 "Lat. America" ///
-	3 "N. Africa and M. East" 4 "Sub-Sah. Africa" ///
-	5 "W. Europe and N. America" 6 "Asia, Pacific and Carribean" ///
-	, replace
+cap log using "week9.log", replace
 
 
-* Finalized sample
-* ----------------
+* ====================
+* = DATA DESCRIPTION =
+* ====================
 
-* Have a quick look.
-codebook births schooling gdpc hdi corruption femgov region, c
+
+use "Datasets/ess2008.dta", clear
+
+
+* Dependent variable
+* ------------------
+
+fre stfhlth
+
+* Rename DV.
+ren stfhlth hsat
+
+* Cross-country comparison.
+tab cntry, summ(hsat)
+
+* Detailed summary statistics.
+su hsat, d
+
+
+* Cross-country comparisons
+* -------------------------
+
+* Cross-country visualization (mean).
+gr dot hsat, over(cntry, sort(1)des) yla(0 10) ///
+    yti("Satisfaction in health services") ///
+    name(dv_country, replace)
+
+* Generate category dummies for the full 11-pt scale DV.
+cap drop hsat11_*
+tab hsat, gen(hsat11_)
+
+* Cross-country visualization (full 11-pt scale).
+gr hbar hsat11_*, over(cntry, sort(1)des) stack legend(off) ///
+    yti("Satisfaction in health services") ///
+    scheme(burd11) name(dv_country11, replace)
+
+
+* Independent variables
+* ---------------------
+
+fre agea gndr health hincfel lrscale, r(10)
+
+* Recode sex to dummy.
+gen female:female = (gndr==2) if !mi(gndr)
+la de female 0 "Male" 1 "Female", replace
+
+* Fix age variable name.
+ren agea age
+
+* Generate six age groups (15-24, 25-34, ..., 65+).
+gen age6:age6 = irecode(age,24,34,44,54,64,.)
+replace age6 = 10*age6 + 15
+la de age6 15 "15-24" 25 "25-34" 35 "35-44" 45 "45-54" 55 "55-64" 65 "65+", replace
+
+* Subjective low income dummy.
+gen lowinc = (hincfel > 2) if !mi(hincfel)
+
+* Recode left-right scale.
+recode lrscale (0/4=1 "Left") (5=2 "Centre") (6/10=3 "Right"), gen(pol3)
+
+
+* Subsetting
+* ----------
 
 * Check missing values.
-misstable pat births schooling gdpc hdi corruption femgov region
+misstable pat hsat age6 female health pol3 lowinc if cntry=="FR"
+misstable pat hsat age6 female health pol3 lowinc if cntry=="GB"
 
-* Subset to complete observations (not run for demonstration purposes).
-drop if mi(births, schooling, gdpc, hdi, corruption, femgov)
+* Select case studies.
+keep if inlist(cntry,"FR","GB")
 
+* Delete incomplete observations.
+drop if mi(hsat,age6,female,health,pol3,lowinc)
 
-* ==========
-* = MODELS =
-* ==========
-
-
-* (1) Fertility Rates and Schooling Years
-* ---------------------------------------
-
-* We are looking again at Example 1 for the previous do-file. At that stage, we
-* assume that you have a substantive model to explain the relationship that you
-* are studying, otherwise the results of the model will land nowhere and serve
-* no analytical purpose. Theoretical support is unavoidable hereinafter.
-
-* Visual fit.
-sc births schooling, $ccode ///
-	legend(off) yti("Fertility rate (births per woman)") ///
-	name(fert_edu1, replace)
-
-* Linear fit.
-tw (sc births schooling, $ccode) (lfit births schooling, $ci), ///
-	yti("Fertility rate (births per woman)") ///
-	name(fert_edu2, replace)
-
-* Add 95% CI.
-tw (sc births schooling, $ccode) (lfitci births schooling, $ci), ///
-	yti("Fertility rate (births per woman)") ///
-	name(fert_edu3, replace)
-
-* Estimate the predicted effect of the education level on the fertility rate.
-* Function: number of births = _cons (alpha) + Coef (beta) * schooling years.
-reg births schooling
-
-* Simple residuals-versus-fitted plot.
-rvfplot, $ccode yline(0) ///
-	name(rvfplot, replace)
+* Final sample sizes.
+bys cntry: count
 
 
-* Plotting regression results
-* ---------------------------
+* Normality
+* ---------
 
-* Get fitted values.
-cap drop yhat
-predict yhat
+* Distribution of the DV in the case studies.
+hist hsat, discrete normal xla(1 11) by(cntry, legend(off) note("")) ///
+    name(dv_histograms, replace)
 
-* Plot DV with observed and predicted values of IV.
-sc births schooling || conn yhat schooling, ///
-	name(dv_yhat, replace)
+* Generate strictly positive DV recode.
+gen hsat1 = hsat + 1
 
-* Get residuals.
-cap drop r
-predict r, resid
+* Visual check of common transformations.
+gladder hsat1, bin(11) ///
+   name(gladder, replace)
 
-* Plot residuals against predicted values of IV.
-sc r yhat, ///
-	name(rvfplot2, replace)
+/* Notes:
 
+ - There are more missing observations for Britain than for France, and this
+   might distort the results if the non-respondents come, for example, from the
+   same end of the political spectrum. We'll be careful.
 
-* Small multiples
-* ---------------
+ - The distribution of the DV is skewed to the right in both case studies, which
+   is consistent with the hypothesis that extensive healthcare states like the
+   ones found in Britain France enjoy higher popular support.
 
-* Draw scatterplots and linear fits for each region. Visualizing small multiples
-* requires using an independent variable with a limited number of categories and
-* might reveal additional strengths or weaknesses of your model.
-sc births schooling || lfit births schooling, by(region) ///
-	name(lfit_region, replace)
+ - To allow for a log-transformation, the variable should be strictly positive
+   since the function f: y = log(x) is undefined for x = 0. We use a recode of
+   the DV of strictly positive range to test for transformations.
 
-* Run the linear regression models for each region. Observe how the standard
-* errors and p-values of the regression coefficients widen when the regional
-* sample size falls at lower numbers of observations.
-bys region: reg births schooling
-
-* Detailed residuals-versus-fitted plots.
-sc r yhat, yline(0) by(region, total) $ccode ///
-	name(rvfplot2, replace)
+ - The square root comes only marginally closer to a normal distribution. With
+   little improvement in normality, transforming the DV would be overkill. It is
+   reasonable to carry on with the untransformed DV. */
 
 
-* Transforming the DV
-* -------------------
-
-* We will start working on linear models, but a more advanced model might better
-* explain the relationship as it actually looks less linear than quadratic.
-tw (sc births schooling, $ccode) (qfit births schooling), ///
-	name(fert_edu, replace)
-
-* In this case, using the square root of the independent variable might provide
-* better estimates of its actual effect on the dependent variable. We could have
-* diagnosed that earlier by looking at the normality of the schooling variable,
-* for which a square root transformation is recommended by the ladder commands.
-
-* Variable transformation.
-gen sqrt_schooling = sqrt(schooling)
-la var sqrt_schooling "Average schooling years (sqrt)"
-
-* Visual inspection.
-tw (sc births sqrt_schooling, $ccode) (lfit births sqrt_schooling), ///
-	name(fert_edu, replace)
-
-* Regression model.
-reg births sqrt_schooling
-
-* Reading the regression coefficient for schooling is less intuitive when it is
-* computed on the square root of the variable: it requires a short equation to
-* produce real-world examples of what the model means. However, more variance
-* in the data is explained when the model is written in this more complex form.
-
-* Visualization with solved square root units.
-tw (sc births sqrt_schooling, $ccode) (lfit births sqrt_schooling), ///
-	xla(1 "1" 1.5 "2.25" 2 "4" 2.5 "6.25" 3 "9" 3.5 "12.25") ///
-	xti("Average schooling years") note("Horizontal axis in square units.") ///
-	name(fert_edu, replace)
+* =====================
+* = ASSOCIATION TESTS =
+* =====================
 
 
-* (2) Schooling Years and (Log) Gross Domestic Product
-* ----------------------------------------------------
+* Relationships with socio-demographics
+* -------------------------------------
 
-* As always, start with a visual inspection of the relationship.
-tw (sc schooling log_gdpc, $ccode) (lfit schooling log_gdpc), ///
-	name(edu_log_gdpc, replace)
+* Line graph using DV means computed for each age and gender group.
+cap drop msat*
+bys cntry age6: egen msat1 = mean(hsat) if female
+bys cntry age6: egen msat2 = mean(hsat) if !female
+tw conn msat1 msat2 age6, by(cntry, note("")) ///
+    xti("Age") yti("Mean level of satisfaction") ///
+    legend(row(1) order(1 "Female" 2 "Male")) ///
+    name(hsat_age_sex, replace)
 
-* The interpretation of the coefficient and intercept are going to be rather
-* difficult here due to the logarithmic unit of GDP, but the transformation
-* was necessary to identify the linear relationship between the two variables.
-reg schooling log_gdpc
+* Association between DV and gender.
+by cntry: ttest hsat, by(female)
 
+* Correlation between DV and age (using the continuous measurements).
+by cntry: pwcorr hsat age, obs sig
 
-* (3) Corruption and Human Development
-* ------------------------------------
+* Plot DV histograms over small multiples (6 age groups, 2 countries).
+hist hsat, normal discrete by(cntry age6, col(3) note("") legend(off)) ///
+    name(dv_age6, replace)
 
-* Looking again at Example 3, visualizing the nonlinear, quadratic fit.
-tw (sc corruption hdi, $ccode) (qfit corruption hdi), ///
-	ysc(rev) yla(0 "High" 10 "Low", angle(hor)) ///
-	name(cpi_hdi, replace)
+* Generate a dummy from extreme categories of age.
+cap drop agex
+gen agex:agex = .
+replace agex = 0 if age6==15
+replace agex = 1 if age6==65
+la de agex 0 "15-24" 1 "65+", replace
 
-* Before interpreting the model, remember that:
-* - the relationship is, in fact, quadratic, and only approximately linear
-* - the Corruption Perceptions Index is reverse-coded: 10 is highly corrupt
-reg corruption hdi
-
-* The following commands rely on a visual inspection of the model residuals.
-* A more thorough exploration of residuals will be covered in later sessions
-* on regression diagnostics, but here is a snapshot of what we can do and
-* understand by studying them in a bit more depth.
-cap drop yhat
-predict yhat
-sc corruption yhat hdi, yla(0 "Highly corrupt" 10 "Lowly corrupt") ///
-	ysc(rev) connect(i l) sort(yhat) ///
-	name(r_linear, replace)
-
-* The curvilinearity, which approaches a y = x^2 function, can be taken care
-* of by squaring HDI and fitting the model again to the transformed data.
-gen hdi2=hdi^2
-reg corruption hdi hdi2
-cap drop yhat2
-predict yhat2
-sc corruption yhat2 hdi, yla(0 "Highly corrupt" 10 "Lowly corrupt") ///
-	ysc(rev) connect(i l) sort(yhat) || sc yhat hdi, legend(order(2 3) ///
-	lab(2 "Quadratic fit") lab(3 "Linear fit")) name(r_curvilinear, replace)
+* Difference between age extremes.
+bys cntry: ttest hsat, by(agex)
 
 
-* (4) Female Government Ministers and Corruption
-* ----------------------------------------------
+* Relationship to health status
+* -----------------------------
 
-* Looking again at Example 4, visualizing the absence of evident fit.
-* A confidence interval was added to the regression line in order to show how
-* poorly it accounts for the relationship between the variables: only a few
-* data points are actually included in the interval, showing a mediocre fit.
-tw (lfitci corruption femgov) (sc corruption femgov, $ccode), ///
-	legend(off) yla(1 "Highly corrupt" 10 "Lowly corrupt") ///
-	name(cpi_femgov, replace)
+* DV by health.
+gr dot hsat [aw=dweight], over(health) over(cntry) ///
+    yti("Satisfaction in health services") ///
+    name(dv_health, replace)
 
-* Despite a less-than-optimal fit, the model yet returns a "good", by which
-* we mean a satisfactory p-value lower than our alpha level of statistical
-* significance. Hence, caution!
-reg corruption femgov
+* Generate a dummy from health status (bad/very bad = 0, good/very good = 1).
+cap drop health01
+recode health (1/2=1 "Good") (4/5=0 "Poor") (else=.), gen(health01)
 
-* The same information can be shown with a residuals-versus-fitted plot,
-* which displays the regression line as a horizontal line at zero. The
-* distance from that line indicates the fit of each data point. The other
-* option is naturally the residuals-versus-predictor plot, which shows the
-* residuals against values of the predictor (or independent variable).
-rvfplot, $ccode yline(0) ///
-	name(cpi_femgov_rvf, replace)
+* Association between DV and health status.
+bys cntry: ttest hsat, by(health01)
 
-rvpplot femgov, $ccode yline(0) ///
-	name(cpi_femgov_rvp, replace)
+
+* Relationship to low income status
+* ---------------------------------
+
+* DV by income.
+bys cntry: ttest hsat, by(lowinc)
+
+* Association between IV and political attitude.
+bys cntry: tab lowinc pol3, col chi2 nokey
+
+* Proportions test (since the lowinc dummy is a proportion of the sample).
+bys cntry: prtest lowinc if pol3 != 2, by(pol3)
+
+
+* Relationship to left-right attitude
+* -----------------------------------
+
+* Correlation between DV and political attitude (left 1-10 right).
+by cntry: pwcorr hsat lrscale, obs sig
+
+* Association between DV and political attitude (left, centre, right).
+gr box hsat, over(pol3) asyvars over(cntry) legend(row(1)) ///
+    scheme(burd4) name(dv_pol3, replace)
+
+
+* Comparison with covariates
+* --------------------------
+
+d hsat stfedu stfgov
+
+* DV and other ESS satisfaction items (edu = education, gov = government).
+cap drop msat*
+bys cntry lrscale: egen msat1 = mean(hsat)
+bys cntry lrscale: egen msat2 = mean(stfedu)
+bys cntry lrscale: egen msat3 = mean(stfgov)
+
+* Line graph, using the means computed above for each left-right group.
+tw conn msat1-msat3 lrscale, by(cntry, note("")) ///
+    xla(0 "Left" 10 "Right") xti("") yti("Mean level of satisfaction") ///
+    legend(row(1) order(1 "Health services" 2 "Education" 3 "Government")) ///
+    name(stf_lrscale, replace)
+
+/* Notes:
+
+ - The significance tests are expectedly highly positive due to the large N.
+   The risk here is to make Type I errors, even though the variations between
+   age groups in each country seem statistically robust.
+
+ - Health status seems important in France but not in Britain, whereas old age
+   seems important in Britain but not in France. It will be interesting to see
+   if any of these effects persist after controlling for income.
+
+ - The relationship between financial difficulties and political leaning shows
+   how your independent variables are interacting with each other.
+         
+ - Other measures of satisfaction (which are not part of the model itself) show
+   how health services correlate to other measures of public sector performance
+   when the measures are examined by left-right positioning. Politics matter. */
+ 
+
+* =====================
+* = REGRESSION MODELS =
+* =====================
+
+
+bys cntry: reg hsat i.age6 female i.health lowinc i.pol3
+
+* Cleaner output.
+leanout: reg hsat i.age6 female i.health lowinc i.pol3 if cntry=="FR"
+leanout: reg hsat i.age6 female i.health lowinc i.pol3 if cntry=="GB"
+
+* Using the -estout- command
+* --------------------------
+
+* Store model estimates.
+eststo clear
+bys cntry: eststo: reg hsat i.age6 female i.health lowinc i.pol3
+
+* View stored model estimates.
+eststo dir
+
+* View standardized coefficients.
+esttab, lab wide nogaps beta(2) se(2) mti("FR" "GB")
+
+* Export unstandardized coefficients.
+esttab using week10_regressions.txt, ///
+    replace lab wide nolines nogaps b(1) se(1) mti("FR" "GB")
+
+
+* Models with covariates
+* ----------------------
+
+* Run identical model on satisfaction with education.
+bys cntry: eststo: reg stfedu i.age6 female i.health lowinc i.pol3
+
+* Run identical model on satisfaction with government.
+bys cntry: eststo: reg stfgov i.age6 female i.health lowinc i.pol3
+
+* View updated list of model estimates.
+eststo dir
+
+* Compare DV and covariates in each country (use standardized coefficients...
+esttab est1 est3 est5, lab nogaps beta(2) se(2) r2 ///
+	mti("Health" "Education" "Government") ti("France")
+
+* ... and add the option to show the R-squared, to compare predicted variance).
+esttab est2 est4 est6, lab nogaps beta(2) se(2) r2 ///
+	mti("Health" "Education" "Government") ti("UK")
+
+* View updated list of model estimates.
+eststo dir
+
+/* Notes:
+
+ - On first read, the models seem to do fine: the RMSE indicates a mean error
+   of 2 on a scale of 11. Furthermore, both case studies have the same constant,
+   which makes it easy to compare from one to the other.
+
+ - Note how some coefficients indicate similar effects (health, sex, income),
+   whereas others reveal cross-case differences in either the direction and
+   magnitude of the effect (old age) or statistical significance (politics).
+
+ - The -leanout- command makes your model more readable and helps you focus on
+   the essentials: coefficients, confidence intervals, root mean square error.
+   Use it to read the regression model of each case study.
+  
+ - The -estout- commands work by storing model estimates (eststo) and putting
+   them into tables (esttab). Use it at the end of your regression commands:
+   start with -reg-, then -leanout-, then -eststo-, then -esttab-.
+   
+ - The -estout- command is especially practical when you run many models, as
+   shown here when we check how the DV model compares to other satisfaction
+   measures (covariates). Check the -estout- website for more examples. */
+
+
+* ==================
+* = EXPORT RESULTS =
+* ==================
+
+
+* The next command is part of the SRQM folder. If Stata returns an error when
+* you run it, set the folder as your working directory and type 'run profile'
+* to run the course setup, then try the command again. If you still experience
+* problems with the -stab- command, please send a detailed email on the issue.
+
+
+* Export summary statistics
+* -------------------------
+
+stab using week10 [aw=dweight], replace ///
+    su(hsat age lrscale) corr ///
+    fr(female age6 health lowinc pol3) ///
+    by(cntry)
+
+/* Basic syntax of -stab- command:
+
+ - 'using name'  adds the 'name' prefix to the exported file(s)
+ - 'su()'        summarizes a list of continuous variables (mean, sd, min-max)
+ - 'fre()'       summarizes a list of categorical variables (frequencies)
+ - 'corr'        adds a correlation matrix of continuous variables
+ - 'by'          produces several tables over a given categorical variable
+ - 'replace'     overwrite previous tables
+ - '[aw,fw]'     use survey weights
+
+   In the example above, the -stab- command will export two files to the working
+   directory, containing summary statistics for France (week10_stats_FR.txt) and
+   Britain (week10_stats_GB.txt). If the research examines continuous variables,
+   add the 'corr' option to also export a correlation matrix, as shown here. */
 
 
 * =======
@@ -242,5 +392,5 @@ rvpplot femgov, $ccode yline(0) ///
 * Close log (if opened).
 cap log close
 
-* We are done. Just quit the application, have a nice week, and see you soon :)
+* We are done. Thanks for following!
 * exit, clear
