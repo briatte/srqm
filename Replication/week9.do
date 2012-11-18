@@ -44,7 +44,8 @@ codebook births schooling gdpc hdi corruption femgov region, c
 misstable pat births schooling gdpc hdi corruption femgov region
 
 * Subset to complete observations (not run for demonstration purposes).
-* drop if mi(births, schooling, gdpc, hdi, corruption, femgov)
+drop if mi(births, schooling, gdpc, hdi, corruption, femgov)
+
 
 * ==========
 * = MODELS =
@@ -55,9 +56,9 @@ misstable pat births schooling gdpc hdi corruption femgov region
 * ---------------------------------------
 
 * We are looking again at Example 1 for the previous do-file. At that stage, we
-* assume that you have a subtantive model to explain the relationship that you
+* assume that you have a substantive model to explain the relationship that you
 * are studying, otherwise the results of the model will land nowhere and serve
-* no analytical purpose. Theoretical support is hence unavoidable hereinafter.
+* no analytical purpose. Theoretical support is unavoidable hereinafter.
 
 * Visual fit.
 sc births schooling, $ccode ///
@@ -233,9 +234,9 @@ rvpplot femgov, $ccode yline(0) ///
 	name(cpi_femgov_rvp, replace)
 
 
-* ========
-* = EXIT =
-* ========
+* =======
+* = END =
+* =======
 
 
 * Close log (if opened).

@@ -49,7 +49,7 @@ gen bmi = weight*703/(height^2)
 la var bmi "Body Mass Index"
 
 * Weight the data with NHIS individual weights.
-svyset psu [pw=perweight], strata(strata) vce(linearized) singleunit(missing)
+svyset psu [pw=perweight], strata(strata)
 
 
 * =============
@@ -228,14 +228,26 @@ gr hbox logbmi
 
 * Running the same graphs with a few options to combine them allows a quick
 * visual comparison of the transformation.
+
+* Part 1/4.
 hist bmi, normal xscale(off) yscale(off) ///
 	title("Untransformed") name(bmi1, replace)
+
+* Part 2/4.
 gr hbox bmi, fysize(25) name(bmi2, replace)
+
+* Part 3/4.
 hist logbmi, normal xscale(off) yscale(off) ///
 	title("Transformed") name(bmi3, replace)
+
+* Part 4/4.
 gr hbox logbmi, fysize(25) name(bmi4, replace)
+
+* Final combined graph.
 gr combine bmi1 bmi3 bmi2 bmi4, imargin(small) ysize(3) col(2) ///
 	name(bmi_comparison, replace)
+
+* Drop individual pieces.
 gr drop bmi1 bmi2 bmi3 bmi4
 
 
@@ -279,17 +291,17 @@ replace yrsinus=. if yrsinus==0
 * We know from previous analysis that BMI varies by gender and ethnicity.
 * We now look for the effect of the number of years spent in the U.S. within
 * each gender and ethnic categories.
-graph dot bmi, over(female) over(yrsinus) over(race) asyvars scale(.7)
+graph dot bmi, over(sex) over(yrsinus) over(raceb) asyvars scale(.7)
 
 * The average BMI of Blacks who spent less than one year in the U.S. shows
-* an outstanding difference for males and females, but this category holds
+* an outstanding difference for males and sexs, but this category holds
 * so little observations that the difference should not be considered.
-bysort female: ci bmi if race==2 & yrsinus==1
+bys sex: ci bmi if raceb==2 & yrsinus==1
 
-* Identically, the seemingly clean pattern among male and female Asians is
+* Identically, the seemingly clean pattern among male and sex Asians is
 * calculated on a low number of observations and requires verification of
 * the confidence intervals. The pattern appears to be rather robust.
-bysort yrsinus: ci bmi if race==4
+bys yrsinus: ci bmi if raceb==4
 
 * EXTRA BONUS!
 
@@ -297,30 +309,30 @@ bysort yrsinus: ci bmi if race==4
 * bands follow a different method of calculation. Basically, categorical data is
 * just dummies for a bunch of categories, and the distribution of binary data
 * can hardly be normal. The binomial distributions applies instead.
-ci female, binomial
+ci sex, binomial
 
 * Categorical variables, which can be described through proportions, also
 * come with confidence intervals that reflect the range of values that each
 * category might take in the true population. The proportions of ethnic groups
 * in the U.S., for instance, are somehwere in these intervals:
-prop race
+prop raceb
 
 * Actually, if you want to be completely correct, you need to weight the data
 * with the svy: prefix to use the weight settings specified earlier. This will
 * have a tremendous effect on your data in this case, shifting the proportion
 * of White respondents from roughly 60% to roughly 70% of all U.S. adults, the
 * reason being that other racial-ethnic groups are oversampled in NHIS data.
-svy: prop race
+svy: prop raceb
 
 * Identically to continuous variables, confidence intervals for categorical
 * data will increase when the total number of observations decreases. The
 * 95% CI for ethnicity on morbidly obese respondents illustrates that issue.
-prop race if bmi > 40
+prop raceb if bmi > 40
 
 
-* ========
-* = EXIT =
-* ========
+* =======
+* = END =
+* =======
 
 
 * Close log (if opened).

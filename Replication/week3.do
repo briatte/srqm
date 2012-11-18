@@ -100,11 +100,6 @@ fre sq
 * observations. Read the same variable again with that lens:
 su sq
 
-* The more appropriate command would have to take into account the fact that
-* our status quo variable is a dichotomous outcome, and that the data should
-* be weighted. We will explore these themes later on, but the command is:
-svy: prop sq
-
 
 * =========================
 * = INDEPENDENT VARIABLES =
@@ -118,7 +113,7 @@ fre v223
 ren v223 sex
 
 * Recode as binary: either female or not.
-recode sex (1=0 "Male") (2=1 "Female"), gen(female)
+recode sex (1=0 "Male") (2=1 "Female") (else=.), gen(female)
 la var female "Gender"
 fre female
 
@@ -126,9 +121,9 @@ fre female
 * Since the recoded status quo variable can only take values of 0 and 1,
 * with 1 indicating support for the status quo, then its mean indicates the
 * percentage of status quo supporters in each gender group.
-bysort female: su sq
+bys female: su sq
 
-* The same result appears if you crosstabulate both variables.
+* The same result can be obtained by crosstabulating the variables.
 tab sq female, col
 
 
@@ -236,16 +231,24 @@ la val hh hh_labels
 la var hh "Household composition"
 fre hh
 
-* Average support for the status quo by household composition.
-gr dot sq, over(female) over(hh) name(sq_hhold, replace)
+* Average support for the status quo by household composition. The first command
+* produces a dotplot, the next ones produce spineplots if you have installed the
+* -spineplot- command. One of the graphs also uses the burd7 graph scheme, which
+* is part of the course material and should be available if you have set up your
+* computer for the course in the previous sessions.
 
-* Alternative visualization. Install the command by uncommenting the line below.
-spineplot married sq, name(spine_married, replace)
-spineplot hh sq, scheme(burd7) name(spine_hh, replace)
+gr dot sq, over(female) over(hh) ///
+	name(sq_hhold, replace)
+
+spineplot hh sq, ///
+	scheme(burd7) name(sq_hhold2, replace)
+
+spineplot married sq, ///
+	name(sq_married, replace)
 
 * Alternative crosstabulations:
 table children female married, c(n sq mean sq) format(%9.2f) // supercolumns
-tab sq married, cell // cell percentages.
+tab sq married, cell // cell percentages
 
 
 * (5) Urban setting
@@ -279,47 +282,9 @@ spineplot city3 sq, scheme(burd6) name(sq_city3, replace)
 tab sq city3, col nofreq
 
 
-* ========================
-* = CONFIDENCE INTERVALS =
-* ========================
-
-
-* The following lines show what we will learn to do in future sessions when we
-* add estimation and significance to our toolkit. You do not need to replicate
-* this part of the code. Note: collapsing is going to alter the data in memory
-* and you will have to run all lines from the 'preserve' to 'restore' commands
-* for the code to execute properly.
-
-* Recoding city size to dummy.
-recode city8 (1/6=0 "lo") (8=1 "hi"), gen(city2)
-
-* Preserve WVS 2000 data.
-preserve
-
-* Collapse data by age group and city size (destructive).
-collapse (mean) sq (sd) sd = sq (count) n = sq, by(agegroup city2)
-
-* Create upper-level and lower-level confidence intervals.
-gen ul = sq + invttail(n-1,0.025)*(sd / sqrt(n))
-gen ll = sq - invttail(n-1,0.025)*(sd / sqrt(n))
-
-* Plot.
-tw conn sq agegroup if city2==0 || ///
-	rcap ul ll agegroup if city2==0 || ///
-	rcap ul ll agegroup if city2==1 || ///
-	conn sq agegroup if city2==1, ms(Oh) ///
-	xlab(1 "16-33" 2 "34-49" 3 "50-64" 4 "65+") ///
-	legend(subtitle("City population") pos(3) col(1) ///
-	order(1 "< 500,000" 4 "> 500,000")) ///
-	yti("Attitude = (status quo)") scheme(burd4) // that was long
-
-* Restore original data.
-restore
-
-
-* ========
-* = EXIT =
-* ========
+* =======
+* = END =
+* =======
 
 
 * Close log (if opened).

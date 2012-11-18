@@ -155,7 +155,8 @@ su bmi, d
 * Visualizing the distribution of BMI values among the observations contained
 * in the dataset will make these first insights more clear and more complete.
 * Create a histogram (shorthanded -hist-) for the distribution of BMI:
-hist bmi, freq normal name(bmi, replace)
+hist bmi, freq normal ///
+	name(bmi, replace)
 
 * A histogram describes the distribution of the variable in the sample, i.e.
 * the distribution of different values of BMI among the respondents to the
@@ -167,19 +168,21 @@ hist bmi, freq normal name(bmi, replace)
 * Another visualization is the boxplot, which uses different criteria to shape
 * the distribution of the variable. Refer to the course material to understand
 * how quartiles and outliers are calculated to form each element of the plot.
-gr hbox bmi, name(bmi_boxplot, replace)
+gr hbox bmi, ///
+	name(bmi_boxplot, replace)
 
-* This more complex example uses with the 'over() asyvars' option to produce the
-* box plots of BMI over gender categories, and then again over insurance status.
-* Note that you need to select BOTH LINES TOGETHER to run the command properly.
-* The result will stay in memory under the name given by the name() option.
-gr hbox bmi if uninsured != 9, ///
-	over(sex) asyvars over(uninsured) name(bmi_sex_ins, replace)
+* This more complex example uses with the -over() asyvars- options to produce
+* boxplots of BMI over gender groups, and then again over insurance status.
+* The result will stay in memory under the name given by the -name()- option.
+* Note that you need to select both lines to run the command properly: if you
+* do not include the final line, Stata will not understand the full command.
+gr hbox bmi if uninsured != 9, over(sex) asyvars over(uninsured) ///
+	name(bmi_sex_ins, replace)
 
-* Note how the 'DNK' category for insurance status was excluded by using a call
-* to a conditional operator (if), which excluded observations with an insurance
+* Note how the 'DK' category for insurance status was removed by using a call
+* to the conditional operator -if-, to exclude observations with an insurance
 * status equal to 9 when drawing the plot. This part of the command reads as:
-* 'draw a boxplot for all observations with an insurance status not equal to 9'.
+* draw a boxplot of all observations with an insurance status not equal to 9.
 
 * Here are more examples of logical operators:
 
@@ -198,7 +201,7 @@ su bmi if raceb==2 | raceb==3
 * two ethnic groups: the '|' symbol is the logical operator for 'or'. It
 * reads as: 'summarize BMI if the respondent is Black or Hispanic.'
 
-* If you have many categories to select, then using the 'inlist' operator might
+* If you have many categories to select, then using the -inlist- operator might
 * be much quicker. The example below selects a series of income categories that
 * fall either below the minimum wage in 2009 (15,000 dollars/year) or that fall
 * five times over that or more (i.e. earnings==11, the highest income category
@@ -225,13 +228,16 @@ lookfor sex health race
 
 * Summarize BMI (as well as height and weight) for each value of 'sex'. The
 * -su- command presumes that you are describing a variable that can take any
-* numerical value, and shows a five-number summary of it.
-bysort sex: su bmi age height weight
+* numerical value, and shows a five-number summary of it. The -bysort- (bys)
+* prefix takes one categorical variable and will repeat the command over its
+* categories. The entire command thus reads: for each value of the female
+* categorical variable, summarize the continuous variables BMI and weight.
+bysort sex: su bmi age weight
 
 * Read the Stata codebook for the 'health' variable:
 codebook health
 
-* The codebook shows that the 'health' variable comes in ordered categories.
+* The codebook shows that the health variable comes in ordered categories.
 * In that case, the -su- command will not inspect the variable properly. You
 * will instead need to use either the -tab- or the -fre- command to describe
 * the variable properly, by viewing its frequencies:
@@ -240,20 +246,23 @@ fre health
 * Note that health is measured on five levels that come as values (1-5), and
 * labels attached to them (from 'Excellent' to 'Poor'). We will discuss this
 * structure in depth when we introduce variable types and value labels. For
-* the moment, simply note that the 'health' variable holds an ordinal scale
+* the moment, simply note that the health variable holds an ordinal scale
 * of self-reported health status, and that the values attached to its labels
 * are merely a way to create an ordinal scale: 'poor' health is not worth 5
 * points of anything. Refer later to the course material to make sure that
 * you are familiar with the terminology and notions of variable description.
 
-* Summarize BMI (as well as height and weight) for each value of 'health'.
+* Summarize BMI (as well as height and weight) for each value of the health
+* variable. Note that -bys- is shorthand for the -bysort- prefix.
 bysort health: su bmi weight
 
 * Graph the mean BMI of each ethnic group, using a dot plot.
-gr dot bmi, over(raceb) ytitle("Average Body Mass Index") name(bmi_race, replace)
+gr dot bmi, over(raceb) ytitle("Average Body Mass Index") ///
+	name(bmi_race, replace)
 
 * Add a new categorical division between men and women to the dot plot.
-gr dot bmi, over(sex) over(raceb) ytitle("Average Body Mass Index") name(bmi_race, replace)
+gr dot bmi, over(sex) over(raceb) ytitle("Average Body Mass Index") ///
+	name(bmi_race, replace)
 
 * Each independent variable might influence BMI, but can also interact with
 * another independent variable, making the explanation of BMI more complex

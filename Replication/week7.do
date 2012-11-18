@@ -7,6 +7,11 @@
 
  - DATA:   Quality of Government (2011)
 
+   This do-file is the last one that we will run on the topic of association.
+   You are expected to submit the second draft of your work very soon: the draft
+   paper that you will be submitting will be mostly significance tests, so make
+   sure that you have done all the necessary readings and practice by then.
+
    Last updated 2012-11-13.
 
 ----------------------------------------------------------------------------- */
@@ -63,7 +68,7 @@ misstable pat births schooling gdpc hdi corruption femgov region ccodewb
 * ===============
 
 
-* IV: Fertility Rates and Schooling Years
+* (1) Fertility rates and schooling years
 * ---------------------------------------
 
 scatter births schooling
@@ -71,7 +76,7 @@ scatter births schooling
 pwcorr births schooling, obs sig
 
 
-* IV: Schooling Years and (Log) Gross Domestic Product
+* (2) Schooling years and (log) Gross Domestic Product
 * ----------------------------------------------------
 
 sc gdpc schooling
@@ -101,7 +106,7 @@ sc log_gdpc schooling, yline(7.5) xline(6) ///
 pwcorr gdpc log_gdpc schooling, obs sig
 
 
-* IV: Corruption and Human Development
+* (3) Corruption and human development
 * ------------------------------------
 
 * Before graphing the variables, we need to pass a few graph options, because
@@ -122,7 +127,7 @@ sc corruption hdi, ysc(rev) ///
 pwcorr corruption hdi, obs sig
 
 
-* IV: Female Government Ministers and Corruption
+* (4) Female government ministers and corruption
 * ----------------------------------------------
 
 * Obtain summary statistics.
@@ -217,9 +222,9 @@ sc births schooling, mlabc(gs10) $ccode || ///
 * help pages for two-way graphs (h tw) for a list that applies to scatterplots.
 
 
-* ========
-* = EXIT =
-* ========
+* =======
+* = END =
+* =======
 
 
 * Close log (if opened).

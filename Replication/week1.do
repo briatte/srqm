@@ -338,6 +338,12 @@ log using "Replication/week1.log", replace
 * Now run these example commands (do not worry about the comments, you can leave
 * them where they are and 'execute' them too, Stata will just ignore them):
 
+* Loading data from the U.S. National Health Interview Survey (2009).
+use "Datasets/nhis2009.dta", clear
+
+* The 'clear' option gets rid of any data previously loaded into memory, since
+* Stata can only open one dataset at once.
+
 d year sex weight raceb  // describe a few variables
 keep if year==2009       // keep observations for year 2009
 
@@ -413,12 +419,6 @@ lookfor_all health, dir(Datasets)
 * The command above, like all commands that calls datasets or do-files,
 * requires that the SRQM folder has been set as the working directory.
 
-* We will now load data from the U.S. National Health Interview Survey (2009).
-use "Datasets/nhis2009.dta", clear
-
-* The 'clear' option gets rid of any data previously loaded into memory, since
-* Stata can only open one dataset at once.
-
 
 * ========
 * = HELP =
@@ -427,25 +427,24 @@ use "Datasets/nhis2009.dta", clear
 
 * It is essential to the methods covered by this course that you learn to use
 * help extensively. The course material includes a lot of help with Stata, but
-* you should also learn to use the internal Stata help pages.
-
-* This command will serve as an example:
-su weight if raceb==1, d
+* you should also learn to use internal Stata help pages, accessible with the
+* -help- command. If you want to understand the following command:
+*
+* su weight if raceb==1, d
 
 * To understand what 'su' means and does, type -help- followed by 'su':
 help su
 
 * The underline tells you that 'su' is shorthand for -summarize-, which returns
-* a few summary statistics for the variable 'weight' in this example. The 'if'
-* component of the command is also documented in Stata:
-help if
+* a few summary statistics for one or more variables. The -help- command itself
+* can be abbreviated to simply 'h'. The 'if' component of the command is also
+* documented in Stata:
+h if
 
-* The 'd' option is documented on the help page for -summarize-. It specifies
-* that you want more detailed statistics: 'd' is shorthand for 'detail' here.
-
-* The -help- command itself can be abbreviated to simply 'h'. Try this example
-* to realise how quick accessing Stata help pages can be:
-h su
+* Finally, the 'd' option shown in the example is documented on the help page
+* for -summarize-. It produces more statistics: 'd' is shorthand for 'detail'.
+* Do not confuse it with the -d- shorthand  for the -describe- command, which
+* lists the variables in the current dataset.
 
 
 * =======

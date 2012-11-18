@@ -275,9 +275,9 @@ tab torture media, col nof exact
 prtest torture, by(media)
 
 
-* ========
-* = EXIT =
-* ========
+* =======
+* = END =
+* =======
 
 
 * Close log (if opened).
