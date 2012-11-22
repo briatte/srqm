@@ -83,7 +83,7 @@ la var region "Geographical region"
 pwcorr births sqrt_schooling log_gdpc aids, star(.05)
 gr mat births sqrt_schooling log_gdpc, half
 
-* Export correlation matrix (requires estout package)
+* Export correlation matrix.
 eststo clear
 qui estpost correlate births sqrt_schooling log_gdpc aids, matrix listwise
 esttab using week11_correlations.txt, unstack not compress label replace
@@ -145,9 +145,9 @@ su births schooling log_gdpc
 * that loses the metric, sensible units of variables to create a fictional view
 * of coefficients that indicates which coefficient produces the biggest effect
 * on the dependent variable and thus explains most variance within the model.
-egen std_births=std(births)
-egen std_schooling=std(schooling)
-egen std_log_gdpc=std(log_gdpc)
+egen std_births    = std(births)
+egen std_schooling = std(schooling)
+egen std_log_gdpc  = std(log_gdpc)
 su std_*
 
 * Compare both regression outputs. The first one is the linear regression that
@@ -307,13 +307,13 @@ reg births c.schooling##c.log_gdpc aids##region, r beta
 * =================
 
 
+* The next commands require that you install the -estout- package first.
+
 * This section shows how to export regression results, in order to avoid having
 * to copy out the results by hand, copy-paste or any other risky (non)technique
 * that you might come up with at that stage. Exporting regression results also
-* make it easier to build several regression models based on varying sets of
+* makes it easier to build several regression models based on varying sets of
 * covariates (independent variables), in order to compare their coefficients.
-
-* The next commands require that you install the estout package first.
 
 * Wipe any previous regression estimates.
 eststo clear
@@ -322,10 +322,10 @@ eststo clear
 eststo M1: qui reg births schooling log_gdpc, r beta
 
 * Model 2: Adding the HIV/AIDS dummy with regional interactions.
-eststo M2: qui reg births schooling log_gdpc aids##region, r beta
+eststo M2: qui reg births schooling log_gdpc aids#i.region, r beta
 
 * Model 3: Adding the interaction between education and wealth.
-eststo M3: qui reg births c.schooling##c.log_gdpc aids##region, r beta
+eststo M3: qui reg births c.schooling##c.log_gdpc aids#i.region, r beta
 
 * Export all models for comparison and reporting.
 esttab M1 M2 M3 using "week11_regressions.txt", replace constant beta(2) se(2) r2(2) ///
