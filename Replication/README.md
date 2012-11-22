@@ -6,6 +6,8 @@ This folder contains the replication do-files required to follow the [Statistica
 
 All students are required to execute the full do-file at home as a review and extension of the practice session that is run every week of class. Executing the code requires running commands sequentially, one after the other, while reading their syntax and comments.
 
+For the do-files to execute properly, the working directory must be set to the `SRQM` folder. The datasets used in the do-files are stored in the `Datasets` folder and are documented in its [README](https://github.com/briatte/srqm/blob/master/Datasets/README.md) file.
+
 ## Commands
 
 The course do-files use built-in Stata commands as well as a few additional ones that are installed from online in the first week of class, as described in the [README](https://github.com/briatte/srqm/blob/master/README.md) file of the `SRQM` folder.
@@ -17,6 +19,3 @@ Once installed, commands are documented from within Stata with the `help` comman
 - `stab` exports summary statistics, *t*-tests and correlations
 - `repl` exports complete research projects (do-file, log, tables, plots)
 
-## Datasets
-
-The datasets used in the do-files are stored in the `Datasets` folder and are documented in its [README](https://github.com/briatte/srqm/blob/master/Datasets/README.md) file. For the do-files to execute properly, the working directory must be set to the `SRQM` folder.

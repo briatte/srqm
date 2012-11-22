@@ -12,6 +12,7 @@ program srqm
 	tokenize `anything'
 	local setup =  ("`1'"=="setup")
 	local check =  ("`1'"=="check")
+	local fetch =  ("`1'"=="fetch") // now includes an update function
 	local clean =  ("`1'"=="clean")
 	local folder = ("`2'"=="folder")
 	local packages = ("`2'"=="packages")
@@ -37,7 +38,7 @@ program srqm
 
 	// check syntax
 
-	if `setup' | `check' | `clean' {
+	if `setup' | `check' | `clean' | `fetch' {
 		if `log' {
 			if "`2'"!="" local x = "-`2'"
 			cap qui log using Programs/`1'`x'.log, name(SRQM) replace
@@ -145,16 +146,16 @@ program srqm
 				// tab_chi and tabchi
 				if "`t'"=="tab_chi" cap which tabchi
 
-				if _rc==111 | "`3'" == "forced" {
+				if _rc==111 | `forced' {
 					if "`t'"=="clarify" {
 						// note: keep clarify and next at end of install macro
 						cap which simqi
-						if _rc==111 cap noi net install clarify, from("http://gking.harvard.edu/clarify")
+						if (_rc==111 | `forced') cap noi net install clarify, from("http://gking.harvard.edu/clarify")
 					}
 					else if "`t'"=="gstd01" {
 						// note: keep the underscore out of install macro
 						cap which _gstd01
-						if _rc==111 cap noi net install _gstd01, from("http://web.missouri.edu/~kolenikovs/stata")
+						if (_rc==111 | `forced') cap noi net install _gstd01, from("http://web.missouri.edu/~kolenikovs/stata")
 					}
 					else {
 						cap noi ssc install `t', replace						
@@ -271,21 +272,23 @@ program srqm
 			
 			cap qui ssc hot
 			if _rc==0 cap noi adoupdate, update all
-			if _rc!=0 di as err "Could not connect to SSC archive."
+			if _rc!=0 di as err "Could not go online to check for updates."
 		}
 		else if `course' {
 			//
-			// FULL MONTY
+			// CHECK COURSE
 			//
 			di as inp _n "Course demo:"
 
 			gr drop _all
 			win man close viewer _all
 			clear all
-			
+		
 			local start = c(current_time)
 
-			forvalues y=1/12 {
+			if "`3'"=="" local 3 = 1
+			if "`4'"=="" local 4 = 12
+			forvalues y=`3'/`4' {
 
 				gr drop _all
 				win man close viewer _all
@@ -298,16 +301,19 @@ program srqm
 
 				do Replication/week`y'.do
 				repl week`y'
-			}
-
+			
 			gr drop _all
 			win man close viewer _all
 			clear all
 
 			di as txt _n "Done! Routine launched at `start' and finished at", c(current_time) "."
-
+			}
+			else {
+				di as txt "Updating `3'"
+				strpos("`3'",".do") > 0
+			}
 		}
-		else {
+		else if "`3'" != "" {
 			//
 			// PLAIN CHECK
 			//
@@ -370,6 +376,36 @@ program srqm
 				local expr = "Replication/week`i'"
 				cap !rm -R `expr'
 			}
+		}
+	}
+
+	// =========
+	// = FETCH =
+	// =========
+
+	if `fetch' {
+
+		cap cd "$srqm_wd"
+
+		cap qui net
+		if _rc == 631 {
+			di as err "You do not seem to be online. Check your Internet connection."
+			exit 0
+		}
+
+		local bk = strtoname("`2' backup `c(current_date)'")
+		
+		if "`3'" == "dofile" {
+			cap qui copy "Replication/`2'.do" "Replication/`bk'.do", replace
+			if _rc==0 di as txt "Do-file `2' updated."
+			cap qui copy "http://briatte.org/srqm-updates/`2'.do" "Replication/`2'.do", replace
+			if _rc==0 di as txt "Do-file `2' updated."
+		}
+		
+		if "`3'" == "slides" {
+			cap qui copy "Course/`2'.pdf" "Course/`bk'.pdf", replace
+			cap qui copy "http://briatte.org/srqm-updates/`2'.pdf" "Course/`2'.pdf", replace
+			if _rc==0 di as txt "Slides `2' updated."
 		}
 	}
 

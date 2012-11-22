@@ -11,18 +11,20 @@
    running in the background. This will prepare the data by renaming variables,
    logging GDP per capita and recoding geographical regions to less categories
    and shorter labels. We then explore simple linear regression using the same
-   set of variables (DV = fertility, IVs = education, GDP/capita...) as before.
+   set of variables (DV = fertility, IVs = education, GDP per capita, etc. and
+   then DV = corruption, IVs = Human Development Index and female ministers).
+   Please refer to last week's do-file for precisions on variable recodes.
 
    Last updated 2012-11-13.
 
 ----------------------------------------------------------------------------- */
 
 
-* Replicate last week and clear graphs. The data that is left in memory is a
-* modified version the Quality of Government dataset, with all necessary recodes
-* and renames already performed. It is very common to use different do-files for
-* different tasks: in the present example, the previous do-file is used for data
-* management, and the current do-file is used for analysis.
+* Replicate last week and clear graphs. The data left in memory is a modified
+* version the Quality of Government dataset, with all necessary recodes and 
+* renames already performed. It is very common to use different do-files for
+* different tasks. In this example, the previous do-file is used for data
+* management and the current do-file is used for analysis.
 do "Replication/week7.do"
 gr drop _all
 
@@ -44,18 +46,18 @@ cap log using "Replication/week8.log", replace
 global ci "legend(off) lp(dash)"
 
 
-* ==========
-* = MODELS =
-* ==========
+* =====================
+* = REGRESSION MODELS =
+* =====================
 
 
 * (1) Fertility Rates and Schooling Years
 * ---------------------------------------
 
-* We are looking again at Example 1 for the previous do-file. At that stage, we
-* assume that you have a subtantive model to explain the relationship that you
-* are studying, otherwise the results of the model will land nowhere and serve
-* no analytical purpose. Theoretical support is hence unavoidable hereinafter.
+* We are looking again at the relationship between fertility and education that
+* we already observed in our previous do-file. At that stage, we assume that you
+* have a subtantive model to explain the relationship that you are studying, or 
+* the results of the model will land nowhere and serve no analytical purpose.
 
 * Visual fit.
 sc births schooling, $ccode ///
@@ -168,13 +170,17 @@ tw (sc schooling log_gdpc, $ccode) (lfit schooling log_gdpc), ///
 * was necessary to identify the linear relationship between the two variables.
 reg schooling log_gdpc
 
-//////////
+* The relationship is a 'lin-log' equation: Y = alpha + beta ln X, such that a
+* 1% increase in X (IV) is associated with a 0.01*beta unit increase in Y (DV).
+* Here, a 15% increase in GDP per capita translates into a 1.54*log(1.15) = .21
+* increase in education years. For more examples of lin-log relationships, see:
+* http://www.ats.ucla.edu/stat/mult_pkg/faq/general/log_transformed_regression.htm
 
 
 * (3) Corruption and Human Development
 * ------------------------------------
 
-* Looking again at Example 3, visualizing the nonlinear, quadratic fit.
+* Visualizing a nonlinear, quadratic fit with corruption as the DV.
 tw (sc corruption hdi, $ccode) (qfit corruption hdi), ///
     ysc(rev) yla(0 "High" 10 "Low", angle(hor)) ///
     name(cpi_hdi, replace)
@@ -201,20 +207,23 @@ reg corruption hdi hdi2
 cap drop yhat2
 predict yhat2
 sc corruption yhat2 hdi, yla(0 "Highly corrupt" 10 "Lowly corrupt") ///
-    ysc(rev) connect(i l) sort(yhat) || sc yhat hdi, legend(order(2 3) ///
+    ysc(rev) connect(i l) sort(yhat) || sc yhat hdi, c(l) legend(order(2 3) ///
     lab(2 "Quadratic fit") lab(3 "Linear fit")) name(r_curvilinear, replace)
 
 
 * (4) Female Government Ministers and Corruption
 * ----------------------------------------------
 
-* Looking again at Example 4, visualizing the absence of evident fit.
-* A confidence interval was added to the regression line in order to show how
-* poorly it accounts for the relationship between the variables: only a few
-* data points are actually included in the interval, showing a mediocre fit.
+* Finally, visualizing an absence of evident fit.
 tw (lfitci corruption femgov) (sc corruption femgov, $ccode), ///
     legend(off) yla(1 "Highly corrupt" 10 "Lowly corrupt") ///
     name(cpi_femgov, replace)
+
+* Another way to visualize the quality of a linear fit is to plot a smoothed fit
+* with the -lowess- command to show departures from linearity in the IV effect.
+tw (sc corruption femgov, $ccode) (lfit corruption femgov, $ci) (lowess corruption femgov), ///
+    yla(1 "Highly corrupt" 10 "Lowly corrupt") ///
+    name(cpi_femgov_lowess, replace)
 
 * Despite a less-than-optimal fit, the model yet returns a "good", by which
 * we mean a satisfactory p-value lower than our alpha level of statistical
@@ -223,14 +232,9 @@ reg corruption femgov
 
 * The same information can be shown with a residuals-versus-fitted plot,
 * which displays the regression line as a horizontal line at zero. The
-* distance from that line indicates the fit of each data point. The other
-* option is naturally the residuals-versus-predictor plot, which shows the
-* residuals against values of the predictor (or independent variable).
+* distance from that line indicates the fit of each data point.
 rvfplot, $ccode yline(0) ///
     name(cpi_femgov_rvf, replace)
-
-rvpplot femgov, $ccode yline(0) ///
-    name(cpi_femgov_rvp, replace)
 
 
 * =======

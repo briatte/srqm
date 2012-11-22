@@ -1,35 +1,20 @@
 
-/* ------------------------------------------ SRQM Session 10 ------------------
+/* ------------------------------------------ SRQM Session 9 -------------------
 
    F. Briatte and I. Petev
 
- - TOPIC:  Satisfaction with Health Services in Britain and France
+ - TOPIC:  Sexual Partners in the U.S.
+
+ - DATA:   U.S. General Social Survey (2010)
  
- - DATA:   European Social Survey Round 4 (2008)
-    
-   We explore patterns of satisfaction with the state of health services in
-   the UK and France, two countries with extensive public healthcare systems
-   and where health services play different roles in political competition.
-
- - (H1): We expect to observe high satisfaction on average, except among those
-   in ill health, who we expect to report lower satisfaction regardless of age,
-   sex, income or political views.
-
- - (H2): We also expect respondents in political opposition to the government to
-   report less satisfaction with the state of health services in the country,
-   independently of all other characteristics.
-
- - (H3): We finally expect to find lower patterns of satisfaction among those
-   who report financial difficulties, as evidence of an income effect that
-   we expect to exist in isolation of all others.
-
-   We use data from the European Social Survey (ESS) Round 4. The sample used in
-   the analysis contains N = 1,942 French and N = 2,079 UK individuals selected
-   through stratified probability sampling and interviewed face-to-face in 2008.
-
-   We run linear regressions for each country to assess whether satisfaction
-   with health services can be predicted from political factors, controlling
-   for age, sex, health status and financial situation.
+   What makes Americans likely to report high numbers of sexual partners in the
+   last five years? What makes them more likely to report low numbers?
+   
+   We explore that topic this week, as a means of introduction to multiple
+   linear regression with individual-level data. Our first approach of linear
+   regression will be relatively low-tech, as we will focus on fitting the
+   model without diagnosing its validity. Regression diagnostics are explored
+   next week.
 
    Last updated 2012-11-13.
 
@@ -37,13 +22,13 @@
 
 
 * Install required commands.
-foreach p in estout fre leanout {
-    cap which `p'
-    if _rc==111 cap noi ssc install `p'
+foreach p in fre {
+	cap which `p'
+	if _rc==111 cap noi ssc install `p'
 }
 
 * Log results.
-cap log using "week9.log", replace
+cap log using "Replication/week10.log", replace
 
 
 * ====================
@@ -51,346 +36,170 @@ cap log using "week9.log", replace
 * ====================
 
 
-use "Datasets/ess2008.dta", clear
+use "Datasets/gss2010.dta", clear
 
 
-* Dependent variable
-* ------------------
+* Keep variables of interest and respondent ID.
+keep id partnrs5 sex age coninc educ marital wrkstat size
 
-fre stfhlth
+* Inspect DV, drop missing cases.
+fre partnrs5
+drop if mi(partnrs5)
 
-* Rename DV.
-ren stfhlth hsat
+* Inspect IVs, drop missing cases.fre sex age coninc educ marital wrkstat size, r(10)
+drop if mi(age,coninc,educ,marital,wrkstat)
 
-* Cross-country comparison.
-tab cntry, summ(hsat)
+* Generate age decades.
+gen age10 = 10*floor(age/10)
 
-* Detailed summary statistics.
-su hsat, d
+* Drop small-N category of age < 20.
+drop if age < 20
 
+* Inspect DV by age.
+spineplot partnrs5 age10, scheme(burd8)
 
-* Cross-country comparisons
-* -------------------------
+* Inspect DV by age, sex and interviewer's sex.
+gr bar partnrs5, over(female) asyvars over(age10) by(intsex)
 
-* Cross-country visualization (mean).
-gr dot hsat, over(cntry, sort(1)des) yla(0 10) ///
-    yti("Satisfaction in health services") ///
-    name(dv_country, replace)
+* Drop ambiguous wrkstat category "Other".
+drop if wrkstat==8
 
-* Generate category dummies for the full 11-pt scale DV.
-cap drop hsat11_*
-tab hsat, gen(hsat11_)
+* Drop respondents oblivious of their sexual life.
+drop if partnrs5==9
 
-* Cross-country visualization (full 11-pt scale).
-gr hbar hsat11_*, over(cntry, sort(1)des) stack legend(off) ///
-    yti("Satisfaction in health services") ///
-    scheme(burd11) name(dv_country11, replace)
+* Recodes.
+recode sex (1=0 "Male") (2=1 "Female"), gen(female)
+drop sex
 
+* Final sample size.
+count
 
-* Independent variables
-* ---------------------
+* Survey weights.
+svyset vpsu [weight=wtcomb], strata (vstrat)
 
-fre agea gndr health hincfel lrscale, r(10)
+* ================
+* = DESCRIPTIONS =
+* ================
 
-* Recode sex to dummy.
-gen female:female = (gndr==2) if !mi(gndr)
-la de female 0 "Male" 1 "Female", replace
 
-* Fix age variable name.
-ren agea age
+* Explore the DV.
+fre partnrs5
+hist partnrs5, bin(10) percent addl
 
-* Generate six age groups (15-24, 25-34, ..., 65+).
-gen age6:age6 = irecode(age,24,34,44,54,64,.)
-replace age6 = 10*age6 + 15
-la de age6 15 "15-24" 25 "25-34" 35 "35-44" 45 "45-54" 55 "55-64" 65 "65+", replace
+* Bivariate test of hypothesis.
+tab partnrs5 female, nofreq col chi2
+gr hbar partnrs5, over(female)
+ttest partnrs5, by(female)
 
-* Subjective low income dummy.
-gen lowinc = (hincfel > 2) if !mi(hincfel)
 
-* Recode left-right scale.
-recode lrscale (0/4=1 "Left") (5=2 "Centre") (6/10=3 "Right"), gen(pol3)
+* ==========
+* = MODELS =
+* ==========
 
 
-* Subsetting
-* ----------
+* A simple linear regression model test.
+reg partnrs5 i.female
 
-* Check missing values.
-misstable pat hsat age6 female health pol3 lowinc if cntry=="FR"
-misstable pat hsat age6 female health pol3 lowinc if cntry=="GB"
+* Let's add some of our control variables one by one.
+* Let's control for income:
+* Is higher income associated with a higher number of partners in the US?
+reg partnrs5 i.female coninc
 
-* Select case studies.
-keep if inlist(cntry,"FR","GB")
+* Let's transform income into a more meaningful scale.
+* A dollar change in income is not large enough to expect a large effect.
+* Let's change income to tens of thousands of dollars.
+gen coninc2=coninc/10000
 
-* Delete incomplete observations.
-drop if mi(hsat,age6,female,health,pol3,lowinc)
+reg partnrs5 i.female coninc2
 
-* Final sample sizes.
-bys cntry: count
+* Let's control for education as well.
+reg partnrs5 i.female coninc2 educ
 
+* Let's control for urban size.
+reg partnrs5 i.female coninc2 educ size
 
-* Normality
-* ---------
+* How about working status?
+reg partnrs5 i.female coninc2 educ size i.wrkstat
+fre wrkstat
 
-* Distribution of the DV in the case studies.
-hist hsat, discrete normal xla(1 11) by(cntry, legend(off) note("")) ///
-    name(dv_histograms, replace)
+* Let's add a control for marital status.
+reg partnrs5 i.female coninc2 educ size i.wrkstat i.marital
+fre marital
 
-* Generate strictly positive DV recode.
-gen hsat1 = hsat + 1
+* Finally, let's control for age.
+reg partnrs5 i.female coninc2 educ size i.wrkstat i.marital age
 
-* Visual check of common transformations.
-gladder hsat1, bin(11) ///
-   name(gladder, replace)
 
-/* Notes:
+* Reinterpretation of the constant
+* --------------------------------
 
- - There are more missing observations for Britain than for France, and this
-   might distort the results if the non-respondents come, for example, from the
-   same end of the political spectrum. We'll be careful.
-
- - The distribution of the DV is skewed to the right in both case studies, which
-   is consistent with the hypothesis that extensive healthcare states like the
-   ones found in Britain France enjoy higher popular support.
-
- - To allow for a log-transformation, the variable should be strictly positive
-   since the function f: y = log(x) is undefined for x = 0. We use a recode of
-   the DV of strictly positive range to test for transformations.
-
- - The square root comes only marginally closer to a normal distribution. With
-   little improvement in normality, transforming the DV would be overkill. It is
-   reasonable to carry on with the untransformed DV. */
-
-
-* =====================
-* = ASSOCIATION TESTS =
-* =====================
-
-
-* Relationships with socio-demographics
-* -------------------------------------
-
-* Line graph using DV means computed for each age and gender group.
-cap drop msat*
-bys cntry age6: egen msat1 = mean(hsat) if female
-bys cntry age6: egen msat2 = mean(hsat) if !female
-tw conn msat1 msat2 age6, by(cntry, note("")) ///
-    xti("Age") yti("Mean level of satisfaction") ///
-    legend(row(1) order(1 "Female" 2 "Male")) ///
-    name(hsat_age_sex, replace)
-
-* Association between DV and gender.
-by cntry: ttest hsat, by(female)
-
-* Correlation between DV and age (using the continuous measurements).
-by cntry: pwcorr hsat age, obs sig
-
-* Plot DV histograms over small multiples (6 age groups, 2 countries).
-hist hsat, normal discrete by(cntry age6, col(3) note("") legend(off)) ///
-    name(dv_age6, replace)
-
-* Generate a dummy from extreme categories of age.
-cap drop agex
-gen agex:agex = .
-replace agex = 0 if age6==15
-replace agex = 1 if age6==65
-la de agex 0 "15-24" 1 "65+", replace
-
-* Difference between age extremes.
-bys cntry: ttest hsat, by(agex)
-
-
-* Relationship to health status
-* -----------------------------
-
-* DV by health.
-gr dot hsat [aw=dweight], over(health) over(cntry) ///
-    yti("Satisfaction in health services") ///
-    name(dv_health, replace)
-
-* Generate a dummy from health status (bad/very bad = 0, good/very good = 1).
-cap drop health01
-recode health (1/2=1 "Good") (4/5=0 "Poor") (else=.), gen(health01)
-
-* Association between DV and health status.
-bys cntry: ttest hsat, by(health01)
-
-
-* Relationship to low income status
-* ---------------------------------
-
-* DV by income.
-bys cntry: ttest hsat, by(lowinc)
-
-* Association between IV and political attitude.
-bys cntry: tab lowinc pol3, col chi2 nokey
-
-* Proportions test (since the lowinc dummy is a proportion of the sample).
-bys cntry: prtest lowinc if pol3 != 2, by(pol3)
-
-
-* Relationship to left-right attitude
-* -----------------------------------
-
-* Correlation between DV and political attitude (left 1-10 right).
-by cntry: pwcorr hsat lrscale, obs sig
-
-* Association between DV and political attitude (left, centre, right).
-gr box hsat, over(pol3) asyvars over(cntry) legend(row(1)) ///
-    scheme(burd4) name(dv_pol3, replace)
-
-
-* Comparison with covariates
-* --------------------------
-
-d hsat stfedu stfgov
-
-* DV and other ESS satisfaction items (edu = education, gov = government).
-cap drop msat*
-bys cntry lrscale: egen msat1 = mean(hsat)
-bys cntry lrscale: egen msat2 = mean(stfedu)
-bys cntry lrscale: egen msat3 = mean(stfgov)
-
-* Line graph, using the means computed above for each left-right group.
-tw conn msat1-msat3 lrscale, by(cntry, note("")) ///
-    xla(0 "Left" 10 "Right") xti("") yti("Mean level of satisfaction") ///
-    legend(row(1) order(1 "Health services" 2 "Education" 3 "Government")) ///
-    name(stf_lrscale, replace)
-
-/* Notes:
-
- - The significance tests are expectedly highly positive due to the large N.
-   The risk here is to make Type I errors, even though the variations between
-   age groups in each country seem statistically robust.
-
- - Health status seems important in France but not in Britain, whereas old age
-   seems important in Britain but not in France. It will be interesting to see
-   if any of these effects persist after controlling for income.
-
- - The relationship between financial difficulties and political leaning shows
-   how your independent variables are interacting with each other.
-         
- - Other measures of satisfaction (which are not part of the model itself) show
-   how health services correlate to other measures of public sector performance
-   when the measures are examined by left-right positioning. Politics matter. */
- 
-
-* =====================
-* = REGRESSION MODELS =
-* =====================
-
-
-bys cntry: reg hsat i.age6 female i.health lowinc i.pol3
-
-* Cleaner output.
-leanout: reg hsat i.age6 female i.health lowinc i.pol3 if cntry=="FR"
-leanout: reg hsat i.age6 female i.health lowinc i.pol3 if cntry=="GB"
-
-* Using the -estout- command
-* --------------------------
-
-* Store model estimates.
-eststo clear
-bys cntry: eststo: reg hsat i.age6 female i.health lowinc i.pol3
-
-* View stored model estimates.
-eststo dir
-
-* View standardized coefficients.
-esttab, lab wide nogaps beta(2) se(2) mti("FR" "GB")
-
-* Export unstandardized coefficients.
-esttab using week10_regressions.txt, ///
-    replace lab wide nolines nogaps b(1) se(1) mti("FR" "GB")
-
-
-* Models with covariates
+* Lastly, the constant reflects the value of y when the IVs are equal to the
+* reference category for the categorical IVs (i.e., males, full-time employment,
+* married) or 0 for the continuous IVs (income=0, education=0, age=0, size=0).
+* However, often for continuous variables, as in this case, the 0 category is
+* unlikely (educ=0 and income=0) or unreal (age=0 and size=0). Therefore, the
+* constant is not meaningful and interpretable. In such cases, it's best to
+* recode your continuous IVs so that their mean is equal to 0, making the
+* reference category for the constant the sample mean for each continuous IV.
+* To do so, we simply nead to substract from each variable its mean.
+
+su coninc2
+gen zconinc2=coninc2-r(mean)
+su size
+gen zsize=size-r(mean)
+su age
+gen zage=age-r(mean)
+su educ
+gen zeduc=educ-r(mean)
+
+* Replicate the final regression model with transformed continuous variables.
+reg partnrs5 i.female zconinc2 zeduc zsize i.wrkstat i.marital zage
+
+* The results do not change except for the constant. For this model, the constant
+* stands for the average number of partners of respondents who are:
+* - Male
+* - With average income
+* - With average education
+* - From a mid-sized town
+* - Employed full-time
+* - Married
+* - Mid-age
+
+
+* Robust standard errors
 * ----------------------
 
-* Run identical model on satisfaction with education.
-bys cntry: eststo: reg stfedu i.age6 female i.health lowinc i.pol3
-
-* Run identical model on satisfaction with government.
-bys cntry: eststo: reg stfgov i.age6 female i.health lowinc i.pol3
-
-* View updated list of model estimates.
-eststo dir
-
-* Compare DV and covariates in each country (use standardized coefficients...
-esttab est1 est3 est5, lab nogaps beta(2) se(2) r2 ///
-	mti("Health" "Education" "Government") ti("France")
-
-* ... and add the option to show the R-squared, to compare predicted variance).
-esttab est2 est4 est6, lab nogaps beta(2) se(2) r2 ///
-	mti("Health" "Education" "Government") ti("UK")
-
-* View updated list of model estimates.
-eststo dir
-
-/* Notes:
-
- - On first read, the models seem to do fine: the RMSE indicates a mean error
-   of 2 on a scale of 11. Furthermore, both case studies have the same constant,
-   which makes it easy to compare from one to the other.
-
- - Note how some coefficients indicate similar effects (health, sex, income),
-   whereas others reveal cross-case differences in either the direction and
-   magnitude of the effect (old age) or statistical significance (politics).
-
- - The -leanout- command makes your model more readable and helps you focus on
-   the essentials: coefficients, confidence intervals, root mean square error.
-   Use it to read the regression model of each case study.
-  
- - The -estout- commands work by storing model estimates (eststo) and putting
-   them into tables (esttab). Use it at the end of your regression commands:
-   start with -reg-, then -leanout-, then -eststo-, then -esttab-.
-   
- - The -estout- command is especially practical when you run many models, as
-   shown here when we check how the DV model compares to other satisfaction
-   measures (covariates). Check the -estout- website for more examples. */
+reg partnrs5 i.female zconinc2 zeduc zsize i.wrkstat i.marital zage
+reg partnrs5 i.female zconinc2 zeduc zsize i.wrkstat i.marital zage, r
 
 
-* ==================
-* = EXPORT RESULTS =
-* ==================
-
-
-* The next command is part of the SRQM folder. If Stata returns an error when
-* you run it, set the folder as your working directory and type 'run profile'
-* to run the course setup, then try the command again. If you still experience
-* problems with the -stab- command, please send a detailed email on the issue.
-
-
-* Export summary statistics
+* Standardized coefficients
 * -------------------------
 
-stab using week10 [aw=dweight], replace ///
-    su(hsat age lrscale) corr ///
-    fr(female age6 health lowinc pol3) ///
-    by(cntry)
-
-/* Basic syntax of -stab- command:
-
- - 'using name'  adds the 'name' prefix to the exported file(s)
- - 'su()'        summarizes a list of continuous variables (mean, sd, min-max)
- - 'fre()'       summarizes a list of categorical variables (frequencies)
- - 'corr'        adds a correlation matrix of continuous variables
- - 'by'          produces several tables over a given categorical variable
- - 'replace'     overwrite previous tables
- - '[aw,fw]'     use survey weights
-
-   In the example above, the -stab- command will export two files to the working
-   directory, containing summary statistics for France (week10_stats_FR.txt) and
-   Britain (week10_stats_GB.txt). If the research examines continuous variables,
-   add the 'corr' option to also export a correlation matrix, as shown here. */
+reg partnrs5 i.female zconinc2 zeduc zsize i.wrkstat i.marital zage
+reg partnrs5 i.female zconinc2 zeduc zsize i.wrkstat i.marital zage, b
 
 
-* =======
-* = END =
-* =======
+* Residuals
+* ---------
+
+rvfplot
+rvpplot
+
+
+* Variance inflation
+* ------------------
+
+vif
+
+
+* ========
+* = EXIT =
+* ========
 
 
 * Close log (if opened).
 cap log close
 
-* We are done. Thanks for following!
+* We are done. Just quit the application, have a nice week, and see you soon :)
 * exit, clear
