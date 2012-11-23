@@ -64,32 +64,23 @@
 				
 	\end{frame}
 
-	 	%
-	%%%%%%%%%%% last page on key regression terms
-	%%%%%%
-	%%% https://www.princeton.edu/wwac/academic-review/stata/507c/stata_guide.pdf?raw=true
-	%%% 
-	%%%%%%%%
-	%%%%%%%%%
+	\begin{frame}[c]{Logarithmic coefficients: see \href{http://www.ats.ucla.edu/stat/mult_pkg/faq/general/log_transformed_regression.htm}{UCLA mini-guide}}
+	
+		\begin{block}{Linear-linear relationships: $Y = \alpha + \beta_1 X$}
+			An increase of one unit of $X$ is associated with an increase of $\beta_1$ units of $Y$.
+		\end{block}
+	
+		\begin{block}{Log-linear relationships: $\red{\ln Y} = \alpha + \beta_1 X$}
+			An increase of one unit of $X$ is associated with a $100 \times \beta_1$\% increase in $Y$ (true effect: $Y \times$ \texttt{exp($\beta_1$)}).
+		\end{block}
 
-	\begin{frame}[c]{Lin-log coefficients: see \href{http://www.ats.ucla.edu/stat/mult_pkg/faq/general/log_transformed_regression.htm}{UCLA mini-guide}}
+		\begin{block}{Linear-log relationships: $Y = \alpha + \red{\beta_1 \ln X}$}
+			A 1\% increase in $X$ is associated with a $0.01 \times \beta_1$ unit increase in $Y$ (e.g. $\beta_1 \times$ \texttt{log(1.15)} for +15\% in $X$).
+		\end{block}
 	
-	\begin{block}{Linear-linear relationships}
-		$Y = \beta_0 + \beta_1 X$: an increase of one unit of $X$ is associated with an increase of $\beta_1$ units of $Y$.
-	\end{block}
-	
-	\begin{block}{Log-linear relationships}
-		$\red{\ln Y} = \beta_0 + \beta_1 X$: an increase of one unit of $X$ is associated with a $100 \times \beta_1$\% increase in $Y$ (true effect: $Y \times$ \texttt{exp($\beta_1$)}).
-	\end{block}
-
-	\begin{block}{Linear-log relationships}
-		$Y = \beta_0 + \red{\beta_1 \ln X}$: a 1\% increase in $X$ is associated with a $0.01 \times \beta_1$ unit increase in $Y$ (e.g. $\beta_1 \times$ \texttt{log(1.15)} for +15\% in $X$).
-	\end{block}
-	
-	\begin{block}{Log-log relationships}
-		$\red{\ln Y} = \beta_0 + \red{\beta_1 \ln X}$: a 1\% increase in $X$ is associated with a $\beta_1$\%
-		increase in $Y$.
-	\end{block}
+		\begin{block}{Log-log relationships: $\red{\ln Y} = \alpha + \red{\beta_1 \ln X}$}
+			A 1\% increase in $X$ is associated with a $\beta_1$\% increase in $Y$.
+		\end{block}
 	
 	\end{frame}
 	
