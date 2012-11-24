@@ -1,9 +1,13 @@
 
-*! stab: simple tables (summary stats, correlation matrix)
+*! stab: simple tables for summary stats and correlations
+*! stab using <projectname>, replace ///
+*!      sum(<continuous variables>) corr ///
+*!      fre(<categorical variables>)
 
 cap pr drop stab
 program stab
 	// exports a tab-separated summary statistics and frequencies table
+	// also exports correlation mat
 	// default 1 digit precision for mean and sd, 0 elsewhere
 
     syntax using/ [if] [in] [aweight fweight/] ///
@@ -183,8 +187,8 @@ program stab
 					if r(p) < .001 local stars = "***"
 					local diff = r(mu_2) - r(mu_1)
 					local diff = round(`diff',`fl1')
-					if _rc != 0 local diff = "NA"
-					if _rc != 0 local stars = ""
+					if _rc local diff = "NA"
+					if _rc local stars = ""
 					file write `fh' _tab "`diff'" "`stars'" 
 				}
 				

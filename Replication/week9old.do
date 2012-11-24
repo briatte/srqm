@@ -41,7 +41,7 @@ la de region 1 "E. Europe and PSU" 2 "Lat. America" ///
 codebook births schooling gdpc hdi corruption femgov region, c
 
 * Check missing values.
-misstable pat births schooling gdpc hdi corruption femgov region
+misstable pat births schooling gdpc hdi corruption femgov region, freq
 
 * Subset to complete observations (not run for demonstration purposes).
 drop if mi(births, schooling, gdpc, hdi, corruption, femgov)

@@ -3,10 +3,24 @@
 
    F. Briatte and I. Petev
 
+ - Welcome again to Stata. This do-file contains the commands used during our
+   third session: read the comments as you go along, and make sure that you get
+   the difference between continuous and categorical types of variables. Also 
+   makre sure that you understand how to recode variables and missing values.
+
  - Now is the point where you need to make a choice of dataset for your project.
    Start writing the commands that you used to select your data and variables to
    a do-file. Use the course do-files for inspiration: start with a short header
    in the comments, then load the data, then explore and recode the variables.
+
+ - This do-file explores the World Values Survey (WVS) dataset and focuses on
+   respondents from Egypt. Egypt underwent a social revolution in 2011, but what
+   fraction of Egyptian society was willing to undergo radical reform? In other
+   words, how strong was the support for the status quo in Egyptian society?
+
+ - If the desire for reform spreads through society, which social groups will
+   oppose the strongest level of resistance to change? What socio-economic
+   characteristics predict a high level of support in the existing regime?
 
  - If you want to study one country or compare two of them, turn to survey data
    from the European Social Survey (ESS), U.S. General Social Survey (GSS) or
@@ -34,34 +48,16 @@ foreach p in fre spineplot {
 cap log using "Replication/week3.log" replace
 
 
-* ========
-* = DATA =
-* ========
+* ====================
+* = DATA DESCRIPTION =
+* ====================
 
-
-* Egypt underwent a social revolution in 2011. Who were the revolutionaries?
-* What fraction of Egyptian society was willing to undergo radical reform?
-* And most importantly perhaps, how strong was the support for the status quo?
-* If the desire for reform spreads through society, which social groups will
-* oppose the strongest level of resistance to change? What socio-economic
-* characteristics predict a high level of support in the existing regime?
-
-* Welcome again to Stata. This do-file contains the commands used during our
-* third session. Read the comment lines as you go along. We will explore the
-* WVS 2000 dataset by concentrating on respondents from Egypt. The analysis
-* will illustrate how to recode variables and missing values.
 
 * Data: World Values Survey (2000).
 use "Datasets/wvs2000.dta", clear
 
 * Finally, if you need to use survey weights:
 svyset [pw=v245]
-
-
-* ====================
-* = DATA PREPARATION =
-* ====================
-
 
 * Inspect the list of included countries.
 fre v2
@@ -71,10 +67,8 @@ ren v2 country
 keep if country==89
 
 
-* ======================
-* = DEPENDENT VARIABLE =
-* ======================
-
+* Dependent variable
+* ------------------
 
 * Inspect the dependent variable: attitude towards society.
 fre v140
@@ -101,10 +95,8 @@ fre sq
 su sq
 
 
-* =========================
-* = INDEPENDENT VARIABLES =
-* =========================
-
+* Independent variables
+* ---------------------
 
 * (1) Gender
 * ----------

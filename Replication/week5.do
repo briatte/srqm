@@ -101,7 +101,7 @@ spineplot bmi6 year, scheme(burd6) ///
 * Independent variables
 * ---------------------
 
-fre age sex raceb educrec1 earnings uninsured ybarcare, r(10)
+fre age sex raceb educrec1 earnings health uninsured ybarcare, r(10)
 
 * Recode age to four groups (slow method, using manual categories).
 recode age ///
@@ -129,17 +129,17 @@ mvdecode ybarcare uninsured, mv(9)
 * Subsetting
 * ----------
 
-* Select data from most recent year.
-drop if year!=2009
+* Select observations from most recent year.
+keep if year==2009
 
-* Patterns of missing data.
-misstable pat bmi age female raceb educrec1 earnings uninsured ybarcare
+* Patterns of missing values.
+misstable pat bmi age female raceb educrec1 earnings health uninsured ybarcare
 
 * Delete incomplete observations.
 drop if mi(bmi, age, female, raceb, educrec1, earnings, uninsured, ybarcare)
 
-* Final data and sample size.
-codebook, c
+* Final data, showing effective sample size.
+codebook bmi age female raceb educrec1 earnings health uninsured ybarcare, c
 
 
 * Normality

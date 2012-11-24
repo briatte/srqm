@@ -42,7 +42,7 @@ program srqm
 		if `log' {
 			if "`2'"!="" local x = "-`2'"
 			cap qui log using Programs/`1'`x'.log, name(SRQM) replace
-			if _rc==0 local logged 1
+			if !_rc local logged 1
 
 			di as txt "Running SRQM utilities..."
 
@@ -56,8 +56,8 @@ program srqm
 			di as inp _n "Working directory:", as res c(pwd)
 
 	 		cap qui log query SRQM
-	 		if _rc==0 di as inp "Log path:", as res r(filename) _n	
-			if _rc!=0 di as err "Log creation failed." _n
+	 		if !_rc di as inp "Log path:", as res r(filename) _n	
+			if _rc di as err "Log creation failed." _n
 		
 			di as inp "System directories:"
 			adopath
@@ -91,7 +91,7 @@ program srqm
 				file write fh "*! `c(pwd)'" _n _n
 				file write fh "global srqm_wd " _char(34) "`c(pwd)'" _char(34) _n
 				file write fh "cap confirm file " _char(34) _char(36) "srqm_wd`c(dirsep)'Programs`c(dirsep)'srqm.ado" _char(34) _n _n
-				file write fh "if _rc!=0 { // cannot load utilities" _n _tab "noi di as err _n ///" _n
+				file write fh "if _rc { // cannot load utilities" _n _tab "noi di as err _n ///" _n
 				file write fh _tab _tab _char(34) "ERROR: The SRQM folder is no longer available at its former location:" _char(34) " as txt _n ///" _n
 				file write fh _tab _tab _char(34) _char(36) "srqm_wd" _char(34) " _n(2) ///" _n
 				file write fh _tab _tab _char(34) "This error occurs when you rename or relocate the SRQM folder." _char(34) " _n ///" _n
@@ -101,8 +101,8 @@ program srqm
 				file write fh _tab "exit -1" _n "}" _n "else {" _n
 				file write fh _tab "cap cd " _char(34) _char(36) "srqm_wd" _char(34) _n _n
 				file write fh _tab "cap noi run profile" _n
-				file write fh _tab "if _rc==0 noi type profile.do, starbang" _n _n
-				file write fh _tab "if _rc!=0 | " _char(34) _char(36) "srqm_wd" _char(34) "==" _char(34) _char(34) " { // folder check failed" _n
+				file write fh _tab "if !_rc noi type profile.do, starbang" _n _n
+				file write fh _tab "if _rc | " _char(34) _char(36) "srqm_wd" _char(34) "==" _char(34) _char(34) " { // folder check failed" _n
 				file write fh _tab _tab "noi di as txt ///" _n
 				file write fh _tab _tab _tab _char(34) "Some essential course material is not available in your working directory." _char(34) " _n(2) ///" _n
 				file write fh _tab _tab _tab _char(34) "This error occurs when you modify the folders or files of the SRQM folder." _char(34) " _n ///" _n
@@ -170,7 +170,7 @@ program srqm
 						qui cd "`c(sysdir_plus)'"
 						qui cd ..
 						cap mkdir personal
-						if _rc==0 noi di as txt "Could not install to the PLUS folder:" ///
+						if !_rc noi di as txt "Could not install to the PLUS folder:" ///
 							_n "`c(sysdir_plus)'" _n ///
 							"Installing to the PERSONAL folder instead:" _n ///
 							"`c(pwd)'/personal"
@@ -184,7 +184,7 @@ program srqm
 				else {
 				 // di "`t' is already installed"
 				}
-				if _rc!=0 di as err "Installation failed with error code", _rc
+				if _rc di as err "Installation failed with error code", _rc
 			}
 		}
 		else {
@@ -196,29 +196,33 @@ program srqm
 			* Memory.
 			if c(version) < 12 {
 				cap set mem 500m, perm
-				if _rc==0 di as txt "Memory set to 500MB (running older Stata)."
+				if !_rc di as txt "Memory set to 500MB (running older Stata)."
 			}
 			
 			* Screen breaks.
 			cap set more off, perm
-			if _rc==0 di as txt "Screen breaks set to", c(more)
+			if !_rc di as txt "Screen breaks set to", c(more)
 			
 			* Maximum variables.
 			clear all
-			cap set maxvar 5000, perm
-			if _rc==0 di as txt "Maximum variables set to", c(maxvar)
+			cap set maxvar 7500, perm
+			if !_rc di as txt "Maximum variables set to", c(maxvar)
 			
 			* Scrollback buffer size.
 			cap set scrollbufsize 500000
-			if _rc==0 di as txt "Scrollback buffer size set to", c(scrollbufsize)
+			if !_rc di as txt "Scrollback buffer size set to", c(scrollbufsize)
 				
 			* Software updates.
 			cap set update_query off
-	        if _rc==0 di as txt "Software updates set to", c(update_query)
-	
+	        if !_rc di as txt "Software updates set to", c(update_query)
+
+			* Variable abbreviations.
+			set varabbrev off, perm
+	        if !_rc di as txt "Variable abbreviations set to", c(varabbrev)
+			
 			* Course themes.
 			cap set scheme burd, perm
-			if _rc==0 di as txt "Graphics scheme set to", c(scheme)
+			if !_rc di as txt "Graphics scheme set to", c(scheme)
 		}
 
 	}
@@ -238,7 +242,7 @@ program srqm
 
 			foreach f in  "Datasets" "Replication" {
 				cap cd "`f'"
-				if _rc != 0 {
+				if _rc {
 					di as err _n "ERROR: The `f' folder could not be located in the working directory."
 					exit -1
 				}
@@ -247,7 +251,7 @@ program srqm
 					// exhaustive check
 					foreach d in `datasets' {
 						cap confirm file `d'.dta
-						if _rc!=0 {
+						if _rc {
 							di as txt "Unzipping " as inp "`d'.dta" as txt "..."
 							cap unzipfile "`d'", replace
 						}
@@ -271,8 +275,8 @@ program srqm
 			di _n as inp "Package updates:"
 			
 			cap qui ssc hot
-			if _rc==0 cap noi adoupdate, update all
-			if _rc!=0 di as err "Could not go online to check for updates."
+			if !_rc cap noi adoupdate, update all
+			if _rc di as err "Could not go online to check for updates."
 		}
 		else if `course' {
 			//
@@ -397,15 +401,15 @@ program srqm
 		
 		if "`3'" == "dofile" {
 			cap qui copy "Replication/`2'.do" "Replication/`bk'.do", replace
-			if _rc==0 di as txt "Do-file `2' updated."
+			if !_rc di as txt "Do-file `2' updated."
 			cap qui copy "http://briatte.org/srqm-updates/`2'.do" "Replication/`2'.do", replace
-			if _rc==0 di as txt "Do-file `2' updated."
+			if !_rc di as txt "Do-file `2' updated."
 		}
 		
 		if "`3'" == "slides" {
 			cap qui copy "Course/`2'.pdf" "Course/`bk'.pdf", replace
 			cap qui copy "http://briatte.org/srqm-updates/`2'.pdf" "Course/`2'.pdf", replace
-			if _rc==0 di as txt "Slides `2' updated."
+			if !_rc di as txt "Slides `2' updated."
 		}
 	}
 

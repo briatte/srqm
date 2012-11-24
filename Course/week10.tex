@@ -30,7 +30,7 @@
 				
 	\end{frame}
 	
-	\begin{frame}[c]{Multiple linear regression}
+	\begin{frame}[c]{Multiple linear regression} % or, as my girlfriend calls it, ultimate regression
 			
 		\begin{center}
 			\includegraphics[width=\textwidth]{mreg-output.pdf}
@@ -103,7 +103,33 @@
 	\end{frame}
 
 		\section{Regression dummies}
+
+		\begin{frame}[t]{Categorical and dummy predictors}
+
+			\begin{block}{Single coefficient of dummy $X_3$}
+
+				\vspace{-1em}
+				\begin{align*}
+					Y &= \alpha + \beta_1 X_1 + \beta_2 X_2 + \color{gray} \beta_3 (0) \color{fg} + \epsilon \\
+					Y &= \alpha + \beta_1 X_1 + \beta_2 X_2 + \red{\beta_3 (1)} + \epsilon
+				\end{align*}
+
+				The omitted category $X_3 = 0$ is called the \red{reference category} and is part of the \red{baseline model} $Y = \alpha$, for which all coefficients are null.
+				
+			\end{block}
 			
+			\begin{exampleblock}{Example}
+
+				\vspace{-1em}
+				\begin{align*}			
+					Income &= \alpha + \beta_1 \cdot \text{age} + \beta_2 \cdot \text{education} + \color{gray} 0 \cdot \text{male} \color{fg} & + \epsilon \\
+					Income &= \alpha + \beta_1 \cdot \text{age} + \beta_2 \cdot \text{education} + \red{1 \cdot \text{female}} & + \epsilon
+				\end{align*}
+
+			\end{exampleblock}
+			
+		\end{frame}
+					
 	\begin{frame}[t]{\texttt{reg births schooling log\_gdpc \red{i.region}}}
 
 		Categorical variables can be used as \red{dummies}, i.e. binary recodes of each category that are tested against a \red{reference category} to provide regression coefficients for the net effect of each category:\\[.5em]

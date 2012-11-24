@@ -33,9 +33,9 @@ foreach p in fre {
 cap log using "Replication/week4.log", replace
 
 
-* ========
-* = DATA =
-* ========
+* ====================
+* = DATA DESCRIPTION =
+* ====================
 
 
 * Data: U.S. National Health Interview Survey (2009).
@@ -43,6 +43,10 @@ use "Datasets/nhis2009.dta", clear
 
 * Subset to most recent year.
 drop if year != 2009
+
+
+* Dependent variable
+* ------------------
 
 * Compute the Body Mass Index.
 gen bmi = weight*703/(height^2)
@@ -52,10 +56,8 @@ la var bmi "Body Mass Index"
 svyset psu [pw=perweight], strata(strata)
 
 
-* =============
-* = VARIABLES =
-* =============
-
+* Independent variables
+* ---------------------
 
 * Inspect some of the variables.
 d sex raceb earnings
@@ -100,70 +102,85 @@ gr hbox bmi, over(sex) asyvars over(raceb) name(bmi_race, replace)
 
 * Obtain summary statistics.
 su bmi, d
+
+* To show the results of a command, Stata saves them first to a temporary space
+* in its memory, r(). The results of the last command are readable from there:
 ret li
 
-* Save statistics to macros:
-global total=r(N)
-global mean=r(mean)
-global sd=r(sd)
-di $total, $mean, $sd
+* Let's save some of these statistics to scalars, in order to access them later.
+* Scalars and macros are programming commands that you will not need to learn to
+* operate Stata at regular user-level. However, they happen to be useful to code
+* some teaching examples and demonstrations, as shown below.
 
-global q1=r(p25)
-global q3=r(p75)
-global iqr= $q3-$q1
-di $q1, $q3, $iqr
+* Save the mean and standard deviation of the summarized variable.
+sca de mean = r(mean)
+sca de sd   = r(sd)
+
+* Save the 25th and 75th percentiles and compute the interquartile range (IQR),
+* which is the range from the first quartile (Q1) to the third quartile (Q3).
+sca de q1 = r(p25)
+sca de q3 = r(p75)
+sca de iqr = q3 - q1
+
+* List all saved scalars, which are used in the next sections in combination to
+* the -di- command for quick verifications about the distribution of
+* the dependent variable (BMI) in the sample.
+sca li
 
 
 * (1) Standard deviation
 * ----------------------
 
-* We can verify what we know about the standard deviation by counting the
-* number of BMI observations that fall between (mean)-1sd and (mean)+1sd,
+* We can verify what we learnt about the standard deviation by counting the
+* number of BMI observations that fall between (mean - 1sd) and (mean + 1sd),
 * and then by checking if this number comes close to 68% of all observations.
-count if bmi > $mean - 1*$sd & bmi < $mean + 1*$sd
-di %9.3g r(N)/$total
+count if bmi > mean - sd & bmi < mean + sd
+di r(N),"observations out of",_N,"(" 100*round(r(N)/_N,.01) "% of the sample)" _n ///
+	"are within 1 standard deviation from the mean."
 
 * The corresponding result is indeed close to 68% of all observations, and the
-* same verification with the [mean-2sd,mean+2sd] range of BMI values is also
-* satisfactorily close to including 95% of all observations.
-count if bmi > $mean - 2*$sd & bmi < $mean + 2*$sd
-di %9.3g r(N)/$total
+* same verification with the [mean - 2sd, mean + 2sd] range of BMI values is
+* also satisfactorily close to including 95% of all observations.
+count if bmi > mean - 2*sd & bmi < mean + 2*sd
+di r(N),"observations out of",_N,"(" 100*round(r(N)/_N,.01) "% of the sample)" _n ///
+	"are within 2 standard deviations from the mean."
 
-* We could go further and calculate the [mean-3sd,mean+3sd] range, but the
-* most extreme values of a distribution are more conveniently captured by
-* the notion of outliers, i.e. observations that fall far from the median.
+* The properties shown here hold for continuous variables that approach a
+* normal distribution, as discussed below. We could go further and compute
+* the [mean - 3sd, mean + 3sd] range, but the most extreme values of a 
+* distribution are more conveniently captured by the notion of outliers,
+* i.e. observations that fall far from the median.
 
 
 * (2) Outliers
 * ------------
 
-* The interquartile range (IQR) is the range between Q3 (p75) and Q1 (p25).
-* We detect mild (1.5*IQR) or extreme (3*IQR) outliers below Q1 and above Q3:
-li bmi sex raceb if bmi < $q1-1.5*$iqr | bmi > $q3+1.5*$iqr, N
-li bmi sex raceb if bmi < $q1-3*$iqr | bmi > $q3+3*$iqr, N
+* Summarize mild (1.5*IQR) or extreme (3*IQR) outliers below Q1 and above Q3:
+su bmi if bmi < q1 - 1.5*iqr | bmi > q3 + 1.5*iqr
+su bmi if bmi < q1 - 3*iqr   | bmi > q3 + 3*iqr
 
 
-* ===================
-* = NORMALITY TESTS =
-* ===================
+* =======================
+* = NORMAL DISTRIBUTION =
+* =======================
 
 
-* The BMI variable is our dependent variable. Every statistical test or
-* quantitative method that we are going to use in this course is based on
-* the assumption that this variable is close to being normally distributed.
+* Continuous variables are expected to approach a normal distribution, a result
+* more easily obtained at higher sample sizes. Let's check if the distribution
+* of BMI values approaches normality, and if not, let's transform the variable
+* to bring it closer to normality. We start with visual inspection and complete
+* the assessment with two statistical measures.
 
 
 * (1) Visual tests
 * ----------------
 
-* Let's check if the distribution of BMI values approaches normality, and
-* if not, let's transform the variable to bring it closer to normality.
-* We start with visual interpretations and then to statistical operations.
-
 * We draw a histogram with three different elements: the actual bins (bars)
 * of the BMI variable, its kernel density, and an overimposed normal curve
 * that we draw in a different colour using a few graph options.
-hist bmi, kdensity normal kdenopts(lc(blue)) name(bmi, replace)
+hist bmi, bin(15) normal kdensity kdenopts(lp(dash) lc(black) bw(1.5)) ///
+	note("Normal distribution in solid red. Kernel density estimator in dashed black.") ///
+	name(bmi, replace)
 
 * The histogram shows what we knew from reading the mean and median of the
 * BMI values: the distribution is skewed to the left, implying that there are
@@ -199,9 +216,9 @@ su bmi, d
 * distributed (i.e. we reject our distributional assumption).
 
 
-* ============================
-* = VARIABLE TRANSFORMATIONS =
-* ============================
+* ===========================
+* = VARIABLE TRANSFORMATION =
+* ===========================
 
 
 * A technique used to approach normality with a continuous variable consists
@@ -225,6 +242,10 @@ tabstat bmi logbmi, s(n sk kurtosis min max) c(s)
 * we can observe some improvement towards normality with 'log-BMI'.
 hist logbmi, normal name(logbmi, replace)
 gr hbox logbmi
+
+
+* Comparison plot
+* ---------------
 
 * Running the same graphs with a few options to combine them allows a quick
 * visual comparison of the transformation.

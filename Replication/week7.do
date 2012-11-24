@@ -57,7 +57,7 @@ la de region 1 "E. Europe and PSU" 2 "Lat. America" ///
 codebook births schooling gdpc hdi corruption femgov region, c
 
 * Check missing values.
-misstable pat births schooling gdpc hdi corruption femgov region ccodewb
+misstable pat births schooling gdpc hdi corruption femgov region ccodewb, freq
 
 * You would usually delete incomplete observations at that stage, but we will
 * exceptionally keep them here to illustrate how pairwise correlation works.
