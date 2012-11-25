@@ -26,7 +26,7 @@ The Stata `use` commands mentioned in this document require that the `SRQM` fold
 
 * * *
 
-## ess2008
+## `ess2008`
 
 The `ess2008` dataset holds [Round 4](http://ess.nsd.uib.no/ess/round4/) (2008) of the European Social Survey (ESS):
 
@@ -46,7 +46,7 @@ The dataset was created by subsetting the [ESS cumulative dataset](http://ess.ns
 
 * * *
 
-## gss2010
+## `gss2010`
 
 The `gss2010` dataset holds data from the U.S. General Social Survey (GSS) for year 2010:
 
@@ -66,7 +66,7 @@ The dataset is a trimmed-down version of the [GSS 2010 cross-sectional dataset](
 
 * * *
 
-## nhis2009
+## `nhis2009`
 
 The `nhis2009` dataset holds sample adult data for years 2000--2009 of the U.S. National Health Interview Survey (NHIS):
 
