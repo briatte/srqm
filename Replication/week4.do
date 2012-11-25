@@ -188,17 +188,21 @@ hist bmi, bin(15) normal kdensity kdenopts(lp(dash) lc(black) bw(1.5)) ///
 
 * As a result, the distribution is asymmetrical, which we can verify using a
 * particular graphical technique that emphasizes deviations from symmetry.
-* Perfect symmetry corresponds to the theoretical straight line in the plot.
-symplot bmi, name(bmi_sym, replace)
+* Perfect symmetry corresponds to the straight red line.
+symplot bmi, ti("Symmetry plot") ///
+	name(bmi_sym, replace)
 
-* Another technique, the quintile plot, emphasizes sudden variation in the
-* values taken by the variable. Again, perfect variation corresponds to the
-* theoretical straight line in the plot.
-quantile bmi, name(bmi_qnt, replace)
+* Another visualization plots the quantiles of the variable against those of the
+* normal distribution. Perfect correspondence between the two distributions is
+* observed at the straight red line.
+qnorm bmi, ti("Normal quantile plot") ///
+	name(bmi_qnorm, replace)
 
-* For similar visualizations, test the "pnorm" and "qnorm" commands.
-pnorm bmi, name(bmi_pnorm, replace)
-qnorm bmi, name(bmi_qnorm, replace)
+* The departures observed here are situated at the tails of the distribution,
+* which means that there is an excess of observations at these values. 
+
+* Combine all diagnostic plots.
+gr combine bmi_sym bmi_qnorm, name(bmi_diag, replace)
 
 
 * (2) Statistical tests

@@ -67,8 +67,10 @@ ren v2 country
 keep if country==89
 
 
-* Dependent variable
-* ------------------
+* ======================
+* = DEPENDENT VARIABLE =
+* ======================
+
 
 * Inspect the dependent variable: attitude towards society.
 fre v140
@@ -95,8 +97,10 @@ fre sq
 su sq
 
 
-* Independent variables
-* ---------------------
+* =========================
+* = INDEPENDENT VARIABLES =
+* =========================
+
 
 * (1) Gender
 * ----------
