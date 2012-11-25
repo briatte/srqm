@@ -42,7 +42,7 @@ See the [ESS weighting guide](http://ess.nsd.uib.no/ess/doc/weighting.pdf) for i
 
 ### Production notes:
 
-The dataset was created by subsetting the [ESS cumulative dataset](http://ess.nsd.uib.no/downloadwizard/) to Round 4, and then by removing variables with no observations. The codebook was downloaded from the [ESS data](http://ess.nsd.uib.no/) website. 
+The dataset was created by subsetting the [ESS cumulative dataset](http://ess.nsd.uib.no/downloadwizard/) to Round 4, and then by removing variables with no observations (including a few empty variables from the ESS rotating module). The codebook was downloaded from the [ESS data](http://ess.nsd.uib.no/) website. 
 
 * * *
 
@@ -73,10 +73,12 @@ The `nhis2009` dataset holds sample adult data for years 2000--2009 of the U.S. 
 > The National Health Interview Survey (NHIS) has monitored the health of the nation since 1957. NHIS data on a broad range of health topics are collected through personal household interviews. For over 50 years, the U.S. Census Bureau has been the data collection agent for the National Health Interview Survey. Survey results have been instrumental in providing data to track health status, health care access, and progress toward achieving national health objectives.  
 <http://www.cdc.gov/nchs/nhis.htm>
 
-### Usage in Stata:
+### Survey weights:
 
     use "Datasets/nhis2009.dta", clear
     svyset psu [pweight=perweight], strata(strata)
+
+See the [IHIS/NHIS user notes](http://www.ihis.us/ihis/userNotes_variance.shtml) on variance estimation for more details.
 
 ### Production notes:
 
