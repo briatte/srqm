@@ -20,9 +20,9 @@ You are expected to use the `lookfor` and `lookfor_all` commands to explore the 
 
 Bibliographic information and additional documentation is available from the online data sources. Once you have identified a dataset, retrieve that information to describe and reference the data in your paper.
 
-Indications on weighting the data with the `syvset` command are provided for point estimation if you need to estimate a particular statistic with high precision.
-
 The Stata `use` commands mentioned in this document require that the `SRQM` folder has been set as the working directory, as explained in its [README](https://github.com/briatte/srqm/blob/master/README.md) file.
+
+Indications on weighting the data with the `syvset` command are provided for point estimation.
 
 * * *
 
@@ -42,7 +42,7 @@ See the [ESS weighting guide](http://ess.nsd.uib.no/ess/doc/weighting.pdf) for i
 
 ### Production notes:
 
-The dataset was created by subsetting the [ESS cumulative dataset](http://ess.nsd.uib.no/downloadwizard/) to Round 4, and then by removing variables with no observations (including a few empty variables from the ESS rotating module). The codebook was downloaded from the [ESS data](http://ess.nsd.uib.no/) website. 
+The dataset was created by subsetting the [ESS cumulative dataset](http://ess.nsd.uib.no/downloadwizard/) to Round 4, and then by removing variables with no observations. The codebook was downloaded from the [ESS data](http://ess.nsd.uib.no/) website. A few variables from the ESS 4 rotating module on welfare attitudes are missing.
 
 * * *
 
