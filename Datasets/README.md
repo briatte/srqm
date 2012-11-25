@@ -86,7 +86,7 @@ The data come from the [Integrated Health Interview Series](http://www.ihis.us/)
 
 * * *
 
-## qog2011
+## `qog2011`
 
 The `qog2011` dataset holds the Quality of Government (QOG) Standard dataset in its most recent revision of April 6, 2011:
 
@@ -99,7 +99,7 @@ The data and codebook come from the [QOG Standard download page](http://www.qog.
 
 * * *
 
-## wvs2000
+## `wvs2000`
 
 The `wvs2000` dataset holds data from Wave 4 (1999-2004) of the World Values Survey (WVS):
 
@@ -118,3 +118,5 @@ See the [WVS weighting guide](http://www.jdsurvey.net/jds/jdsurveyActualidad.jsp
 The data come from the [WVS 2000 official file](http://www.asep-sa.org/wvs/wvs2000/wvs2000_v20090914_stata.zip) found at the [WVS website](http://www.wvsevsdb.com/wvs/WVSData.jsp). This version had encoding issues that are used as examples in class for recode commands. The [cumulative dataset](http://www.asep-sa.org/wvs/wvs_1981-2008/wvs1981_2008_v20090914_stata.zip) has different variable names and proper variable encoding. More recent data is also available up to [Wave 6](http://www.wvs-online.com/) (2010-2013). A mock codebook is bundled with the data.
 
 * * *
+
+[Additional data sources](https://github.com/briatte/srqm/wiki/Data) are listed on the course wiki; note that many sources are less suitable for cross-national than for longitudinal or pooled time series analysis.
