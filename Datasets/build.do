@@ -32,13 +32,16 @@ note _dta: This version: TS
 
 // Compress and uncompress.
 
-save datasets/ess2008, replace
+cd datasets
+save ess2008, replace
 
-cap rm datasets/ess2008.zip
-zipfile datasets/ess2008*, saving(datasets/ess2008.zip, replace)
+cap rm ess2008.zip
+zipfile ess2008*, saving(ess2008.zip, replace)
 
-unzipfile datasets/ess2008.zip, replace
-ls datasets/ess2008*
+unzipfile ess2008.zip, replace
+ls ess2008*
+
+cd ..
 
 // -------------------------------------------------------------- GSS 2010 -----
 
@@ -79,16 +82,19 @@ log close gss2010
 
 // Compress and uncompress.
 
-save datasets/gss2010, replace
-
 rm temp.zip
 rm 2010.dta
 
-cap rm datasets/gss2010.zip
-zipfile datasets/gss2010*, saving(datasets/gss2010.zip)
+cd datasets
+save gss2010, replace
 
-unzipfile datasets/gss2010.zip, replace
-ls datasets/gss2010*
+cap rm gss2010.zip
+zipfile gss2010*, saving(gss2010.zip)
+
+unzipfile gss2010.zip, replace
+ls gss2010*
+
+cd ..
 
 // ------------------------------------------------------------- NHIS 2009 -----
 
@@ -115,13 +121,16 @@ log close nhis2009
 
 // Compress and uncompress.
 
-save datasets/nhis2009, replace
+cd datasets
+save nhis2009, replace
 
-cap rm datasets/nhis2009.zip
-zipfile datasets/nhis2009*, saving(datasets/nhis2009.zip, replace)
+cap rm nhis2009.zip
+zipfile nhis2009*, saving(nhis2009.zip, replace)
 
-unzipfile datasets/nhis2009.zip, replace
-ls datasets/nhis2009*
+unzipfile nhis2009.zip, replace
+ls nhis2009*
+
+cd ..
 
 // -------------------------------------------------------------- QOG 2011 -----
 
@@ -145,13 +154,16 @@ copy http://www.qog.pol.gu.se/digitalAssets/1390/1390246_the-qog-codebook--c-.pd
 
 // Compress and uncompress.
 
-save datasets/qog2011, replace
+cd datasets
+save qog2011, replace
 
-cap rm datasets/qog2011.zip
-zipfile datasets/qog2011*, saving(datasets/qog2011.zip)
+cap rm qog2011.zip
+zipfile qog2011*, saving(qog2011.zip)
 
-unzipfile datasets/qog2011.zip, replace
-ls datasets/qog2011*
+unzipfile qog2011.zip, replace
+ls qog2011*
+
+cd ..
 
 // -------------------------------------------------------------- WVS 2000 -----
 
@@ -195,13 +207,18 @@ log close wvs2000
 
 // Compress and uncompress.
 
-save datasets/wvs2000, replace
-
 rm temp.zip
 rm wvs2000_v20090914.dta
 
-cap rm datasets/wvs2000.zip
-zipfile datasets/wvs2000*, saving(datasets/wvs2000.zip)
+cd datasets
+save wvs2000, replace
 
-unzipfile datasets/wvs2000.zip, replace
-ls datasets/wvs2000*
+cap rm wvs2000.zip
+zipfile wvs2000*, saving(wvs2000.zip)
+
+unzipfile wvs2000.zip, replace
+ls wvs2000*
+
+cd ..
+
+// ttyl
