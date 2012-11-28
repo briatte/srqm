@@ -1,18 +1,19 @@
 
 *! stab: simple tables for summary stats and correlations
 *! stab using <projectname>, replace ///
-*!      sum(<continuous variables>) corr ///
+*!      sum(<continuous variables>) corr(<continuous variables>) ///
 *!      fre(<categorical variables>)
 
 cap pr drop stab
 program stab
 	// exports a tab-separated summary statistics and frequencies table
-	// also exports correlation mat
+	// also exports a correlation matrix, usually after summary stats
 	// default 1 digit precision for mean and sd, 0 elsewhere
+	// not meant to be a full-fledged command, it's a teaching aid
 
     syntax using/ [if] [in] [aweight fweight/] ///
     	[, SUmmarize(varlist) FRequencies(varlist) ///
-    	CORRelate ttest Float(int 0) by(varname) replace] 
+    	CORRelates(varlist) ttest Float(int 0) by(varname) replace] 
     tempname fh
 
 	tokenize `summarize'
@@ -20,14 +21,15 @@ program stab
 	
 	local fl0 = 10^(-`float')  // precision of min max and freqs
     local fl1 = .1*`fl0'       // one more digit for mean, sd and correlations
-	local corr = ("`correlate'" != "")
 
-	if "`summarize'"=="" & "`frequencies'"=="" {
-		di as txt "You need to specify variables to describe. Example:" _n
-		di "    sysuse nlsw88, clear"
-		di "    su age wage"
-		di "    tab1 race married"
-		di "    tsst using table.txt, su(age wage) fr(race married) replace"
+	if "`summarize'"=="" & "`frequencies'"=="" & "`correlates'"=="" {
+		di as txt "You need to specify variables to describe. Example:" _n _n ///
+		    _s(4) "sysuse nlsw88, clear" _n ///
+		    _s(4) "su age wage" _n ///
+		    _s(4) "tab1 race married" _n ///
+		    _s(4) "stab using name, su(age wage) fr(race married) replace" _n ///
+		    _n "Other options are corr() for correlations and by() for multiple tables."
+		// ttest and f() are undocumented, for the best
     	exit 0
     }
     else if strpos("`using'",".") > 0 {
@@ -214,7 +216,7 @@ program stab
 	
 	//--------------------------------- CORRELATION MATRIX
 
-	if "`summarize'" != "" & `corr' {
+	if "`correlates'" != "" {
 	
 		// watered down version of mkcorr
 		
@@ -234,7 +236,7 @@ program stab
 		file write `fh' _n "Table 2. Correlation matrix" _n
 		file write `fh' _tab
 
-		local n: word count `summarize'
+		local n: word count `correlates'
 
 		forvalues i=1/`n' {
 			file write `fh' "(" (`i') ")" _tab
@@ -247,7 +249,7 @@ program stab
 			file write `fh' (`row') "." _skip(1)
 			
 			// variable label
-			local v: word `row' of `summarize'
+			local v: word `row' of `correlates'
 			local l: var l `v'
 			
 			if "`l'"=="" local l = "UNLABELED `v'"
@@ -255,8 +257,8 @@ program stab
 			
 			forvalues col=1/`row' {     
 
-				local var1: word `row' of `summarize'
-				local var2: word `col' of `summarize'
+				local var1: word `row' of `correlates'
+				local var2: word `col' of `correlates'
 				
 				if "`weight'" == "" | "`weight'" == "pweight" {
 					qui corr(`var1' `var2') `if' `in'
@@ -286,7 +288,7 @@ program stab
 
 	// footer
 	
-	file write `fh' _n "Pearson pairwise correlations." ///
+	file write `fh' _n "Pearson correlation coefficients." ///
 		"Two-tailed significance: * p < .05 ** p < .01 *** p < .001"
 
 	if "`weight'" != "" & "`weight'" != "pweight" {

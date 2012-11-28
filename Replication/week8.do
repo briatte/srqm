@@ -28,12 +28,6 @@
 do "Replication/week7.do"
 gr drop _all
 
-* Install required commands.
-foreach p in mkcorr {
-    cap which `p'
-    if _rc==111 cap noi ssc install `p'
-}
-
 * Log results.
 cap log using "Replication/week8.log", replace
 
@@ -174,7 +168,8 @@ reg schooling log_gdpc
 * 1% increase in X (IV) is associated with a 0.01*beta unit increase in Y (DV).
 * Here, a 15% increase in GDP per capita translates into a 1.54*log(1.15) = .21
 * increase in education years. For more examples of lin-log relationships, see:
-* http://www.ats.ucla.edu/stat/mult_pkg/faq/general/log_transformed_regression.htm
+*
+* [URL]: http://www.ats.ucla.edu/stat/mult_pkg/faq/general/log_transformed_regression.htm
 
 
 * (3) Corruption and Human Development

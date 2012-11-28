@@ -43,8 +43,10 @@ gen gdpc = unna_gdp/unna_pop
 la var gdpc "Real GDP per capita (constant USD)"
 
 * Recode to less, shorter labels.
-recode ht_region (6/10=6), gen(region) l(region)
-la de region 1 "E. Europe and PSU" 2 "Lat. America" ///
+recode ht_region (6/10=6), gen(region)
+la var region "Geographical region"
+la val region region
+la def region 1 "E. Europe and PSU" 2 "Lat. America" ///
 	3 "N. Africa and M. East" 4 "Sub-Sah. Africa" ///
 	5 "W. Europe and N. America" 6 "Asia, Pacific and Carribean" ///
 	, replace
