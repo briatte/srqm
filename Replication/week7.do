@@ -71,7 +71,8 @@ misstable pat births schooling gdpc hdi corruption femgov region ccodewb, freq
 * (1) Fertility rates and schooling years
 * ---------------------------------------
 
-scatter births schooling
+scatter births schooling, ///
+	name(fert_edu, replace)
 
 pwcorr births schooling, obs sig
 
@@ -79,13 +80,15 @@ pwcorr births schooling, obs sig
 * (2) Schooling years and (log) Gross Domestic Product
 * ----------------------------------------------------
 
-sc gdpc schooling
+sc gdpc schooling, ///
+	name(gdpc_edu, replace)
 
 * A first look at the scatterplot shows no clear linear pattern, but we know
 * from a previous session that the logarithmic variable transformation can be
 * used to visualize exponential relationships differently. Consequently, we
 * try to visualise the same variables with a logarithmic scale for GDP per capita.
-sc gdpc schooling, ysc(log)
+sc gdpc schooling, ysc(log) ///
+	name(gdpc_edu, replace)
 
 * In this classical case, log units are more informative than metric ones to
 * identify the relationship between the dependent and independent variables.
@@ -93,7 +96,8 @@ gen log_gdpc = ln(gdpc)
 la var log_gdpc "Real GDP per capita (log)"
 
 * Verify the transformation.
-sc log_gdpc schooling
+sc log_gdpc schooling, ///
+	name(gdpc_edu, replace)
 
 * Obtain summary statistics.
 su log_gdpc schooling
@@ -147,8 +151,13 @@ sc femgov corruption, yline(15) xline(4) ///
 * and theoretical elaboration provide no substantive justification for it.
 
 
-* Correlation and scatterplot matrixes
-* ------------------------------------
+* ================
+* = SCATTERPLOTS =
+* ================
+
+
+* Scatterplot matrixes
+* --------------------
 
 * Start with visual inspection of the data organized as a scatterplot matrix.
 * A scatterplot matrix contains all possible bivariate relationships between
@@ -161,7 +170,7 @@ gr mat births schooling log_gdpc corruption femgov, ///
 * You could also look at a sparser version of the matrix that shows only half of
 * all plots for a subset of geographical regions.
 gr mat births schooling log_gdpc corruption femgov if inlist(region,4,5), half ///
-	name(gr_matrix, replace)
+	name(gr_matrix_regions4_5, replace)
 
 * The most practical way to consider all possible correlations in a list of
 * predictors (or independent variables) is to build a correlation matrix out
@@ -182,11 +191,11 @@ pwcorr births schooling log_gdpc corruption femgov, print(.05)
 
 * Export a correlation matrix.
 mkcorr births schooling gdpc corruption femgov, ///
-	lab num sig log("week8_correlations.txt") replace
+	lab num sig log("week7_correlations.txt") replace
 
 
-* Marker labels for scatterplots
-* ------------------------------
+* Scatterplots with marker labels
+* -------------------------------
 
 * Stata requires passing a lot of options to produce informative graphs. If you
 * are using a set of consistent options on several graphs, you can store these
@@ -220,6 +229,53 @@ sc births schooling, mlabc(gs10) $ccode || ///
 
 * There are binders full of Stata graph options like these. Have a look at the
 * help pages for two-way graphs (h tw) for a list that applies to scatterplots.
+
+
+* Scatterplots with histograms
+* ----------------------------
+
+* Or, how to combine graphs with insane axis options.
+sc births schooling, ///
+	yti("") xti("") ysc(alt) yla(none, angle(v)) xsc(alt) xla(none, grid gmax) ///
+	name(plot2, replace) plotregion(style(none))
+
+* Plot 1 is top-left.
+tw hist births, ///
+	xsc(alt rev) xla(none) xti("") horiz fxsize(25) ///
+	name(plot1, replace) plotregion(style(none))
+
+* Plot 3 is bottom-right.
+tw hist schooling, ///
+	ysc(alt rev) yla(none, nogrid angle(v)) yti("") xla(,grid gmax) fysize(25) ///
+	name(plot3, replace) plotregion(style(none))
+
+* Combined plots with square ratio (y-size = x-size).
+gr combine plot1 plot2 plot3, ///
+	imargin(0 0 0 0) hole(3) ysiz(5) xsiz(5) ///
+	name(fert_edu4, replace)
+
+* Cleanup, focus on result.
+gr drop plot1 plot2 plot3
+gr di fert_edu4
+
+
+* Scatterplots with smoothed lines
+* --------------------------------
+
+* Another way to visualize the quality of a linear fit is to plot a smoothed fit
+* with the -lowess- command to show departures from linearity in the IV effect.
+lowess births schooling, ///
+	name(fert_edu_lowess, replace)
+
+* The lowess smoother can works as a moving average (running mean) or as a least
+* squares estimator on a fraction of the observations (which is the default).
+* Use the bw() option with low widths (below .5) to see how it works:
+lowess births schooling, bw(.2) ///
+	name(fert_edu_lowess, replace)
+
+* The data are broken into clusters, for which an approximate slope is computed
+* in order to draw a small segment of the LOWESS curve. The details of a least
+* squares estimator are on next week's menu.
 
 
 * =======

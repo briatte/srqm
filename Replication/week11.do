@@ -128,7 +128,7 @@ reg births sqrt_schooling gdpc
 * ----------------------------------
 
 * With standardised, or 'beta', coefficients.
-reg births sqrt_schooling log_gdpc, beta
+reg births sqrt_schooling log_gdpc, b
 
 * Proof of concept: Each variable in the equation has a different distribution
 * and therefore a different standard deviation. As such, regression with metric
@@ -153,7 +153,7 @@ su std_*
 * Compare both regression outputs. The first one is the linear regression that
 * produces identical coefficients to the right hand column of the second one.
 reg std_*
-reg births schooling log_gdpc, beta
+reg births schooling log_gdpc, b
 
 
 * Dummies (categorical variables)
@@ -260,25 +260,25 @@ gen schoolingXlog_gdpc = schooling*log_gdpc
 la var schoolingXlog_gdpc "GDP * Schooling"
 
 * Regression model.
-reg births schooling log_gdpc aids i.region, r
+reg births schooling log_gdpc aids i.region
 
 * Regression model with an interaction term.
-reg births schooling log_gdpc schoolingXlog_gdpc aids i.region, r
+reg births schooling log_gdpc schoolingXlog_gdpc aids i.region
 
 * Standardised coefficients reveal how the interaction influences the model.
-reg births schooling log_gdpc schoolingXlog_gdpc aids i.region, r beta
+reg births schooling log_gdpc schoolingXlog_gdpc aids i.region, b
 
 * Similarly, nested regression shows how the interaction advances the model.
 nestreg: reg births ///
 	(schooling log_gdpc aids) ///
-	(schooling log_gdpc schoolingXlog_gdpc aids), r beta
+	(schooling log_gdpc schoolingXlog_gdpc aids), b
 
 * Finally, this is how an even more detailed model can be written. The first
 * term tests a factorial interaction between two continuous variables, noted
 * with the "c." prefix. Each variable is added to the model, along with their
 * interaction term. The second term tests all combinations of two categorical
 * variables, which will show the impact of high HIV prevalence per continent.
-reg births c.schooling##c.log_gdpc aids#region, r beta
+reg births c.schooling##c.log_gdpc aids#region, b
 
 
 * (c) Heteroskedasticity
@@ -298,9 +298,6 @@ rvpplot schooling, yline(0) ms(i) mlab(ccodewb) name(diag_rvp, replace)
 sc r schooling || sc r schooling if abs(rst) > 2, yline(0) mlab(ccodewb) ///
 	legend(lab(2 "Outliers"))
 
-* Use robust standard errors to adjust for heterogeneous variance.
-reg births c.schooling##c.log_gdpc aids##region, r beta
-
 
 * =================
 * = MODEL RESULTS =
@@ -319,13 +316,13 @@ reg births c.schooling##c.log_gdpc aids##region, r beta
 eststo clear
 
 * Model 1: 'Baseline model'.
-eststo M1: qui reg births schooling log_gdpc, r beta
+eststo M1: qui reg births schooling log_gdpc, b
 
 * Model 2: Adding the HIV/AIDS dummy with regional interactions.
-eststo M2: qui reg births schooling log_gdpc aids#i.region, r beta
+eststo M2: qui reg births schooling log_gdpc aids#i.region, b
 
 * Model 3: Adding the interaction between education and wealth.
-eststo M3: qui reg births c.schooling##c.log_gdpc aids#i.region, r beta
+eststo M3: qui reg births c.schooling##c.log_gdpc aids#i.region, b
 
 * Export all models for comparison and reporting.
 esttab M1 M2 M3 using "week11_regressions.txt", replace constant beta(2) se(2) r2(2) ///

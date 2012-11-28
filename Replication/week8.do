@@ -219,12 +219,6 @@ tw (lfitci corruption femgov) (sc corruption femgov, $ccode), ///
     legend(off) yla(1 "Highly corrupt" 10 "Lowly corrupt") ///
     name(cpi_femgov, replace)
 
-* Another way to visualize the quality of a linear fit is to plot a smoothed fit
-* with the -lowess- command to show departures from linearity in the IV effect.
-tw (sc corruption femgov, $ccode) (lfit corruption femgov, $ci) (lowess corruption femgov), ///
-    yla(1 "Highly corrupt" 10 "Lowly corrupt") ///
-    name(cpi_femgov_lowess, replace)
-
 * Despite a less-than-optimal fit, the model yet returns a "good", by which
 * we mean a satisfactory p-value lower than our alpha level of statistical
 * significance. Hence, caution!

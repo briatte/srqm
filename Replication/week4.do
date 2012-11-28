@@ -201,9 +201,6 @@ qnorm bmi, ti("Normal quantile plot") ///
 * The departures observed here are situated at the tails of the distribution,
 * which means that there is an excess of observations at these values. 
 
-* Combine all diagnostic plots.
-gr combine bmi_sym bmi_qnorm, name(bmi_diag, replace)
-
 
 * (2) Statistical tests
 * ---------------------
