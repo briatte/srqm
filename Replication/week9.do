@@ -77,6 +77,7 @@ count
 * Survey weights.
 svyset vpsu [weight=wtcomb], strata (vstrat)
 
+
 * ================
 * = DESCRIPTIONS =
 * ================
@@ -105,29 +106,29 @@ reg partnrs5 i.female
 * Is higher income associated with a higher number of partners in the US?
 reg partnrs5 i.female coninc
 
-* Let's transform income into a more meaningful scale.
-* A dollar change in income is not large enough to expect a large effect.
-* Let's change income to tens of thousands of dollars.
-gen coninc2=coninc/10000
+* Let's transform income into a more meaningful scale: a dollar change in income
+* is not large enough to have a large effect. Let's measure income to 10,000s of
+* U.S. dollars.
+gen inc = coninc/10000
 
-reg partnrs5 i.female coninc2
+reg partnrs5 i.female inc
 
 * Let's control for education as well.
-reg partnrs5 i.female coninc2 educ
+reg partnrs5 i.female inc educ
 
 * Let's control for urban size.
-reg partnrs5 i.female coninc2 educ size
+reg partnrs5 i.female inc educ size
 
 * How about working status?
-reg partnrs5 i.female coninc2 educ size i.wrkstat
+reg partnrs5 i.female inc educ size i.wrkstat
 fre wrkstat
 
 * Let's add a control for marital status.
-reg partnrs5 i.female coninc2 educ size i.wrkstat i.marital
+reg partnrs5 i.female inc educ size i.wrkstat i.marital
 fre marital
 
 * Finally, let's control for age.
-reg partnrs5 i.female coninc2 educ size i.wrkstat i.marital age
+reg partnrs5 i.female inc educ size i.wrkstat i.marital age
 
 
 * Reinterpretation of the constant
@@ -143,54 +144,46 @@ reg partnrs5 i.female coninc2 educ size i.wrkstat i.marital age
 * reference category for the constant the sample mean for each continuous IV.
 * To do so, we simply nead to substract from each variable its mean.
 
-su coninc2
-gen zconinc2=coninc2-r(mean)
+su inc
+gen zinc = inc - r(mean)
+
 su size
-gen zsize=size-r(mean)
+gen zsize = size - r(mean)
+
 su age
-gen zage=age-r(mean)
+gen zage = age - r(mean)
+
 su educ
-gen zeduc=educ-r(mean)
+gen zeduc = educ - r(mean)
 
 * Replicate the final regression model with transformed continuous variables.
-reg partnrs5 i.female zconinc2 zeduc zsize i.wrkstat i.marital zage
+reg partnrs5 i.female zinc zeduc zsize i.wrkstat i.marital zage
 
 * The results do not change except for the constant. For this model, the constant
-* stands for the average number of partners of respondents who are:
-* - Male
-* - With average income
-* - With average education
+* stands for the average number of partners among respondents who are:
+* - Male (female = 0)
+* - With average income (zinc = 0)
+* - With average education (...)
 * - From a mid-sized town
 * - Employed full-time
 * - Married
 * - Mid-age
 
 
-* Robust standard errors
-* ----------------------
-
-reg partnrs5 i.female zconinc2 zeduc zsize i.wrkstat i.marital zage
-reg partnrs5 i.female zconinc2 zeduc zsize i.wrkstat i.marital zage, r
-
-
 * Standardized coefficients
 * -------------------------
 
-reg partnrs5 i.female zconinc2 zeduc zsize i.wrkstat i.marital zage
-reg partnrs5 i.female zconinc2 zeduc zsize i.wrkstat i.marital zage, b
+* Model with metric coefficients (in units of each variable).
+reg partnrs5 i.female zinc zeduc zsize i.wrkstat i.marital zage
 
+* Model with all coefficients expressed in standard deviation units.
+reg partnrs5 i.female zinc zeduc zsize i.wrkstat i.marital zage, b
 
 * Residuals
 * ---------
 
+* Residuals-versus-fitted values plot.
 rvfplot
-rvpplot
-
-
-* Variance inflation
-* ------------------
-
-vif
 
 
 * ========

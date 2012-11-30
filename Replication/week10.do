@@ -37,10 +37,6 @@ use "Datasets/qog2011.dta", clear
 * Rename variables to short handles.
 ren (wdi_fr bl_asyt25 wdi_hiv) (births schooling hiv )
 
-* Transformation of education years to square root units.
-gen sqrt_schooling = sqrt(schooling)
-la var sqrt_schooling "Average Schooling Years (Total) (sqrt units)"
-
 * Transformation of real GDP per capita to logged units.
 gen log_gdpc = ln(unna_gdp/unna_pop)
 la var log_gdpc "Real GDP/capita (constant USD, logged)"
@@ -64,16 +60,16 @@ la def region 1 "E. Europe and PSU" 2 "Lat. America" ///
 * ----------
 
 * Check missing values.
-misstable pat births sqrt_schooling log_gdpc aids, freq
+misstable pat births schooling log_gdpc aids, freq
 
 * Check on sample bias caused by low availability of schooling years.
-gen mi = mi(sqrt_schooling)
-gr hbar (count) sqrt_schooling (count) mi, over(region, sort(2)des) stack ///
+gen mi = mi(schooling)
+gr hbar (count) schooling (count) mi, over(region, sort(2)des) stack ///
     legend(order(1 "N(schooling)" 2 "Missing data")) ///
     name(mi, replace)
 
 * Delete incomplete observations.
-drop if mi(births, sqrt_schooling, log_gdpc, aids)
+drop if mi(births, schooling, log_gdpc, aids)
 
 * Final sample size.
 count
@@ -82,11 +78,9 @@ count
 * Export summary statistics
 * -------------------------
 
-* The next command is part of the SRQM folder. Notice that the table shows the
-* untransformed measurement of schooling years for higher legibility. The only
-* categorical predictor of the model is the HIV/AIDS prevalence dummy: regions
-* are used only for informative purposes in the table but are not treated as a
-* predictor in the model other than for demonstration purposes in our do-file.
+* The next command is part of the SRQM folder. The only categorical predictor of
+* the model is the HIV/AIDS prevalence dummy: regions are used only for teaching
+* purposes in the table but should not be treated as predictors.
 
 stab using week10, replace ///
     su(births schooling log_gdpc) ///
@@ -110,19 +104,19 @@ stab using week10, replace ///
 
 
 * Coefficients matrix.
-corr births sqrt_schooling log_gdpc
+corr births schooling log_gdpc
 
 * Scatterplot matrix.
-gr mat births sqrt_schooling log_gdpc, half ///
-    name(grmat, replace)
+gr mat births schooling log_gdpc, half ///
+    name(mat, replace)
 
 * Export method using -mkcorr-.
-mkcorr births sqrt_schooling log_gdpc, ///
+mkcorr births schooling log_gdpc, ///
 	lab num sig log("week10_mkcorr.txt") replace
 
 * Export method using -estout-.
 eststo clear
-qui estpost correlate births sqrt_schooling log_gdpc aids, matrix listwise
+qui estpost correlate births schooling log_gdpc aids, matrix listwise
 esttab using "week10_estpost.txt", unstack not compress label replace
 
 
@@ -136,9 +130,9 @@ esttab using "week10_estpost.txt", unstack not compress label replace
 
 
 * IV: Education.
-sc births sqrt_schooling || lfit births sqrt_schooling, ///
+sc births schooling || lfit births schooling, ///
 	name(simplereg1, replace)
-reg births sqrt_schooling
+reg births schooling
 
 * IV: Real GDP per capita.
 sc births log_gdpc || lfit births log_gdpc, ///
@@ -146,9 +140,9 @@ sc births log_gdpc || lfit births log_gdpc, ///
 reg births log_gdpc
 
 * IV-IV interaction.
-sc sqrt_schooling log_gdpc || lfit sqrt_schooling log_gdpc, ///
+sc schooling log_gdpc || lfit schooling log_gdpc, ///
 	name(simplereg3, replace)
-reg sqrt_schooling log_gdpc
+reg schooling log_gdpc
 
 
 * Multiple linear regression
@@ -157,11 +151,10 @@ reg sqrt_schooling log_gdpc
 * With schooling in metric units.
 reg births schooling log_gdpc
 
-* With schooling in square root units. The gain in accuracy is trivial so we can
-* switch back to the untransformed measure of education for greater legibility.
-reg births sqrt_schooling log_gdpc
+* Recall the last model.
+reg
 
-* Cleaner output for the last model.
+* Recall the last model, with cleaner output.
 leanout: 
 
 
@@ -255,9 +248,8 @@ reg yhat i.aids
 * =========================
 
 
-* We recall the regression model and switch back to the transformed version of
-* education for higher precision in the diagnostics.
-reg births sqrt_schooling log_gdpc aids i.region
+* Rerun the regression model.
+reg births schooling log_gdpc aids i.region
 
 * Storing fitted (predicted) values.
 cap drop yhat
@@ -275,10 +267,7 @@ predict r, resid
 kdensity r, norm legend(off) ti("") ///
     name(diag_kdens, replace)
 
-qnorm r, ///
-    name(diag_qnorm, replace)
-
-* Homoscedasticity of the residuals versus fitted values (DV).
+* Homoskedasticity of the residuals versus fitted values (DV).
 rvfplot, yline(0) ms(i) mlab(ccodewb) name(diag_rvf, replace)
 
 * Store the standardized residuals.
@@ -300,7 +289,7 @@ sc rsta yhat, yline(-2 2) || sc rsta yhat if abs(rsta) > 2, ///
 * the background of the main regression equation. It might show some predictors
 * are responsible for the overall sampling distribution of the residuals, which
 * means that the model is captive of a restricted number of predictors.
-sc r sqrt_schooling, ///
+sc r schooling, ///
 	yline(0) mlab(ccodewb) legend(lab(2 "Outliers")) ///
 	name(diag_edu1, replace)
 
@@ -311,7 +300,7 @@ sc r sqrt_schooling, ///
 * a pattern in its standard errors, the LOWESS curve will show it by deviating
 * from the null y-axis at values of the IV where the residuals are "clustered"
 * above or below the expected mean of zero (which indicates homoskedasticity).
-lowess rsta sqrt_schooling, bw(.5) yline(0) ///
+lowess rsta schooling, bw(.5) yline(0) ///
 	name(diag_edu2, replace)
 
 
@@ -370,17 +359,17 @@ reg births c.schooling##c.log_gdpc i.aids#i.region, b
 eststo clear
 
 * Model 1: 'Baseline model'.
-eststo M1: qui reg births schooling log_gdpc, b
+eststo M1: qui reg births schooling log_gdpc
 
 * Model 2: Adding the HIV/AIDS dummy with regional interactions.
-eststo M2: qui reg births schooling log_gdpc aids##region, b
+eststo M2: qui reg births schooling log_gdpc aids i.region
 
 * Model 3: Adding the interaction between education and wealth.
-eststo M3: qui reg births c.schooling##c.log_gdpc aids##region, b
+eststo M3: qui reg births c.schooling##c.log_gdpc aids##region
 
 * Export all models for comparison and reporting.
-esttab M1 M2 M3 using "week10_regressions.txt", replace constant beta(2) se(2) r2(2) ///
-    label mtitles("Baseline" "Controls for HIV/AIDS" "Interaction effects")
+esttab M1 M2 M3 using "week10_regressions.txt", replace constant b(2) se(2) r2(2) ///
+    label mtitles("Baseline" "Controls" "Interactions")
 
 /* Basic usage of -estout- commands:
   
