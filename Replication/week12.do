@@ -28,7 +28,7 @@ foreach p in fre {
 }
 
 * Log results.
-cap log using "Replication/week10.log", replace
+cap log using "Replication/week12.log", replace
 
 
 * ====================
@@ -40,9 +40,6 @@ use "Datasets/gss2010.dta", clear
 
 * Keep most recent year.
 keep if year==2010
-
-* Keep variables of interest and respondent ID.
-keep id partnrs5 sex age coninc educ marital wrkstat size intsex wtssall vpsu vstrata
 
 * Inspect DV, drop missing cases.
 fre partnrs5
@@ -87,7 +84,7 @@ svyset vpsu [weight=wtssall], strata (vstrata)
 
 * Explore the DV.
 fre partnrs5
-hist partnrs5, bin(10) percent addl
+hist partnrs5, bin(10) percent addl norm
 
 * Bivariate test of hypothesis.
 tab partnrs5 female, nofreq col chi2
@@ -187,7 +184,7 @@ reg partnrs5 i.female zinc zeduc zsize i.wrkstat i.marital zage, b
 
 * Distribution of the residuals.
 predict r, resid
-kdens r, norm
+kdensity r, norm
 
 * Residuals-versus-fitted values plot.
 rvfplot
