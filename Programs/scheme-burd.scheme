@@ -56,16 +56,16 @@ anglestyle vertical_tick     horizontal
 // See other scheme files for blue-red gradient
 // on 3 to 11 classes.
 
-color p red
-color p1              "33 102 172"
-color p2              "178 24 43"
-color p3              "27 120 55"
-color p4              "230 97 1"
-color p5              "1 102 94"
-color p6              "197 27 125"
-color p7              "118 42 131"
-color p8              "140 81 10"
-color p9              "77 77 77"
+color p gs6
+color p1     "33 102 172"  // Bu from RdBu-7, replaces navy
+color p2     "178 24 43"   // Rd from RdBu-7, replaces maroon
+color p3     "27 120 55"   // Gn from PRGn-7, replaces forest_green
+color p4     "230 97 1"    // Or from PuOr-7, replaces dkorange
+color p5     "1 102 94"    // BG from BrBG-7, replaces teal
+color p6     "197 27 125"  // Pi from PiYG-7, replaces cranberry
+color p7     "118 42 131"  // Pu from PuOr-7, replaces lavender
+color p8     "140 81 10"   // Br from BrBG-7, replaces khaki
+color p9     "77 77 77"    // Gr from RdGy-7, replaces sienna
 intensity bar 75
 
 // Marker symbols

@@ -16,7 +16,7 @@
    model without diagnosing its validity. Regression diagnostics are explored
    next week.
 
-   Last updated 2012-11-13.
+   Last updated 2012-12-05.
 
 ----------------------------------------------------------------------------- */
 
@@ -38,9 +38,11 @@ cap log using "Replication/week10.log", replace
 
 use "Datasets/gss2010.dta", clear
 
+* Keep most recent year.
+keep if year==2010
 
 * Keep variables of interest and respondent ID.
-keep id partnrs5 sex age coninc educ marital wrkstat size
+keep id partnrs5 sex age coninc educ marital wrkstat size intsex wtssall vpsu vstrata
 
 * Inspect DV, drop missing cases.
 fre partnrs5
@@ -59,7 +61,7 @@ drop if age < 20
 spineplot partnrs5 age10, scheme(burd8)
 
 * Inspect DV by age, sex and interviewer's sex.
-gr bar partnrs5, over(female) asyvars over(age10) by(intsex)
+gr bar partnrs5, over(sex) asyvars over(age10) by(intsex)
 
 * Drop ambiguous wrkstat category "Other".
 drop if wrkstat==8
@@ -75,12 +77,12 @@ drop sex
 count
 
 * Survey weights.
-svyset vpsu [weight=wtcomb], strata (vstrat)
+svyset vpsu [weight=wtssall], strata (vstrata)
 
 
-* ================
-* = DESCRIPTIONS =
-* ================
+* ====================
+* = DATA DESCRIPTION =
+* ====================
 
 
 * Explore the DV.
@@ -93,9 +95,9 @@ gr hbar partnrs5, over(female)
 ttest partnrs5, by(female)
 
 
-* ==========
-* = MODELS =
-* ==========
+* =====================
+* = REGRESSION MODELS =
+* =====================
 
 
 * A simple linear regression model test.
@@ -130,7 +132,7 @@ fre marital
 * Finally, let's control for age.
 reg partnrs5 i.female inc educ size i.wrkstat i.marital age
 
-
+                 
 * Reinterpretation of the constant
 * --------------------------------
 
@@ -179,11 +181,30 @@ reg partnrs5 i.female zinc zeduc zsize i.wrkstat i.marital zage
 * Model with all coefficients expressed in standard deviation units.
 reg partnrs5 i.female zinc zeduc zsize i.wrkstat i.marital zage, b
 
+
 * Residuals
 * ---------
 
+* Distribution of the residuals.
+predict r, resid
+kdens r, norm
+
 * Residuals-versus-fitted values plot.
 rvfplot
+
+* Extensions
+* ----------
+
+recode partnrs5 (0=0)(1=1)(2=2)(3=3)(4=4)(5=8)(6=15)(7=60)(8=120)(else=.), gen(sxp)
+
+* Multiple linear regression.
+eststo LIN: reg sxp i.female inc educ size i.wrkstat i.marital age
+
+* Negative binomial regression (for count data).
+eststo NBR: nbreg sxp i.female inc educ size i.wrkstat i.marital age
+
+* Compare models.
+esttab LIN NBR, b(1) wide compress mti("Lin. reg." "Neg. bin.")
 
 
 * ========

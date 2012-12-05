@@ -1,27 +1,28 @@
-\documentclass{beamer}
-\usepackage[utf8]{inputenc}
-\usepackage[]{hyperref}
-\usepackage{booktabs}
-\usetheme[pageofpages=of,bullet=square,
-	titleline=true,
-	alternativetitlepage=true,
-	titlepagelogo=images/table-extract.png]{Torino}
+\documentclass[t]{beamer}
+\usetheme{hkl}
 
-\author{Statistical Reasoning\\and Quantitative Methods}
-\title{Crosstabulation}
-\institute{François Briatte \& Ivaylo Petev}
-\date{Session 6}
-
-\include{settings}
+\title{Course setup}
+	\author{François Briatte \& Ivaylo Petev}
+	\date{Week~\#1}
 
 \begin{document}
-		
-	\begin{frame}[t,plain]
-		\titlepage
-	\end{frame}
+
+    \frame[plain]{
+		\titlepage\\[7em]
+		\tableofcontents[hideallsubsections]
+		}
+
+	%
+	%
 	
 	\begin{frame}[t]{Outline}
 	
+	\begin{block}{Equations}
+	
+	$$\text{Linear model:~} Y = \beta_0 + beta_1 X_1 + \beta_2 X_2 + \epsilon$$
+	$$\text{Logistic model:~} Pr(Y=1) = \frac{exp(\beta_0 + \beta_1 X_1 + \beta_2 X_2 + \epsilon)}{1+exp(\beta_0 + \beta_1 X_1 + \beta_2 X_2 + \epsilon)}$$
+	\end{block}
+		
 	\red{Bivariate statistics} look at the probability of an association between two variables and are part of \red{inferential statistics}.\\[.5em]
 	
 	Before going that far, we need to learn how to \red{crosstabulate} variables with each other, as tables or graphs.\\[.5em]
@@ -35,7 +36,7 @@
 %			… and a lot more awesomeness later on with linear correlation and regression modelling.
 		\column{.45\textwidth}
 			\begin{center}
-				\href{http://ideas.repec.org/c/boc/bocode/s447101.html}{\includegraphics[width=\textwidth]{images/table.png}}
+				\href{http://ideas.repec.org/c/boc/bocode/s447101.html}{\includegraphics[width=\textwidth]{images-old/table.png}}
 			\end{center}		
 		\end{columns}
 		\vspace{2em}
@@ -59,41 +60,41 @@
 	% something is strange: the Protestant ethic is the less greedy
 	% while Jews are outrun by Muslisms join at top (think of what
 	% means for how antisemitism must work in practice for people)...
-	\fullslide{images/comp-dot.pdf}
+%	\fullslide{images-old/comp-dot.pdf}
 	% ... and men *seem* to come out as greedier than women.
-	\fullslide{images/comp-dot-over.pdf}
+%	\fullslide{images-old/comp-dot-over.pdf}
 	% and here, more extreme-left partisans *seem* reluctant to any
 	% form of poor immigration than among right-wing partisans...
-	\fullslide{images/comp-hbar-stack.pdf}
+%	\fullslide{images-old/comp-hbar-stack.pdf}
 	% ... but women on the extreme-left are 5 percentage points
 	% less reluctant to poor immigration than extreme-left men.
-	\fullslide{images/comp-hbar-stack-over.pdf}
+%	\fullslide{images-old/comp-hbar-stack-over.pdf}
 	
 	\subsection{Bars and dots}
 	
 	\begin{frame}[t]{Operationalization: Bars and dots}
 
 	\begin{itemize}
-		\item Use \code{gr dot} to compare the mean, quantile or proportion of a \red{continuous variable} across groups.
+		\item Use \texttt{gr dot} to compare the mean, quantile or proportion of a \red{continuous variable} across groups.
 		
 		\begin{itemize}
 			\item Some interval scales can be treated as pseudo-continuous.
 			% e.g. 4-pt ``agree/disagree'' or 10-pt ``left/right'' scales.
-			\item Use the \code{sort(1)des} option to order the groups by descending order.
-			\item Use the \code{ylab()} option to label the horizontal axis correctly.
-			\item Use the \code{exclude0} option if the null value is not meaningful.
+			\item Use the \texttt{sort(1)des} option to order the groups by descending order.
+			\item Use the \texttt{ylab()} option to label the horizontal axis correctly.
+			\item Use the \texttt{exclude0} option if the null value is not meaningful.
 		\end{itemize}
 		
-		\item Use \code{gr bar} or \code{gr hbar} with the \code{per stack} options to compare proportions of an \red{ordinal variable} as percentages across groups.
+		\item Use \texttt{gr bar} or \texttt{gr hbar} with the \texttt{per stack} options to compare proportions of an \red{ordinal variable} as percentages across groups.
 		
 		\begin{itemize}
-			\item Use \code{tab, gen()} to create dummies of each group category.
-			\item Use the \code{legend(lab(\# "..."))} option to rewrite the legending.
-			\item Use the \code{bar(\#,col(...))} option to apply a sensible color scheme.
-			\item Use the \code{blab(bar, pos(center) format(\%9.2f))} to add labels.
+			\item Use \texttt{tab, gen()} to create dummies of each group category.
+			\item Use the \texttt{legend(lab(\# "..."))} option to rewrite the legending.
+			\item Use the \texttt{bar(\#,col(...))} option to apply a sensible color scheme.
+			\item Use the \texttt{blab(bar, pos(center) format(\%9.2f))} to add labels.
 		\end{itemize}
 		
-		\item Play around with \code{over()}, \code{by()} and other graph options, looking at course do-files for examples.
+		\item Play around with \texttt{over()}, \texttt{by()} and other graph options, looking at course do-files for examples.
 	\end{itemize}
 
 	\end{frame}
@@ -102,9 +103,9 @@
 
 	\begin{frame}[t]{Operationalization: Pies}
 
-		Technically, you might want to use pie charts with the \code{by()} option to look at proportions over categories, as they  do at \textit{The Economist}:\\[1em]
+		Technically, you might want to use pie charts with the \texttt{by()} option to look at proportions over categories, as they  do at \textit{The Economist}:\\[1em]
 
-		\href{http://andrewgelman.com/2011/04/attractive_but/}{\includegraphics[width=\textwidth]{images/uglyassgraph.jpg}}
+		\href{http://andrewgelman.com/2011/04/attractive_but/}{\includegraphics[width=\textwidth]{images-old/uglyassgraph.jpg}}
 
 	\end{frame}
 		
@@ -119,7 +120,7 @@
 			\red{Do not use pie charts.}\\[4.75em]
 			\tiny{(except for rare instances of binary-type proportions shown in exploded slices over a fairly limited number of groups with clear contrasting colours and possibly percentage labels shown outside the plot; \href{http://andrewgelman.com/2011/04/one_more_time-u/}{even the best pie charts from \textit{The Economist} can be redrawn into more readable plots} if you think about it.)}
 			\column{.6\textwidth}
-			\includegraphics[width=\textwidth]{images/pie-problem.jpg}
+			\includegraphics[width=\textwidth]{images-old/pie-problem.jpg}
 		\end{columns}
 
 	\end{frame}
@@ -138,72 +139,72 @@
 
 	If men and women hold identical views on abortion, each group will independently reflect the population percentages:\\[1em]
 		
-	\begin{center}
-	\textit{Example: gender and abortion}\\[1em]
-	\begin{tabular}{lccc}
-	\toprule
-	& \multicolumn{3}{c}{Views on abortion}	\\
-	\cmidrule(r){2-4}
-	Gender & Support & Oppose & Total\\
-	\cmidrule(r){1-4}
-	Men	  & 75\%	& 25\% 	& 100\%\\
-	Women & 75\%  	& 25\%	& 100\%\\
-	\bottomrule
-	\end{tabular}
-	\end{center}
+%	\begin{center}
+%	\textit{Example: gender and abortion}\\[1em]
+%	\begin{tabular}{lccc}
+%	\toprule
+%	& \multicolumn{3}{c}{Views on abortion}	\\
+%	\cmidrule(r){2-4}
+%	Gender & Support & Oppose & Total\\
+%	\cmidrule(r){1-4}
+%	Men	  & 75\%	& 25\% 	& 100\%\\
+%	Women & 75\%  	& 25\%	& 100\%\\
+%	\bottomrule
+%	\end{tabular}
+%	\end{center}
 
 		
 	\end{frame}
 	
 	\begin{frame}[t]{Crosstabulations}
 	
-	\begin{center}\vspace{-1em}
-	\textit{Example: politics and attitudes towards migrants}\\[1em]
-	\begin{tabular}{lcccc}
-	\toprule
-	& \multicolumn{4}{c}{Allow poor migrants}	\\
-	\cmidrule(r){2-5}
-	Political categories & Many & Some	& Few & None\\
-	\cmidrule(r){1-5}
-	Extreme-left	& 42	 & 76 		& 37	 & 12 \\
-	Left	 		& 63  & 284	& 161	 & 46\\
-	Center	 		& 31  & 209	& 238	 & 61\\
-	Right	 		& 17	 & 218	& 234	 & 102\\
-	Extreme-right	& 1	 & 17	 	& 35	 & 27\\
-	\bottomrule
-	\end{tabular}
-	\\
-	\vspace{.5em}
-	Source: European Social Survey 2008, France.\\[1em]
-	\end{center}
+%	\begin{center}\vspace{-1em}
+%	\textit{Example: politics and attitudes towards migrants}\\[1em]
+%	\begin{tabular}{lcccc}
+%	\toprule
+%	& \multicolumn{4}{c}{Allow poor migrants}	\\
+%	\cmidrule(r){2-5}
+%	Political categories & Many & Some	& Few & None\\
+%	\cmidrule(r){1-5}
+%	Extreme-left	& 42	 & 76 		& 37	 & 12 \\
+%	Left	 		& 63  & 284	& 161	 & 46\\
+%	Center	 		& 31  & 209	& 238	 & 61\\
+%	Right	 		& 17	 & 218	& 234	 & 102\\
+%	Extreme-right	& 1	 & 17	 	& 35	 & 27\\
+%	\bottomrule
+%	\end{tabular}
+%	\\
+%	\vspace{.5em}
+%	Source: European Social Survey 2008, France.\\[1em]
+%	\end{center}
 	
 	Note: unweighted data, since the Chi-squared test is non-parametric (it relies on a distinct distribution).
 	
 	\end{frame}
 	
-	\fullslide{images/crosstabs-s6.pdf}
+%	\fullslide{images-old/crosstabs-s6.pdf}
 	
 	\subsection{Table frequencies}
 
 	\begin{frame}[t]{\red{Observed} cell percentages}
 	
-\begin{center}\vspace{-1em}
-\textit{Example: politics and attitudes towards migrants}\\[1em]
-\begin{tabular}{lccccc}
-\toprule
-& \multicolumn{5}{c}{Allow poor migrants}	\\
-\cmidrule(r){2-6}
-Political categories & Many & Some	& Few & None & \textbf{Percentage}\\
-\cmidrule(r){1-6}
-Extreme-left	& 2.20 & 3.98	& 1.94	 & 0.63	 & \textbf{8.74}\\
-Left	 		& 3.30 & 14.86	& 8.42	 & 2.41 & \textbf{28.99}\\
-Center	 		& 1.62 & 10.94	& 12.45  & 3.19 & \textbf{28.21}\\
-Right	 		& 3.46 & 9.63	& 9.99	 & 5.54 & \textbf{28.64}\\
-Extreme-right	& 0.98 & 2.72	& 2.82	 & 1.56 & \textbf{8.10}\\
-\textbf{Percentage}	& \textbf{12.10} & \textbf{33.63} & \textbf{34.90}	& \textbf{19.37} & \textbf{100\%}\\
-\bottomrule
-\end{tabular}
-\end{center}
+%\begin{center}\vspace{-1em}
+%\textit{Example: politics and attitudes towards migrants}\\[1em]
+%\begin{tabular}{lccccc}
+%\toprule
+%& \multicolumn{5}{c}{Allow poor migrants}	\\
+%\cmidrule(r){2-6}
+%Political categories & Many & Some	& Few & None & \textbf{Percentage}\\
+%\cmidrule(r){1-6}
+%Extreme-left	& 2.20 & 3.98	& 1.94	 & 0.63	 & \textbf{8.74}\\
+%Left	 		& 3.30 & 14.86	& 8.42	 & 2.41 & \textbf{28.99}\\
+%Center	 		& 1.62 & 10.94	& 12.45  & 3.19 & \textbf{28.21}\\
+%Right	 		& 3.46 & 9.63	& 9.99	 & 5.54 & \textbf{28.64}\\
+%Extreme-right	& 0.98 & 2.72	& 2.82	 & 1.56 & \textbf{8.10}\\
+%\textbf{Percentage}	& \textbf{12.10} & \textbf{33.63} & \textbf{34.90}	& \textbf{19.37} & \textbf{100\%}\\
+%\bottomrule
+%\end{tabular}
+%\end{center}
 	
 	The \red{cell percentage} of each cell in the table is known by comparing each cell frequency to the whole sample distribution.
 	
@@ -211,22 +212,22 @@ Extreme-right	& 0.98 & 2.72	& 2.82	 & 1.56 & \textbf{8.10}\\
 	
 	\begin{frame}[t]{\red{Observed} row percentages}
 	
-	\begin{center}\vspace{-1em}
-	\textit{Example: politics and attitudes towards migrants}\\[1em]
-	\begin{tabular}{lccccc}
-	\toprule
-	& \multicolumn{5}{c}{Allow poor migrants}	\\
-	\cmidrule(r){2-6}
-	Political categories & Many & Some	& Few & None & \textbf{Total}\\
-	\cmidrule(r){1-6}
-	Extreme-left	& \rd{25.15} & \rd{45.51}	& \rd{22.16} & \rd{7.19} & \textbf{\rd{100\%}}\\
-	Left	 		& \bl{11.37} & \bl{51.26}	& \bl{29.06} & \bl{8.30} & \textbf{\bl{100\%}}\\
-	Center	 		& \rd{5.75} & \rd{38.78}	& \rd{44.16} & \rd{11.32} & \textbf{\rd{100\%}}\\
-	Right	 		& \bl{2.98}	 & \bl{38.18}	& \bl{40.98} & \bl{17.86} & \textbf{\bl{100\%}}\\
-	Extreme-right	& \rd{1.25}	 & \rd{21.25}	& \rd{43.75} & \rd{33.75} & \textbf{\rd{100\%}}\\
-	\bottomrule
-	\end{tabular}
-	\end{center}
+%	\begin{center}\vspace{-1em}
+%	\textit{Example: politics and attitudes towards migrants}\\[1em]
+%	\begin{tabular}{lccccc}
+%	\toprule
+%	& \multicolumn{5}{c}{Allow poor migrants}	\\
+%	\cmidrule(r){2-6}
+%	Political categories & Many & Some	& Few & None & \textbf{Total}\\
+%	\cmidrule(r){1-6}
+%	Extreme-left	& \rd{25.15} & \rd{45.51}	& \rd{22.16} & \rd{7.19} & \textbf{\rd{100\%}}\\
+%	Left	 		& \bl{11.37} & \bl{51.26}	& \bl{29.06} & \bl{8.30} & \textbf{\bl{100\%}}\\
+%	Center	 		& \rd{5.75} & \rd{38.78}	& \rd{44.16} & \rd{11.32} & \textbf{\rd{100\%}}\\
+%	Right	 		& \bl{2.98}	 & \bl{38.18}	& \bl{40.98} & \bl{17.86} & \textbf{\bl{100\%}}\\
+%	Extreme-right	& \rd{1.25}	 & \rd{21.25}	& \rd{43.75} & \rd{33.75} & \textbf{\rd{100\%}}\\
+%	\bottomrule
+%	\end{tabular}
+%	\end{center}
 	
 	The proportion of each row group within each column group is known by reading the \red{row percentages} of the crosstabulation.
 	
@@ -234,23 +235,23 @@ Extreme-right	& 0.98 & 2.72	& 2.82	 & 1.56 & \textbf{8.10}\\
 
 	\begin{frame}[t]{\red{Observed} column percentages}
 	
-	\begin{center}\vspace{-1em}
-	\textit{Example: politics and attitudes towards migrants}\\[1em]
-	\begin{tabular}{lcccc}
-	\toprule
-	& \multicolumn{4}{c}{Allow poor migrants}	\\
-	\cmidrule(r){2-5}
-	Political categories & Many & Some	& Few & None\\
-	\cmidrule(r){1-5}
-	Extreme-left	& \rd{27.27} & \bl{9.45}	& \rd{5.25}	 & \bl{4.84}\\
-	Left	 		& \rd{40.91} & \bl{35.32}	& \rd{22.84}	 & \bl{18.55}\\
-	Center	 		& \rd{20.13} & \bl{26.00}	& \rd{33.76}  & \bl{24.60}\\
-	Right	 		& \rd{11.04} & \bl{27.11}	& \rd{33.19}	 & \bl{41.13}\\
-	Extreme-right	& \rd{0.65}	 & \bl{2.11} 	& \rd{4.96}	 & \bl{10.89}\\
-	\textbf{Total}	& \textbf{\rd{100\%}} & \textbf{\bl{100\%}} & \textbf{\rd{100\%}}	& \textbf{\bl{100\%}}\\
-	\bottomrule
-	\end{tabular}
-	\end{center}
+%	\begin{center}\vspace{-1em}
+%	\textit{Example: politics and attitudes towards migrants}\\[1em]
+%	\begin{tabular}{lcccc}
+%	\toprule
+%	& \multicolumn{4}{c}{Allow poor migrants}	\\
+%	\cmidrule(r){2-5}
+%	Political categories & Many & Some	& Few & None\\
+%	\cmidrule(r){1-5}
+%	Extreme-left	& \rd{27.27} & \bl{9.45}	& \rd{5.25}	 & \bl{4.84}\\
+%	Left	 		& \rd{40.91} & \bl{35.32}	& \rd{22.84}	 & \bl{18.55}\\
+%	Center	 		& \rd{20.13} & \bl{26.00}	& \rd{33.76}  & \bl{24.60}\\
+%	Right	 		& \rd{11.04} & \bl{27.11}	& \rd{33.19}	 & \bl{41.13}\\
+%	Extreme-right	& \rd{0.65}	 & \bl{2.11} 	& \rd{4.96}	 & \bl{10.89}\\
+%	\textbf{Total}	& \textbf{\rd{100\%}} & \textbf{\bl{100\%}} & \textbf{\rd{100\%}}	& \textbf{\bl{100\%}}\\
+%	\bottomrule
+%	\end{tabular}
+%	\end{center}
 	
 	The proportion of each column group within each row group is known by reading the \red{column percentages} of the crosstabulation.
 	
@@ -258,22 +259,22 @@ Extreme-right	& 0.98 & 2.72	& 2.82	 & 1.56 & \textbf{8.10}\\
 
 	\begin{frame}[t]{\red{Expected} frequencies}
 	
-	\begin{center}\vspace{-1em}
-	\textit{Example: politics and attitudes towards migrants}\\[1em]
-	\begin{tabular}{lcccc}
-	\toprule
-	& \multicolumn{4}{c}{Allow poor migrants}	\\
-	\cmidrule(r){2-5}
-	Political categories & Many & Some	& Few & None\\
-	\cmidrule(r){1-5}
-Extreme-left 	& 13.5 	& 70.3 	& 61.6 	& 21.7\\
-Left		 	& 44.6 	& 233.1 	& 204.4 	& 71.9\\
-Center		 	& 43.4 	& 226.8 	& 198.8 	& 69.9\\
-Right		 	& 46.0 	& 240.2 	& 210.7 	& 74.1\\
-Extreme-right 	& 6.4 	& 33.7 	& 29.5 	& 10.4\\
-	\bottomrule
-	\end{tabular}
-	\end{center}
+%	\begin{center}\vspace{-1em}
+%	\textit{Example: politics and attitudes towards migrants}\\[1em]
+%	\begin{tabular}{lcccc}
+%	\toprule
+%	& \multicolumn{4}{c}{Allow poor migrants}	\\
+%	\cmidrule(r){2-5}
+%	Political categories & Many & Some	& Few & None\\
+%	\cmidrule(r){1-5}
+%Extreme-left 	& 13.5 	& 70.3 	& 61.6 	& 21.7\\
+%Left		 	& 44.6 	& 233.1 	& 204.4 	& 71.9\\
+%Center		 	& 43.4 	& 226.8 	& 198.8 	& 69.9\\
+%Right		 	& 46.0 	& 240.2 	& 210.7 	& 74.1\\
+%Extreme-right 	& 6.4 	& 33.7 	& 29.5 	& 10.4\\
+%	\bottomrule
+%	\end{tabular}
+%	\end{center}
 	
 	The \red{expected frequency} of each cell is its row total multiplied by its column total, divided by sample size.
 
@@ -339,18 +340,18 @@ Extreme-right 	& 6.4 	& 33.7 	& 29.5 	& 10.4\\
 		\begin{columns}[t]
 		\column{.55\textwidth}
 		\vspace{-.5em}
-		\begin{center}
-		\begin{tabular}{lcc}
-			\toprule
-			& \multicolumn{2}{c}{Hair colour} \\
-			\cmidrule(r){2-3}
-			Population & Red & Other \\
-			\midrule
-			Scotland & .13 & $1-.13=.87$\\
-			Kabylie & .04 & $1-.04=.96$ \\
-			\bottomrule
-		\end{tabular}\\[0em]
-	\end{center}
+%		\begin{center}
+%		\begin{tabular}{lcc}
+%			\toprule
+%			& \multicolumn{2}{c}{Hair colour} \\
+%			\cmidrule(r){2-3}
+%			Population & Red & Other \\
+%			\midrule
+%			Scotland & .13 & $1-.13=.87$\\
+%			Kabylie & .04 & $1-.04=.96$ \\
+%			\bottomrule
+%		\end{tabular}\\[0em]
+%	\end{center}
 		
 	\column{.25\textwidth}
 	\vspace{3.275em}	
@@ -369,7 +370,7 @@ Extreme-right 	& 6.4 	& 33.7 	& 29.5 	& 10.4\\
 	Are parliamentary regimes \red{more likely} to select female leaders?\\[1em]
 	
 	% A parliamentary regime will multiply the likelihood of a female leader by 2 (twice more likely).
-	\includegraphics[width=\textwidth]{images/comp-prop3.pdf}\\[1em]
+	\includegraphics[width=\textwidth]{images-old/comp-prop3.pdf}\\[1em]
 	
 	Parliamentary regimes are twice more likely to select female leaders: the odds are \red{substantially large} and yet \red{statistically insignificant} at $p < .05$. Small sample size might have induced a Type II Error.
 	\end{frame}

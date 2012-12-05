@@ -70,31 +70,32 @@ tw (sc births schooling, $ccode) (lfitci births schooling, $ci), ///
 
 * Estimate the predicted effect of the education level on the fertility rate.
 * Function: number of births = _cons (alpha) + Coef (beta) * schooling years.
+* Equation: predicted Y (DV) = alpha + beta X (IV) + epsilon (error term).
 reg births schooling
-
-* Simple residuals-versus-fitted plot.
-rvfplot, $ccode yline(0) ///
-    name(rvfplot, replace)
 
 
 * Plotting regression results
 * ---------------------------
 
+* Simple residuals-versus-fitted plot.
+rvfplot, yline(0) ///
+    name(rvfplot, replace)
+
 * Get fitted values.
 cap drop yhat
 predict yhat
-
-* Plot DV with observed and predicted values of IV.
-sc births schooling || conn yhat schooling, ///
-    name(dv_yhat, replace)
 
 * Get residuals.
 cap drop r
 predict r, resid
 
 * Plot residuals against predicted values of IV.
-sc r yhat, ///
+sc r yhat, yline(0) $ccode ///
     name(rvfplot2, replace)
+
+* Plot DV with observed and predicted values of IV.
+sc births schooling || conn yhat schooling, ///
+    name(dv_yhat, replace)
 
 
 * Small multiples
@@ -116,13 +117,14 @@ sc r yhat, yline(0) by(region, total) $ccode ///
     name(rvfplot2, replace)
 
 
-* Transforming the DV
-* -------------------
+* Fitting a transformed IV
+* ------------------------
 
-* We will start working on linear models, but a more advanced model might better
-* explain the relationship as it actually looks less linear than quadratic.
+* The -qfit- command shows that a more advanced model might better explain the
+* DV-IV relationship, as it looks less linear than quadratic: Y = a + bX could
+* be replaced with Y = a + bX^2 to observe a more correct fit.
 tw (sc births schooling, $ccode) (qfit births schooling, $ci), ///
-    name(fert_edu_lfit, replace)
+    name(fert_edu_qfit, replace)
 
 * In this case, using the square root of the independent variable might provide
 * better estimates of its actual effect on the dependent variable. We could have
@@ -137,7 +139,7 @@ la var sqrt_schooling "Average schooling years (sqrt)"
 tw (sc births sqrt_schooling, $ccode) (lfit births sqrt_schooling, $ci), ///
     name(fert_edu_qfit, replace)
 
-* Regression model.
+* Regression model of the form Y = alpha + beta sqrt(X).
 reg births sqrt_schooling
 
 * Reading the regression coefficient for schooling is less intuitive when it is
@@ -148,82 +150,142 @@ reg births sqrt_schooling
 * Visualization with solved square root units.
 tw (sc births sqrt_schooling, $ccode) (lfit births sqrt_schooling, $ci), ///
     xla(1 "1" 1.5 "2.25" 2 "4" 2.5 "6.25" 3 "9" 3.5 "12.25") ///
-    xti("Average schooling years") note("Horizontal axis in square units.") ///
+    xti("Average schooling years") note("Horizontal axis in squared units.") ///
     name(fert_edu_sqrt, replace)
 
 
-* (2) Schooling Years and (Log) Gross Domestic Product
+* (2) Fertility Rates and (Log) Gross Domestic Product
 * ----------------------------------------------------
 
 * As always, start with a visual inspection of the relationship.
-tw (sc schooling log_gdpc, $ccode) (lfit schooling log_gdpc), ///
-    name(edu_log_gdpc, replace)
+tw (sc births log_gdpc, $ccode) (lfit births log_gdpc, $ci), ///
+    name(fert_gdpc, replace)
 
-* The interpretation of the coefficient and intercept are going to be rather
-* difficult here due to the logarithmic unit of GDP, but the transformation
-* was necessary to identify the linear relationship between the two variables.
-reg schooling log_gdpc
+* The interpretation of the coefficient for GDP per capita is going to be less
+* intuitive due to its logarithmic units, but the transformation was necessary
+* to identify the linear relationship between the two variables.
 
-* The relationship is a 'lin-log' equation: Y = alpha + beta ln X, such that a
-* 1% increase in X (IV) is associated with a 0.01*beta unit increase in Y (DV).
-* Here, a 15% increase in GDP per capita translates into a 1.54*log(1.15) = .21
-* increase in education years. For more examples of lin-log relationships, see:
-*
-* [URL]: http://www.ats.ucla.edu/stat/mult_pkg/faq/general/log_transformed_regression.htm
+* Regression model of the form Y = alpha + beta ln(X).
+reg births log_gdpc
+
+
+* Fitting 'lin-log' equations
+* ---------------------------
+
+* The relationship is a 'lin-log' equation, such that a 1% increase in X (IV) is
+* associated with a 0.01 * beta unit increase in Y (DV). In this model, it means
+* that a 15% increase in GDP per capita is associated with -.74*log(1.15) = -.16
+* births per woman. For GDP per capita to reduce fertility by 1 birth per woman,
+* this model would require exp(100/74) = 3.8, a 380% increase in GDP per capita.
 
 
 * (3) Corruption and Human Development
 * ------------------------------------
 
 * Visualizing a nonlinear, quadratic fit with corruption as the DV.
-tw (sc corruption hdi, $ccode) (qfit corruption hdi), ///
-    ysc(rev) yla(0 "High" 10 "Low", angle(hor)) ///
+tw (sc corruption hdi, $ccode) (qfit corruption hdi, $ci), ///
+    ysc(rev) yla(0 "High" 10 "Low") yti("Level of corruption") ///
     name(cpi_hdi, replace)
 
-* Before interpreting the model, remember that:
-* - the relationship is, in fact, quadratic, and only approximately linear
-* - the Corruption Perceptions Index is reverse-coded: 10 is highly corrupt
-reg corruption hdi
+* Before interpreting the model, deal with the reverse-coding issue.
+gen corrupt = 10 - corruption
+la var corrupt "Corruption Perception Index"
 
-* The following commands rely on a visual inspection of the model residuals.
+* Regression model in first approximation (linear form).
+reg corrupt hdi
+
+
+* Fitting a quadratic term
+* ------------------------
+
 * A more thorough exploration of residuals will be covered in later sessions
 * on regression diagnostics, but here is a snapshot of what we can do and
-* understand by studying them in a bit more depth.
+* understand by studying residuals in a bit more depth.
 cap drop yhat
 predict yhat
-sc corruption yhat hdi, yla(0 "Highly corrupt" 10 "Lowly corrupt") ///
-    ysc(rev) connect(i l) sort(yhat) ///
+
+* Plot of linear fitted values.
+sc corrupt yhat hdi, yla(0 "Lowly corrupt" 10 "Highly corrupt") ///
+    connect(i l) sort(yhat) ///
     name(r_linear, replace)
 
-* The curvilinearity, which approaches a y = x^2 function, can be taken care
-* of by squaring HDI and fitting the model again to the transformed data.
-gen hdi2=hdi^2
-reg corruption hdi hdi2
+* The curvilinearity approaches the function f: y = x^2 and can be taken care
+* of by squaring HDI and fitting the model again with the quadratic term. The
+* final mode is therefore a the equation Y = alpha + beta_1 X + beta_2 X^2.
+gen hdi2 = hdi^2
+
+* Regression model in second approximation (added quadratic term).
+reg corrupt hdi hdi2
+
+* Residuals of the quadratic model.
 cap drop yhat2
 predict yhat2
-sc corruption yhat2 hdi, yla(0 "Highly corrupt" 10 "Lowly corrupt") ///
-    ysc(rev) connect(i l) sort(yhat) || sc yhat hdi, c(l) legend(order(2 3) ///
-    lab(2 "Quadratic fit") lab(3 "Linear fit")) name(r_curvilinear, replace)
+
+* Comparison of both fits.
+sc corrupt yhat2 hdi, yla(0 "Highly corrupt" 10 "Lowly corrupt") ///
+    c(i l) sort(yhat) || sc yhat hdi, c(l) legend(order(2 3) ///
+    lab(2 "Quadratic fit") lab(3 "Linear fit")) ///
+    name(r_curvilinear, replace)
 
 
-* (4) Female Government Ministers and Corruption
-* ----------------------------------------------
+* (4) Fertility and Democracy
+* ----------------------------
 
-* Finally, visualizing an absence of evident fit.
-tw (lfitci corruption femgov) (sc corruption femgov, $ccode), ///
-    legend(off) yla(1 "Highly corrupt" 10 "Lowly corrupt") ///
-    name(cpi_femgov, replace)
+* Create dummy.
+gen democracy:democracy = (gol_polreg==0) if !mi(gol_polreg)
+la de democracy 0 "Dictatorship" 1 "Democracy", replace
 
-* Despite a less-than-optimal fit, the model yet returns a "good", by which
-* we mean a satisfactory p-value lower than our alpha level of statistical
-* significance. Hence, caution!
-reg corruption femgov
+* Visualization of the difference in mean of the DV.
+gr bar births, over(democracy) asyvars over(region, lab(alt)) ///
+    name(fert_democ, replace)
 
-* The same information can be shown with a residuals-versus-fitted plot,
-* which displays the regression line as a horizontal line at zero. The
-* distance from that line indicates the fit of each data point.
-rvfplot, $ccode yline(0) ///
-    name(cpi_femgov_rvf, replace)
+
+* Fitting a dummy predictor
+* -------------------------
+
+* Visualization of the "linear" fit using the dummy.
+sc births democracy || lfit births democracy, $ci ///
+    xsc(r(-.5 1.5)) xla(0 "Dictatorship" 1 "Democracy") xti("") ///
+    name(fert_democ, replace)
+
+* You actually know this result in a different form:
+ttest births, by(democracy)
+
+* This is actually identical to the following model:
+reg births i.democracy
+
+* In this model, democracy is understood as a categorical variable because we
+* added the "i." prefix to it. The coefficient reveals that the fertility rates
+* of democracies is, on average, significantly lower than in non-democracies.
+* There is no regression coefficient for dictatorships: since democracy is a
+* dummy, it takes only two values, 0 or 1. The coefficient is therefore null
+* when democracy equals 0. Let's look at null models (Y = alpha) for a proof.
+
+* Y = alpha + beta (democracy = 0) = alpha.
+reg births if !democracy
+
+* Y = alpha + beta (democracy = 1) = alpha + beta.
+reg births if democracy
+
+
+* (5) Fertility and Women's Rights
+* --------------------------------
+
+* Visualization of the difference in mean of the DV. The plot relies on a LOWESS
+* smoother to show the "running means" through each category of women's rights.
+sc births ciri_wosoc, yti("Fertility rate") || lowess births ciri_wosoc, $ci ///
+	name(fert_wosoc, replace)
+
+
+* Fitting a categorical predictor
+* -------------------------------
+
+* Regression model.
+reg births i.ciri_wosoc
+
+* This time, the baseline category is ciri_wosoc=0 (no women's rights). Compared
+* to countries in this category, other countries have lower mean fertility rates
+* and the effect increases as women's rights increases from categories 1 to 3.
 
 
 * =======

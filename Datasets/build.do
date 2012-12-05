@@ -47,17 +47,27 @@ cd ..
 
 // Get the data.
 
-copy http://publicdata.norc.org/GSS/DOCUMENTS/OTHR/2010_stata.zip temp.zip, replace
+// Single-year file (2010):
+// copy http://publicdata.norc.org/GSS/DOCUMENTS/OTHR/2010_stata.zip temp.zip, replace
+// unzipfile temp.zip
+// use 2010.dta, clear
 
-unzipfile temp.zip
-use 2010.dta, clear
+// Cumulative file (1972-2010):
+// copy http://publicdata.norc.org/GSS/DOCUMENTS/OTHR/GSS_stata.zip temp.zip, replace
+// unzipfile temp.zip
+// use gss7210_r2b.dta, clear
+
+// The teaching dataset uses years 2000-2010.
+// We'll avoid downloading it more than once:
+use "/Users/fr/Documents/Research/Data/GSS 2010/gss7210_r2b.dta"
+drop if year < 2000
 
 // Teaching annotation.
 
 notes drop _dta
 local N = _N
-la data "General Social Survey 2010"
-note _dta: General Social Survey 2010
+la data "General Social Survey 2000-2010"
+note _dta: General Social Survey 2000-2010
 note _dta: Full sample size: N = `N'
 note _dta: Teaching dataset, please do not redistribute.
 note _dta: This version: TS
@@ -73,6 +83,17 @@ if r(N)==0 {
     }
 }
 
+// Remove low-N variables.
+
+foreach v of varlist * {
+	qui count if !mi(`v')
+	if r(N) < 1000 {
+	local l: var l `v'
+	di as txt "Removing","`v':","`l'"
+    drop `v'
+    }
+}
+
 // Export mock codebook.
 
 log using datasets/gss2010_codebook.log, name(gss2010) replace
@@ -82,8 +103,8 @@ log close gss2010
 
 // Compress and uncompress.
 
-rm temp.zip
-rm 2010.dta
+cap rm temp.zip
+// rm 2010.dta
 
 cd datasets
 save gss2010, replace

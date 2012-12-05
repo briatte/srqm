@@ -90,11 +90,21 @@ tabstat bmi, s(p25 median p75 iqr)
 * Visualize the distribution:
 hist bmi, freq bin(10)
 hist bmi, kdensity
-hist bmi, percent normal name(bmi, replace)
-kdensity bmi, normal legend(row(1)) title("") note("")
 
-gr hbox bmi, over(raceb)
-gr hbox bmi, over(sex) asyvars over(raceb) name(bmi_race, replace)
+* Histogram.
+hist bmi, percent normal ///
+	name(hist, replace)
+
+* Kernel density.
+kdensity bmi, normal legend(row(1)) title("") note("") ///
+	name(kdens, replace)
+
+* Box plots.
+gr hbox bmi, over(raceb) ///
+	name(bmi_race, replace)
+
+gr hbox bmi, over(sex) asyvars over(raceb) ///
+	name(bmi_race_sex, replace)
 
 * The next commands use 'global macros' to illustrate how a distribution
 * can be described through the standard deviation and through outliers. This
@@ -229,20 +239,20 @@ su bmi, d
 * of the same values is closer to normality if we take a different measure.
 
 * The 'gladder' command visualizes several common transformations all at once.
-gladder bmi
+gladder bmi, ///
+	name(gladder, replace)
 
 * The logarithm transformation appears to approximate a normal distribution.
 * We transform the variable accordingly.
-gen logbmi=ln(bmi)
+gen logbmi = ln(bmi)
 la var logbmi "Body Mass Index (log units)"
 
 * Looking at skewness and kurtosis for the logged variable.
 tabstat bmi logbmi, s(n sk kurtosis min max) c(s)
 
-* Running the same graphs as previously on the original BMI variable,
-* we can observe some improvement towards normality with 'log-BMI'.
-hist logbmi, normal name(logbmi, replace)
-gr hbox logbmi
+* The histogram shows some improvement towards normality with 'log-BMI'.
+hist logbmi, normal ///
+    name(logbmi, replace)
 
 
 * Comparison plot
@@ -252,18 +262,20 @@ gr hbox logbmi
 * visual comparison of the transformation.
 
 * Part 1/4.
-hist bmi, normal xscale(off) yscale(off) ///
-	title("Untransformed") name(bmi1, replace)
+hist bmi, norm xti("") ysc(off) ti("Untransformed (metric)") bin(21) ///
+	name(bmi1, replace)
 
 * Part 2/4.
-gr hbox bmi, fysize(25) name(bmi2, replace)
+gr hbox bmi, fysize(25) ///
+	name(bmi2, replace)
 
 * Part 3/4.
-hist logbmi, normal xscale(off) yscale(off) ///
-	title("Transformed") name(bmi3, replace)
+hist logbmi, norm xti("") ysc(off) ti("Transformed (logged)") bin(21) ///
+	name(bmi3, replace)
 
 * Part 4/4.
-gr hbox logbmi, fysize(25) name(bmi4, replace)
+gr hbox logbmi, fysize(25) ///
+	name(bmi4, replace)
 
 * Final combined graph.
 gr combine bmi1 bmi3 bmi2 bmi4, imargin(small) ysize(3) col(2) ///
@@ -271,6 +283,7 @@ gr combine bmi1 bmi3 bmi2 bmi4, imargin(small) ysize(3) col(2) ///
 
 * Drop individual pieces.
 gr drop bmi1 bmi2 bmi3 bmi4
+gr di bmi_comparison
 
 
 * ==================
@@ -313,7 +326,8 @@ replace yrsinus=. if yrsinus==0
 * We know from previous analysis that BMI varies by gender and ethnicity.
 * We now look for the effect of the number of years spent in the U.S. within
 * each gender and ethnic categories.
-graph dot bmi, over(sex) over(yrsinus) over(raceb) asyvars scale(.7)
+gr dot bmi, over(sex) over(yrsinus) over(raceb) asyvars scale(.7) ///
+	name(bmi_sex_yrs, replace)
 
 * The average BMI of Blacks who spent less than one year in the U.S. shows
 * an outstanding difference for males and sexs, but this category holds

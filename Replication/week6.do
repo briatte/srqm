@@ -13,7 +13,7 @@
 
 
 * Install required commands.
-foreach p in fre catplot {
+foreach p in fre tab_chi {
     cap which `p'
     if _rc==111 cap noi ssc install `p' // install from online if missing
 }
@@ -22,12 +22,11 @@ foreach p in fre catplot {
 cap log using "Replication/week6.log", replace
 
 
-* ===========
-* = DATASET =
-* ===========
+* ====================
+* = DATA DESCRIPTION =
+* ====================
 
 
-* Data: European Social Survey, Round 4 (2008).
 use "Datasets/ess2008.dta", clear
 
 * Survey weights.
@@ -40,10 +39,11 @@ ren (rlgblg rlgdnm lrscale tvpol) (rel denom pol tv) // religion, politics
 * Have a quick look.
 codebook cntry age sex income edu rel denom pol tv, c
 
+* Delete incomplete observations.
+drop if mi(age, sex, income, edu, rel, denom, pol, tv)
 
-* ================
-* = DESCRIPTIONS =
-* ================
+* Final sample size.
+count
 
 
 * DV: Justifiability of torture in event of preventing terrorism
@@ -65,7 +65,7 @@ tab torture [aw=dweight*pweight]   // weighted by overall European population
 bys cntry: ci torture [aw=dweight] // weighted by country-specific population
 
 * Average opposition to torture in each country.
-gr dot torture [aw=dweight], over(cntry, sort(1) des) scale(.7) ///
+gr dot torture [aw=dweight], over(cntry, sort(1) des) scale(.75) ///
     name(torture1, replace)
 
 
@@ -83,17 +83,6 @@ gr hbar torture_* [aw=dweight], stack over(cntry, sort(1)des lab(labsize(*.8))) 
     yti("Torture is never justified even to prevent terrorism") ///
     legend(rows(1) order(1 "Strongly agree" 2 "" 3 "Neither" 4 "" 5 "Strongly disagree")) ///
     name(torture2, replace) scheme(burd5)
-
-* Let's go a step further and plot the 'Strongly agree/disagree' categories for
-* each country in the sample. The code to get there is tugly: terrifyingly ugly.
-cap drop mean1 mean2 cid
-bys cntry: egen mean1 = mean(torture_1 + torture_2)
-bys cntry: egen mean2 = mean(torture_4 + torture_5)
-bys cntry: gen cid = _n // hack
-sc mean1 mean2 if cid==1, ms(i) mlab(cntry) xsc(r(.15 .4)) ///
-    yti("Opposition to torture") xti("Openness to torture") ///
-    name(torture3, replace)
-
 
 * Comparing Israel to other European countries.
 gen israel:israel = (cntry=="IL")
@@ -135,8 +124,9 @@ tab torture age4, cell // cell percentages
 tab torture age4, col nof    // column percentages
 tab torture age4, row nof    // rows percentages
 
-* Significance tests:
-tab torture age4, exp chi2 V
+* Chi-squared test:
+tab torture age4, exp chi2 // expected frequencies
+tabchi torture age4, noe p // Pearson residuals
 
 * Comparison of average age in each category.
 ttest age, by(torture)
@@ -150,8 +140,13 @@ fre sex
 recode sex (1=0 "Male") (2=1 "Female") (else=.), gen(female) // dummify
 la var female "Gender"
 
-* Significance tests:
-tab torture female, exp chi2 V exact
+* Conditional probabilities:
+tab torture female, col nof // column percentages
+tab torture female, row nof // rows percentages
+
+* Chi-squared test:
+tab torture female, exp chi2 // expected frequencies
+tabchi torture female, noe p // Pearson residuals
 
 * Comparison of proportions in each category.
 prtest torture, by(female)
@@ -163,16 +158,21 @@ prtest torture, by(female)
 fre income
 
 * Recoding to 4 income groups.
-recode income (1/3=1 "D1-D3") (4/6=2 "D4-D6") ///
-    (7/9=3 "D7-D9") (10=4 "D10"), gen(income4)
-la var income4 "HH income"
+recode income ///
+    (1/3=1 "D1-D3 Low") ///
+    (4/6=2 "D4-D6 Med") ///
+    (7/9=3 "D7-D9 High") ///
+    (10=4 "D10 Top") ///
+    (else=.), gen(income4)
+la var income4 "Household income"
 
 * Conditional probabilities:
-tab torture income4, col nof    // column percentages
-tab torture income4, row nof    // rows percentages
+tab torture income4, col nof // column percentages
+tab torture income4, row nof // rows percentages
 
-* Significance tests:
-tab torture income4, exp chi2 V
+* Chi-squared test:
+tab torture income4, exp chi2 // expected frequencies
+tabchi torture income4, noe p // Pearson residuals
 
 
 * IV: Education
@@ -205,8 +205,9 @@ la var faith4 "Religious faith"
 tab torture faith4, col nof    // column percentages
 tab torture faith4, row nof    // rows percentages
 
-* Significance tests:
-tab torture faith4, exp chi2 V
+* Chi-squared test:
+tab torture faith4, exp chi2 // expected frequencies
+tabchi torture faith4, noe p // Pearson residuals
 
 * Create a binary variable for each category.
 tab faith4, gen(faith_)
@@ -242,8 +243,9 @@ la var pol3 "Political positioning"
 tab torture pol3, col nof    // column percentages
 tab torture pol3, row nof    // rows percentages
 
-* Significance tests:
-tab torture pol3, exp chi2 V
+* Chi-squared test:
+tab torture pol3, exp chi2 // expected frequencies
+tabchi torture pol3, noe p // Pearson residuals
 
 * Comparing left-wing respondents to all others.
 gen left = (pol3==1)
@@ -268,8 +270,9 @@ tab tv, plot
 recode tv (0/3=0 "Low") (4/7=1 "High"), gen(media)
 la var media "Media exposure"
 
-* Crosstabulation; Fisher's exact test.
-tab torture media, col nof exact
+* Chi-squared test:
+tab torture media, exp chi2  // expected frequencies
+tabchi torture media, noe p  // Pearson residuals
 
 * Comparing respondents with high TV exposure to others.
 prtest torture, by(media)

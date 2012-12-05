@@ -33,7 +33,6 @@ cap log using "Replication/week10.log", replace
 
 use "Datasets/qog2011.dta", clear
 
-
 * Rename variables to short handles.
 ren (wdi_fr bl_asyt25 wdi_hiv) (births schooling hiv )
 
@@ -116,7 +115,7 @@ mkcorr births schooling log_gdpc, ///
 
 * Export method using -estout-.
 eststo clear
-qui estpost correlate births schooling log_gdpc aids, matrix listwise
+qui estpost correlate births schooling log_gdpc, matrix listwise
 esttab using "week10_estpost.txt", unstack not compress label replace
 
 

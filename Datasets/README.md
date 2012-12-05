@@ -48,7 +48,7 @@ The dataset was created by subsetting the [ESS cumulative dataset](http://ess.ns
 
 ## `gss2010`
 
-The `gss2010` dataset holds data from the U.S. General Social Survey (GSS) for year 2010:
+The `gss2010` dataset holds data from the U.S. General Social Survey (GSS) for years 2000-2010:
 
 > The GSS contains a standard 'core' of demographic, behavioral, and attitudinal questions, plus topics of special interest. Many of the core questions have remained unchanged since 1972 to facilitate time-trend studies as well as replication of earlier findings.  
 <http://www3.norc.org/GSS+Website/>
@@ -62,7 +62,7 @@ See "[Calculating Design-Corrected Standard Errors for the General Social Survey
 
 ### Production notes:
 
-The dataset is a trimmed-down version of the [GSS 2010 cross-sectional dataset](http://www3.norc.org/GSS+Website/Download/STATA+v8.0+Format/) (Release 2, Feb. 2012). A mock codebook is bundled with the data.
+The dataset is a trimmed-down version of the [GSS 1972-2010 cumulative cross-sectional dataset](http://www3.norc.org/GSS+Website/Download/STATA+v8.0+Format/) (Release 2, Feb. 2012). A mock codebook is bundled with the data extract.
 
 * * *
 

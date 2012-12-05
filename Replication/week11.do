@@ -34,7 +34,6 @@ cap log using "Replication/week11.log" replace
 
 use "Datasets/ess2008.dta", clear
 
-
 * Subsetting to respondents age 25+ with full data.
 drop if agea < 25 | mi(imdfetn, agea, gndr, brncntr, edulvla, hinctnta, lrscale)
 
@@ -310,6 +309,12 @@ marginsplot, xlab(minmax) by(female born) name(mfx_demog, replace)
 * in the model, at least in comparison to other predictors.
 margins born#female, at(age=(25(5)85))
 marginsplot, by(female) recast(line) recastci(rarea) ciopts(col(*.6)) name(mfx_age, replace)
+
+* Marginal effects used to be much more cumbersome in previous versions of Stata
+* and were often computed through additional commands like the -spost9- commands
+* by Scott Long and Jeremy Freese. Bill Rising of StataCorp has written a useful
+* presentation on the -margins- commands for a recent Stata Users Group Meeting:
+* http://www.stata.com/meeting/italy12/abstracts/materials/it12_rising.pdf
 
 
 * Sensitivity analysis

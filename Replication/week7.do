@@ -27,12 +27,11 @@ foreach p in mkcorr {
 cap log using "Replication/week7.log", replace
 
 
-* ===========
-* = DATASET =
-* ===========
+* ====================
+* = DATA DESCRIPTION =
+* ====================
 
 
-* Data: Quality of Government (2011).
 use "Datasets/qog2011.dta", clear
 
 * Rename variables to short handles.
@@ -61,8 +60,10 @@ codebook births schooling gdpc hdi corruption femgov region, c
 * Check missing values.
 misstable pat births schooling gdpc hdi corruption femgov region ccodewb, freq
 
-* You would usually delete incomplete observations at that stage, but we will
-* exceptionally keep them here to illustrate how pairwise correlation works.
+* You would usually delete incomplete observations at that stage, and then count
+* the number of observations in your finalized sample. We exceptionally keep the
+* missing values here to illustrate how pairwise and listwise correlation works.
+
 
 
 * ===============
