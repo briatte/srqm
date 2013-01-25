@@ -1,7 +1,7 @@
 // --- SRQM --------------------------------------------------------------------
 
 // This file creates the utilities called at startup by the profile.do file of
-// the SRQM folder. See the README file of the Programs folder for details.
+// the SRQM folder. See the README file of the /setup/ folder for details.
 
 cap pr drop srqm
 program srqm
@@ -90,7 +90,7 @@ program srqm
                 file write fh _n "*! This do-file automatically sets the working directory to the SRQM folder:" _n
                 file write fh "*! `c(pwd)'" _n _n
                 file write fh "global srqm_wd " _char(34) "`c(pwd)'" _char(34) _n
-                file write fh "cap confirm file " _char(34) _char(36) "srqm_wd`c(dirsep)'Programs`c(dirsep)'srqm.ado" _char(34) _n _n
+                file write fh "cap confirm file " _char(34) _char(36) "srqm_wd`c(dirsep)'setup`c(dirsep)'srqm.ado" _char(34) _n _n
                 file write fh "if _rc { // cannot load utilities" _n _tab "noi di as err _n ///" _n
                 file write fh _tab _tab _char(34) "ERROR: The SRQM folder is no longer available at its former location:" _char(34) " as txt _n ///" _n
                 file write fh _tab _tab _char(34) _char(36) "srqm_wd" _char(34) " _n(2) ///" _n
@@ -387,7 +387,7 @@ program srqm
             cap !rm `expr'
 
             forval i=1/12 {
-                // erase replication folders created by repl
+                // erase folders created by repl
                 local expr = "code/week`i'"
                 cap !rm -R `expr'
             }
@@ -401,27 +401,49 @@ program srqm
     if `fetch' {
 
         cap cd "$srqm_wd"
+		
+		di as txt _n "Running update program..."
 
-        cap qui net
+        //cap qui net
         if _rc == 631 {
             di as err "You do not seem to be online. Check your Internet connection."
-            exit 0
+            exit 631
+        }
+
+        if "`2'" == "" {
+            di as err "Please provide a filename to update."
+            exit 198
         }
 
         local bk = strtoname("`2' backup `c(current_date)'")
 
-        if "`3'" == "dofile" {
-            cap qui copy "code/`2'.do" "code/`bk'.do", replace
-            if !_rc di as txt "Do-file `2' updated."
-            cap qui copy "http://briatte.org/srqm-updates/`2'.do" "code/`2'.do", replace
+        if strpos("`2'", ".do") > 0 {
+			di as txt "Looking for do-file..."
+            cap qui copy "code/`2'" "code/`bk'.do", replace
+            if !_rc di as txt "Do-file `2' backed up to `bk'."
+            cap qui copy "http://briatte.org/srqm-updates/`2'.do" "code/`2'", public replace
             if !_rc di as txt "Do-file `2' updated."
         }
 
-        if "`3'" == "slides" {
-            cap qui copy "course/`2'.pdf" "course/`bk'.pdf", replace
-            cap qui copy "http://briatte.org/srqm-updates/`2'.pdf" "course/`2'.pdf", replace
+        if strpos("`2'", ".pdf") > 0 {
+			di as txt "Looking for slides..."
+            cap qui copy "course/`2'" "course/`bk'.pdf", replace
+            if !_rc di as txt "Slides `2' backed up to `bk'."
+            cap qui copy "http://briatte.org/srqm-updates/`2'.pdf" "course/`2'", public replace
             if !_rc di as txt "Slides `2' updated."
         }
+
+		// careful with that axe eugene
+		
+        if strpos("`2'", ".ado") > 0 {
+			di as txt "Looking for setup file..."
+            cap qui copy "setup/`2'" "setup/`bk'.ado", replace
+            if !_rc di as txt "Setup file `2' backed up to `bk'."
+            cap qui copy "http://briatte.org/srqm-updates/`2'.pdf" "setup/`2'", public replace
+            if !_rc di as txt "Setup file `2' updated."
+        }
+
+		if _rc di as err "No file updated: error", _rc ". Sorry."
     }
 
     if `log' {
