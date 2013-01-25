@@ -40,7 +40,9 @@ Open Stata:
 
 ### 3. Working directory
 
-Set the `SRQM` folder as the working directory with the 'File : Change Working Directory…' menu item, also accessible with &#8984;&#8679;J (Command-Shift-J) on Mac OS X. Select the `SRQM` folder and press `OK`.
+Set the `SRQM` folder as the working directory with the 'File : Change Working Directory…' menu item, also accessible with &#8984;&#8679;J (Command-Shift-J) on Mac OS X.
+
+Select the `SRQM` folder and press `OK`.
 
 The folder path that appears in the Results window might look like the following examples:
 
@@ -71,4 +73,6 @@ At the end of the semester, type `srqm clean folder`. This will stop redirecting
 
 * * *
 
-You can now enjoy the rest of the course and start reading the Stata Guide.  Welcome to SRQM, and see you soon!
+You can now start reading the Stata Guide.
+
+Welcome to the course, and see you soon!
