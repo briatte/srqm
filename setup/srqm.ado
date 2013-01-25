@@ -418,8 +418,8 @@ program srqm
         }
 
         if "`3'" == "slides" {
-            cap qui copy "Course/`2'.pdf" "Course/`bk'.pdf", replace
-            cap qui copy "http://briatte.org/srqm-updates/`2'.pdf" "Course/`2'.pdf", replace
+            cap qui copy "course/`2'.pdf" "course/`bk'.pdf", replace
+            cap qui copy "http://briatte.org/srqm-updates/`2'.pdf" "course/`2'.pdf", replace
             if !_rc di as txt "Slides `2' updated."
         }
     }

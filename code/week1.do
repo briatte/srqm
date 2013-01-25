@@ -21,7 +21,7 @@
    research project. Practice with Stata by trying out commands as you learn
    them. If things do not work out, try again after checking the command syntax.
 
-   Last updated 2012-11-13.
+   Last updated 2013-01-25.
 
 ----------------------------------------------------------------------------- */
 
@@ -172,7 +172,8 @@ ren test x // This line will not run if you do not run the previous ones first.
 * ---------------------------
 
 * You can navigate through past commands from the Command window by using the
-* PageUp and PageDown keys. Try running the following command:
+* PageUp and PageDown keys. Try running the following command after taking out
+* the asterisk at the beginning of the line:
 
 * memory6
 
@@ -264,12 +265,14 @@ set more off, perm
 
 * sysdir set PLUS "c:\temp"
 
-* This course makes heavy use of the -fre- command to view frequencies.
-* Install the command by uncommenting and running this command while online:
+* This course makes heavy use of the -fre- command to view frequencies. The
+* course setup should have installed it for you, but let's practice installing
+* additional Stata commands. Install the -fre- command (again) by uncommenting
+* and running this command while online:
 
 * ssc install fre
 
-* Read the package description:
+* Now read the package description:
 ado de fre
 
 
@@ -391,8 +394,8 @@ help graph
 
 * Show all datasets for this course. The asterisk in the command is an escape
 * character that causes the command to return all matches (within .dta files).
-* The 'w' option is to make the output less verbose.
-ls data/*.dta, w
+* The 'w' option is to make the output less verbose. Quotes are optional here.
+ls "data/*.dta", w
 
 * All datasets are in the SRQM Teaching Pack, and will load only if your working
 * directory is correctly set. The README file of the Datasets folder holds links
@@ -414,7 +417,7 @@ lookfor army homo
 * Tip: an additional package can help you search for variables across datasets.
 * It should have been installed by the course setup utility. If not, install it
 * yourself
-lookfor_all health, dir(Datasets)
+lookfor_all health, dir(data)
 
 * The command above, like all commands that calls datasets or do-files,
 * requires that the SRQM folder has been set as the working directory.
