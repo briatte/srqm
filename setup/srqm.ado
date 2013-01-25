@@ -1,7 +1,7 @@
 // --- SRQM --------------------------------------------------------------------
 
 // This file creates the utilities called at startup by the profile.do file of
-// the SRQM folder. See the README file of the /setup/ folder for details.
+// the SRQM folder. See the README file of the setup/ folder for details.
 
 cap pr drop srqm
 program srqm
@@ -12,7 +12,7 @@ program srqm
     tokenize `anything'
     local setup =  ("`1'"=="setup")
     local check =  ("`1'"=="check")
-    local fetch =  ("`1'"=="fetch") // now includes an update function
+    local fetch =  ("`1'"=="fetch") // new update function
     local clean =  ("`1'"=="clean")
     local folder = ("`2'"=="folder")
     local packages = ("`2'"=="packages")
@@ -410,40 +410,54 @@ program srqm
             exit 631
         }
 
-        if "`2'" == "" {
-            di as err "Please provide a filename to update."
-            exit 198
+		// dot separator
+		local bd = strpos("`2'", ".")
+		// root
+		local br = substr("`2'", 1, `bd' - 1)
+		// extension
+		local be = substr("`2'", `bd' + 1, .)
+		// backup name
+        local bk = strtoname("`br' backup `c(current_date)'")
+		
+        if "`be'" == "do" {
+			local bt "do-file"
+			local bf "code"
         }
 
-        local bk = strtoname("`2' backup `c(current_date)'")
-
-        if strpos("`2'", ".do") > 0 {
-			di as txt "Looking for do-file..."
-            cap qui copy "code/`2'" "code/`bk'.do", replace
-            if !_rc di as txt "Do-file `2' backed up to `bk'."
-            cap qui copy "http://briatte.org/srqm-updates/`2'.do" "code/`2'", public replace
-            if !_rc di as txt "Do-file `2' updated."
-        }
-
-        if strpos("`2'", ".pdf") > 0 {
-			di as txt "Looking for slides..."
-            cap qui copy "course/`2'" "course/`bk'.pdf", replace
-            if !_rc di as txt "Slides `2' backed up to `bk'."
-            cap qui copy "http://briatte.org/srqm-updates/`2'.pdf" "course/`2'", public replace
-            if !_rc di as txt "Slides `2' updated."
+        if "`be'" == "pdf" {
+			local bt "content"
+			local bf "course"
         }
 
 		// careful with that axe eugene
 		
-        if strpos("`2'", ".ado") > 0 {
-			di as txt "Looking for setup file..."
-            cap qui copy "setup/`2'" "setup/`bk'.ado", replace
-            if !_rc di as txt "Setup file `2' backed up to `bk'."
-            cap qui copy "http://briatte.org/srqm-updates/`2'.pdf" "setup/`2'", public replace
-            if !_rc di as txt "Setup file `2' updated."
+        if "`be'" == "ado" {
+			local bt "utility"
+			local bf "setup"
         }
 
-		if _rc di as err "No file updated: error", _rc ". Sorry."
+        if "`bt'" == "" {
+            di as err "Please provide a valid filename to update."
+            exit 198
+        }
+        else {
+			di as txt "- updating course `bt' in `bf' folder"
+
+	        cap qui copy "`bf'/`2'" "`bf'/`bk'.`be'", public replace
+	        if !_rc di as txt "- `2' backed up to `bk'.`be'"
+
+	        cap qui copy "http://briatte.org/srqm-updates/`2'" "`bf'/`2'", public replace
+	        if !_rc {
+	        	di as txt "- `2' successfully updated"
+	        }
+	        else {
+	        	di as err "No file updated: error", _rc "." _n ///
+	        		"Check your syntax and connection."
+	        	cap qui copy "`bf'/`bk'.`be'" "`bf'/`2'", public replace
+	        	if _rc di as err "No backup restored."
+	        }
+		}
+
     }
 
     if `log' {
