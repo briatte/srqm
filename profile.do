@@ -3,38 +3,37 @@
 // This file sets up a computer for use with the SRQM course. It creates another
 // profile.do file in the Stata application folder. See README file for details.
 
-*! http://f.briatte.org/teaching/quanti/  Sciences Po, Spring 2013  Version 1.4
+*! http://f.briatte.org/teaching/quanti/
 
 cap qui set more off, perm
 
 // --- LOG ---------------------------------------------------------------------
 
 cap log using backup.log, name(backlog) replace
-if _rc==0 | _rc==604 {
-	qui log query backlog
-	noi di as inp _n "Backup log:" _n as txt r(filename)
+if _rc==604 {
+	noi di as err "(backup log already open)"
 }
-else {
-	noi di as err "(Could not open a backup log.)"
+else if _rc {
+	noi di as err "(failed open a backup log)"
 }
 
 // --- COURSE ------------------------------------------------------------------
 
-// folder
-cap adopath + "`c(pwd)'/Programs"
+// load utilities
+cap adopath + "`c(pwd)'/setup"
+
+// course folder
 cap noi srqm check folder, nolog
 if _rc != 0 exit -1
 
-// packages
-
+// additional commands
 cap noi srqm setup packages, nolog
 
-// settings
-
-if c(update_query)=="on" | c(more)=="on" | c(scheme) != "burd" {
+// system settings
+if c(update_query)=="on" | c(more)=="on" {
 	noi di as txt _n ///
 		"(It looks like we need to adjust some Stata settings.)"
-	cap noi srqm setup, nolog
+	cap noi srqm setup course, nolog
 }
 
 // link
@@ -49,6 +48,6 @@ if "$srqm_wd" != "`c(pwd)'" {
 
 local t = "morning"
 if real(substr("`c(current_time)'",1,2)) > 12 local t = "afternoon"
-noi di as inp _n "Good `t'!", as txt "Welcome to the course."
+noi di as inp _n "Hello!", as txt "Good `t', and welcome to the course."
 
 // ttyl

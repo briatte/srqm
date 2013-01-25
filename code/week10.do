@@ -23,7 +23,7 @@ foreach p in fre estout leanout mkcorr {
 }
 
 * Export log.
-cap log using "Replication/week10.log", replace
+cap log using code/week10.log, replace
 
 
 * ====================
@@ -31,7 +31,7 @@ cap log using "Replication/week10.log", replace
 * ====================
 
 
-use "Datasets/qog2011.dta", clear
+use data/qog2011, clear
 
 * Rename variables to short handles.
 ren (wdi_fr bl_asyt25 wdi_hiv) (births schooling hiv )
@@ -154,7 +154,7 @@ reg births schooling log_gdpc
 reg
 
 * Recall the last model, with cleaner output.
-leanout: 
+leanout:
 
 
 * Standardised ('beta') coefficients

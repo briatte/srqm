@@ -57,7 +57,7 @@ This path is where the course setup will tell Stata to look for the SRQM teachin
 
 Make sure that you are connected to the Internet. At Sciences Po, this requires checking that you logged into the wifi network. Then, type `run profile` in the Command window and press `Enter`. 
 
-This command runs the `profile.do` file that will setup Stata for this course by running some of the code stored in the `Programs` [folder](https://github.com/briatte/srqm/tree/master/Programs). The setup accomplishes three things:
+This command runs the `profile.do` file that will setup Stata for this course by running some of the code stored in the `setup` [folder](https://github.com/briatte/srqm/tree/master/setup). The setup accomplishes three things:
 
 - it adjusts some common Stata settings for screen output and installs an improved graph scheme;
 

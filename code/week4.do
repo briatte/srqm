@@ -30,7 +30,7 @@ foreach p in fre {
 }
 
 * Log results.
-cap log using "Replication/week4.log", replace
+cap log using code/week4.log, replace
 
 
 * ====================
@@ -39,7 +39,7 @@ cap log using "Replication/week4.log", replace
 
 
 * Data: U.S. National Health Interview Survey (2009).
-use "Datasets/nhis2009.dta", clear
+use data/nhis2009, clear
 
 * Subset to most recent year.
 drop if year != 2009
@@ -157,7 +157,7 @@ di r(N),"observations out of",_N,"(" 100*round(r(N)/_N,.01) "% of the sample)" _
 
 * The properties shown here hold for continuous variables that approach a
 * normal distribution, as discussed below. We could go further and compute
-* the [mean - 3sd, mean + 3sd] range, but the most extreme values of a 
+* the [mean - 3sd, mean + 3sd] range, but the most extreme values of a
 * distribution are more conveniently captured by the notion of outliers,
 * i.e. observations that fall far from the median.
 
@@ -209,7 +209,7 @@ qnorm bmi, ti("Normal quantile plot") ///
 	name(bmi_qnorm, replace)
 
 * The departures observed here are situated at the tails of the distribution,
-* which means that there is an excess of observations at these values. 
+* which means that there is an excess of observations at these values.
 
 
 * (2) Statistical tests

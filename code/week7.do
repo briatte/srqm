@@ -24,7 +24,7 @@ foreach p in mkcorr {
 }
 
 * Log results.
-cap log using "Replication/week7.log", replace
+cap log using code/week7.log, replace
 
 
 * ====================
@@ -32,7 +32,7 @@ cap log using "Replication/week7.log", replace
 * ====================
 
 
-use "Datasets/qog2011.dta", clear
+use data/qog2011, clear
 
 * Rename variables to short handles.
 ren (wdi_fr bl_asyt25 undp_hdi ti_cpi gid_fgm) (births schooling hdi corruption femgov)

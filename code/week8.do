@@ -21,7 +21,7 @@
 
 
 * Replicate last week and clear graphs. The data left in memory is a modified
-* version the Quality of Government dataset, with all necessary recodes and 
+* version the Quality of Government dataset, with all necessary recodes and
 * renames already performed. It is very common to use different do-files for
 * different tasks. In this example, the previous do-file is used for data
 * management and the current do-file is used for analysis.
@@ -29,7 +29,7 @@ do "Replication/week7.do"
 gr drop _all
 
 * Log results.
-cap log using "Replication/week8.log", replace
+cap log using code/week8.log, replace
 
 * Graph macro. If you remember what we did last week, we used a macro to label
 * the data points with country codes instead of using anonymous dots. Since we
@@ -50,7 +50,7 @@ global ci "legend(off) lp(dash)"
 
 * We are looking again at the relationship between fertility and education that
 * we already observed in our previous do-file. At that stage, we assume that you
-* have a subtantive model to explain the relationship that you are studying, or 
+* have a subtantive model to explain the relationship that you are studying, or
 * the results of the model will land nowhere and serve no analytical purpose.
 
 * Visual fit.

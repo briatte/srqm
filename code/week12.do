@@ -1,5 +1,5 @@
 
-/* ------------------------------------------ SRQM Session 9 -------------------
+/* ------------------------------------------ SRQM Session 12 ------------------
 
    F. Briatte and I. Petev
 
@@ -28,7 +28,7 @@ foreach p in fre {
 }
 
 * Log results.
-cap log using "Replication/week12.log", replace
+cap log using code/week12.log, replace
 
 
 * ====================
@@ -36,7 +36,7 @@ cap log using "Replication/week12.log", replace
 * ====================
 
 
-use "Datasets/gss2010.dta", clear
+use data/gss2010, clear
 
 * Keep most recent year.
 keep if year==2010
@@ -55,10 +55,10 @@ gen age10 = 10*floor(age/10)
 drop if age < 20
 
 * Inspect DV by age.
-spineplot partnrs5 age10, scheme(burd8)
+spineplot partnrs5 age10, scheme(burd8) name(sp, replace)
 
 * Inspect DV by age, sex and interviewer's sex.
-gr bar partnrs5, over(sex) asyvars over(age10) by(intsex)
+gr bar partnrs5, over(sex) asyvars over(age10) by(intsex) name(is, replace)
 
 * Drop ambiguous wrkstat category "Other".
 drop if wrkstat==8

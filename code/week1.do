@@ -286,15 +286,15 @@ ls, w
 
 * For this course, you need to set the working directory to the SRQM folder.
 * Use the 'File > Change Working Directory...' menu item in the Stata graphical
-* user interface to select the SRQM folder. The path to that foldr will show in
+* user interface to select the SRQM folder. The path to that folder will show in
 * the Results window. It might look like this:
 
-* cd "/Users/fr/Documents/Teaching/SRQM/"
+* cd ~/Documents/Teaching/SRQM/
 
 * I use Mac OS X, which is why my file path takes that form. Ivaylo uses a PC,
 * and his own working directory might be set like this:
 
-* cd "C:\Users\Ivo\Desktop\SRQM"
+* cd C:\Users\Ivo\Desktop\SRQM
 
 * You will need to identify that file path on your own computer. Choose a simple
 * location for the SRQM folder and then keep it there without renaming it or any
@@ -303,10 +303,10 @@ ls, w
 
 * The -cd- command shown above navigates through your folders. The next example
 * assumes that you are now in the SRQM folder. It will select the folder that
-* contains the course do-files. The quotes can be omitted when the path contains
-* no spaces, but we will use them systematically for consistency, as in:
+* contains the course do-files. Note that if the path contained spaces, you
+* would need to add quotes around it.
 
-* cd "Replication"
+* cd code
 
 * Uncomment and run the line above, then uncomment and run the next command to
 * go back one level and return to the SRQM folder:
@@ -324,7 +324,7 @@ ls "Replication", w
 
 * You can save the commands and results from this do-file to a log file, which
 * will serve as a backup of your work. To log this session, type:
-log using "Replication/week1.log", replace
+log using code/week1.log, replace
 
 * The log command will now create a history of your work on this do-file. You
 * should keep it for replication purposes. It will log all your commands and
@@ -339,7 +339,7 @@ log using "Replication/week1.log", replace
 * them where they are and 'execute' them too, Stata will just ignore them):
 
 * Loading data from the U.S. National Health Interview Survey (2009).
-use "Datasets/nhis2009.dta", clear
+use data/nhis2009, clear
 
 * The 'clear' option gets rid of any data previously loaded into memory, since
 * Stata can only open one dataset at once.
@@ -372,7 +372,7 @@ cap log close
 * any plain text editor, you will find a copy of everything that was entered
 * between the 'log using' and 'log close' commands, including comments, the
 * example above and its output for each command. You can view the file in Stata:
-view "Replication/week1.log"
+view code/week1.log
 
 * The dot graph will need to be saved separately: this can be done in several
 * ways that are documented in the course slides and in the Stata Guide. The
@@ -392,7 +392,7 @@ help graph
 * Show all datasets for this course. The asterisk in the command is an escape
 * character that causes the command to return all matches (within .dta files).
 * The 'w' option is to make the output less verbose.
-ls "Datasets/*.dta", w
+ls data/*.dta, w
 
 * All datasets are in the SRQM Teaching Pack, and will load only if your working
 * directory is correctly set. The README file of the Datasets folder holds links
@@ -400,13 +400,13 @@ ls "Datasets/*.dta", w
 * research project. You can start looking for variables of interest by using the
 * lookfor command after loading one of the course datasets.
 
-use "Datasets/ess2008.dta", clear
+use data/ess2008, clear
 lookfor health immig
 
-use "Datasets/qog2011.dta", clear
+use data/qog2011, clear
 lookfor devel orig
 
-use "Datasets/wvs2000.dta", clear
+use data/wvs2000, clear
 lookfor army homo
 
 // etc. (this line is also a comment)

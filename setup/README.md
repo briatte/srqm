@@ -8,7 +8,7 @@ All commands were written to assist students in completing their research projec
 
 ## `burd`
 
-The series of ten `scheme-burd` files contain reversed versions of the `RdBu` [ColorBrewer](http://colorbrewer2.org/) theme, as well as a replacement for the `s2color` scheme. Used to scheme the course plots. Some example plots appear on the [course wiki](https://github.com/briatte/srqm/wiki/BuRd).
+The series of `scheme-burd` files contain reversed versions of the `RdBu` [ColorBrewer](http://colorbrewer2.org/) theme, as well as a replacement for the `s2color` scheme. The scheme is used for the course plots (and students get to use it if they want to). See [example plots](https://github.com/briatte/srqm/wiki/BuRd) appear on the course wiki.
 
 ## `properl`
 
@@ -16,7 +16,7 @@ Sets the labels of a variable to their proper capitalization, using code kindly 
 
 ## `repl`
 
-Creates a replication folder out of a do-file. The folder will contain the do-file, log and all plots that were assigned a `name()` in the code. It will also contain any file exported by the do-file and a short file manifest in a `README` file.
+Creates a replication folder out of a do-file. The folder will contain the do-file, log and all plots that were assigned an optional `name()` in the code. It will also contain any file exported by the do-file and a short file manifest in a `README` file.
 
 ## `require`
 
@@ -32,26 +32,31 @@ The `srqm` utilities require one command and optionally one subcommand to execut
 
 The commands and subcommands form three blocks. The first of them, `setup`, is called from the `profile.do` file of the `SRQM` folder and is used to set up computers for the course:
 
-	srqm setup
+	srqm setup course
 	srqm setup folder
 	srqm setup packages
 
 To minimize trouble with working directory errors, the setup creates a mock symbolic link to the `SRQM` folder and performs a quick folder integrity check at startup. A few more similar checks are available:
 
-	srqm check
+	srqm check course
 	srqm check folder
 	srqm check packages
-	srqm check course
+
+The utilities also include a built-in course update system that recognizes where files go and keeps older files as backups. The command works with `week#.do` files (code), `week#.pdf` files (slides) and setup (`.ado`) files:
+
+	srqm update week7.pdf
+	srqm update week11.do
+	srqm update stab.ado // caution with that
 
 Finally, the mock symbolic link to the `SRQM` folder can be erased at the end of the semester, and a few more cleanup utilities can be used for testing purposes:
 
-	srqm clean
+	srqm clean course
 	srqm clean folder
 	srqm clean packages
 
 Unless the additional `nolog` option is specified, all commands send moderately verbose output to a log in order to help users report issues.
 
-### `srqm setup`
+### `srqm setup course`
 
 Tries to permanently set up a few options like screen breaks and scrollback buffer size in Stata, including `memory` on software versions older than Stata 12. Also sets the `burd` scheme (documented above).
 
@@ -83,7 +88,7 @@ Checks whether the additional packages installed from the SSC server by the `srq
 
 #### `srqm check course`
 
-Runs the whole course (weekly sessions and draft assignments) as a single sequence to test the executability of the course code. Usually runs in less than ten minutes.
+Runs the whole course (twelve weekly sessions) as a single sequence to test the executability of the code. Usually runs in less than ten minutes.
 
 ### `srqm clean`
 

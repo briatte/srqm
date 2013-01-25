@@ -4,6 +4,17 @@
 *!      sum(<continuous variables>) corr(<continuous variables>) ///
 *!      fre(<categorical variables>)
 
+*! version 0.5; mega-thanks to
+*! Alba Guesch, Leila Ferrali, Laura Fuehrer, Ivaylo Petev and many others
+
+* last bugfix (2012-12-10):
+* in fr(), -tab, gen()- now preceded by -cap dr var_*- to refresh dummies
+
+* todo:
+* - force-wrap long labels over 36 characters (nowrap and wrap(int 36))
+* - deal with long numbers (more than 5 chars, given a tab is 4): 
+*   divide by 10^(3*floor(max)/3) -- add warning
+
 cap pr drop stab
 program stab
 	// exports a tab-separated summary statistics and frequencies table
@@ -11,9 +22,9 @@ program stab
 	// default 1 digit precision for mean and sd, 0 elsewhere
 	// not meant to be a full-fledged command, it's a teaching aid
 
-    syntax using/ [if] [in] [aweight fweight/] ///
-    	[, SUmmarize(varlist) FRequencies(varlist) ///
-    	CORRelates(varlist) ttest Float(int 0) by(varname) replace] 
+    syntax [using/] [if] [in] [aweight fweight/] ///
+    	[, by(varname) SUmmarize(varlist) FRequencies(varlist) CORRelate(varlist) CORRelates ttest ///
+    	Float(int 0) Wrap(int 36) NOWrap replace]
     tempname fh
 
 	tokenize `summarize'
@@ -22,7 +33,10 @@ program stab
 	local fl0 = 10^(-`float')  // precision of min max and freqs
     local fl1 = .1*`fl0'       // one more digit for mean, sd and correlations
 
-	if "`summarize'"=="" & "`frequencies'"=="" & "`correlates'"=="" {
+	// maintain older command syntax for students and convenience
+	if "`correlates'" != "" & "`correlate'" == "" local correlate `summarize'
+
+	if "`summarize'"=="" & "`frequencies'"=="" & "`correlate'"=="" {
 		di as txt "You need to specify variables to describe. Example:" _n _n ///
 		    _s(4) "sysuse nlsw88, clear" _n ///
 		    _s(4) "su age wage" _n ///
@@ -30,7 +44,7 @@ program stab
 		    _s(4) "stab using name, su(age wage) fr(race married) replace" _n ///
 		    _n "Other options are corr() for correlations and by() for multiple tables."
 		// ttest and f() are undocumented, for the best
-    	exit 0
+    	exit 198
     }
     else if strpos("`using'",".") > 0 {
     	// plain text format advocacy
@@ -50,9 +64,12 @@ program stab
 		}
 		cap qui levelsof `by' `if' `in', local(by_lvls)
 	}
+	else if "`summarize'"=="" & "`frequencies'"=="" {
+		local by_lvls ""
+	}
 	else {
 		cap gen _by_fullsample_1 = 1
-		local by = "by_fullsample"
+		local by "by_fullsample"
 		local by_lvls 1
 	}
 	
@@ -69,25 +86,23 @@ program stab
 		
 		local by_text = "for `by_vlbl'"
 		if "`by'" == "by_fullsample" {
-			local by_text = ""
+			local iff "`if'"
+			local by_text ""
+			local by_name ""
 			file open `fh' using `using'_stats.txt, write `replace'
-			noi di as txt _n "Exporting summary statistics to", as inp ///
-				"{browse `using'_stats.txt}" _n
 		}
 		else {
 			if "`if'" == "" local iff = "if _`by'_`by_i'" 
 			if "`if'" != "" local iff = "`if' & _`by'_`by_i'"
-			local by_name = strtoname("`by_vlbl'")
-			file open `fh' using `using'_stats_`by_name'.txt, write `replace'
-			noi di as txt _n "Exporting summary statistics to", ///
-				"{browse `using'_stats_`by_name'.txt}" _n "for category" ///
-				, as inp "`by_vlbl':"
+			local by_name = strtoname("_`by_vlbl'")
+			qui file open `fh' using `using'_stats`by_name'.txt, write `replace'
+			noi di as inp _n "`by_vlbl':"
 		}
 		
-		file write `fh' _n "Table 1. Summary statistics `by_text'"
+		file write `fh' _n "Table #. Summary statistics `by_text'"
 		
 	//--------------------------------- SUMMARY STATS
-    	
+
 	if "`summarize'" != "" {
 	
 		// watered down version of tabstatout
@@ -138,12 +153,12 @@ program stab
 		// watered down version of tabout
 		
 		foreach v of varlist `frequencies' {
+			cap drop `v'_*
 			if "`weight'" == "" {
 				qui cap tab `v' `iff' `in', gen(`v'_) matcell(m)
 			}
 			else {
 				qui cap tab `v' `iff' `in' [`weight'=`exp'], gen(`v'_) matcell(m)
-				// mat li m
 			}
 		    local l: var l `v'
 		    
@@ -163,8 +178,9 @@ program stab
 			if "`ttest'" != "" file write `fh' _tab "diff"
 			
 			local N = r(N)
-			qui levelsof `v' `if' `in', local(lvls)
+			qui levelsof `v' `iff' `in', local(lvls)
 			local i = 0
+
 			foreach val of local lvls {
 				local i=`i'+1
 				local n = m[`i',1]
@@ -212,11 +228,14 @@ program stab
 	if "`weight'" != "" file write `fh' ". Survey weights: " "`exp'."
 	file close `fh'
 
+	noi di as txt _n "... Exported summary statistics to", ///
+		"{browse `using'_stats`by_name'.txt}"
+	
 	} // end of by
 	
 	//--------------------------------- CORRELATION MATRIX
 
-	if "`correlates'" != "" {
+	if "`correlate'" != "" {
 	
 		// watered down version of mkcorr
 		
@@ -229,14 +248,11 @@ program stab
 			local if "if \`touse'"
 		}
 
-		noi di as txt _n "Exporting correlation matrix to", as inp ///
-			"{browse `using'_correlations.txt}" _n
-
 		file open `fh' using `using'_correlations.txt, write `replace'
-		file write `fh' _n "Table 2. Correlation matrix" _n
+		file write `fh' _n "Table #. Correlation matrix" _n
 		file write `fh' _tab
 
-		local n: word count `correlates'
+		local n: word count `correlate'
 
 		forvalues i=1/`n' {
 			file write `fh' "(" (`i') ")" _tab
@@ -249,7 +265,7 @@ program stab
 			file write `fh' (`row') "." _skip(1)
 			
 			// variable label
-			local v: word `row' of `correlates'
+			local v: word `row' of `correlate'
 			local l: var l `v'
 			
 			if "`l'"=="" local l = "UNLABELED `v'"
@@ -257,8 +273,8 @@ program stab
 			
 			forvalues col=1/`row' {     
 
-				local var1: word `row' of `correlates'
-				local var2: word `col' of `correlates'
+				local var1: word `row' of `correlate'
+				local var2: word `col' of `correlate'
 				
 				if "`weight'" == "" | "`weight'" == "pweight" {
 					qui corr(`var1' `var2') `if' `in'
@@ -288,7 +304,7 @@ program stab
 
 	// footer
 	
-	file write `fh' _n "Pearson correlation coefficients." ///
+	file write `fh' _n "Pearson correlation coefficients. " ///
 		"Two-tailed significance: * p < .05 ** p < .01 *** p < .001"
 
 	if "`weight'" != "" & "`weight'" != "pweight" {
@@ -296,9 +312,12 @@ program stab
 	}
 
 	file close `fh'
+		
+	noi di as txt _n "... Exported correlation matrix to", as inp ///
+		"{browse `using'_correlations.txt}"
 	
 	}
 	
-	di as txt _n "Now look for the exported file(s) in {browse `c(pwd)'}" _n ///
-		"Remember to describe all variables properly! Enjoy life."
+	di as txt _n "The exported file(s) are in {browse `c(pwd)'}" _n ///
+		_n "Remember to describe all variables properly! Enjoy life."
 end

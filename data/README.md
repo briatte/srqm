@@ -22,7 +22,7 @@ Bibliographic information and additional documentation is available from the onl
 
 The Stata `use` commands mentioned in this document require that the `SRQM` folder has been set as the working directory, as explained in its [README](https://github.com/briatte/srqm/blob/master/README.md) file.
 
-Indications on weighting the data with the `syvset` command are provided for point estimation.
+Indications on weighting the data with the `svyset` command are provided for point estimation.
 
 * * *
 

@@ -14,13 +14,20 @@
    second session. Read the comment lines as you go along, and execute the code
    by running commands sequentially. Select lines with Cmmd-L (Mac) or Ctrl-L
    (Win), and execute them with Cmmd-Shift-D (Mac) or Ctrl-D (Win).
-  
- - We will explore the National Health Interview Survey with a few basic Stata
-   commands. This is to show you how to explore a dataset and its variables.
-   You will need to select a dataset for your own research project in the next
-   couple of weeks, so learning how to explore data is essential at that point.
 
-   Last updated 2012-11-13.
+ - We will explore the National Health Interview Survey with a few basic Stata
+   commands. This is to show you how to explore a dataset and its variables. You
+   need to make a choice of dataset for your project by the end of the week.
+ 
+ - If you want to study one country or compare two of them, turn to survey data
+   from the European Social Survey (ESS), U.S. General Social Survey (GSS) or
+   World Values Survey (WVS).
+
+ - If you want to study country-level data, use the Quality of Government (QOG)
+   dataset. Your sample should be all world countries: do not further restrict
+   the sample further by subsetting to less observations.
+
+   Last updated 2012-12-07.
 
 ----------------------------------------------------------------------------- */
 
@@ -34,7 +41,7 @@ foreach p in fre {
 }
 
 * Log the commands and results from this do-file.
-cap log using "Replication/week2.log", replace
+cap log using code/week2.log, replace
 
 
 * ========
@@ -43,7 +50,7 @@ cap log using "Replication/week2.log", replace
 
 
 * Data: U.S. National Health Interview Survey (2009).
-use "Datasets/nhis2009.dta", clear
+use data/nhis2009, clear
 
 * Once the dataset is loaded, the Variables window will fill up, and you will
 * be able to look at the actual dataset from the Data Editor. Read from the
@@ -254,7 +261,7 @@ fre health
 
 * Summarize BMI (as well as height and weight) for each value of the health
 * variable. Note that -bys- is shorthand for the -bysort- prefix.
-bysort health: su bmi weight
+bys health: su bmi weight
 
 * Graph the mean BMI of each ethnic group, using a dot plot.
 gr dot bmi, over(raceb) ytitle("Average Body Mass Index") ///
@@ -301,7 +308,7 @@ cap log close
 * Logs are essential to keep records of your analysis. They complement do-files,
 * which are records of your commands and comments only. Now that you have closed
 * the log below, have a quick look at it.
-view "Replication/week2.log"
+view code/week2.log
 
 * We are done. Just quit the application, have a nice week, and see you soon :)
 * exit, clear

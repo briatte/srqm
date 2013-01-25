@@ -61,7 +61,7 @@ cap log using "week5.log", replace
 * ====================
 
 
-use "Datasets/nhis2009.dta", clear
+use data/nhis2009, clear
 
 * Individual survey weights.
 svyset psu [pw=perweight], strata(strata)

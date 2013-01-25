@@ -12,7 +12,23 @@ color plotregion             white
 color matrix_plotregion      white
 color legend                 white
 
-color plotregion_line        black
+// single row:
+// numstyle legend_rows      1
+
+// added:
+color tick                   none
+gsize legend_key_xsize       medsmall
+clockdir                     legend_position 11
+clockdir                     title_position  11
+  
+// linestyle                 axis_withgrid none
+// tickstyle                 major_notick
+
+// does not seem to work:
+// gsize legend_key_ysize       *.5
+
+// changed from black:
+color plotregion_line        none
 color matplotregion_line     black
 
 margin plotregion        zero

@@ -15,26 +15,26 @@ if "`pwd'" != "$srqm_wd" {
 
 *! - copy of do-file
 cap mkdir `namelist', public
-cap qui copy "Replication/`namelist'.do" "`namelist'`c(dirsep)'temp.do", replace
-if _rc ==0 di as txt "Replication do-file: Replication/`namelist'.do"
-cap confirm file `namelist'.do
+cap qui copy `namelist'.do `namelist'/temp.do, replace
+if _rc ==0 di as txt "Replication do-file: code/`namelist'.do"
+cap confirm file `namelist'/`namelist'.do
 if _rc != 0 {
 	di as err "Do-file error", _rc
-	di as err "Please use -repl- on a do-file from the Replication folder."
+	di as err "Please use -repl- on a do-file from the Code folder."
 	di as err "Move your project do-file there if needed."
 	cap cd "`pwd'"
 	exit 198
 }
 
 *! - copy of dataset
-cap mkdir "`namelist'`c(dirsep)'datasets", public
+cap mkdir "`namelist'`c(dirsep)'data", public
 cap use "`c(filename)'", clear
 local data = c(filename)
 while strpos("`data'","/") > 0 {
 	local data = substr("`data'",strpos("`data'","/")+1,length("`data'"))
 	di "`c(filename)'","`data'"
 }
-cap qui save "`namelist'`c(dirsep)'datasets`c(dirsep)'`data'", replace
+cap qui save "`namelist'`c(dirsep)'data`c(dirsep)'`data'", replace
 if _rc == 0 di as txt "Replication dataset: `c(filename)'"
 if _rc != 0 {
 	di as err "Dataset error", _rc
@@ -44,7 +44,7 @@ if _rc != 0 {
 	exit 198
 }
 
-qui cd Replication // will fail if trying to run repl recursively
+qui cd code // will fail if trying to run repl recursively
 
 
 gr drop _all
@@ -69,8 +69,8 @@ cap rm `namelist'.do
 copy temp.do `namelist'.do
 rm temp.do
 
-rm "datasets/`data'"
-rmdir datasets
+rm "data/`data'"
+rmdir data
 
 noi ls, w
 

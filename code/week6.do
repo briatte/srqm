@@ -12,14 +12,14 @@
 ----------------------------------------------------------------------------- */
 
 
-* Install required commands.
+* Additional commands.
 foreach p in fre tab_chi {
     cap which `p'
     if _rc==111 cap noi ssc install `p' // install from online if missing
 }
 
-* Log results.
-cap log using "Replication/week6.log", replace
+* Log.
+cap log using code/week6.log, replace
 
 
 * ====================
@@ -27,7 +27,7 @@ cap log using "Replication/week6.log", replace
 * ====================
 
 
-use "Datasets/ess2008.dta", clear
+use data/ess2008, clear
 
 * Survey weights.
 svyset [pw=dweight] // weighting scheme set to country-specific population
