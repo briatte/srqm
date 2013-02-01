@@ -23,17 +23,17 @@ else if _rc {
 cap adopath + "`c(pwd)'/setup"
 
 // course folder
-cap noi srqm check folder, nolog
+cap noi srqm check folder
 if _rc != 0 exit -1
 
 // additional commands
-cap noi srqm setup packages, nolog
+cap noi srqm setup packages
 
 // system settings
 if c(update_query)=="on" | c(more)=="on" {
 	noi di as txt _n ///
 		"(It looks like we need to adjust some Stata settings.)"
-	cap noi srqm setup course, nolog
+	cap noi srqm setup course
 }
 
 // link
@@ -41,7 +41,7 @@ if c(update_query)=="on" | c(more)=="on" {
 if "$srqm_wd" != "`c(pwd)'" {
 	noi di as txt _n ///
 		"(It looks like we need to (re)locate the SRQM folder.)"
-	cap noi srqm setup folder, nolog
+	cap noi srqm setup folder
 }
 
 // --- HELLO -------------------------------------------------------------------

@@ -1,24 +1,28 @@
-// --- SRQM --------------------------------------------------------------------
 
-// This file creates the utilities called at startup by the profile.do file of
-// the SRQM folder. See the README file of the setup/ folder for details.
+/* --- SRQM version 3.0 / 2013-01-26 -------------------------------------------
+
+  This file creates the utilities called at startup by the profile.do file of
+  the SRQM folder. See the README file of the setup folder for details on how
+  to operate it. If you are a student, just follow the instructions in class.
+
+----------------------------------------------------------------------------- */
 
 cap pr drop srqm
 program srqm
-    syntax anything [, noLOG forced]
+    syntax anything [, LOGged forced] // new: log is now disabled by default
 
     // parse syntax
-
+        
     tokenize `anything'
-    local setup =  ("`1'"=="setup")
-    local check =  ("`1'"=="check")
-    local fetch =  ("`1'"=="fetch") // new update function
-    local clean =  ("`1'"=="clean")
-    local folder = ("`2'"=="folder")
+    local setup    = ("`1'"=="setup")
+    local check    = ("`1'"=="check")
+    local fetch    = ("`1'"=="fetch") // new: update function
+    local clean    = ("`1'"=="clean")
+    local folder   = ("`2'"=="folder")
     local packages = ("`2'"=="packages")
-    local course = ("`2'"=="course")
-    local log =    ("`log'"=="")
-    local forced = ("`forced'"!="")
+    local course   = ("`2'"=="course")
+    local logged   = ("`logged'"!="")
+    local forced   = ("`forced'"!="")
 
     // package list
 
@@ -34,12 +38,12 @@ program srqm
 
     // interrupt backup log if any
 
-    if `log' cap log off backlog
+    if `logged' cap log off backlog
 
     // check syntax
 
     if `setup' | `check' | `clean' | `fetch' {
-        if `log' {
+        if `logged' {
             if "`2'"!="" local x = "-`2'"
             cap qui log using setup/`1'`x'.log, name(SRQM) replace
             if !_rc local logged 1
@@ -193,7 +197,7 @@ program srqm
                     }
                 }
                 else {
-                 if `log' di "SETUP:", as inp `t', as txt "is already installed"
+                 if `logged' di "SETUP:", as inp "`t'", as txt "is already installed"
                 }
                 if _rc di as err "ERROR: installation of `t' failed with error code", _rc
             }
@@ -398,6 +402,8 @@ program srqm
     // = FETCH =
     // =========
 
+	// ... might not work for Windows users running without admin privileges
+	
     if `fetch' {
 
         cap cd "$srqm_wd"
@@ -436,6 +442,11 @@ program srqm
 			local bf "setup"
         }
 
+        // path to backup
+        local pb "`bf'/`bk'.`be'"
+        // path to file
+        local pf "`bf'/`2'"
+        
         if "`bt'" == "" {
             di as err "Please provide a valid filename to update."
             exit 198
@@ -443,24 +454,32 @@ program srqm
         else {
 			di as txt "- updating course `bt' in `bf' folder"
 
-	        cap qui copy "`bf'/`2'" "`bf'/`bk'.`be'", public replace
-	        if !_rc di as txt "- `2' backed up to `bk'.`be'"
+	        cap qui copy "`pf'" "`pb'", public replace
+	        if !_rc  di as txt "- `2' backed up to `bk'.`be'"
 
-	        cap qui copy "http://briatte.org/srqm-updates/`2'" "`bf'/`2'", public replace
+	        cap qui rm "`pf'"
+	        cap qui copy "http://briatte.org/srqm-updates/`2'" "`pf'", public replace
+
 	        if !_rc {
-	        	di as txt "- `2' successfully updated"
+	        	di as txt "- { browse `pf':`2'} successfully updated"
 	        }
 	        else {
 	        	di as err "No file updated: error", _rc "." _n ///
 	        		"Check your syntax and connection."
-	        	cap qui copy "`bf'/`bk'.`be'" "`bf'/`2'", public replace
-	        	if _rc di as err "No backup restored."
+	        	cap qui copy "`pb'" "`pf'", public replace
+	        	if !_rc {
+	        		cap rm "`pb'"
+	        		di as txt "- `bk'.`be' restored to `2'.`be'"
+	        	}
+	        	else {
+	        		di as err "No backup restored: error", _rc "." 
+	        	}
 	        }
 		}
 
     }
 
-    if `log' {
+    if `logged' {
         di _n as inp "Done.", as txt "Have a nice day."
         cap log close SRQM
         cap log on backlog
