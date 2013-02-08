@@ -19,7 +19,7 @@
 * Install required commands.
 foreach p in fre estout leanout mkcorr {
     cap which `p'
-    if _rc==111 cap noi ssc install `p' // install from online if missing
+    if _rc == 111 cap noi ssc install `p' // install from online if missing
 }
 
 * Export log.
@@ -46,7 +46,7 @@ gen aids = (hiv > 1.5) if !mi(hiv)
 la var aids "Highest HIV/AIDS prevalence quartile"
 
 * Recode regions to less, shorter labels.
-recode ht_region (6/10=6), gen(region)
+recode ht_region (6/10 = 6), gen(region)
 la var region "Geographical region"
 la val region region
 la def region 1 "E. Europe and PSU" 2 "Lat. America" ///
@@ -88,13 +88,17 @@ stab using week10, replace ///
 
 /* Basic syntax of -stab- command:
 
- - 'using name'  adds the 'name' prefix to the exported file(s)
- - 'sum()'       summarizes a list of continuous variables (mean, sd, min-max)
- - 'fre()'       summarizes a list of categorical variables (frequencies)
- - 'corr()'      adds a (pairwise) correlation matrix of continuous variables
- - 'by'          produces several tables over a given categorical variable
- - 'replace'     overwrite previous tables
- - '[aw,fw]'     use survey weights */
+- argument: -using NAME-  adds the NAME prefix to the exported file(s)
+- argument: -su()-        summarizes a list of continuous variables (mean, sd, min-max)
+- argument: -fre()-       summarizes a list of categorical variables (frequencies)
+
+- option:   -by-          produces several tables over a given categorical variable
+- option:   -replace-     overwrite any previously existing tables
+- option:   [aw, fw]      use survey weights (use only if you know how they work)
+
+  In the example above, the -stab- command will export two files to the working
+  directory, containing summary statistics (week10_stats.txt) and a correlation
+  matrix (week10_correlations.txt). */
 
 
 * =====================
@@ -160,7 +164,7 @@ leanout:
 * Standardised ('beta') coefficients
 * ----------------------------------
 
-* With standardised, or 'beta', coefficients (abbreviated to 'b' hereinafter).
+* With standardised, or 'beta', coefficients (abbreviated to -b- hereinafter).
 reg births schooling log_gdpc, beta
 
 * Proof of concept: Each variable in the equation has a different distribution
@@ -193,8 +197,8 @@ reg births schooling log_gdpc, b
 * -------------------------------
 
 * Visualizing two categories (Asia and Africa) within the sample.
-tw (sc births schooling if region==4, ms(O)) ///
-    (sc births schooling if region==6, ms(O)) ///
+tw (sc births schooling if region == 4, ms(O)) ///
+    (sc births schooling if region == 6, ms(O)) ///
     (sc births schooling if !inlist(region,4,6), mc(gs10)) ///
     (lfit births schooling, lc(gs10)), ///
     legend(order(1 "African countries" 3 "Rest of sample" ///
@@ -222,13 +226,13 @@ cap drop yhat
 predict yhat
 
 * Regression lines for the predicted values of Asia and Africa.
-tw (sc births schooling if region==4, ms(O)) ///
-    (sc births schooling if region==6) ///
+tw (sc births schooling if region == 4, ms(O)) ///
+    (sc births schooling if region == 6) ///
     (sc births schooling if !inlist(region,4,6), mc(gs10)) ///
-    (rcap yhat births schooling if region==4, c(l) lc(blue) lp(dash) msize(tiny)) ///
-    (rcap yhat births schooling if region==6, c(l) lc(red) lp(dash) msize(tiny)) ///
-    (sc yhat schooling if region==4, c(l) ms(i) mc(blue) lc(blue)) ///
-    (sc yhat schooling if region==6, c(l) ms(i) mc(red) lc(red)), ///
+    (rcap yhat births schooling if region == 4, c(l) lc(blue) lp(dash) msize(tiny)) ///
+    (rcap yhat births schooling if region == 6, c(l) lc(red) lp(dash) msize(tiny)) ///
+    (sc yhat schooling if region == 4, c(l) ms(i) mc(blue) lc(blue)) ///
+    (sc yhat schooling if region == 6, c(l) ms(i) mc(red) lc(red)), ///
     legend(order(1 "African countries" 6 "Fitted values (Africa)" 4 "Residuals (Africa)" ///
     2 "Asian countries" 7 "Fitted values (Asia)" 5 "Residuals (Asia)") row(2)) ///
     name(reg_geo2, replace)
@@ -310,7 +314,7 @@ lowess rsta schooling, bw(.5) yline(0) ///
 * models that use high numbers of correlated variables together in the model,
 * which measures several times the same effect and creates multicollinearity.
 * This problem renders the regression coefficients useless. Critical cut-off
-* points for variance inflation are VIF > 10 or tolerance 1/VIF <.1.
+* points for variance inflation are VIF > 10 or 1/VIF < .1 (tolerance).
 vif
 
 * Adding an interaction term is a technique to account for the variance that

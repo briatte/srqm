@@ -5,15 +5,13 @@
 
    Hi! Welcome to your second SRQM do-file.
 
- - All do-files for this course assume that you have set up Stata for your
-   computer. This includes setting up several parameters, most importantly
-   setting the working directory to your SRQM folder. Please refer to the
-   do-file from Session 1 for guidance on setup.
+ - All the do-files for this course assume that you have set up Stata first by 
+   adjusting some parameters, most importantly setting the working directory to
+   your SRQM folder. Please refer to the do-file from Session 1 for guidance.
 
- - Welcome again to Stata. This do-file contains the commands used during our
-   second session. Read the comment lines as you go along, and execute the code
-   by running commands sequentially. Select lines with Cmmd-L (Mac) or Ctrl-L
-   (Win), and execute them with Cmmd-Shift-D (Mac) or Ctrl-D (Win).
+ - Welcome again to Stata. Read the comment lines as you go along, and run the
+   code by executing command lines sequentially. Select lines with Cmd-L (Mac)
+   or Ctrl-L (Win), and execute them with Cmd-Shift-D (Mac) or Ctrl-D (Win).
 
  - We will explore the National Health Interview Survey with a few basic Stata
    commands. This is to show you how to explore a dataset and its variables. You
@@ -27,26 +25,26 @@
    dataset. Your sample should be all world countries: do not further restrict
    the sample further by subsetting to less observations.
 
-   Last updated 2012-12-07.
+   Last updated 2013-02-08.
 
 ----------------------------------------------------------------------------- */
 
 
-* To run this do-file, you might need to install some additional commands first.
-* The next lines will check this: select the whole loop and execute it. The loop
-* spans from 'foreach' to the final '}' a few lines later.
+* To run this do-file, you might need to have installed the -fre- command. The
+* next lines will check that: select the whole loop and execute it. The loop
+*  spans from -foreach- to the final curly bracket '}' a few lines later.
 foreach p in fre {
 	cap which `p'
-	if _rc==111 cap noi ssc install `p'
+	if _rc == 111 cap noi ssc install `p'
 }
 
 * Log the commands and results from this do-file.
 cap log using code/week2.log, replace
 
 
-* ========
-* = DATA =
-* ========
+* ====================
+* = DATA DESCRIPTION =
+* ====================
 
 
 * Data: U.S. National Health Interview Survey (2009).
@@ -56,15 +54,33 @@ use data/nhis2009, clear
 * be able to look at the actual dataset from the Data Editor. Read from the
 * course material to make sure that you know how to read through a dataset:
 * its data structure shows observations in rows and variables in columns.
-* Also make sure that you understand what a cross-sectional dataset is.
+
+* List all variables in the dataset.
+describe
+
+
+* Finding variables
+* -----------------
+
+* Locate some variables of interest by looking for keywords in the variables.
+* You can explore your dataset by looking for particular keywords in the
+* variable names and labels. This is particularly useful when your dataset
+* comes with variable names that are hard or impossible to understand by
+* themselves, such as 'v1' or 'epi_epi'. The example below will identify
+* several variables with either 'height' or 'weight' in their descriptors.
+lookfor height weight
+
+* List their values for the first ten observations.
+list height weight in 1/10
+
+
+* Subsetting to cross-sectional format
+* ------------------------------------
 
 * Our first step verifies whether the survey is cross-sectional. As we find
 * that the data contains more than one survey wave and spans over several years,
 * we keep only most recent observations. This step applies only to datasets that
-* contain multiple survey years, which is not the case of other course datasets.
-
-* List all variables in the dataset.
-describe
+* contain multiple survey years, which is generally not the case in this course.
 
 * Check whether the survey is cross-sectional.
 lookfor year
@@ -80,51 +96,60 @@ drop if year != 2009
 * The -drop- command deleted all observations for which the variable 'year' is
 * different (!=) from 2009. An equivalent command would be:
 *
-* keep if year==2009
+* keep if year == 2009
 *
 * This command keeps only observations for which the 'year' variable is equal
 * (==) to 2009. Notice that the 'equal to' operator in Stata is a double equal
 * sign (==). Logical operators apply to many commands: read on to find out.
 * Also note that the spaces around logical operators are optional.
 
-* Locate some variables of interest by looking for keywords in the variables.
-* You can explore your dataset by looking for particular keywords in the
-* variable names and labels. This is particularly useful when your dataset
-* comes with variable names that are hard or impossible to understand by
-* themselves, such as 'v1' or 'epi_epi'. The example below will identify
-* several variables with either 'height' or 'weight' in their descriptors.
-lookfor height weight
-
-* List their values for the first ten observations.
-list height weight in 1/10
+* Make sure that you fully understand how cross-sectional data are arranged by
+* opening the Data Editor or using the -browse- command to take a quick look.
 
 
-* ===========================
-* = VARIABLE TRANSFORMATION =
-* ===========================
+* Survey weights
+* --------------
 
+* The command below sets survey weights, which can be used to obtain weighted
+* estimates at later stages of the analysis. We will not require them much.
+
+* Survey weights (see NHIS documentation).
+svyset psu [pw = perweight], strata(strata)
+
+
+* =========================
+* = VARIABLE MANIPULATION =
+* =========================
+
+
+* Dependent variable: Body Mass Index
+* -----------------------------------
 
 * Our next step is to compute the Body Mass Index for each observation in the
 * dataset (i.e. for each respondent to the survey) from their height and weight
 * by using the 'height' and 'weight' variables, and the formula for BMI.
 
-* Create the Body Mass Index from height and weight.
-* The -gen- command is shorthand for -generate-.
-gen bmi = weight*703/(height^2)
+* Create the Body Mass Index from height and weight. We can write the -generate-
+* command as its -gen- shorthand. We will later call BMI our dependent variable,
+* and we will use other (independent) variables to try to predict its values.
+gen bmi = weight * 703 / (height^2)
 
 * If something looks wrong later on in your analysis, check your BMI equation.
 * Also note that Stata is case-sensitive: we will write 'BMI' in the comments,
 * but the variable itself is called 'bmi' and should be written in lowercase.
 
-* Add a description label to the variable. We will come back to labels, as
-* they have many different uses. All label commands start with -label- (-la-).
-* The one below applies a label to a variable (shorthanded -var-):
+
+* Labelling a variable
+* --------------------
+
+* Add a description label to the variable. All label commands start with -label-
+* (shorthand -la-). The one below labels a variable (shorthand -var-).
 la var bmi "Body Mass Index"
 
 * List BMI among the variables included in the current dataset.
 d bmi
 
-* The -describe- command (shorthanded -d-) shows that the BMI variable is now
+* The -describe- command (shorthand -d-) shows that the BMI variable is now
 * part of the NHIS dataset. However, DO NOT SAVE your dataset, even when you
 * perform a useful operation like this one. Instead, you will run the do-file
 * to generate the variable again, hence making your calculation of BMI fully
@@ -133,21 +158,19 @@ d bmi
 * Take a look at the BMI of a few respondents. Values between 15 and 40 are
 * expected for human beings as we know them on this planet. We also list a
 * few other variables to start thinking about possible relationships.
-list sex age health bmi in 50/60
-list sex age health bmi in -10/l
+li sex age health bmi in 50/60
+li sex age health bmi in -10/l
 
 
-* ======================
-* = SUMMARY STATISTICS =
-* ======================
-
+* Summary statistics
+* ------------------
 
 * We now turn to analysing the newly created 'bmi' variable, using the
 * -summarize- command (shorthand -su-) to obtain its mean, min and max values,
 * as well as standard deviation, which we will cover later on.
 su bmi
 
-* Add the 'detail' option (shorthanded 'd') for precise statistics that cover
+* Add the -detail- option (shorthand -d-) for precise statistics that cover
 * its mean, minimum and maximum values, as well as its percentile distribution.
 su bmi, d
 
@@ -159,18 +182,22 @@ su bmi, d
 * and/or more extreme than lower BMI values. You can also note that the top 1%
 * respondents has a BMI between 41 and 50, which indicates morbid obesity.
 
+
+* Visualization
+* -------------
+
 * Visualizing the distribution of BMI values among the observations contained
 * in the dataset will make these first insights more clear and more complete.
-* Create a histogram (shorthanded -hist-) for the distribution of BMI:
+* Create a histogram (shorthand -hist-) for the distribution of BMI.
 hist bmi, freq normal ///
 	name(bmi, replace)
 
 * A histogram describes the distribution of the variable in the sample, i.e.
 * the distribution of different values of BMI among the respondents to the
-* survey. The 'freq' option specifies to use percentages, and the 'normal'
+* survey. The -freq- option specifies to use percentages, and the -normal-
 * option overlays a normal distribution to the histogram, a curve to which
 * we will soon come back when we cover essential statistical theory. The
-* 'name' option saves the graph in Stata temporary memory.
+* -name- option saves the graph in Stata temporary memory.
 
 * Another visualization is the boxplot, which uses different criteria to shape
 * the distribution of the variable. Refer to the course material to understand
@@ -186,23 +213,27 @@ gr hbox bmi, ///
 gr hbox bmi if uninsured != 9, over(sex) asyvars over(uninsured) ///
 	name(bmi_sex_ins, replace)
 
+
+* Logical expressions
+* -------------------
+
 * Note how the 'DK' category for insurance status was removed by using a call
 * to the conditional operator -if-, to exclude observations with an insurance
 * status equal to 9 when drawing the plot. This part of the command reads as:
 * draw a boxplot of all observations with an insurance status not equal to 9.
 
-* Here are more examples of logical operators:
+* Here are more examples of logical expressions.
 
 su bmi if age >= 20 & age < 25
 * This command reads as: 'run the -summarize- command on the 'bmi' variable,
 * but only for observations for wich the 'age' variable takes a value greater
 * than or equal to 20 and ('&') lesser than 25.'
 
-su bmi if sex==1 & age >= 65
+su bmi if sex == 1 & age >= 65
 * This command reads as: 'summarize BMI for observations of sex equal to 1
 * (i.e. males in this dataset) and of age greater or equal to 65.'
 
-su bmi if raceb==2 | raceb==3
+su bmi if raceb == 2 | raceb == 3
 * This command uses the 'raceb' variable, which codes Blacks and Hispanics
 * with values 2 and 3. This command therefore summarises BMI only for these
 * two ethnic groups: the '|' symbol is the logical operator for 'or'. It
@@ -211,9 +242,9 @@ su bmi if raceb==2 | raceb==3
 * If you have many categories to select, then using the -inlist- operator might
 * be much quicker. The example below selects a series of income categories that
 * fall either below the minimum wage in 2009 (15,000 dollars/year) or that fall
-* five times over that or more (i.e. earnings==11, the highest income category
+* five times over that or more (i.e. earnings == 11, the highest income category
 * in the dataset).
-tab earnings if inlist(earnings,1,2,3,11)
+tab earnings if inlist(earnings, 1, 2, 3, 11)
 
 * This operator is also practical to select countries, regions and other nominal
 * variables in country-level data, and it accepts strings, i.e. text variables.
@@ -233,15 +264,19 @@ tab earnings if inlist(earnings,1,2,3,11)
 * we assume that BMI can be partially 'predicted' by sex, health and race.
 lookfor sex health race
 
+
+* Summarizing over categories
+* ---------------------------
+
 * Summarize BMI (as well as height and weight) for each value of 'sex'. The
-* -su- command presumes that you are describing a variable that can take any
-* numerical value, and shows a five-number summary of it. The -bysort- (bys)
-* prefix takes one categorical variable and will repeat the command over its
-* categories. The entire command thus reads: for each value of the female
-* categorical variable, summarize the continuous variables BMI and weight.
+* -su- command assumes that you are describing a variable that can take any
+* numerical value, and shows summary statistics for it. The -bysort- prefix
+* (shorthand -bys-) takes one categorical variable and repeats the command
+* over its categories. The entire command thus reads: for each value of the
+* 'sex' variable, summarize the continuous variables 'bmi', 'age' and weight.
 bysort sex: su bmi age weight
 
-* Read the Stata codebook for the 'health' variable:
+* Read the Stata codebook for the 'health' variable.
 codebook health
 
 * The codebook shows that the health variable comes in ordered categories.
@@ -262,6 +297,10 @@ fre health
 * Summarize BMI (as well as height and weight) for each value of the health
 * variable. Note that -bys- is shorthand for the -bysort- prefix.
 bys health: su bmi weight
+
+
+* Visualization over categories
+* -----------------------------
 
 * Graph the mean BMI of each ethnic group, using a dot plot.
 gr dot bmi, over(raceb) ytitle("Average Body Mass Index") ///
@@ -288,12 +327,40 @@ gr dot health, exclude0 yreverse over(sex) over(raceb) ///
 * The graph uses several options: due to the numerical coding of the 'health'
 * variable, we had to remove 0 from the dot plot, and reverse the axis. We also
 * made the horizontal (y) axis more legible by adding (y)labels and a (y)title.
+* Note that the visual difference is naturally not sufficient to establish that 
+* there is a significant difference in mean BMI across racial/ethnic groups.
 
-* Note that the visual difference is not sufficient to establish that there is
-* a statistically significant difference in mean BMI across ethnic groups. Also
-* note that the entire analysis will not inform us at any point about causality
-* because causal links are provided by your theory, not by statistical analysis
-* alone. The rest of the course will advance with that word of caution in mind.
+
+* ==========================
+* = FINALIZING THE DATASET =
+* ==========================
+
+
+* Patterns of missing values
+* --------------------------
+
+* Finally, let's see how many observations have all variables measured for our
+* selection of variables. The -misstable- command produces a pattern that shows
+* the number of observations with no missing values across all listed variables. 
+misstable pat bmi age sex health raceb earnings uninsured, freq
+
+* There are only 7 missing values in the selection of variables above. Let's see
+* what happens if we also want to analyze the 'strength' and 'vigor' variables,
+* which measure physical activity. We remove the -freq- option to read the size
+* the data with no missing values as a percentage. The loss is still trivial.
+misstable pat bmi age sex health raceb earnings uninsured strength vigor
+
+
+* Subsetting
+* ----------
+
+* We can now finalize the dataset by deleting observations with missing data in
+* our selection of variables. The final count is the actual sample size that we
+* will analyze at later stages of the course.
+drop if mi(bmi, age, sex, health, raceb, earnings, uninsured, strength, vigor)
+
+* Final count.
+count
 
 
 * =======

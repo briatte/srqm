@@ -41,7 +41,7 @@
 * Install required commands.
 foreach p in fre {
 	cap which `p'
-	if _rc==111 cap noi ssc install `p'
+	if _rc == 111 cap noi ssc install `p'
 }
 
 * Log results.
@@ -57,7 +57,7 @@ cap log using code/week3.log replace
 use data/wvs2000, clear
 
 * Survey weights (see WVS documentation).
-svyset [pw=v245]
+svyset [pw = v245]
 
 * Inspect the list of included countries.
 fre v2
@@ -75,7 +75,7 @@ table country, c(min s020 max s020)
 * Inspect the overall dependent variable.
 fre iv166
 
-* Clone the nonmissing values of the dependent variable (exclude "DK/NA" codes).
+* Clone the nonmissing values of the dependent variable (exclude 'DK/NA' codes).
 clonevar sharia = iv166 if iv166 > 0 & iv166 < 8
 
 * We use -clonevar- to create a variable with the same coding and labels as the
@@ -86,7 +86,7 @@ clonevar sharia = iv166 if iv166 > 0 & iv166 < 8
 * the original variable. The new variable will appear at the end of the dataset,
 * as the -d- command (for -describe-) would show.
 
-* Inspect the 'clean' variable.
+* Inspect the clean version of the variable.
 fre sharia
 
 * Find in which countries the variable was measured.
@@ -110,9 +110,9 @@ fre sharia
 * The recoded variable is binary: it takes only two values, either 0 or 1.
 * These variables are affectionately called 'dummies'.
 recode sharia ///
-	(1/2=1 "Support") ///
-	(4/5=0 "Oppose") ///
-	(else=.), gen(prosharia)
+	(1/2 = 1 "Support") ///
+	(4/5 = 0 "Oppose") ///
+	(else = .), gen(prosharia)
 la var prosharia "Legislative enforcement of sharia (0/1)"
 fre prosharia
 
@@ -121,10 +121,19 @@ fre prosharia
 * proportion of positive cases (1) within the total number of observations.
 su prosharia
 
+* Same thing, different command (more flexible; used later).
+tabstat prosharia, s(n mean) c(s)
+
 * Finally, you can generates dummies for each value of a variable, which here
 * means generating five dummies starting with the "sharia_" prefix:
 tab sharia, gen(sharia_)
-codebook sharia_*, c // * = "all variables named sharia_[whatever]"
+
+* Show all variables named 'sharia_[whatever]'.
+codebook sharia_*, c
+
+
+* Stacked plots with dummies
+* --------------------------
 
 * One reason to recode is to have a look at simplified versions of the DV in
 * graphs. Here's a dot plot showing the mean value of the DV (its proportion)
@@ -134,10 +143,10 @@ gr dot prosharia, over(country, sort(1)des) ///
 
 * Recode the DV to three groups.
 recode sharia ///
-	(1/2=1 "Agree") ///
-	(3=2 "Neither") ///
-	(4/5=3 "Disagree") ///
-	(else=.), gen(sharia3)
+	(1/2 = 1 "Agree") ///
+	(3 = 2 "Neither") ///
+	(4/5 = 3 "Disagree") ///
+	(else = .), gen(sharia3)
 la var sharia3 "Legislative enforcement of sharia (3 groups)"
 
 * Recode each category to a dummy.
@@ -163,8 +172,10 @@ gr hbar sharia3_*, over(country, sort(1)des) stack percent ///
 	scheme(burd3) name(dv_hbar, replace)
 
 
-* Independent variables
-* ---------------------
+* =========================
+* = INDEPENDENT VARIABLES =
+* =========================
+
 
 * Describe independent variables.
 d v223 v225 v226 v241
@@ -181,7 +192,7 @@ fre v223
 * Recode gender as a meaningful binary (either female or not) using a logical
 * operator (in brackets), excluding missing observations from the operation and
 * applying the female label to the new -female- dummy variable:
-gen female:female = (v223==1) if !mi(v223)
+gen female:female = (v223 == 1) if !mi(v223)
 
 * Label the values.
 la def female 0 "Male" 1 "Female", replace
@@ -206,10 +217,12 @@ tab prosharia female, col nof
 
 fre v225
 
-* Strangely enough, '98' and '99' are missing values here, so we exclude them
-* from the cloned variable. This issue was diagnosed by using the -fre- command,
-* which is otherwise inappropriate to summarize a continuous variable like age.
-clonevar age = v225 if v225 < 98
+* Strangely enough, '99' is a missing value here, so we replace '99' values with
+* a missing value code. The -replace- command is the quickest way to do that.
+replace v225 = . if v225 == 99
+
+* We can now clone the variable.
+clonevar age = v225
 
 * Use -summarize- (or simply -su-) to get the summary statistics, as appropriate
 * for continuous variables where the mean and standard deviation are meaningful.
@@ -218,16 +231,22 @@ su age
 
 * Histograms showing the distribution of age in each country.
 hist age, by(country, note("")) bin(9) percent ///
+	xti("Age distribution") ///
 	name(age,replace)
 	
 * Recode to four age groups. The -irecode- command creates categories based on
 * continuous intervals: category 0 of age4 will contain observations of age up
 * to 33, category 1 will contain those from 34 to 49, and so on.
-gen age4:age4 = irecode(age,33,49,64,.)
+gen age4:age4 = irecode(age, 33, 49, 64, .)
 
 * Check the results. This is a different -table- command than the -tab- one used
 * previously, which we will get to use for more flexible crosstabulations.
 table age4, c(min age max age)
+
+* And here's yet another way to crosstabulate: the -tab- command with the -sum- 
+* option returns the average age in each age group, along with the SD and count.
+* More on the SD (standard deviation) next week.
+tab age4, sum(age)
 
 * Write the value and variable labels.
 la def age4 0 "16-33" 1 "34-49" 2 "50-64" 3 "65+", replace
@@ -236,7 +255,7 @@ fre age4
 
 * Average support for sharia law by age group in each country.
 gr dot prosharia, over(female) asyvars over(age4) by(country) ///
-	name(dv_sex_age, replace)
+	name(dv_sex_age2, replace)
 	
 
 * IV: Education
@@ -246,11 +265,11 @@ fre v226
 
 * Recode to simpler educational attainment levels.
 recode v226 ///
-	(1/2=0 "None") ///
-	(3/4=1 "Primary") ///
-	(5/8=2 "Secondary") ///
-	(9=3 "University") ///
-	(else=.), gen(edu4)
+	(1/2 = 0 "None") ///
+	(3/4 = 1 "Primary") ///
+	(5/8 = 2 "Secondary") ///
+	(9 = 3 "University") ///
+	(else = .), gen(edu4)
 la var edu4 "Education"
 fre edu4
 
@@ -258,7 +277,7 @@ fre edu4
 * variable is categorical, the histograms require the -discrete- option to plot
 * the histograms bin as zero-spaced frequency bars.
 hist edu4, by(country, note("")) percent discrete xla(0(1)3) ///
-	name(age,replace)
+	name(edu,replace)
 
 
 * IV: Employment status
@@ -277,7 +296,7 @@ fre empl
 fre v106 v107
 
 * Married dummy.
-gen married = (v106==1) if v106 < 8
+gen married = (v106 == 1) if v106 < 8
 tab v106 married
 
 * Children dummy.
@@ -290,20 +309,24 @@ tab v107 haskids
 
 * Recode to simpler categories.
 recode v241 ///
-	(1/3=1 "< 10k") ///
-	(4/6=2 "< 100k") ///
-	(7=3 "< 500k") ///
-	(8=4 "> 500k") ///
-	(else=.), gen(city4)
+	(1/3 = 1 "< 10k") ///
+	(4/6 = 2 "< 100k") ///
+	(7 = 3 "< 500k") ///
+	(8 = 4 "> 500k") ///
+	(else = .), gen(city4)
 la var city4 "City size"
 fre city4
 
 
-* Finalizing the dataset
-* ----------------------
+* ========================== 
+* = FINALIZING THE DATASET =
+* ==========================
+
+* Recall how the country variable is coded.
+fre country
 
 * Subset to two countries of interest.
-keep if inlist(country,89,96)
+keep if inlist(country, 89, 96)
 
 * Pattern of missing values.
 misstable pat sharia age female edu4 empl married haskids city4

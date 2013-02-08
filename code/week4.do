@@ -26,7 +26,7 @@
 * Install required commands.
 foreach p in fre {
 	cap which `p'
-	if _rc==111 cap noi ssc install `p'
+	if _rc == 111 cap noi ssc install `p'
 }
 
 * Log results.
@@ -49,11 +49,11 @@ drop if year != 2009
 * ------------------
 
 * Compute the Body Mass Index.
-gen bmi = weight*703/(height^2)
+gen bmi = weight * 703 / (height^2)
 la var bmi "Body Mass Index"
 
 * Weight the data with NHIS individual weights.
-svyset psu [pw=perweight], strata(strata)
+svyset psu [pw = perweight], strata(strata)
 
 
 * Independent variables
@@ -218,8 +218,8 @@ qnorm bmi, ti("Normal quantile plot") ///
 * Moving to statistical measures of normality, we can measure skewness, which
 * measures symmetry and approaches 0 in quasi-normal distributions, along with
 * kurtosis, which measures the size of the distribution tails and approaches 3
-* in quasi-normal distributions. Use the 'summarize' command with the 'detail'
-* option, respectively abbreviated as 'su' and 'd'.
+* in quasi-normal distributions. Use the -summarize- command with the -detail-
+* option, respectively abbreviated as -su- and -d-.
 su bmi, d
 
 * There are more advanced tests to measure normality, but the tests above are
@@ -311,7 +311,7 @@ ci bmi, level(99)
 * i.e. for restricted categories of the population, the total number of
 * observations will drop and the confidence interval will widen.
 
-* Average BMI for N=10, 100, 1000 and 10,000 with a 95% CI.
+* Average BMI for N = 10, 100, 1000 and 10,000 with a 95% CI.
 ci bmi in 1/10
 ci bmi in 1/100
 ci bmi in 1/1000
@@ -321,23 +321,25 @@ ci bmi in 1/10000
 * instance, how the number of years spent in the U.S. seems to affect the BMI
 * of respondents:
 fre yrsinus
-replace yrsinus=. if yrsinus==0
+replace yrsinus = . if yrsinus == 0
 
 * We know from previous analysis that BMI varies by gender and ethnicity.
 * We now look for the effect of the number of years spent in the U.S. within
 * each gender and ethnic categories.
 gr dot bmi, over(sex) over(yrsinus) over(raceb) asyvars scale(.7) ///
+	ti("Body Mass Index by age, sex, race and number of years in the U.S.") ///
+	yti("Mean BMI") ///
 	name(bmi_sex_yrs, replace)
 
 * The average BMI of Blacks who spent less than one year in the U.S. shows
 * an outstanding difference for males and sexs, but this category holds
 * so little observations that the difference should not be considered.
-bys sex: ci bmi if raceb==2 & yrsinus==1
+bys sex: ci bmi if raceb == 2 & yrsinus == 1
 
 * Identically, the seemingly clean pattern among male and sex Asians is
 * calculated on a low number of observations and requires verification of
 * the confidence intervals. The pattern appears to be rather robust.
-bys yrsinus: ci bmi if raceb==4
+bys yrsinus: ci bmi if raceb == 4
 
 * EXTRA BONUS!
 

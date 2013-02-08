@@ -49,11 +49,11 @@
 * Install required commands.
 foreach p in fre spineplot {
 	cap which `p'
-	if _rc==111 cap noi ssc install `p'
+	if _rc == 111 cap noi ssc install `p'
 }
 
 * Log results.
-cap log using "week5.log", replace
+cap log using code/week5.log, replace
 
 
 * ====================
@@ -64,7 +64,7 @@ cap log using "week5.log", replace
 use data/nhis2009, clear
 
 * Individual survey weights.
-svyset psu [pw=perweight], strata(strata)
+svyset psu [pw = perweight], strata(strata)
 
 
 * Dependent variable
@@ -105,10 +105,10 @@ fre age sex raceb educrec1 earnings health uninsured ybarcare, r(10)
 
 * Recode age to four groups (slow method, using manual categories).
 recode age ///
-	(18/44=1 "18-44") ///
-	(45/64=2 "45-64") ///
-	(65/74=3 "65-74") ///
-	(75/max=4 "75+") (else=.), gen(age4)
+	(18/44 = 1 "18-44") ///
+	(45/64 = 2 "45-64") ///
+	(65/74 = 3 "65-74") ///
+	(75/max = 4 "75+") (else = .), gen(age4)
 la var age4 "Age groups (4)"
 
 * Recode age to eight groups (quick method, using decades: 10-19, 20-29, etc.).
@@ -116,11 +116,11 @@ gen age8 = 10*floor(age/10) if !mi(age)
 la var age8 "Age groups (8)"
 
 * Recode sex to dummy.
-gen female:female = (sex==2) if !mi(sex)
+gen female:female = (sex == 2) if !mi(sex)
 la de female 0 "Male" 1 "Female", replace
 
 * Recode missing values of income.
-replace earnings=. if inlist(earnings,97,99)
+replace earnings = . if inlist(earnings,97,99)
 
 * Recode missing values of insurance and medical care.
 mvdecode ybarcare uninsured, mv(9)
@@ -130,7 +130,7 @@ mvdecode ybarcare uninsured, mv(9)
 * ----------
 
 * Select observations from most recent year.
-keep if year==2009
+keep if year == 2009
 
 * Patterns of missing values.
 misstable pat bmi age female raceb educrec1 earnings health uninsured ybarcare
@@ -238,7 +238,7 @@ spineplot raceb inc if inc > 0, xla(,alt axis(2)) ///
 	name(inc_race, replace)
 
 * Plot educational levels for each income band.
-spineplot edu inc if inc > 0, scheme(burd4) xla(, alt axis(2)) ///
+spineplot educrec1 inc if inc > 0, scheme(burd4) xla(, alt axis(2)) ///
 	name(inc_edu, replace)
 
 * Plot income quartiles for each BMI group.
@@ -254,7 +254,7 @@ bys inc: ci bmi    // confidence bands
 * --------------------
 
 * Plot BMI distribution for groups who have or do not have health coverage.
-kdensity bmi if uninsured==1, addplot(kdensity bmi if uninsured==2) ///
+kdensity bmi if uninsured == 1, addplot(kdensity bmi if uninsured == 2) ///
 	legend(order(1 "Not covered" 2 "Covered") row(1)) ///
 	name(uninsured, replace)
 
@@ -267,7 +267,7 @@ bys uninsured: ci bmi    // confidence bands
 * ------------------------
 
 * Plot BMI distribution for groups who could or coult not afford medical care.
-kdensity bmi if ybarcare==1, addplot(kdensity bmi if ybarcare==2) ///
+kdensity bmi if ybarcare == 1, addplot(kdensity bmi if ybarcare == 2) ///
 	legend(order(1 "Could afford medical care" 2 "Could not") row(1)) ///
 	name(ybarcare, replace)
 
@@ -282,28 +282,29 @@ bys ybarcare: ci bmi    // confidence bands
 
 
 * The next command is part of the SRQM folder. If Stata returns an error when
-* you run it, set the folder as your working directory and type 'run profile'
+* you run it, set the folder as your working directory and type -run profile-
 * to run the course setup, then try the command again. If you still experience
 * problems with the -stab- command, please send a detailed email on the issue.
 
-stab using week5 [aw=perweight], replace ///
+stab using week5, replace ///
 	su(bmi age) ///
 	fr(female raceb educrec1 earnings uninsured ybarcare)
 
 /* Basic syntax of -stab- command:
 
-- 'using name'  adds the 'name' prefix to the exported file(s)
-- 'su()'        summarizes a list of continuous variables (mean, sd, min-max)
-- 'fre()'       summarizes a list of categorical variables (frequencies)
-- 'by'          produces several tables over a given categorical variable
-- 'replace'     overwrite previous tables
-- '[aw,fw]'     use survey weights
+- argument: -using NAME-  adds the NAME prefix to the exported file(s)
+- argument: -su()-        summarizes a list of continuous variables (mean, sd, min-max)
+- argument: -fre()-       summarizes a list of categorical variables (frequencies)
+
+- option:   -by-          produces several tables over a given categorical variable
+- option:   -replace-     overwrite any previously existing tables
+- option:   [aw, fw]      use survey weights (use only if you know how they work)
 
   In the example above, the -stab- command will export a single file to the
-  working directory (week5_descriptions.txt) containing summary statistics
-  for the final sample. We will expand the use of that command at a later
-  stage to also export correlation tables in a few weeks. */
- 
+  working directory (week5_stats.txt) containing summary statistics for the
+  final sample. We will expand the use of that command at a later stage to 
+  also export correlation tables in a few weeks. */
+
 
 * =======
 * = END =

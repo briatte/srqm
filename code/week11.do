@@ -15,7 +15,7 @@
 * Additional commands.
 foreach p in estout fre {
 	cap which `p'
-	if _rc==111 ssc install `p'
+	if _rc == 111 ssc install `p'
 }
 
 * Log.
@@ -67,15 +67,15 @@ d agea gndr brncntr edulvla hinctnta lrscale
 ren (agea hinctnta lrscale) (age income rightwing)
 
 * Dummify sex.
-gen female:sex = (gndr==2)
+gen female:sex = (gndr == 2)
 la de sex 0 "Male" 1 "Female", replace
 
 * Dummify country of birth.
-gen born:born = (brncntr==1)
+gen born:born = (brncntr == 1)
 la de born 0 "Foreign-born" 1 "Born in country", replace
 
 * Collapse some educational categories.
-recode edulvla (1 2=1 "Low") (3=2 "Medium") (4 5=3 "High") (else=.), gen(edu3)
+recode edulvla (1 2 = 1 "Low") (3 = 2 "Medium") (4 5 = 3 "High") (else = .), gen(edu3)
 la var edu3 "Education level"
 
 
@@ -134,9 +134,9 @@ tabchi income edu3, p noo noe
 
 * Simplified political scale.
 recode rightwing ///
-	(0/4=1 "Left-wing") ///
-	(5=2 "Centre") ///
-	(6/11=3 "Right-wing") ///
+	(0/4 = 1 "Left-wing") ///
+	(5 = 2 "Centre") ///
+	(6/11 = 3 "Right-wing") ///
 	, gen(wing)
 tab wing, gen(wing_)
 
@@ -161,10 +161,10 @@ tabchi income wing, p noo noe
 global bl "age i.female i.born i.edu3 income rightwing" // store IV names
 
 * Baseline OLS model.
-reg imdfetn $bl [pw=dpw]
+reg imdfetn $bl [pw = dpw]
 
 * Adjusted OLS model: observations clustered by country.
-reg imdfetn $bl [pw=dpw], vce(cluster cid)
+reg imdfetn $bl [pw = dpw], vce(cluster cid)
 
 * The last option reads as 'variance-covariance estimation is clustered by cid'.
 * This specification enforces robust standard errors into the model. It uses the
@@ -185,8 +185,8 @@ rvfplot, yli(0) name(rvf, replace)     // residuals versus fitted values
 
 * Export.
 eststo clear
-eststo lin_1: reg imdfetn $bl [pw=dpw]
-eststo lin_2: reg imdfetn $bl [pw=dpw], vce(cluster cid)
+eststo lin_1: reg imdfetn $bl [pw = dpw]
+eststo lin_2: reg imdfetn $bl [pw = dpw], vce(cluster cid)
 esttab lin_? using week11_ols.txt, mti("OLS" "Adj. OLS") replace
 
 * The diagnostics clearly identify the issue here: the limited number of levels
@@ -228,7 +228,7 @@ logit nomigrants i.cohort
 logit nomigrants i.cohort, or
 
 * Baseline model.
-logit nomigrants $bl [pw=dpw] // coefficients are log-odds
+logit nomigrants $bl [pw = dpw] // coefficients are log-odds
 
 * Log-odds are variations in the probability of the DV. Negative log-odds imply
 * that an increase in the IV, or the presence of it, reduces the probability of
@@ -237,7 +237,7 @@ logit nomigrants $bl [pw=dpw] // coefficients are log-odds
 * significance level (p-value, closeness of confidence interval bounds to zero).
 
 * Odds ratios.
-logit nomigrants $bl [pw=dpw], or
+logit nomigrants $bl [pw = dpw], or
 
 * Odds ratios provide an easier means of comparison between coefficients: for
 * example, in this model, completing upper secondary education increases the
@@ -246,15 +246,15 @@ logit nomigrants $bl [pw=dpw], or
 * answered "Some" or "Many" to the original question.
 
 * Adjusted model.
-logit nomigrants $bl [pw=dpw], vce(cluster cid)
+logit nomigrants $bl [pw = dpw], vce(cluster cid)
 
 * Odds ratios.
-logit nomigrants $bl [pw=dpw], vce(cluster cid) or
+logit nomigrants $bl [pw = dpw], vce(cluster cid) or
 
 * Export.
 eststo clear
-eststo log_1: logit nomigrants $bl [pw=dpw]
-eststo log_2: logit nomigrants $bl [pw=dpw], vce(cluster cid)
+eststo log_1: logit nomigrants $bl [pw = dpw]
+eststo log_2: logit nomigrants $bl [pw = dpw], vce(cluster cid)
 esttab log_? using week11_logits.txt, mti("Logit" "Adj. logit") replace
 
 
@@ -300,19 +300,19 @@ marginsplot, by(female) recast(line) recastci(rarea) ciopts(col(*.6)) ///
 * our example, the signs of the coefficients should actually be the same for the
 * OLS (linear regression) and ordered logit, not for the logit (the logit codes
 * the dummy in reverse order to the original variable).
-ologit imdfetn $bl [pw=dpw], vce(cluster cid)
+ologit imdfetn $bl [pw = dpw], vce(cluster cid)
 
 
 * Export all models
 * -----------------
 
 eststo clear
-eststo lin_1: qui reg imdfetn $bl [pw=dpw], b
-eststo lin_2: qui reg imdfetn $bl [pw=dpw], vce(cluster cid)
-eststo log_1: qui logit nomigrants $bl [pw=dpw]
-eststo log_2: qui logit nomigrants $bl [pw=dpw], vce(cluster cid)
-eststo log_3: qui ologit imdfetn $bl [pw=dpw], vce(cluster cid)
-esttab lin_* log_* using week11_models.csv, constant label beta(2) se(2) r2(2) ///
+eststo lin_1: qui reg imdfetn $bl [pw = dpw], b
+eststo lin_2: qui reg imdfetn $bl [pw = dpw], vce(cluster cid)
+eststo log_1: qui logit nomigrants $bl [pw = dpw]
+eststo log_2: qui logit nomigrants $bl [pw = dpw], vce(cluster cid)
+eststo log_3: qui ologit imdfetn $bl [pw = dpw], vce(cluster cid)
+esttab lin_* log_* using week11_models.txt, constant label beta(2) se(2) r2(2) ///
 	mti("OLS" "Adj. OLS" "Logit" "Adj. logit" "Ord. logit") replace
 
 

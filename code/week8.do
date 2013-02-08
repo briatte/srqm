@@ -25,7 +25,7 @@
 * renames already performed. It is very common to use different do-files for
 * different tasks. In this example, the previous do-file is used for data
 * management and the current do-file is used for analysis.
-do "Replication/week7.do"
+do code/week7.do
 gr drop _all
 
 * Log results.
@@ -232,7 +232,7 @@ sc corrupt yhat2 hdi, yla(0 "Highly corrupt" 10 "Lowly corrupt") ///
 * ----------------------------
 
 * Create dummy.
-gen democracy:democracy = (gol_polreg==0) if !mi(gol_polreg)
+gen democracy:democracy = (gol_polreg == 0) if !mi(gol_polreg)
 la de democracy 0 "Dictatorship" 1 "Democracy", replace
 
 * Visualization of the difference in mean of the DV.
@@ -283,7 +283,7 @@ sc births ciri_wosoc, yti("Fertility rate") || lowess births ciri_wosoc, $ci ///
 * Regression model.
 reg births i.ciri_wosoc
 
-* This time, the baseline category is ciri_wosoc=0 (no women's rights). Compared
+* This time, the baseline category is ciri_wosoc = 0 (no women's rights). Compared
 * to countries in this category, other countries have lower mean fertility rates
 * and the effect increases as women's rights increases from categories 1 to 3.
 

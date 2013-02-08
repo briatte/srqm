@@ -1,5 +1,5 @@
 
-/* --- SRQM version 3.0 / 2013-01-26 -------------------------------------------
+/* --- SRQM version 3.1 / 2013-01-26 -------------------------------------------
 
   This file creates the utilities called at startup by the profile.do file of
   the SRQM folder. See the README file of the setup folder for details on how
@@ -319,7 +319,7 @@ program srqm
                 // set scheme s2color
 
                 do code/week`y'.do
-                repl week`y'
+                // repl week`y'
 
             gr drop _all
             win man close viewer _all
@@ -327,12 +327,12 @@ program srqm
 
             di as txt _n "Done! Routine launched at `start' and finished at", c(current_time) "."
             }
-            else {
-                di as txt "Updating `3'"
-                strpos("`3'",".do") > 0
-            }
+            * else {
+            *     di as txt "Updating `3'"
+            *     strpos("`3'",".do") > 0
+            * }
         }
-        else if "`3'" != "" {
+        else {
             //
             // PLAIN CHECK
             //
@@ -389,6 +389,9 @@ program srqm
 
             local expr = "code/*.log"
             cap !rm `expr'
+
+			// really destructive
+			cap !rm week*.txt
 
             forval i=1/12 {
                 // erase folders created by repl

@@ -20,7 +20,7 @@
 * Install required commands.
 foreach p in mkcorr {
 	cap which `p'
-	if _rc==111 cap noi ssc install `p' // install from online if missing
+	if _rc == 111 cap noi ssc install `p' // install from online if missing
 }
 
 * Log results.
@@ -42,7 +42,7 @@ gen gdpc = unna_gdp/unna_pop
 la var gdpc "Real GDP per capita (constant USD)"
 
 * Recode to less, shorter labels.
-recode ht_region (6/10=6), gen(region)
+recode ht_region (6/10 = 6), gen(region)
 la var region "Geographical region"
 la val region region
 la def region 1 "E. Europe and PSU" 2 "Lat. America" ///
@@ -222,12 +222,12 @@ sc births schooling, $ccode ///
 
 * Add a color difference to Western states by overlaying multiple scatterplots.
 sc births schooling, $ccode || ///
-	sc births schooling if region==5, $ccode ///
+	sc births schooling if region == 5, $ccode ///
 	name(fert_edu2, replace)
 
 * Add a tone and color difference to subsaharan African states (more options!).
 sc births schooling, mlabc(gs10) $ccode || ///
-	sc births schooling if region==4, $ccode ///
+	sc births schooling if region == 4, $ccode ///
 	name(fert_edu3, replace)
 
 * There are binders full of Stata graph options like these. Have a look at the

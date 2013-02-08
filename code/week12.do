@@ -24,7 +24,7 @@
 * Install required commands.
 foreach p in fre {
 	cap which `p'
-	if _rc==111 cap noi ssc install `p'
+	if _rc == 111 cap noi ssc install `p'
 }
 
 * Log results.
@@ -39,13 +39,14 @@ cap log using code/week12.log, replace
 use data/gss2010, clear
 
 * Keep most recent year.
-keep if year==2010
+keep if year == 2010
 
 * Inspect DV, drop missing cases.
 fre partnrs5
 drop if mi(partnrs5)
 
-* Inspect IVs, drop missing cases.fre sex age coninc educ marital wrkstat size, r(10)
+* Inspect IVs, drop missing cases.
+fre sex age coninc educ marital wrkstat size, r(10)
 drop if mi(age,coninc,educ,marital,wrkstat)
 
 * Generate age decades.
@@ -61,20 +62,20 @@ spineplot partnrs5 age10, scheme(burd8) name(sp, replace)
 gr bar partnrs5, over(sex) asyvars over(age10) by(intsex) name(is, replace)
 
 * Drop ambiguous wrkstat category "Other".
-drop if wrkstat==8
+drop if wrkstat == 8
 
 * Drop respondents oblivious of their sexual life.
-drop if partnrs5==9
+drop if partnrs5 == 9
 
 * Recodes.
-recode sex (1=0 "Male") (2=1 "Female"), gen(female)
+recode sex (1 = 0 "Male") (2 = 1 "Female"), gen(female)
 drop sex
 
 * Final sample size.
 count
 
 * Survey weights.
-svyset vpsu [weight=wtssall], strata (vstrata)
+svyset vpsu [weight = wtssall], strata (vstrata)
 
 
 * ====================
@@ -135,9 +136,9 @@ reg partnrs5 i.female inc educ size i.wrkstat i.marital age
 
 * Lastly, the constant reflects the value of y when the IVs are equal to the
 * reference category for the categorical IVs (i.e., males, full-time employment,
-* married) or 0 for the continuous IVs (income=0, education=0, age=0, size=0).
+* married) or 0 for the continuous IVs (income = 0, education = 0, age = 0, size = 0).
 * However, often for continuous variables, as in this case, the 0 category is
-* unlikely (educ=0 and income=0) or unreal (age=0 and size=0). Therefore, the
+* unlikely (educ = 0 and income = 0) or unreal (age = 0 and size = 0). Therefore, the
 * constant is not meaningful and interpretable. In such cases, it's best to
 * recode your continuous IVs so that their mean is equal to 0, making the
 * reference category for the constant the sample mean for each continuous IV.
@@ -192,7 +193,8 @@ rvfplot
 * Extensions
 * ----------
 
-recode partnrs5 (0=0)(1=1)(2=2)(3=3)(4=4)(5=8)(6=15)(7=60)(8=120)(else=.), gen(sxp)
+recode partnrs5 (0 = 0) (1 = 1) (2 = 2) (3 = 3) (4 = 4) ///
+				(5 = 8) (6 = 15) (7 = 60) (8 = 120) (else = .), gen(sxp)
 
 * Multiple linear regression.
 eststo LIN: reg sxp i.female inc educ size i.wrkstat i.marital age
