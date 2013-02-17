@@ -25,7 +25,7 @@
    dataset. Your sample should be all world countries: do not further restrict
    the sample further by subsetting to less observations.
 
-   Last updated 2013-02-08.
+   Last updated 2013-02-17.
 
 ----------------------------------------------------------------------------- */
 
@@ -197,19 +197,22 @@ hist bmi, freq normal ///
 * survey. The -freq- option specifies to use percentages, and the -normal-
 * option overlays a normal distribution to the histogram, a curve to which
 * we will soon come back when we cover essential statistical theory. The
-* -name- option saves the graph in Stata temporary memory.
+* -name- option saves the graph under that name in Stata temporary memory.
 
 * Another visualization is the boxplot, which uses different criteria to shape
 * the distribution of the variable. Refer to the course material to understand
-* how quartiles and outliers are calculated to form each element of the plot.
+* how quartiles and outliers are constructed to form each element of the plot.
+* Also note that a boxplot is pretty uninformative if, as in this example, you
+* decide not to split the visualization over any number of categories.
 gr hbox bmi, ///
 	name(bmi_boxplot, replace)
 
-* This more complex example uses with the -over() asyvars- options to produce
-* boxplots of BMI over gender groups, and then again over insurance status.
-* The result will stay in memory under the name given by the -name()- option.
-* Note that you need to select both lines to run the command properly: if you
-* do not include the final line, Stata will not understand the full command.
+* The next example uses the -over() asyvars- options to produce boxplots of BMI
+* over gender groups, and then again over insurance status. This method creates
+* several box plots, one for each category -- a method called 'visualizing over
+* small multiples'. The result will stay in memory under the name given by the
+* -name()- option. Note, finally, that you need to select both lines to run the
+* command properly: if you do not include the final line, nothing will happen.
 gr hbox bmi if uninsured != 9, over(sex) asyvars over(uninsured) ///
 	name(bmi_sex_ins, replace)
 

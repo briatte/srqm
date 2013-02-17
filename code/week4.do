@@ -18,7 +18,7 @@
    no systematic way to assess normality, but your decision should take skewness
    and kurtosis into account.
    
-   Last updated 2012-11-13.
+   Last updated 2012-11-17.
 
 ----------------------------------------------------------------------------- */
 
@@ -67,7 +67,7 @@ fre sex
 fre raceb
 fre earnings
 
-* The default 'tab' or 'tab1' commands give similar results, minus value labels.
+* The default -tab- or -tab1- commands give similar results, minus value labels.
 tab sex
 tab1 raceb earnings, plot
 
@@ -88,10 +88,10 @@ su bmi, d
 tabstat bmi, s(p25 median p75 iqr)
 
 * Visualize the distribution:
-hist bmi, freq bin(10)
+hist bmi, percent bin(10)
 hist bmi, kdensity
 
-* Histogram.
+* Histogram with normal distribution superimposed.
 hist bmi, percent normal ///
 	name(hist, replace)
 
@@ -238,7 +238,7 @@ su bmi, d
 * its standard unit measurement is not normal, but perhaps the distribution
 * of the same values is closer to normality if we take a different measure.
 
-* The 'gladder' command visualizes several common transformations all at once.
+* The -gladder- command visualizes several common transformations all at once.
 gladder bmi, ///
 	name(gladder, replace)
 
@@ -250,7 +250,7 @@ la var logbmi "Body Mass Index (log units)"
 * Looking at skewness and kurtosis for the logged variable.
 tabstat bmi logbmi, s(n sk kurtosis min max) c(s)
 
-* The histogram shows some improvement towards normality with 'log-BMI'.
+* The log-BMI histogram shows some improvement towards normality.
 hist logbmi, normal ///
     name(logbmi, replace)
 
@@ -341,7 +341,9 @@ bys sex: ci bmi if raceb == 2 & yrsinus == 1
 * the confidence intervals. The pattern appears to be rather robust.
 bys yrsinus: ci bmi if raceb == 4
 
-* EXTRA BONUS!
+
+* Confidence intervals with proportions
+* -------------------------------------
 
 * A few things about confidence intervals with proportions, for which confidence
 * bands follow a different method of calculation. Basically, categorical data is

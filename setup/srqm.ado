@@ -1,11 +1,15 @@
 
-/* --- SRQM version 3.1 / 2013-01-26 -------------------------------------------
+/* --- SRQM version 3.2 / 2013-01-26 -------------------------------------------
 
   This file creates the utilities called at startup by the profile.do file of
   the SRQM folder. See the README file of the setup folder for details on how
   to operate it. If you are a student, just follow the instructions in class.
 
 ----------------------------------------------------------------------------- */
+
+*! version 3.2: fetch updated
+*! version 3.1: fetch command
+*! version 3.0: major rewrite
 
 cap pr drop srqm
 program srqm
@@ -26,10 +30,9 @@ program srqm
 
     // package list
 
-    local cmdlist = "lookfor_all fre spineplot tab_chi mkcorr tabout estout leanout plotbeta _gstd01 clarify schemes"
+    local cmdlist = "lookfor_all fre spineplot tab_chi mkcorr tabout estout leanout plotbeta kountry qog wbopendata _gstd01 clarify schemes"
 
         * catplot ciplot log2do2 outreg2 revrs
-        * kountry qog wbopendata
         * tufte lean2
 
     // dataset list
@@ -411,11 +414,10 @@ program srqm
 
         cap cd "$srqm_wd"
 		
-		di as txt _n "Running update program..."
-
         //cap qui net
         if _rc == 631 {
-            di as err "You do not seem to be online. Check your Internet connection."
+            di as err "You do not seem to be online." _n ///
+            	"Please fix your Internet connection to fetch course material."
             exit 631
         }
 
@@ -426,45 +428,34 @@ program srqm
 		// extension
 		local be = substr("`2'", `bd' + 1, .)
 		// backup name
-        local bk = strtoname("`br' backup `c(current_date)'")
+        local bk = subinstr(strtoname("`br' backup `c(current_date)'"), "__", "_", .)
 		
-        if "`be'" == "do" {
-			local bt "do-file"
-			local bf "code"
-        }
-
-        if "`be'" == "pdf" {
-			local bt "content"
-			local bf "course"
-        }
-
+        if "`be'" == "do"  local bf "code"
+        if "`be'" == "pdf" local bf "course"
 		// careful with that axe eugene
-		
-        if "`be'" == "ado" {
-			local bt "utility"
-			local bf "setup"
-        }
+        if "`be'" == "ado" local bf "setup"
 
         // path to backup
         local pb "`bf'/`bk'.`be'"
         // path to file
         local pf "`bf'/`2'"
         
-        if "`bt'" == "" {
-            di as err "Please provide a valid filename to update."
+        if "`bf'" == "" {
+            di as err "Please check the syntax of your filename."
             exit 198
         }
         else {
-			di as txt "- updating course `bt' in `bf' folder"
-
+        	di as txt _n "Downloading `2' to the `bf' folder..."
 	        cap qui copy "`pf'" "`pb'", public replace
-	        if !_rc  di as txt "- `2' backed up to `bk'.`be'"
 
-	        cap qui rm "`pf'"
+	        cap qui erase "`pf'" // instead of rm for Windows compatibility
 	        cap qui copy "http://briatte.org/srqm-updates/`2'" "`pf'", public replace
 
 	        if !_rc {
-	        	di as txt "- { browse `pf':`2'} successfully updated"
+	        	di as txt "Successfully downloaded."
+	        		
+	        	if "`be'" == "pdf" di as inp _n "{stata !open `pf':open `pf'}"
+	        	if "`be'" == "do" di as inp _n "{stata doedit `pf':doedit `pf'}"
 	        }
 	        else {
 	        	di as err "No file updated: error", _rc "." _n ///

@@ -33,7 +33,7 @@
    detail, and another draft paragraph that lists your independent variables and
    offers a general theory on the articulation between your variables.
 
-   Last updated 2012-11-13.
+   Last updated 2012-11-17.
 
 ----------------------------------------------------------------------------- */
 
@@ -45,7 +45,7 @@ foreach p in fre {
 }
 
 * Log results.
-cap log using code/week3.log replace
+cap log using code/week3.log, replace
 
 
 * ====================
@@ -95,7 +95,7 @@ fre country if !mi(sharia)
 * Remove other countries.
 drop if mi(sharia)
 
-* In the first command, the "!mi" operator means "not missing" and therefore
+* In the first command, the -!mi- operator means 'not missing' and therefore
 * produces the list of countries for which the DV is available. In the second
 * command, -drop- removes all observations for which the DV is missing.
 
@@ -125,7 +125,7 @@ su prosharia
 tabstat prosharia, s(n mean) c(s)
 
 * Finally, you can generates dummies for each value of a variable, which here
-* means generating five dummies starting with the "sharia_" prefix:
+* means generating five dummies starting with the 'sharia_' prefix:
 tab sharia, gen(sharia_)
 
 * Show all variables named 'sharia_[whatever]'.
@@ -191,7 +191,7 @@ fre v223
 
 * Recode gender as a meaningful binary (either female or not) using a logical
 * operator (in brackets), excluding missing observations from the operation and
-* applying the female label to the new -female- dummy variable:
+* applying the 'female' label to the new 'female' dummy variable:
 gen female:female = (v223 == 1) if !mi(v223)
 
 * Label the values.
