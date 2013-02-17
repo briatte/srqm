@@ -153,6 +153,9 @@ program srqm
                 // tab_chi and tabchi
                 if "`t'"=="tab_chi" cap which tabchi
 
+                // qog and qoguse
+                if "`t'"=="qog" cap which qoguse
+
                 if _rc==111 | `forced' {
 
                     // note: keep special cases at end of local list for the 699 hack to work with them
