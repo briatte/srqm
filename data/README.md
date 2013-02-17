@@ -2,7 +2,7 @@
 
 This file listing covers the datasets distributed as part of the [Statistical Reasoning and Quantitative Methods](http://f.briatte.org/teaching/quanti/) course taught by François Briatte and Ivaylo Petev.
 
-All files are provided in Stata 9/10 `dta` format on an "as-is" basis: please use them for teaching purposes only, and do not redistribute them. Modifications to the original files are listed in [`build.do`](https://github.com/briatte/srqm/blob/master/Datasets/build.do).
+All files are provided in Stata 9/10 `dta` format on an "as-is" basis: please use them for teaching purposes only, and do not redistribute them. Modifications to the original files are listed in [`setup/dataprep.do`](https://github.com/briatte/srqm/blob/master/setup/dataprep.do).
 
 ### Data sources:
 
