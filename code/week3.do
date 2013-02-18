@@ -21,6 +21,10 @@
    types of variables by the end of this training session. Also make sure that
    you know how to encode variables and missing values for analysis in Stata.
 
+ - Select a dataset for analysis. Use the -lookfor- and -lookfor_all- commands
+   to identify which dataset has variables that match your interests, and use
+   the -d-, -fre- and -su- commands to describe and inspect the variables.
+
  - Start writing a draft do-file in which you prepare your dataset for analysis.
    Use the course do-files for inspiration: start with a short header, then load
    the data and describe the variables, recoding them if needed.
@@ -33,7 +37,7 @@
    detail, and another draft paragraph that lists your independent variables and
    offers a general theory on the articulation between your variables.
 
-   Last updated 2012-11-17.
+   Last updated 2013-02-18.
 
 ----------------------------------------------------------------------------- */
 
