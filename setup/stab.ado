@@ -14,6 +14,7 @@
 * - force-wrap long labels over 36 characters (nowrap and wrap(int 36))
 * - deal with long numbers (more than 5 chars, given a tab is 4): 
 *   divide by 10^(3*floor(max)/3) -- add warning
+* history: used to be called -tsst-
 
 cap pr drop stab
 program stab

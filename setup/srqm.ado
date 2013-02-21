@@ -7,13 +7,14 @@
 
 ----------------------------------------------------------------------------- */
 
+*! version 3.3: demo updated
 *! version 3.2: fetch updated
 *! version 3.1: fetch command
 *! version 3.0: major rewrite
 
 cap pr drop srqm
 program srqm
-    syntax anything [, LOGged forced] // new: log is now disabled by default
+    syntax anything [, LOGged forced demo(numlist > 0 < 13 ascending integer)]
 
     // parse syntax
         
@@ -24,7 +25,6 @@ program srqm
     local clean    = ("`1'"=="clean")
     local folder   = ("`2'"=="folder")
     local packages = ("`2'"=="packages")
-    local course   = ("`2'"=="course")
     local logged   = ("`logged'"!="")
     local forced   = ("`forced'"!="")
 
@@ -174,6 +174,8 @@ program srqm
                     }
                     else {
                         cap noi ssc install `t', replace
+						if _rc==631 di as err "Could not connect to the SSC archive to look for package " as inp "`1'"
+						if _rc==601 di as err "Could not find package " as inp "`1'" as err " at the SSC archive"
                     }
                     if _rc==699 {
 
@@ -299,7 +301,7 @@ program srqm
             if !_rc cap noi adoupdate, update all
             if _rc di as err "Could not go online to check for updates."
         }
-        else if `course' {
+        else if "`demo'" != "" {
             //
             // CHECK COURSE
             //
@@ -311,16 +313,15 @@ program srqm
 
             local start = c(current_time)
 
-            if "`3'"=="" local 3 = 1
-            if "`4'"=="" local 4 = 12
-            forvalues y=`3'/`4' {
+            foreach y of numlist `demo' {
 
                 gr drop _all
                 win man close viewer _all
                 clear all
 
                 // to test the package installation loops
-                // and/or get plots in s2color default scheme:
+                // and/or get plots in s2color default scheme,
+				// uncomment these:
                 // srqm clean packages
                 // set scheme s2color
 
@@ -333,10 +334,6 @@ program srqm
 
             di as txt _n "Done! Routine launched at `start' and finished at", c(current_time) "."
             }
-            * else {
-            *     di as txt "Updating `3'"
-            *     strpos("`3'",".do") > 0
-            * }
         }
         else {
             //

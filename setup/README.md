@@ -6,21 +6,21 @@ All commands were written to assist students in completing their research projec
 
 * * *
 
+## `betaplot`
+
+__Currently in the works.__ This command will produce a `plotbeta`-style plot of coefficients. See the `plotbeta` package.
+
 ## `burd`
 
 The series of `scheme-burd` files contain reversed versions of the `RdBu` [ColorBrewer](http://colorbrewer2.org/) theme, as well as a replacement for the `s2color` scheme. The scheme is used for the course plots (and students get to use it if they want to). See [example plots](https://github.com/briatte/srqm/wiki/BuRd) appear on the course wiki.
 
-## `properl`
+## `dataprep`
 
-Sets the labels of a variable to their proper capitalization, using code kindly provided by William A. Huber as an answer to a [StackOverflow question](http://stackoverflow.com/questions/12591056/capitalizing-value-labels-in-stata). Occasionally used for data management.
+Prepares the [course datasets](https://github.com/briatte/srqm/blob/master/data/README.md), which are slight variations on the original versions. All datasets are saved in Stata 9/10 format for compatibility. The `ess2008` and `nhis2009` datasets need to be downloaded by hand from the sources and renamed to these handles.
 
 ## `repl`
 
-Creates a replication folder out of a do-file. The folder will contain the do-file, log and all plots that were assigned an optional `name()` in the code. It will also contain any file exported by the do-file and a short file manifest in a `README` file.
-
-## `require`
-
-Checks whether a given list of commands are currently installed in Stata, and [if not][statalist-tip], tries to install the corresponding package at the [SSC archive](http://ideas.repec.org/s/boc/bocode.html). Occasionally used for debugging.
+__Not in use due to limited testing.__ Creates a replication folder out of a do-file. The folder will contain the do-file, log and all plots that were assigned an optional `name()` in the code. It will also contain any file exported by the do-file and a short file manifest in a `README` file.
 
 ## `srqm`
 
@@ -30,37 +30,38 @@ The `srqm` utilities require one command and optionally one subcommand to execut
 
 	srqm command [subcommand] [, nolog forced]
 
-The commands and subcommands form three blocks. The first of them, `setup`, is called from the `profile.do` file of the `SRQM` folder and is used to set up computers for the course:
+The commands and subcommands form four blocks. The first of them, `setup`, is called from the `profile.do` file of the `SRQM` folder and is used to set up computers for the course:
 
-	srqm setup course
+	srqm setup
 	srqm setup folder
 	srqm setup packages
 
 To minimize trouble with working directory errors, the setup creates a mock symbolic link to the `SRQM` folder and performs a quick folder integrity check at startup. A few more similar checks are available:
 
+	srqm check
 	srqm check course
 	srqm check folder
 	srqm check packages
 
-The utilities also include a built-in course update system that recognizes where files go and keeps older files as backups. The command works with `week#.do` files (code), `week#.pdf` files (slides) and setup (`.ado`) files:
+The mock symbolic link to the `SRQM` folder is generally erased at the end of the semester, and a few more cleanup utilities can be used for testing purposes:
 
-	srqm update week7.pdf
-	srqm update week11.do
-	srqm update stab.ado // caution with that
-
-Finally, the mock symbolic link to the `SRQM` folder can be erased at the end of the semester, and a few more cleanup utilities can be used for testing purposes:
-
-	srqm clean course
+	srqm clean
 	srqm clean folder
 	srqm clean packages
 
-Unless the additional `nolog` option is specified, all commands send moderately verbose output to a log in order to help users report issues.
+Finally, the utilities also include a built-in course update system that recognizes where files go and keeps older files as backups. The command works with `week#.do` files (code), `week#.pdf` files (slides) and setup (`.ado`) files:
 
-### `srqm setup course`
+    srqm fetch week7.pdf
+    srqm fetch week11.do
+    srqm fetch stab.ado // caution with that
+
+When the additional `log` option is specified, all commands send verbose output to a log in order to help users report issues.
+
+### `srqm setup`
 
 Tries to permanently set up a few options like screen breaks and scrollback buffer size in Stata, including `memory` on software versions older than Stata 12. Also sets the `burd` scheme (documented above).
 
-#### `srqm setup folder`
+### `srqm setup folder`
 
 Tries to tell Stata to automatically run from the `SRQM` folder by copying its path to the global macro `$srqm_wd`. The macro is saved into a `profile.do` file located in the Stata application folder.
 
@@ -68,27 +69,25 @@ The `profile.do` file saved to the Stata application folder acts as a symbolic l
 
 This command requires to run Stata as administrator on Windows Vista and 7, or it will fail due to a [system restriction](http://www.stata.com/support/faqs/windows/updating-on-vista/) in recent versions of Windows.
 
-#### `srqm setup packages`
+### `srqm setup packages`
 
 Installs the additional Stata packages used in the course do-files. Requires Internet access to execute properly. Usually runs in less than five minutes.
 
-The subcommand will try to run as quickly as possible by skipping packages that are [already installed][statalist-tip]. This behaviour can be overriden by passing the `forced` option.
+The command will try to run as quickly as possible by skipping packages that are [already installed][statalist-tip]. This behaviour can be overriden by passing the `forced` option.
 
 ### `srqm check`
 
 Produces a report on the current setup, covering the basic system options obtained with `query` and the list of installed packages obtained with `ado dir`.
 
-#### `srqm check folder`
+If the `demo' option is specified, as in `srqm check, demo(1/4 12)`, the command runs the course do-files to test their executability (the whole course usually runs in less than ten minutes).
+
+### `srqm check folder`
 
 Checks the existence of the `Datasets` and `Replication` folders used in class. This subcommand is automatically run with the `nolog` option every time Stata loads with the `SRQM` working directory.
 
-#### `srqm check packages`
+### `srqm check packages`
 
 Checks whether the additional packages installed from the SSC server by the `srqm setup packages` subcommand are up to date.
-
-#### `srqm check course`
-
-Runs the whole course (twelve weekly sessions) as a single sequence to test the executability of the code. Usually runs in less than ten minutes.
 
 ### `srqm clean`
 
@@ -104,7 +103,7 @@ Uninstalls course packages. Used for testing purposes.
 
 ## `stab`
 
-Produces summary statistics and correlation matrix tables in plain text format, for maximum compatibility with text and spreadsheet editors (the course recommendation is to use Google Documents).
+__Currently in the works.__ Produces summary statistics and correlation matrix tables in plain text format, for maximum compatibility with text and spreadsheet editors (the course recommendation is to use Google Documents).
 
 The basic syntax for `stab` is:
 

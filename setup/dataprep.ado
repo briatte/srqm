@@ -46,19 +46,19 @@ tdprep, lab(European Social Survey 2008) zip(ess2008)
 
 // Get the data.
 
-// Single-year file (2010):
-// copy http://publicdata.norc.org/GSS/DOCUMENTS/OTHR/2010_stata.zip temp.zip, replace
-// unzipfile temp.zip
-// use 2010.dta, clear
+cap use "~/Documents/Research/Data/GSS/gss7210_r2b.dta"
 
-// Cumulative file (1972-2010):
-// copy http://publicdata.norc.org/GSS/DOCUMENTS/OTHR/GSS_stata.zip temp.zip, replace
-// unzipfile temp.zip
-// use gss7210_r2b.dta, clear
+// Download the 1972-2010 cumulative file if needed.
+if _rc==601 {
+	qui conf f gss7210_r2b.dta
+	if _rc==601 {
+		copy "http://publicdata.norc.org/GSS/DOCUMENTS/OTHR/GSS_stata.zip" temp.zip, replace
+		unzipfile temp.zip
+	}
+	use gss7210_r2b.dta, clear
+}
 
 // The teaching dataset uses years 2000-2010.
-// We'll avoid downloading it more than once:
-use "/Users/fr/Documents/Research/Data/GSS/gss7210_r2b.dta"
 drop if year < 2000
 
 // Remove empty variables.
@@ -131,12 +131,13 @@ use wvs2000_v20090914.dta, clear
 rm temp.zip
 rm wvs2000_v20090914.dta
 
-// Capitalize country names (code kindly provided by William A. Huber).
+// Capitalize country names.
+// Thanks to William A. Huber: http://stackoverflow.com/q/12591056/635806
 
 local sLabelName: value l v2
 di "`sLabelName'"
 
-levelsof v2, local(xValues)
+qui levelsof v2, local(xValues)
 foreach x of local xValues {
     local sLabel: label (v2) `x', strict
     local sLabelNew =proper("`sLabel'")
