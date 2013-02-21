@@ -237,7 +237,22 @@ su age
 hist age, by(country, note("")) bin(9) percent ///
 	xti("Age distribution") ///
 	name(age,replace)
-	
+
+* Recode to quartiles -- shown for demonstration purposes: recoding to groups
+* makes much more sense here, but recoding to n-quantiles like percentiles or
+* quartiles is useful in many explorative situations.
+xtile age_q4 = age, nq(4)
+
+* Check that the quartiles each capture roughly a quarter of the distribution.
+fre age_q4
+
+* Inspect how age varies within each quartile.
+tab age_q4, sum(age)
+
+* Expectedly, there is more variance in the last, older group. Let's finally get
+* the range, or lower (min) and lower (max) bounds, of each age quartile.
+table age_q4, c(min age max age)
+
 * Recode to four age groups. The -irecode- command creates categories based on
 * continuous intervals: category 0 of age4 will contain observations of age up
 * to 33, category 1 will contain those from 34 to 49, and so on.

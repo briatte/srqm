@@ -9,9 +9,11 @@
 
  - This week focuses on inspecting the normality of your dependent variable. The
    DV should be continuous for best results, or at least pseudo-continuous like
-   a 10-point index scale. Avoid variables with four dimensions or less, unless
-   you have some prior experience with introductory statistics and can learn to
-   interpret logistic regression in just a few weeks at the end of the course.
+   a 10-point scale measurement.
+   
+ - Avoid selecting variables with four dimensions or less as your DV, unless you
+   can learn to interpret logistic regression in just a few weeks at the end of 
+   the course. This requires some math and is for the most adventurous only.
 
  - Assessing the normality of a variable is first and foremost a visual process.
    You will need to visualize your DV a lot at that stage of your work. There is
@@ -45,8 +47,8 @@ use data/nhis2009, clear
 drop if year != 2009
 
 
-* Dependent variable
-* ------------------
+* Dependent variable: Body Mass Index
+* -----------------------------------
 
 * Compute the Body Mass Index.
 gen bmi = weight * 703 / height^2
@@ -138,8 +140,8 @@ sca de iqr = q3 - q1
 sca li
 
 
-* (1) Standard deviation
-* ----------------------
+* Standard deviation
+* ------------------
 
 * We can verify what we learnt about the standard deviation by counting the
 * number of BMI observations that fall between (mean - 1sd) and (mean + 1sd),
@@ -162,17 +164,17 @@ di r(N), "observations out of", _N, "(" 100 * round(r(N) / _N, .01) "% of the sa
 * i.e. observations that fall far from the median.
 
 
-* (2) Outliers
-* ------------
+* Outliers
+* --------
 
-* Summarize mild (1.5*IQR) or extreme (3*IQR) outliers below Q1 and above Q3:
+* Summarize mild (1.5 IQR) or extreme (3 IQR) outliers below Q1 and above Q3:
 su bmi if bmi < q1 - 1.5 * iqr | bmi > q3 + 1.5 * iqr
 su bmi if bmi < q1 - 3 * iqr   | bmi > q3 + 3 * iqr
 
 
-* =======================
-* = NORMAL DISTRIBUTION =
-* =======================
+* =============
+* = NORMALITY =
+* =============
 
 
 * Continuous variables are expected to approach a normal distribution, a result
@@ -182,8 +184,8 @@ su bmi if bmi < q1 - 3 * iqr   | bmi > q3 + 3 * iqr
 * the assessment with two statistical measures.
 
 
-* (1) Visual tests
-* ----------------
+* Visual assessment
+* -----------------
 
 * We draw a histogram with three different elements: the actual bins (bars)
 * of the BMI variable, its kernel density, and an overimposed normal curve
@@ -212,8 +214,8 @@ qnorm bmi, ti("Normal quantile plot") ///
 * which means that there is an excess of observations at these values.
 
 
-* (2) Statistical tests
-* ---------------------
+* Formal assessment
+* -----------------
 
 * Moving to statistical measures of normality, we can measure skewness, which
 * measures symmetry and approaches 0 in quasi-normal distributions, along with
@@ -227,10 +229,8 @@ su bmi, d
 * distributed (i.e. we reject our distributional assumption).
 
 
-* ===========================
-* = VARIABLE TRANSFORMATION =
-* ===========================
-
+* Variable transformation
+* -----------------------
 
 * A technique used to approach normality with a continuous variable consists
 * in 'transforming' the variable with a mathematical operator that modifies
@@ -291,11 +291,23 @@ gr di bmi_comparison
 * ==================
 
 
-* A few things about confidence intervals. Remember that all this is based on
-* the assumption that the data follow something like a normal distribution. It
-* applies to continuous variables, for which it is relevant to calculate the
-* mean. The confidence interval reflects the standard error of the mean (SEM),
-* itself a reflection of sample size.
+* Sort the data by order of survey collection.
+sort serial
+
+* Now here's a simple issue: if we subsample our data, the average BMI will not
+* necessarily reflect the sample mean.
+su bmi in 1/10
+
+* The problem applies to our entire sample: how can we confirm that it reflects
+* the true population mean? We cannot, but we can enforce a precaution measure,
+* following the assumption that the data follow a somewhat normal distribution.
+
+
+* Confidence intervals with means
+* -------------------------------
+
+* The confidence interval reflects the standard error of the mean (SEM), itself
+* a reflection of sample size. We will come back to the SEM equation next week.
 
 * Average BMI for the full sample with a 95% CI.
 ci bmi
@@ -303,23 +315,20 @@ ci bmi
 * Average BMI for the full sample with a 99% CI (more confidence, less precision).
 ci bmi, level(99)
 
-* The confidence intervals for the full sample show a high precision,
-* both at the 95% (alpha = 0.05) and 99% (alpha = 0.01) levels. This
-* is due to the high number of observations provided for the BMI variable.
+* The confidence intervals for the full sample show a high precision, both at
+* the 95% (alpha = 0.05) and 99% (alpha = 0.01) levels. This is due to the high
+* number of observations provided for the BMI variable.
 
-* If we start computing the average BMI for subsamples of the population,
-* i.e. for restricted categories of the population, the total number of
-* observations will drop and the confidence interval will widen.
-
-* Average BMI for N = 10, 100, 1000 and 10,000 with a 95% CI.
+* If we compute the average BMI for subsamples of the population, such as one
+* category of the population, the total number of observations will drop and
+* the confidence interval will widen, as shown here with smaller subsamples:
 ci bmi in 1/10
 ci bmi in 1/100
 ci bmi in 1/1000
 ci bmi in 1/10000
 
-* Confidence bands can become useful to detect spurious relationships. See, for
-* instance, how the number of years spent in the U.S. seems to affect the BMI
-* of respondents:
+* Confidence bands can become useful to detect spurious relationships. Let's
+* take a look, for instance, at the number of years spent in the U.S.
 fre yrsinus
 replace yrsinus = . if yrsinus == 0
 

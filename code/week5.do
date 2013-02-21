@@ -67,8 +67,8 @@ use data/nhis2009, clear
 svyset psu [pw = perweight], strata(strata)
 
 
-* Dependent variable
-* ------------------
+* Dependent variable: Body Mass Index
+* -----------------------------------
 
 gen bmi = weight * 703 / height^2
 la var bmi "Body Mass Index"
@@ -77,8 +77,8 @@ la var bmi "Body Mass Index"
 su bmi, d
 
 
-* DV breakdowns
-* -------------
+* Breakdowns
+* ----------
 
 * Recoding BMI to 6 groups.
 gen bmi6:bmi6 = irecode(bmi, 0, 18.5, 25, 30, 35, 40, .)
@@ -96,6 +96,19 @@ tab bmi6, summ(bmi)
 * Progression of BMI groups over years.
 spineplot bmi6 year, scheme(burd6) ///
     name(bmi6, replace)
+
+* Breakdown of BMI to percentiles.
+xtile bmi_qt = bmi, nq(100)
+
+* Verify the BMI of, e.g. the top 10% most obese.
+su bmi if bmi_qt == 90
+
+* Compute the mean BMI for each percentile.
+bys bmi_qt: egen bmi_qm = mean(bmi)
+
+* Plot the empirical cumulative distribution function (ECDF) of BMI.
+sc bmi_qm bmi_qt, ms(o) c(l) yti("Body Mass Index") ///
+	name(bmi_ecdf, replace)
 
 
 * Independent variables
@@ -149,7 +162,7 @@ hist bmi, bin(20) normal normopts(lp(dash)) ///
     kdensity kdenopts(k(biweight) bw(3) lc(black)) ///
     name(dv, replace)
 
-* Transformations (use -gladder- for the graphical check).
+* Transformations (add 'g' to make the command -gladder- for a graphical check).
 ladder bmi
 
 * Log-BMI transformation.
@@ -246,6 +259,10 @@ spineplot educrec1 inc if inc > 0, scheme(burd4) xla(, alt axis(2)) ///
 gr box inc if inc > 0, over(bmi6) ///
 	name(inc, replace)
 
+* Plot BMI quartiles for each income band (excluding outliers).
+gr box bmi if inc > 0, over(inc) noout ///
+	name(bmi_inc, replace)
+
 * 95% CI estimates:
 tab inc, summ(bmi) // mean BMI at each education level
 bys inc: ci bmi    // confidence bands
@@ -303,8 +320,14 @@ stab using week5, replace ///
 
   In the example above, the -stab- command will export a single file to the
   working directory (week5_stats.txt) containing summary statistics for the
-  final sample. We will expand the use of that command at a later stage to 
-  also export correlation tables in a few weeks. */
+  final sample. To get one table per racial group, the syntax would be:
+  
+  stab using week5, replace ///
+	su(bmi age) ///
+	fr(female educrec1 earnings uninsured ybarcare) ///
+	by(raceb)
+  
+  We will later see how to use -stab- to also export correlation tables. */
 
 
 * =======
