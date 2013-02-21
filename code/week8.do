@@ -233,7 +233,7 @@ sc corrupt yhat2 hdi, yla(0 "Highly corrupt" 10 "Lowly corrupt") ///
 
 * Create dummy.
 gen democracy:democracy = (gol_polreg == 0) if !mi(gol_polreg)
-la de democracy 0 "Dictatorship" 1 "Democracy", replace
+la def democracy 0 "Dictatorship" 1 "Democracy", replace
 
 * Visualization of the difference in mean of the DV.
 gr bar births, over(democracy) asyvars over(region, lab(alt)) ///

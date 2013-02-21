@@ -70,7 +70,7 @@ svyset psu [pw = perweight], strata(strata)
 * Dependent variable
 * ------------------
 
-gen bmi = weight*703/height^2
+gen bmi = weight * 703 / height^2
 la var bmi "Body Mass Index"
 
 * Detailed summary statistics.
@@ -85,7 +85,7 @@ gen bmi6:bmi6 = irecode(bmi, 0, 18.5, 25, 30, 35, 40, .)
 la var bmi6 "Body Mass Index (categories)"
 
 * Define the category labels.
-la de bmi6 ///
+la def bmi6 ///
 	1 "Underweight" 2 "Normal" 3 "Overweight" ///
 	4 "Obese" 5 "Severely obese" 6 "Morbidly obese", replace
 
@@ -112,15 +112,15 @@ recode age ///
 la var age4 "Age groups (4)"
 
 * Recode age to eight groups (quick method, using decades: 10-19, 20-29, etc.).
-gen age8 = 10*floor(age/10) if !mi(age)
+gen age8 = 10 * floor(age / 10) if !mi(age)
 la var age8 "Age groups (8)"
 
 * Recode sex to dummy.
 gen female:female = (sex == 2) if !mi(sex)
-la de female 0 "Male" 1 "Female", replace
+la def female 0 "Male" 1 "Female", replace
 
 * Recode missing values of income.
-replace earnings = . if inlist(earnings,97,99)
+replace earnings = . if inlist(earnings, 97, 99)
 
 * Recode missing values of insurance and medical care.
 mvdecode ybarcare uninsured, mv(9)
@@ -145,7 +145,8 @@ codebook bmi age female raceb educrec1 earnings health uninsured ybarcare, c
 * Normality
 * ---------
 
-hist bmi, normal kdensity kdenopts(bw(1) lc(gs4)) normopts(lp(dash)) ///
+hist bmi, bin(20) normal normopts(lp(dash)) ///
+    kdensity kdenopts(k(biweight) bw(3) lc(black)) ///
     name(dv, replace)
 
 * Transformations (use -gladder- for the graphical check).
@@ -153,7 +154,7 @@ ladder bmi
 
 * Log-BMI transformation.
 gen logbmi = ln(bmi)
-la var logbmi "ln(BMI)"
+la var logbmi "log(BMI)"
 
 * Inspect improvement in normality.
 tabstat bmi logbmi, s(skewness kurtosis) c(s)
@@ -210,7 +211,7 @@ bys raceb: ci bmi    // confidence bands
 * -------------
 
 * Shorter labels for graph.
-la de edu 13 "Grade 12" 14 "Coll 1-3 yrs" 15 "Coll 4" 16 "Coll 5+"
+la def edu 13 "Grade 12" 14 "Coll 1-3 yrs" 15 "Coll 4" 16 "Coll 5+"
 la val educrec1 edu
 
 * Plot BMI groups for each educational level.
@@ -230,7 +231,7 @@ bys educrec1: ci bmi    // confidence bands
 * ----------
 
 * Generate variable defined by the income ceiling of each category.
-gen inc = 5000*earnings + 5000*(earnings - 5)*(earnings > 5)
+gen inc = 5000 * earnings + 5000 * (earnings - 5) * (earnings > 5)
 la var inc "Total earnings ($)"
 
 * Plot racial backgrounds for each income band.

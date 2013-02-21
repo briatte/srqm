@@ -86,7 +86,7 @@ gr hbar torture_* [aw = dweight], stack over(cntry, sort(1)des lab(labsize(*.8))
 
 * Comparing Israel to other European countries.
 gen israel:israel = (cntry == "IL")
-la de israel 1 "Israel" 0 "Other EU"
+la def israel 1 "Israel" 0 "Other EU"
 
 * Comparison of average opposition to torture inside and outside Israel.
 prtest torture, by(israel)
@@ -110,7 +110,7 @@ hist age, bin(15) normal ///
 * Recoding to 4 age groups:
 gen age4:age4 = irecode(age, 24, 44, 64)         // quick recode
 table age4, c(min age max age n age)             // check result
-la de age4 0 "15-24" 1 "25-44" 2 "45-64" 3 "65+" // value labels
+la def age4 0 "15-24" 1 "25-44" 2 "45-64" 3 "65+" // value labels
 la var age4 "Age (4 groups)"                     // label result
 fre age4                                         // final result
 

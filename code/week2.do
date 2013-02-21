@@ -132,7 +132,7 @@ svyset psu [pw = perweight], strata(strata)
 * Create the Body Mass Index from height and weight. We can write the -generate-
 * command as its -gen- shorthand. We will later call BMI our dependent variable,
 * and we will use other (independent) variables to try to predict its values.
-gen bmi = weight * 703 / (height^2)
+gen bmi = weight * 703 / height^2
 
 * If something looks wrong later on in your analysis, check your BMI equation.
 * Also note that Stata is case-sensitive: we will write 'BMI' in the comments,

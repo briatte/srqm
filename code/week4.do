@@ -18,7 +18,7 @@
    no systematic way to assess normality, but your decision should take skewness
    and kurtosis into account.
    
-   Last updated 2012-11-17.
+   Last updated 2013-02-21.
 
 ----------------------------------------------------------------------------- */
 
@@ -49,7 +49,7 @@ drop if year != 2009
 * ------------------
 
 * Compute the Body Mass Index.
-gen bmi = weight * 703 / (height^2)
+gen bmi = weight * 703 / height^2
 la var bmi "Body Mass Index"
 
 * Weight the data with NHIS individual weights.
@@ -145,14 +145,14 @@ sca li
 * number of BMI observations that fall between (mean - 1sd) and (mean + 1sd),
 * and then by checking if this number comes close to 68% of all observations.
 count if bmi > mean - sd & bmi < mean + sd
-di r(N),"observations out of", _N, "(" 100*round(r(N)/_N,.01) "% of the sample)" _n ///
+di r(N), "observations out of", _N, "(" 100 * round(r(N) / _N, .01) "% of the sample)" _n ///
 	"are within 1 standard deviation from the mean."
 
 * The corresponding result is indeed close to 68% of all observations, and the
 * same verification with the [mean - 2sd, mean + 2sd] range of BMI values is
 * also satisfactorily close to including 95% of all observations.
 count if bmi > mean - 2*sd & bmi < mean + 2*sd
-di r(N),"observations out of", _N, "(" 100*round(r(N)/_N,.01) "% of the sample)" _n ///
+di r(N), "observations out of", _N, "(" 100 * round(r(N) / _N, .01) "% of the sample)" _n ///
 	"are within 2 standard deviations from the mean."
 
 * The properties shown here hold for continuous variables that approach a
@@ -166,8 +166,8 @@ di r(N),"observations out of", _N, "(" 100*round(r(N)/_N,.01) "% of the sample)"
 * ------------
 
 * Summarize mild (1.5*IQR) or extreme (3*IQR) outliers below Q1 and above Q3:
-su bmi if bmi < q1 - 1.5*iqr | bmi > q3 + 1.5*iqr
-su bmi if bmi < q1 - 3*iqr   | bmi > q3 + 3*iqr
+su bmi if bmi < q1 - 1.5 * iqr | bmi > q3 + 1.5 * iqr
+su bmi if bmi < q1 - 3 * iqr   | bmi > q3 + 3 * iqr
 
 
 * =======================

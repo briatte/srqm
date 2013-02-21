@@ -46,7 +46,7 @@ encode cntry, gen(cid)
 fre imdfetn
 
 * Relabel for concise legends in graphs.
-la de imdfetn 1 "Many" 2 "Some" 3 "Few" 4 "None", replace
+la def imdfetn 1 "Many" 2 "Some" 3 "Few" 4 "None", replace
 
 * Normality: distribution shows symmetricality but the reduced number of items
 * on a 4-point scale limits variability and will create postestimation issues.
@@ -68,11 +68,11 @@ ren (agea hinctnta lrscale) (age income rightwing)
 
 * Dummify sex.
 gen female:sex = (gndr == 2)
-la de sex 0 "Male" 1 "Female", replace
+la def sex 0 "Male" 1 "Female", replace
 
 * Dummify country of birth.
 gen born:born = (brncntr == 1)
-la de born 0 "Foreign-born" 1 "Born in country", replace
+la def born 0 "Foreign-born" 1 "Born in country", replace
 
 * Collapse some educational categories.
 recode edulvla (1 2 = 1 "Low") (3 = 2 "Medium") (4 5 = 3 "High") (else = .), gen(edu3)
@@ -119,7 +119,7 @@ tabchi cohort imdfetn, p noo noe
 tab edu3, gen(edu_)
 
 * Clarify x-axis by dropping labels on income deciles.
-la de inc10 1 "D1" 10 "D10", replace
+la def inc10 1 "D1" 10 "D10", replace
 la val income inc10
 
 * Visualization of education with income, sex and country of birth.
