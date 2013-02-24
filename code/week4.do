@@ -309,11 +309,14 @@ su bmi in 1/10
 * The confidence interval reflects the standard error of the mean (SEM), itself
 * a reflection of sample size. We will come back to the SEM equation next week.
 
-* Average BMI for the full sample with a 95% CI.
+* Mean BMI for the full sample with a 95% CI.
 ci bmi
 
-* Average BMI for the full sample with a 99% CI (more confidence, less precision).
+* Mean BMI for the full sample with a 99% CI (more confidence, less precision).
 ci bmi, level(99)
+
+* Mean BMI for the full sample with survey weights (better representativeness).
+svy: mean bmi
 
 * The confidence intervals for the full sample show a high precision, both at
 * the 95% (alpha = 0.05) and 99% (alpha = 0.01) levels. This is due to the high
@@ -377,6 +380,43 @@ svy: prop raceb
 * data will increase when the total number of observations decreases. The
 * 95% CI for ethnicity on morbidly obese respondents illustrates that issue.
 prop raceb if bmi > 40
+
+
+* Visualization of standard errors
+* --------------------------------
+
+* Let's illustrate again the problem that arises with low sample sizes with a
+* sample of 25 observations, which will be much more subject to sampling error
+* than the very large sample provided by the original data. You do not need to
+* simulate a lower sample size as shown here for your own research, but you
+* should understand, by now, the importance of maximizing sample size.
+
+* Delete all data but 25 randomly chosen observations.
+sample 25, count
+
+* Compute mean BMI in each racial group.
+bys raceb: egen raceb_mu = mean(bmi)
+
+* Compute standard deviation of BMI in each racial group.
+bys raceb: egen raceb_sd = sd(bmi)
+
+* Compute number of observations in each racial group.
+bys raceb: egen raceb_n = count(bmi)
+
+* Compute standard error of mean BMI in each racial group.
+bys raceb: gen raceb_se = raceb_sd / sqrt(raceb_n)
+
+* Plot using mean, standard error and racial group.
+serrbar raceb_mu raceb_se raceb, ///
+	yti("Mean BMI") xla(1 "White" 2 "Black" 3 "Hispanic" 4 "Asian") ///
+	name(serr, replace)
+
+* The plot that you get shows much larger 95% CI estimates than those previously
+* computed. If you restrict your analysis to a limited number of observations, 
+* e.g. to a limited number of countries with cross-sectional country-level data,
+* you will run into the same issue of very large standard errors. You should
+* therefore spare your estimates and work on a large number of observations to
+* avoid any issues of that kind.
 
 
 * =======

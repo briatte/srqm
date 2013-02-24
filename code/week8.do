@@ -10,10 +10,12 @@
    This do-file is a continuation from last week's do-file, which we start by
    running in the background. This will prepare the data by renaming variables,
    logging GDP per capita and recoding geographical regions to less categories
-   and shorter labels. We then explore simple linear regression using the same
-   set of variables (DV = fertility, IVs = education, GDP per capita, etc. and
-   then DV = corruption, IVs = Human Development Index and female ministers).
-   Please refer to last week's do-file for precisions on variable recodes.
+   and shorter labels.
+   
+   We then explore simple linear regression using the same set of variables:
+   (DV = fertility, IVs = education, GDP per capita, etc., then DV = corruption,
+   IVs = Human Development Index and female ministers). Refer to last week's 
+   do-file for precisions on variable recodes.
 
    Last updated 2012-11-13.
 

@@ -28,9 +28,7 @@ end
 
 use data/ess2008.dta, clear
 
-// Initial subset from cumulative dataset.
-
-drop if essround != 4
+drop if essround != 4 // used in the initial subset from the cumulative dataset
 
 foreach v of varlist * {
     qui count if !mi(`v')

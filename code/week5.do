@@ -80,7 +80,7 @@ su bmi, d
 * Breakdowns
 * ----------
 
-* Recoding BMI to 6 groups.
+* Recoding BMI to 6 groups (best method: cutting the data to intervals).
 gen bmi6:bmi6 = irecode(bmi, 0, 18.5, 25, 30, 35, 40, .)
 la var bmi6 "Body Mass Index (categories)"
 
@@ -107,7 +107,8 @@ su bmi if bmi_qt == 90
 bys bmi_qt: egen bmi_qm = mean(bmi)
 
 * Plot the empirical cumulative distribution function (ECDF) of BMI.
-sc bmi_qm bmi_qt, ms(o) c(l) yti("Body Mass Index") ///
+sc bmi_qm bmi_qt, m(o) c(l) xla(0(10)100) ///
+	yti("Body Mass Index") xti("Percentiles") ///
 	name(bmi_ecdf, replace)
 
 
@@ -116,7 +117,7 @@ sc bmi_qm bmi_qt, ms(o) c(l) yti("Body Mass Index") ///
 
 fre age sex raceb educrec1 earnings health uninsured ybarcare, r(10)
 
-* Recode age to four groups (slow method, using manual categories).
+* Recode age to four groups (slow and risky method: using manual categories).
 recode age ///
 	(18/44 = 1 "18-44") ///
 	(45/64 = 2 "45-64") ///
@@ -124,7 +125,7 @@ recode age ///
 	(75/max = 4 "75+") (else = .), gen(age4)
 la var age4 "Age groups (4)"
 
-* Recode age to eight groups (quick method, using decades: 10-19, 20-29, etc.).
+* Recode age to eight groups (nifty method: using decades, 10-19, 20-29, etc.).
 gen age8 = 10 * floor(age / 10) if !mi(age)
 la var age8 "Age groups (8)"
 

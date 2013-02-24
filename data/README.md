@@ -2,7 +2,7 @@
 
 This file listing covers the datasets distributed as part of the [Statistical Reasoning and Quantitative Methods](http://f.briatte.org/teaching/quanti/) course taught by François Briatte and Ivaylo Petev.
 
-All files are provided in Stata 9/10 `dta` format on an "as-is" basis: please use them for teaching purposes only, and do not redistribute them. Modifications to the original files are listed in [`setup/dataprep.do`](https://github.com/briatte/srqm/blob/master/setup/dataprep.do).
+All files are provided in Stata 9/10 `dta` format on an "as-is" basis: please use them for teaching purposes only, and do not redistribute them. Modifications to the original files are listed in [`setup/dataprep.ado`](https://github.com/briatte/srqm/blob/master/setup/dataprep.ado).
 
 ### Data sources:
 
@@ -35,7 +35,7 @@ The `ess2008` dataset holds [Round 4](http://ess.nsd.uib.no/ess/round4/) (2008) 
 
 ### Survey weights:
 
-    use datasets/ess2008, clear
+    use data/ess2008, clear
     svyset [aw=dweight]
 
 See the [ESS weighting guide](http://ess.nsd.uib.no/ess/doc/weighting.pdf) for instructions.
@@ -55,7 +55,7 @@ The `gss2010` dataset holds data from the U.S. General Social Survey (GSS) for y
 
 ### Survey weights:
 
-    use datasets/gss2010, clear
+    use data/gss2010, clear
     svyset vpsu [pw=wtssall], strata(vstrata)
 
 See "[Calculating Design-Corrected Standard Errors for the General Social Survey, 1988-2010](http://publicdata.norc.org:41000/gss/documents//OTHR/GSS%20design%20variables.pdf)" by Steven Pedlow and [Appendix A](http://publicdata.norc.org:41000/gss/.%5CDocuments%5CCodebook%5CA.pdf) of the GSS codebook for other options.
@@ -75,7 +75,7 @@ The `nhis2009` dataset holds sample adult data for years 2000--2009 of the U.S. 
 
 ### Survey weights:
 
-    use "Datasets/nhis2009.dta", clear
+    use "data/nhis2009.dta", clear
     svyset psu [pweight=perweight], strata(strata)
 
 See the [IHIS/NHIS user notes](http://www.ihis.us/ihis/userNotes_variance.shtml) on variance estimation for more details.
@@ -108,7 +108,7 @@ The `wvs2000` dataset holds data from Wave 4 (1999-2004) of the World Values Sur
 
 ### Survey weights:
 
-    use datasets/wvs2000, clear
+    use data/wvs2000, clear
     svyset [aw=s017]
 
 See the [WVS weighting guide](http://www.jdsurvey.net/jds/jdsurveyActualidad.jsp?Idioma=I&SeccionTexto=0405) for other options.
