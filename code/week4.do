@@ -153,7 +153,7 @@ di r(N), "observations out of", _N, "(" 100 * round(r(N) / _N, .01) "% of the sa
 * The corresponding result is indeed close to 68% of all observations, and the
 * same verification with the [mean - 2sd, mean + 2sd] range of BMI values is
 * also satisfactorily close to including 95% of all observations.
-count if bmi > mean - 2*sd & bmi < mean + 2*sd
+count if bmi > mean - 2 * sd & bmi < mean + 2 * sd
 di r(N), "observations out of", _N, "(" 100 * round(r(N) / _N, .01) "% of the sample)" _n ///
 	"are within 2 standard deviations from the mean."
 

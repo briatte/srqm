@@ -33,7 +33,7 @@ cap noi srqm setup packages
 if c(update_query)=="on" | c(more)=="on" {
 	noi di as txt _n ///
 		"(It looks like we need to adjust some Stata settings.)"
-	cap noi srqm setup course
+	cap noi srqm setup
 }
 
 // link

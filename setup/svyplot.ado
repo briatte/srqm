@@ -1,0 +1,72 @@
+cap pr drop svyplot
+program svyplot
+	syntax varlist(max=3) [if] [in] [aweight fweight iweight/] ///
+		[, Reds Blues Ascending Descending Horizontal XLAB NOPercents ///
+		Percent(int 2) Size(real 3.5) ANGLE(int 0) Ymax(int 100) Float(int 0) *]
+
+	local plot = cond("`horizontal'" != "", "hbar", "bar") // bars by default	
+
+	cap which catplot
+	if _rc == 111 qui ssc install catplot, replace
+	
+	local red = ("`reds'" != "")
+	local blu = ("`blues'"!= "")
+	if `red' + `blu' > 1 {
+		di as err "only one color option allowed"
+		exit 198
+	}
+	else {
+		if `red' local col = "178 24 43"
+		if `blu' local col = "33 102 172"
+	}
+	local asc = ("`ascending'" != "")
+	local des = ("`descending'"!= "")
+	if `asc' + `des' > 1 {
+		di as err "only one sort option allowed"
+		exit 198
+	}
+	else {
+		local rev = cond(`des' == 1, 1, 0) // ascending order by default
+		if `asc' + `des' > 0 local y "`y' asyvars"
+	}
+	
+	tokenize `varlist'
+	tab `1' `2' `if' `in'
+	local ycat = r(r)
+	
+	if `: word count `varlist'' > 1 {
+		local p = cond(`percent' == 2, "`2'", "`3'")
+		local y = "`y' percent(`p') over(`2', lab(angle(`angle')))"
+		if `: word count `varlist'' > 2 local y = "`y' over(`3', lab(angle(`angle')))"
+	}
+	else {
+		local y = "`y' percent"
+	}
+	
+	local t1: variable l `1'
+	if "`xlab'" != "" {
+		local t2: variable l `2'
+		local b1 = cond("`horizontal'" != "", "", "`t2'")
+		local l1 = cond("`horizontal'" != "", "`t2'", "")
+	}
+	
+	if strpos("`options'", "stack") > 0 local pos = "position(center)"
+	
+	if "`col'" != "" {
+		local gradient ""
+		qui levelsof `1' `if' `in', local(n)
+		local i = 1
+		foreach l of local n {
+			local d = round((`i' + 1) / (`ycat' + 1), .01)
+			if `rev' == 1 local d = round((`ycat' + 2  -`i') / (`ycat' + 1), .01)
+			local gradient "`gradient' bar(`i++', blc(`col'*.8) bfc(`col'*`d'))"
+		}
+	}
+
+	if "`nopercents'" == "" local b = "blabel(bar, `pos' size(`size') format(%3.0f))"
+
+	catplot `1' `if' `in', `y' `b' recast(`plot') yla(0(20)`ymax', angle(h)) ///
+		legend(bmargin(bottom) row(1)) ///
+		ti("`t1'", margin(bottom)) yti("") b1ti("`b1'") l1ti("`l1'") ///
+		`gradient' `options'
+end

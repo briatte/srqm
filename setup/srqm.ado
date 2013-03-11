@@ -1,16 +1,21 @@
 
-/* --- SRQM version 3.2 / 2013-01-26 -------------------------------------------
+/* --- SRQM setup utilities ----------------------------------------------------
 
-  This file creates the utilities called at startup by the profile.do file of
-  the SRQM folder. See the README file of the setup folder for details on how
-  to operate it. If you are a student, just follow the instructions in class.
+*! This file creates the utilities called at startup by the profile.do file of
+*! the SRQM folder. See the README file of the setup folder for details on how
+*! to operate it. If you are a student, just follow the instructions in class.
 
------------------------------------------------------------------------------ */
+   Last revised 2013-03-10.
 
+*! version 3.6: setup bugfix
+*! version 3.5: added spmap
+*! version 3.4: data command
 *! version 3.3: demo updated
 *! version 3.2: fetch updated
 *! version 3.1: fetch command
 *! version 3.0: major rewrite
+
+----------------------------------------------------------------------------- */
 
 cap pr drop srqm
 program srqm
@@ -21,18 +26,19 @@ program srqm
     tokenize `anything'
     local setup    = ("`1'"=="setup")
     local check    = ("`1'"=="check")
-    local fetch    = ("`1'"=="fetch") // new: update function
+    local fetch    = ("`1'"=="fetch")
     local clean    = ("`1'"=="clean")
     local folder   = ("`2'"=="folder")
     local packages = ("`2'"=="packages")
+	local data     = ("`2'"=="data")  // new: data preparation utility
     local logged   = ("`logged'"!="")
     local forced   = ("`forced'"!="")
 
     // package list
 
-    local cmdlist = "lookfor_all fre spineplot tab_chi mkcorr tabout estout leanout plotbeta kountry qog wbopendata _gstd01 clarify schemes"
+    local cmdlist = "lookfor_all fre spineplot tab_chi mkcorr tabout estout leanout plotbeta kountry qog wbopendata spmap _gstd01 clarify schemes"
 
-        * catplot ciplot log2do2 outreg2 revrs
+        * catplot ciplot distplot log2do2 outreg2 revrs
         * tufte lean2
 
     // dataset list
@@ -160,7 +166,15 @@ program srqm
 
                     // note: keep special cases at end of local list for the 699 hack to work with them
 
-                    if "`t'"=="clarify" {
+                    if "`t'"=="spmap" {
+						local maps "world-c.dta world-d.dta"
+						foreach y of local maps {
+							cap ssc cp `y'
+							cap copy `y' data/`y'
+							cap rm `y'
+						}
+                    }
+                    else if "`t'"=="clarify" {
                         cap which simqi
                         if (_rc==111 | `forced') cap noi net install clarify, from("http://gking.harvard.edu/clarify")
                     }
@@ -210,6 +224,20 @@ program srqm
                 if _rc di as err "ERROR: installation of `t' failed with error code", _rc
             }
         }
+		// ... might not work for Windows users running without admin privileges
+		else if `data' {
+			//
+			// DATA PREPARATION
+			//
+	        if strpos("all `datalist'", "`2'") {
+		        cap cd "$srqm_wd"
+				noi do setup/srqm_data.ado "`2'"
+			}
+	        else {
+	            di as err "Use one of the subcommand options: all `datalist'"
+	            exit 198
+		    }
+	    }
         else {
             //
             // SYSTEM OPTIONS

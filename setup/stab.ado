@@ -24,7 +24,7 @@ program stab
 	// not meant to be a full-fledged command, it's a teaching aid
 
     syntax [using/] [if] [in] [aweight fweight/] ///
-    	[, by(varname) SUmmarize(varlist) FRequencies(varlist) CORRelate(varlist) CORRelates ttest ///
+    	[, by(varname) SUmmarize(varlist) FRequencies(varlist) CORRelate(varlist) ttest ///
     	Float(int 0) Wrap(int 36) NOWrap replace]
     tempname fh
 
@@ -38,7 +38,13 @@ program stab
 	if "`correlates'" != "" & "`correlate'" == "" local correlate `summarize'
 
 	if "`summarize'"=="" & "`frequencies'"=="" & "`correlate'"=="" {
-		di as txt "You need to specify variables to describe. Example:" _n _n ///
+	    di as err "{p}You need to specify a {it:varlist} to describe "  ///
+	              "through at least one of these options:{p_end}" _n ///
+				  "{bf:{ul:su}mmarize({it:varlist})} for continuous data" _n   ///
+			  	  "{bf:{ul:fr}equencies({it:varlist})} for categorical data" _n   ///
+	              "{bf:{ul:corr}elate({it:varlist})} for correlations" _n
+
+		di as txt "Example:" _n _n ///
 		    _s(4) "sysuse nlsw88, clear" _n ///
 		    _s(4) "su age wage" _n ///
 		    _s(4) "tab1 race married" _n ///

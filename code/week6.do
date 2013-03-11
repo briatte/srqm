@@ -3,7 +3,7 @@
 
    F. Briatte and I. Petev
 
- - TOPIC:  Opposition to Torture in European Countries
+ - TOPIC:  Opposition to Torture in Israel
  
  - DATA:   European Social Survey Round 4 (2008)
  
@@ -14,11 +14,12 @@
 
 * Additional commands.
 foreach p in fre tab_chi {
+	if "`p'" == "tab_chi" local p = "tabchi" // fix
     cap which `p'
     if _rc == 111 cap noi ssc install `p' // install from online if missing
 }
 
-* Log.
+* Log results.
 cap log using code/week6.log, replace
 
 
@@ -42,53 +43,44 @@ codebook cntry age sex income edu denom pol tv, c
 * Delete incomplete observations.
 drop if mi(age, sex, income, edu, denom, pol, tv)
 
-* Final sample size.
-count
-
 
 * DV: Justifiability of torture in event of preventing terrorism
 * --------------------------------------------------------------
 
 fre trrtort
 
+* Generate dummies called 'torture_1 torture_2' etc. for each DV category.
+tab trrtort, gen(torture_)
+
+* Country-level breakdown using stacked bars and 5-pt scale graph scheme.
+gr hbar torture_? [aw = dweight], stack over(cntry, sort(1)des lab(labsize(*.8))) ///
+    yti("Torture is never justified even to prevent terrorism") ///
+    legend(rows(1) order(1 "Strongly agree" 2 "" 3 "Neither" 4 "" 5 "Strongly disagree")) ///
+    name(torture1, replace) scheme(burd5)
+
 * Binary recoding (1 = torture is never justifiable; undecideds removed).
-cap drop torture
 recode trrtort ///
     (1/2 = 1 "Never justifiable") ///
     (4/5 = 0 "Sometimes justifiable") ///
     (3 = .) (else = .), gen(torture)
 la var torture "Opposition to torture"
 
-* Overall opposition to torture in Europe.
+* Average opposition to torture in Europe.
 fre torture
-tab torture [aw = dweight*pweight]   // weighted by overall European population
-bys cntry: ci torture [aw = dweight] // weighted by country-specific population
+tab torture [aw = dweight * pweight] // weighted by overall European population
 
 * Average opposition to torture in each country.
 gr dot torture [aw = dweight], over(cntry, sort(1) des) scale(.75) ///
-    name(torture1, replace)
+    name(torture2, replace)
 
-
-* Detailed breakdown in each country
-* ----------------------------------
-
-* Delete any previous variable called 'torture_*' where '*' can be anything.
-cap drop torture_*
-
-* Generate dummies called 'torture_1 torture_2' etc. for each DV category.
-tab trrtort, gen(torture_)
-
-* Plot using stacked horizontal bars and a 5-pt scale graph scheme.
-gr hbar torture_* [aw = dweight], stack over(cntry, sort(1)des lab(labsize(*.8))) ///
-    yti("Torture is never justified even to prevent terrorism") ///
-    legend(rows(1) order(1 "Strongly agree" 2 "" 3 "Neither" 4 "" 5 "Strongly disagree")) ///
-    name(torture2, replace) scheme(burd5)
-
-* Comparing Israel to other European countries.
+* Create a dummy for Israel vs. other European countries.
 gen israel:israel = (cntry == "IL")
 la def israel 1 "Israel" 0 "Other EU"
 
-* Comparison of average opposition to torture inside and outside Israel.
+* Estimate DV proportions in Israel.
+prop torture if israel
+
+* Compare average opposition to torture inside and outside Israel.
 prtest torture, by(israel)
 
 * Subset to all European countries but Israel.
@@ -108,11 +100,11 @@ hist age, bin(15) normal ///
     name(age, replace)
 
 * Recoding to 4 age groups:
-gen age4:age4 = irecode(age, 24, 44, 64)         // quick recode
-table age4, c(min age max age n age)             // check result
+gen age4:age4 = irecode(age, 24, 44, 64)          // quick recode
+table age4, c(min age max age n age)              // check result
 la def age4 0 "15-24" 1 "25-44" 2 "45-64" 3 "65+" // value labels
-la var age4 "Age (4 groups)"                     // label result
-fre age4                                         // final result
+la var age4 "Age (4 groups)"                      // label result
+fre age4                                          // final result
 
 * Spineplot.
 spineplot torture age4, ///
@@ -127,7 +119,8 @@ ttest age, by(torture)
 
 fre sex
 
-recode sex (1 = 0 "Male") (2 = 1 "Female") (else = .), gen(female) // dummify
+gen female:female = (sex==2) if !mi(sex) // dummify
+la def female 0 "Male" 1 "Female"
 la var female "Gender"
 
 * Conditional probabilities:
@@ -135,7 +128,7 @@ tab torture female, col nof // column percentages
 tab torture female, row nof // rows percentages
 
 * Comparison of proportions in each category.
-prtest torture, by(female)
+prtest female, by(torture)
 
 
 * IV: Income deciles
@@ -149,6 +142,12 @@ gen inc = income
 * Spineplot.
 spineplot torture inc
 
+* Chi-squared test.
+tab inc torture, row nof  // row percentages
+tab inc torture, col nof  // column percentages
+tab inc torture, cell nof // cell percentages
+tab inc torture, chi2     // Chi-squared test
+
 
 * IV: Education
 * -------------
@@ -156,7 +155,7 @@ spineplot torture inc
 fre edu
 
 * Verify normality.
-hist edu, bin(15) normal ///
+hist edu, bin(10) normal ///
     name(edu, replace)
 
 * Comparison of average educational attainment in each category.
@@ -183,8 +182,8 @@ tabchi torture faith3, noe p // Pearson residuals
 
 * Create a binary variable for each category.
 tab faith3, gen(faith_)
-d faith_*
-codebook faith_*, c
+d faith_?
+codebook faith_?, c
 
 * Inspect underlying distribution by country.
 tab cntry faith3

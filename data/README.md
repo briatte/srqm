@@ -36,7 +36,7 @@ The `ess2008` dataset holds [Round 4](http://ess.nsd.uib.no/ess/round4/) (2008) 
 ### Survey weights:
 
     use data/ess2008, clear
-    svyset [aw=dweight]
+    svyset [aw = dweight]
 
 See the [ESS weighting guide](http://ess.nsd.uib.no/ess/doc/weighting.pdf) for instructions.
 
@@ -56,13 +56,13 @@ The `gss2010` dataset holds data from the U.S. General Social Survey (GSS) for y
 ### Survey weights:
 
     use data/gss2010, clear
-    svyset vpsu [pw=wtssall], strata(vstrata)
+    svyset vpsu [pw = wtssall], strata(vstrata)
 
 See "[Calculating Design-Corrected Standard Errors for the General Social Survey, 1988-2010](http://publicdata.norc.org:41000/gss/documents//OTHR/GSS%20design%20variables.pdf)" by Steven Pedlow and [Appendix A](http://publicdata.norc.org:41000/gss/.%5CDocuments%5CCodebook%5CA.pdf) of the GSS codebook for other options.
 
 ### Production notes:
 
-The dataset is a trimmed-down version of the [GSS 1972-2010 cumulative cross-sectional dataset](http://www3.norc.org/GSS+Website/Download/STATA+v8.0+Format/) (Release 2, Feb. 2012). A mock codebook is bundled with the data extract.
+The dataset is a trimmed-down version of the [GSS 1972-2010 cumulative cross-sectional dataset](http://www3.norc.org/GSS+Website/Download/STATA+v8.0+Format/) (Release 2, Feb. 2012). Variables with less than 500 observations are not in the teaching dataset. A mock codebook is bundled with the data extract.
 
 * * *
 
@@ -76,7 +76,7 @@ The `nhis2009` dataset holds sample adult data for years 2000--2009 of the U.S. 
 ### Survey weights:
 
     use "data/nhis2009.dta", clear
-    svyset psu [pweight=perweight], strata(strata)
+    svyset psu [pw = perweight], strata(strata)
 
 See the [IHIS/NHIS user notes](http://www.ihis.us/ihis/userNotes_variance.shtml) on variance estimation for more details.
 
@@ -109,7 +109,7 @@ The `wvs2000` dataset holds data from Wave 4 (1999-2004) of the World Values Sur
 ### Survey weights:
 
     use data/wvs2000, clear
-    svyset [aw=s017]
+    svyset [aw = s017]
 
 See the [WVS weighting guide](http://www.jdsurvey.net/jds/jdsurveyActualidad.jsp?Idioma=I&SeccionTexto=0405) for other options.
 

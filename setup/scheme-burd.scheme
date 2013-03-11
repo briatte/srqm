@@ -20,11 +20,19 @@ color tick                   none
 gsize legend_key_xsize       medsmall
 clockdir                     legend_position 11
 clockdir                     title_position  11
-  
+
+color heading black
+margin heading bottom
+
+color major_grid none
+
+// -- inactive
+
 // linestyle                 axis_withgrid none
 // tickstyle                 major_notick
 
-// does not seem to work:
+// -- doesn't work
+
 // gsize legend_key_ysize       *.5
 
 // changed from black:
@@ -72,7 +80,7 @@ anglestyle vertical_tick     horizontal
 // See other scheme files for blue-red gradient
 // on 3 to 11 classes.
 
-color p gs6
+color p gs5
 color p1     "33 102 172"  // Bu from RdBu-7, replaces navy
 color p2     "178 24 43"   // Rd from RdBu-7, replaces maroon
 color p3     "27 120 55"   // Gn from PRGn-7, replaces forest_green
@@ -82,7 +90,7 @@ color p6     "197 27 125"  // Pi from PiYG-7, replaces cranberry
 color p7     "118 42 131"  // Pu from PuOr-7, replaces lavender
 color p8     "140 81 10"   // Br from BrBG-7, replaces khaki
 color p9     "77 77 77"    // Gr from RdGy-7, replaces sienna
-intensity bar 75
+intensity bar 50
 
 // Marker symbols
 symbol p      circle_hollow

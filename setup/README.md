@@ -14,13 +14,13 @@ __Currently in the works.__ This command will produce a `plotbeta`-style plot of
 
 The series of `scheme-burd` files contain reversed versions of the `RdBu` [ColorBrewer](http://colorbrewer2.org/) theme, as well as a replacement for the `s2color` scheme. The scheme is used for the course plots (and students get to use it if they want to). See [example plots](https://github.com/briatte/srqm/wiki/BuRd) appear on the course wiki.
 
-## `dataprep`
-
-Prepares the [course datasets](https://github.com/briatte/srqm/blob/master/data/README.md), which are slight variations on the original versions. All datasets are saved in Stata 9/10 format for compatibility. The `ess2008` and `nhis2009` datasets need to be downloaded by hand from the sources and renamed to these handles.
-
 ## `repl`
 
 __Not in use due to limited testing.__ Creates a replication folder out of a do-file. The folder will contain the do-file, log and all plots that were assigned an optional `name()` in the code. It will also contain any file exported by the do-file and a short file manifest in a `README` file.
+
+## `srqm_data`
+
+Prepares the [course datasets](https://github.com/briatte/srqm/blob/master/data/README.md), which are slight variations on the original versions. All datasets are saved in Stata 9/10 format for compatibility. The `ess2008` and `nhis2009` datasets need to be downloaded by hand from the sources and renamed to these handles.
 
 ## `srqm`
 
@@ -49,11 +49,13 @@ The mock symbolic link to the `SRQM` folder is generally erased at the end of th
 	srqm clean folder
 	srqm clean packages
 
-Finally, the utilities also include a built-in course update system that recognizes where files go and keeps older files as backups. The command works with `week#.do` files (code), `week#.pdf` files (slides) and setup (`.ado`) files:
+The utilities also include a built-in course update system that recognizes where files go and keeps older files as backups. The command works with `week#.do` files (code), `week#.pdf` files (slides) and setup (`.ado`) files:
 
     srqm fetch week7.pdf
     srqm fetch week11.do
     srqm fetch stab.ado // caution with that
+
+Finally, the course datasets can be rebuilt by calling `srqm data` followed by `all` or by the name of a course dataset. The command calls the `srqm_data` ado-file.
 
 When the additional `log` option is specified, all commands send verbose output to a log in order to help users report issues.
 

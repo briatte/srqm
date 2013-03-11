@@ -273,7 +273,7 @@ lookfor sex health race
 
 * Summarize BMI (as well as height and weight) for each value of 'sex'. The
 * -su- command assumes that you are describing a variable that can take any
-* numerical value, and shows summary statistics for it. The -bysort- prefix
+* numeric value, and shows summary statistics for it. The -bysort- prefix
 * (shorthand -bys-) takes one categorical variable and repeats the command
 * over its categories. The entire command thus reads: for each value of the
 * 'sex' variable, summarize the continuous variables 'bmi', 'age' and weight.
