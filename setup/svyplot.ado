@@ -1,4 +1,4 @@
-*! 0.2.2 François Briatte 20mar2013
+*! 0.2.3 F. Briatte 20mar2013
 
 cap pr drop svyplot
 program svyplot
