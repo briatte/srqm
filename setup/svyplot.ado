@@ -1,4 +1,4 @@
-*! 0.2.1 Franois Briatte 20mar2013
+*! 0.2.2 Franois Briatte 20mar2013
 
 cap pr drop svyplot
 program svyplot
@@ -9,6 +9,8 @@ program svyplot
 	// parse options
 
 	local plot = cond("`horizontal'" != "", "hbar", "bar") // bars by default	
+
+	if strpos("`options'", "stack") > 0 local pos = "position(center)"
 
 	if "`nopercents'" == "" local b = "blabel(bar, `pos' size(`size') format(%3.`float'f))"
 		
@@ -61,9 +63,7 @@ program svyplot
 		local b1 = cond("`horizontal'" != "", "", "`t2'")
 		local l1 = cond("`horizontal'" != "", "`t2'", "")
 	}
-	
-	if strpos("`options'", "stack") > 0 local pos = "position(center)"
-	
+		
 	if "`col'" != "" {
 		local gradient ""
 		qui levelsof `1' `if' `in', local(n)
@@ -76,6 +76,7 @@ program svyplot
 	}
 
 	// plot
+	di as err "`options'"
 	
 	cap which catplot
 	if _rc == 111 qui ssc install catplot, replace
