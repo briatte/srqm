@@ -1,7 +1,0 @@
-#include burd
-
-// Colorbrewer RdBu-3, reversed
-
-color p1              "103 169 207"
-color p2              "247 247 247"
-color p3              "239 138 98"

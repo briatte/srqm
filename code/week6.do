@@ -35,17 +35,21 @@ svyset [pw = dweight] // weighting scheme set to country-specific population
 
 * Rename variables to short handles.
 ren (agea gndr hinctnta eduyrs) (age sex income edu) // socio-demographics
-ren (rlgdnm lrscale tvpol) (denom pol tv) // religion, politics
+ren (rlgdnm lrscale tvpol) (denom pol tv)            // religion, politics
 
 * Have a quick look.
 codebook cntry age sex income edu denom pol tv, c
+
+
+* Subsetting
+* ----------
 
 * Delete incomplete observations.
 drop if mi(age, sex, income, edu, denom, pol, tv)
 
 
-* DV: Justifiability of torture in event of preventing terrorism
-* --------------------------------------------------------------
+* Dependent variable: Justifiability of torture in event of preventing terrorism
+* ------------------------------------------------------------------------------
 
 fre trrtort
 
@@ -53,9 +57,11 @@ fre trrtort
 tab trrtort, gen(torture_)
 
 * Country-level breakdown using stacked bars and 5-pt scale graph scheme.
-gr hbar torture_? [aw = dweight], stack over(cntry, sort(1)des lab(labsize(*.8))) ///
+gr hbar torture_? [aw = dweight], stack ///
+	over(cntry, sort(1)des lab(labsize(*.8))) ///
     yti("Torture is never justified even to prevent terrorism") ///
-    legend(rows(1) order(1 "Strongly agree" 2 "" 3 "Neither" 4 "" 5 "Strongly disagree")) ///
+    legend(rows(1) ///
+    order(1 "Strongly agree" 2 "" 3 "Neither" 4 "" 5 "Strongly disagree")) ///
     name(torture1, replace) scheme(burd5)
 
 * Binary recoding (1 = torture is never justifiable; undecideds removed).
@@ -88,6 +94,11 @@ keep if israel
 
 * Final sample size.
 count
+
+
+* ======================
+* = SIGNIFICANCE TESTS =
+* ======================
 
 
 * IV: Age
@@ -215,7 +226,7 @@ tab torture pol3, col nof    // column percentages
 tab torture pol3, row nof    // rows percentages
 
 * Chi-squared test:
-tab torture pol3, exp chi2 // expected frequencies
+tab torture pol3, exp chi2   // expected frequencies
 
 
 * IV: Media exposure

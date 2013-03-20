@@ -35,7 +35,11 @@ cap log using code/week7.log, replace
 use data/qog2011, clear
 
 * Rename variables to short handles.
-ren (wdi_fr bl_asyt25 undp_hdi ti_cpi gid_fgm) (births schooling hdi corruption femgov)
+ren wdi_fr births
+ren bl_asyt25 schooling
+ren undp_hdi hdi
+ren ti_cpi corruption
+ren gid_fgm femgov
 
 * Compute GDP per capita.
 gen gdpc = unna_gdp/unna_pop
@@ -172,7 +176,7 @@ gr mat births schooling log_gdpc corruption femgov, ///
 
 * You could also look at a sparser version of the matrix that shows only half of
 * all plots for a subset of geographical regions.
-gr mat births schooling log_gdpc corruption femgov if inlist(region,4,5), half ///
+gr mat births schooling log_gdpc corruption femgov if inlist(region, 4, 5), half ///
 	name(gr_matrix_regions4_5, replace)
 
 * The most practical way to consider all possible correlations in a list of
@@ -266,19 +270,13 @@ gr di fert_edu4
 * --------------------------------
 
 * Another way to visualize the quality of a linear fit is to plot a smoothed fit
-* with the -lowess- command to show departures from linearity in the IV effect.
+* with the -lowess- command, to show departures from linearity in the IV effect:
 lowess births schooling, ///
 	name(fert_edu_lowess, replace)
 
-* The lowess smoother can works as a moving average (running mean) or as a least
-* squares estimator on a fraction of the observations (which is the default).
-* Use the bw() option with low widths (below .5) to see how it works:
-lowess births schooling, bw(.2) ///
-	name(fert_edu_lowess, replace)
-
-* The data are broken into clusters, for which an approximate slope is computed
-* in order to draw a small segment of the LOWESS curve. The details of a least
-* squares estimator are on next week's menu.
+* The LOWESS smoother available with -lowess- in Stata can operate as a moving 
+* average (running mean) or as a least squares estimator, which is the default.
+* The core mechanics of a least squares estimator are on next week's menu.
 
 
 * =======

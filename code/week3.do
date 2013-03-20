@@ -162,7 +162,7 @@ d sharia3_*
 * visualizations, especially with categorical variables.
 gr bar sharia3_*, over(country, sort(1)des lab(angle(45))) stack percent ///
 	ti("Support for sharia legislation") yti("% respondents") ///
-	legend(pos(1) row(1) order(1 "For" 2 "Neutral" 3 "Against")) ///
+	legend(row(1) order(1 "For" 2 "Neutral" 3 "Against")) ///
 	note("World Values Survey 1999-2004. {it:N} = 13,541") ///
 	scheme(burd3) name(dv_bar, replace)
 

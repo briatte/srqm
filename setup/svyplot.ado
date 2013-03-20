@@ -1,14 +1,16 @@
 cap pr drop svyplot
 program svyplot
 	syntax varlist(max=3) [if] [in] [aweight fweight iweight/] ///
-		[, Reds Blues Ascending Descending Horizontal XLAB NOPercents ///
-		Percent(int 2) Size(real 3.5) ANGLE(int 0) Ymax(int 100) Float(int 0) *]
-
-	local plot = cond("`horizontal'" != "", "hbar", "bar") // bars by default	
+		[, Reds Blues Ascending Descending Horizontal XLAb NOPercents ///
+		Size(real 3.5) ANGLE(int 0) Ymax(int 100) Float(int 0) *]
 
 	cap which catplot
 	if _rc == 111 qui ssc install catplot, replace
-	
+
+	// parse options
+
+	local plot = cond("`horizontal'" != "", "hbar", "bar") // bars by default	
+		
 	local red = ("`reds'" != "")
 	local blu = ("`blues'"!= "")
 	if `red' + `blu' > 1 {
@@ -19,6 +21,7 @@ program svyplot
 		if `red' local col = "178 24 43"
 		if `blu' local col = "33 102 172"
 	}
+
 	local asc = ("`ascending'" != "")
 	local des = ("`descending'"!= "")
 	if `asc' + `des' > 1 {
@@ -28,16 +31,24 @@ program svyplot
 	else {
 		local rev = cond(`des' == 1, 1, 0) // ascending order by default
 		if `asc' + `des' > 0 local y "`y' asyvars"
+		if `asc' + `des' > 0 & `red' + `blu' < 1 di as txt ///
+			"Warning: no color option specified; " ///
+			"sort option ignored"
 	}
-	
+
+	// parse variables
+		
 	tokenize `varlist'
-	tab `1' `2' `if' `in'
+	
+	qui tab `1' `2' `if' `in'
 	local ycat = r(r)
 	
+	local angle "lab(angle(`angle'))"
+	
 	if `: word count `varlist'' > 1 {
-		local p = cond(`percent' == 2, "`2'", "`3'")
-		local y = "`y' percent(`p') over(`2', lab(angle(`angle')))"
-		if `: word count `varlist'' > 2 local y = "`y' over(`3', lab(angle(`angle')))"
+		local p = cond("`3'" == "", "`2' `by'", "`2' `3' `by'")
+		local y = "`y' percent(`p') over(`2', `angle')"
+		if `: word count `varlist'' > 2 local y = "`y' over(`3', `angle')"
 	}
 	else {
 		local y = "`y' percent"
@@ -63,8 +74,8 @@ program svyplot
 		}
 	}
 
-	if "`nopercents'" == "" local b = "blabel(bar, `pos' size(`size') format(%3.0f))"
-
+	if "`nopercents'" == "" local b = "blabel(bar, `pos' size(`size') format(%3.`float'f))"
+	
 	catplot `1' `if' `in', `y' `b' recast(`plot') yla(0(20)`ymax', angle(h)) ///
 		legend(bmargin(bottom) row(1)) ///
 		ti("`t1'", margin(bottom)) yti("") b1ti("`b1'") l1ti("`l1'") ///
