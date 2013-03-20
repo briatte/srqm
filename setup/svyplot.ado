@@ -1,3 +1,5 @@
+*! 0.2.0 François Briatte 20mar2013
+
 cap pr drop svyplot
 program svyplot
 	syntax varlist(max=3) [if] [in] [aweight fweight iweight/] ///
