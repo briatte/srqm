@@ -1,17 +1,16 @@
-*! 0.2.0 François Briatte 20mar2013
+*! 0.2.1 François Briatte 20mar2013
 
 cap pr drop svyplot
 program svyplot
 	syntax varlist(max=3) [if] [in] [aweight fweight iweight/] ///
-		[, Reds Blues Ascending Descending Horizontal XLAb NOPercents ///
-		Size(real 3.5) ANGLE(int 0) Ymax(int 100) Float(int 0) *]
-
-	cap which catplot
-	if _rc == 111 qui ssc install catplot, replace
+		[, Reds Blues Ascending Descending Horizontal Ymax(int 100) ///
+		Float(int 0) Size(real 3.5) ANGLE(int 0) NOPercent XLAb *]
 
 	// parse options
 
 	local plot = cond("`horizontal'" != "", "hbar", "bar") // bars by default	
+
+	if "`nopercents'" == "" local b = "blabel(bar, `pos' size(`size') format(%3.`float'f))"
 		
 	local red = ("`reds'" != "")
 	local blu = ("`blues'"!= "")
@@ -76,8 +75,11 @@ program svyplot
 		}
 	}
 
-	if "`nopercents'" == "" local b = "blabel(bar, `pos' size(`size') format(%3.`float'f))"
+	// plot
 	
+	cap which catplot
+	if _rc == 111 qui ssc install catplot, replace
+
 	catplot `1' `if' `in', `y' `b' recast(`plot') yla(0(20)`ymax', angle(h)) ///
 		legend(bmargin(bottom) row(1)) ///
 		ti("`t1'", margin(bottom)) yti("") b1ti("`b1'") l1ti("`l1'") ///
