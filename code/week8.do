@@ -12,10 +12,15 @@
    logging GDP per capita and recoding geographical regions to less categories
    and shorter labels.
    
-   We then explore simple linear regression using the same set of variables:
-   (DV = fertility, IVs = education, GDP per capita, etc., then DV = corruption,
-   IVs = Human Development Index and female ministers). Refer to last week's 
-   do-file for precisions on variable recodes.
+   We then explore simple linear regression using a similar set of variables as
+   the one used last week. Some variables are interpreted on non-linear scales.
+   Dummies (and categorical variables generally) can also be passed to a simple
+   linear regression equation, with another slight adjustment in interpretation.
+
+   Our next two sessions will move from these fundamentals about regression to
+   multiple linear regression, and then to logistic models for binary dependent
+   variables. Make sure that you understand the logic of ordinary least squares
+   (OLS) in order to include simple linear regression models in your next draft.
 
    Last updated 2012-11-13.
 
@@ -52,7 +57,7 @@ global ci "legend(off) lp(dash)"
 
 * We are looking again at the relationship between fertility and education that
 * we already observed in our previous do-file. At that stage, we assume that you
-* have a subtantive model to explain the relationship that you are studying, or
+* have a substantive model to explain the relationship that you are studying, or
 * the results of the model will land nowhere and serve no analytical purpose.
 
 * Visual fit.
