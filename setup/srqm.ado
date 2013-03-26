@@ -36,7 +36,7 @@ program srqm
 
     // package list
 
-    local cmdlist = "lookfor_all fre spineplot tab_chi mkcorr tabout estout leanout plotbeta kountry qog wbopendata spmap _gstd01 clarify schemes"
+    local cmdlist = "lookfor_all fre spineplot tab_chi mkcorr tabout estout leanout plotbeta kountry qog wbopendata spmap scheme-burd schemes _gstd01 clarify"
 
         * catplot ciplot distplot log2do2 outreg2 revrs
         * tufte lean2
@@ -161,6 +161,9 @@ program srqm
 
                 // qog and qoguse
                 if "`t'"=="qog" cap which qoguse
+                
+                // scheme-burd
+                if "`t'"=="scheme-burd" cap which scheme-burd.scheme
 
                 if _rc==111 | `forced' {
 

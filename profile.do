@@ -22,9 +22,6 @@ else if _rc {
 // load utilities
 cap adopath + "`c(pwd)'/setup"
 
-// load BuRd scheme
-cap adopath + "`c(pwd)'/setup/burd"
-
 // course folder
 cap noi srqm check folder
 if _rc != 0 exit -1
