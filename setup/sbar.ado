@@ -1,7 +1,7 @@
 *! 0.2.3 F. Briatte 20mar2013
 
-cap pr drop svyplot
-program svyplot
+cap pr drop sbar
+program sbar
 	syntax varlist(max=3) [if] [in] [aweight fweight iweight/] ///
 		[, Reds Blues Ascending Descending Horizontal Ymax(int 100) ///
 		Float(int 0) Size(real 3.5) ANGLE(int 0) NOPercent XLAb *]
@@ -71,12 +71,12 @@ program svyplot
 		foreach l of local n {
 			local d = round((`i' + 1) / (`ycat' + 1), .01)
 			if `rev' == 1 local d = round((`ycat' + 2  -`i') / (`ycat' + 1), .01)
-			local gradient "`gradient' bar(`i++', blc(`col'*.8) bfc(`col'*`d'))"
+			local gradient "`gradient' bar(`i++', blc(`col'*0) bfc(`col'*`d'))"
 		}
 	}
-
+	
 	// plot
-	di as err "`options'"
+	di as err "`gradient'"
 	
 	cap which catplot
 	if _rc == 111 qui ssc install catplot, replace
@@ -84,5 +84,5 @@ program svyplot
 	catplot `1' `if' `in', `y' `b' recast(`plot') yla(0(20)`ymax', angle(h)) ///
 		legend(bmargin(bottom) row(1)) ///
 		ti("`t1'", margin(bottom)) yti("") b1ti("`b1'") l1ti("`l1'") ///
-		`gradient' `options'
+		`gradient' `options' inten(100)
 end
