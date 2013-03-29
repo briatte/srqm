@@ -1,5 +1,5 @@
 
-/* ------------------------------------------ SRQM Session 10 ------------------
+/* ------------------------------------------ SRQM Session 9 -------------------
 
    F. Briatte and I. Petev
 
@@ -7,11 +7,27 @@
 
  - DATA:   Quality of Government (2011)
  
-   This is our final do-file. It contains details on some aspects of multiple
-   linear regression, and shows again how to use the -estout- command to store
-   and export regression models. It was a pleasure to cruise in your company.
+   This is our final do-file with the Quality of Government example that we have
+   been running over three sessions. It explains how to build on correlation and
+   simple linear regression to produce complete linear regression models.
+   
+   The code contains details on several aspects of multiple linear regression.
+   It also shows how to use the -estout- command to store and export the results
+   of regression models.
+   
+   For your second draft, go as far as possible with multiple linear regression.
+   Start with correlations if applicable, then go forward with simple linear
+   regressions (add scatterplots if your predictors are continuous).
 
-   Last updated 2012-11-28.
+   Follow the instructions from the draft paper template. If you manage to go as
+   far as diagnosing your model, discuss them and add interaction terms if you
+   detect issues of multicollinearity.
+   
+   The next sessions will provide another way to model the data for dependent
+   variables that are (or are closer to being) categorical in nature, and will
+   go deeper into the core mechanics of regression modelling.
+
+   Last updated 2013-03-29.
 
 ----------------------------------------------------------------------------- */
 
