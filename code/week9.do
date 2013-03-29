@@ -218,7 +218,7 @@ reg births schooling log_gdpc i.region
 * The baseline is, by default, the first category in the variable. Looking at
 * predicted values, we can draw parallel regression lines for dummies.
 
-* Previous regression model.
+* Bivariate regression model, for demonstration purposes.
 reg births schooling i.region
 
 * Storing fitted (predicted) values.
@@ -229,17 +229,29 @@ predict yhat
 tw (sc births schooling if region == 4, ms(O)) ///
     (sc births schooling if region == 6) ///
     (sc births schooling if !inlist(region,4,6), mc(gs10)) ///
-    (rcap yhat births schooling if region == 4, c(l) lc(blue) lp(dash) msize(tiny)) ///
-    (rcap yhat births schooling if region == 6, c(l) lc(red) lp(dash) msize(tiny)) ///
+    (rcap yhat births schooling if region == 4, ///
+    	c(l) lc(blue) lp(dash) msize(tiny)) ///
+    (rcap yhat births schooling if region == 6, ///
+    	c(l) lc(red) lp(dash) msize(tiny)) ///
     (sc yhat schooling if region == 4, c(l) ms(i) mc(blue) lc(blue)) ///
     (sc yhat schooling if region == 6, c(l) ms(i) mc(red) lc(red)), ///
-    legend(order(1 "African countries" 6 "Fitted values (Africa)" 4 "Residuals (Africa)" ///
-    2 "Asian countries" 7 "Fitted values (Asia)" 5 "Residuals (Asia)") row(2)) ///
+    legend(order(1 "African countries" 6 "Fitted values (Africa)" ///
+    	4 "Residuals (Africa)" ///
+    	2 "Asian countries" 7 "Fitted values (Asia)" ///
+    	5 "Residuals (Asia)") row(2)) ///
     name(reg_geo2, replace)
-    
+
+* Visualizing AIDS dummy within the sample.
+tw (sc births schooling if !aids, ms(O)) ///
+    (sc births schooling if aids, ms(O)) ///
+    (lfit births schooling, lc(gs10)), ///
+    legend(order(2 "High AIDS prevalence" 1 "Rest of sample") row(1)) ///
+    yti("Fertility rate") ///
+    name(reg_aids1, replace)
+
 * Regression line for the HIV/AIDS dummy.
 tw (sc yhat aids) (lfit yhat aids), xlab(0 "Low" 1 "High") ///
-	name(reg_aids, replace)
+	name(reg_aids2, replace)
 
 * Comparison of t-test and regression results for a single dummy.
 ttest yhat, by(aids)
@@ -251,8 +263,8 @@ reg yhat i.aids
 * =========================
 
 
-* Rerun the regression model.
-reg births schooling log_gdpc aids i.region
+* Rerun regression model. Note that the "i." prefix is optional for dummies.
+reg births schooling log_gdpc aids
 
 * Storing fitted (predicted) values.
 cap drop yhat
@@ -314,7 +326,10 @@ lowess rsta schooling, bw(.5) yline(0) ///
 * models that use high numbers of correlated variables together in the model,
 * which measures several times the same effect and creates multicollinearity.
 * This problem renders the regression coefficients useless. Critical cut-off
-* points for variance inflation are VIF > 10 or 1/VIF < .1 (tolerance).
+* points for variance inflation are VIF > 10 or 1/VIF < .1 (tolerance). Each
+* VIF is computed as the reciprocal of the inverse R-squared, 1/(1-R^2), for
+* each predictor in the model (that is, the R-squared of that variable minus
+* the R-squared of the entire model without it).
 vif
 
 * Adding an interaction term is a technique to account for the variance that
@@ -323,24 +338,21 @@ vif
 * The regression coefficient for this product is the interaction effect. If that
 * effect is significantly large, the model accounts for it by isolating it and
 * reading other coefficients.
-gen schoolingXlog_gdpc = schooling*log_gdpc
-la var schoolingXlog_gdpc "GDP * Schooling"
+gen schoolingXlog_gdpc = schooling * log_gdpc
+la var schoolingXlog_gdpc "GDP * Education"
 
 * Regression model.
-reg births schooling log_gdpc aids i.region
+reg births schooling log_gdpc aids
 
 * Regression model with an interaction term.
-reg births schooling log_gdpc schoolingXlog_gdpc aids i.region
+reg births schooling log_gdpc schoolingXlog_gdpc aids
 
-* Standardised coefficients reveal how the interaction influences the model.
-reg births schooling log_gdpc schoolingXlog_gdpc aids i.region, b
+* Standardised coefficients reveal the extent to which the interaction actually
+* influences the model, in comparison to all other included predictors (IVs).
+reg births schooling log_gdpc schoolingXlog_gdpc aids, b
 
-* Finally, this is how an even more detailed model can be written. The first
-* term tests a factorial interaction between two continuous variables, noted
-* with the "c." prefix. Each variable is added to the model, along with their
-* interaction term. The second term tests all combinations of two categorical
-* variables, which will show the impact of high HIV prevalence per continent.
-reg births c.schooling##c.log_gdpc i.aids#i.region, b
+* Last, a shorter way to write up an interaction for two continuous predictors.
+reg births c.schooling##c.log_gdpc aids, b
 
 
 * =================
@@ -364,15 +376,29 @@ eststo clear
 * Model 1: 'Baseline model'.
 eststo M1: qui reg births schooling log_gdpc
 
-* Model 2: Adding the HIV/AIDS dummy with regional interactions.
-eststo M2: qui reg births schooling log_gdpc aids i.region
+* Re-read, in simplified form.
+leanout:
+
+* Model 2: Adding the HIV/AIDS dummy.
+eststo M2: qui reg births schooling log_gdpc aids
+
+* Re-read, in simplified form.
+leanout:
 
 * Model 3: Adding the interaction between education and wealth.
-eststo M3: qui reg births c.schooling##c.log_gdpc aids##region
+eststo M3: qui reg births c.schooling##c.log_gdpc aids
+
+* Re-read, in simplified form.
+leanout:
+
+* Compare all models on screen.
+esttab M1 M2 M3, lab b(1) se(1) sca(rmse) ///
+    mti("Baseline" "Control" "Interaction")
 
 * Export all models for comparison and reporting.
-esttab M1 M2 M3 using "week10_regressions.txt", replace constant b(2) se(2) r2(2) ///
-    label mtitles("Baseline" "Controls" "Interactions")
+esttab M1 M2 M3 using week10_regressions.txt, replace /// 
+	lab b(1) se(1) sca(rmse) ///
+    mti("Baseline" "Controls" "Interactions")
 
 /* Basic usage of -estout- commands:
   

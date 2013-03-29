@@ -43,7 +43,7 @@ program sbar
 		
 	tokenize `varlist'
 	
-	qui tab `1' `2' `if' `in'
+	tab `1' `2' `if' `in', chi2
 	local ycat = r(r)
 	
 	local angle "lab(angle(`angle'))"
