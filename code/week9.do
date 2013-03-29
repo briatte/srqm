@@ -39,7 +39,7 @@ foreach p in fre estout leanout mkcorr {
 }
 
 * Export log.
-cap log using code/week10.log, replace
+cap log using code/week9.log, replace
 
 
 * ====================
@@ -97,7 +97,7 @@ count
 * the model is the HIV/AIDS prevalence dummy: regions are used only for teaching
 * purposes in the table but should not be treated as predictors.
 
-stab using week10, replace ///
+stab using week9, replace ///
     su(births schooling log_gdpc) ///
     corr(births schooling log_gdpc) ///
     fr(aids region)
@@ -113,8 +113,8 @@ stab using week10, replace ///
 - option:   [aw, fw]      use survey weights (use only if you know how they work)
 
   In the example above, the -stab- command will export two files to the working
-  directory, containing summary statistics (week10_stats.txt) and a correlation
-  matrix (week10_correlations.txt). */
+  directory, containing summary statistics (week9_stats.txt) and a correlation
+  matrix (week9_correlations.txt). */
 
 
 * =====================
@@ -131,12 +131,12 @@ gr mat births schooling log_gdpc, half ///
 
 * Export method using -mkcorr-.
 mkcorr births schooling log_gdpc, ///
-	lab num sig log("week10_mkcorr.txt") replace
+	lab num sig log("week9_mkcorr.txt") replace
 
 * Export method using -estout-.
 eststo clear
 qui estpost correlate births schooling log_gdpc, matrix listwise
-esttab using "week10_estpost.txt", unstack not compress label replace
+esttab using "week9_estpost.txt", unstack not compress label replace
 
 
 * =====================
@@ -412,7 +412,7 @@ esttab M1 M2 M3, lab b(1) se(1) sca(rmse) ///
     mti("Baseline" "Control" "Interaction")
 
 * Export all models for comparison and reporting.
-esttab M1 M2 M3 using week10_regressions.txt, replace /// 
+esttab M1 M2 M3 using week9_regressions.txt, replace /// 
 	lab b(1) se(1) sca(rmse) ///
     mti("Baseline" "Controls" "Interactions")
 
