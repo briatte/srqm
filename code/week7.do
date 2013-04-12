@@ -52,7 +52,7 @@ ren ti_cpi corruption
 ren gid_fgm femgov
 
 * Compute GDP per capita.
-gen gdpc = unna_gdp/unna_pop
+gen gdpc = unna_gdp / unna_pop
 la var gdpc "Real GDP per capita (constant USD)"
 
 * Recode to less, shorter labels.
