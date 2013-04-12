@@ -7,6 +7,42 @@
  
  - DATA:   European Social Survey Round 4 (2008)
  
+   This do-file introduces the topic of significance tests, i.e. statistical
+   tools to assess whether an association that shows up in the data is different
+   from the kind of arrangement that might be observed in random data.
+   
+   Associations are relationships between two of your variables. They correspond
+   to real-world relationships, like the association between income and gender.
+   Significance tests are helpful to observe and measure these phenomena.
+   
+   The null hypothesis, which is the kind of hypothesis that gets tested in a 
+   significance test, is different from the substantive hypotheses that you 
+   previously formulated about your data. It is usually denoted "H_0".
+   
+   The null hypothesis is the extent to which it is possible to reproduce the
+   association that you observe in the data by statistical accident. It measures
+   the consistency of your data with randomness.
+   
+   A significance test never proves anything. It can only reject the possibility
+   that an association in your data is consistent with accidental situations.
+   The aim of a significance test is therefore to reject the null hypothesis.
+   
+   To obtain that kind of proof by contradiction, the significance test will
+   estimate how likely it is to reach the same kind of association that you
+   observe from random data. This likelihood is called the p-value of the test.
+   
+   A small p-value means that is highly unlikely to produce the same association
+   as the one you observe out of randomness. Note how far that result is from an
+   assessment of whether your hypothesis is right or wrong!
+   
+   The notions covered in the paragraphs above cannot be introduced technically,
+   as short comments accompanying Stata commands. They require that you actually
+   open your textbooks and read at length about statistical estimation.
+   
+   There are many different kinds of hypothesis tests: we will cover the t-test,
+   the proportions test, the Chi-squared test and finally linear correlation.
+   The Stata Guide also covers these tests. Make sure to read what you need to!
+
    Last updated 2012-11-13.
 
 ----------------------------------------------------------------------------- */

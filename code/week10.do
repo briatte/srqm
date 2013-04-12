@@ -1,5 +1,5 @@
 
-/* ------------------------------------------ SRQM Session 11 ------------------
+/* ------------------------------------------ SRQM Session 10 ------------------
 
    F. Briatte and I. Petev
 
@@ -7,19 +7,36 @@
  
  - DATA:   European Social Survey Round 4 (2008)
 
-   Last updated 2012-12-15.
+   This do-file complements the series that we finished running last week using
+   the Quality of Government dataset. It shows how multiple regression can apply
+   to survey data, and introduces a different form of regression model.
+   
+   Survey data commonly feature response items that are discrete rather than 
+   continuous. This means that linear regression models will be of limited use
+   with this type of data.
+   
+   When the dependent variable cannot be normaly distributed, a solution is to 
+   simplify it to a dummy and to estimate a logistic regression model, which is
+   a generalization of the linear model.
+   
+   This do-file introduces logistic models. For your own work, decide whether a
+   logistic estimator is more appropriate than a linear one, and include draft
+   models in your revised draft.
+   
+   Last updated 2013-04-05.
 
 ----------------------------------------------------------------------------- */
 
 
 * Additional commands.
-foreach p in estout fre {
+foreach p in estout fre tab_chi  {
+	if "`p'" == "tab_chi" local p = "tabchi" // fix
 	cap which `p'
 	if _rc == 111 ssc install `p'
 }
 
 * Log.
-cap log using code/week11.log, replace
+cap log using code/week10.log, replace
 
 
 * ====================
@@ -33,7 +50,7 @@ use data/ess2008, clear
 drop if agea < 25 | mi(imdfetn, agea, gndr, brncntr, edulvla, hinctnta, lrscale)
 
 * Survey weights (design weight by country, multiplied by population weight).
-gen dpw = dweight*pweight
+gen dpw = dweight * pweight
 la var dpw "Survey weight (population*design)"
 
 * Country dummies (used for clustered standard errors).
@@ -66,6 +83,10 @@ d agea gndr brncntr edulvla hinctnta lrscale
 * Renaming.
 ren (agea hinctnta lrscale) (age income rightwing)
 
+* Create age groups.
+gen cohort = irecode(age, 24, 34, 44, 54, 64, 74)
+replace cohort = 15 + 10 * cohort
+
 * Dummify sex.
 gen female:sex = (gndr == 2)
 la def sex 0 "Male" 1 "Female", replace
@@ -75,28 +96,30 @@ gen born:born = (brncntr == 1)
 la def born 0 "Foreign-born" 1 "Born in country", replace
 
 * Collapse some educational categories.
-recode edulvla (1 2 = 1 "Low") (3 = 2 "Medium") (4 5 = 3 "High") (else = .), gen(edu3)
+recode edulvla ///
+	(1 2  = 1 "Low")    ///
+	(3    = 2 "Medium") ///
+	(4 5  = 3 "High")   ///
+	(else = .), gen(edu3)
 la var edu3 "Education level"
 
 
-* Summary statistics
-* ------------------
+* Export summary statistics
+* -------------------------
 
 * Export.
-stab using week11, replace ///
+stab using week10, replace ///
 	su(age rightwing) ///
 	fre(imdfetn female born edu3 income)
 
 
-* Associations
-* ------------
+* =====================
+* = ASSOCIATION TESTS =
+* =====================
 
-* Dummify the DV.
+
+* Dummify the DV categories.
 tab imdfetn, gen(immig_)
-
-* Create age groups.
-gen cohort = irecode(age,24,34,44,54,64,74)
-replace cohort = 15 + 10*cohort
 
 * Crossvisualize DV with basic demographics.
 gr bar immig_*, stack percent over(cohort) by(female born, note("")) yti("") ///
@@ -104,7 +127,7 @@ gr bar immig_*, stack percent over(cohort) by(female born, note("")) yti("") ///
 	scheme(burd4) name(demog, replace)
 
 * Crosstabulation: DV by gender.
-tab female imdfetn, row nof chi2 // Chi-squared test and Cramer's V
+tab female imdfetn, row nof chi2 // Chi-squared test
 tabchi female imdfetn, p noo noe // Pearson residuals
 
 * Crosstabulation: DV by country of birth.
@@ -123,21 +146,16 @@ la def inc10 1 "D1" 10 "D10", replace
 la val income inc10
 
 * Visualization of education with income, sex and country of birth.
-gr bar edu_*, stack percent over(income) by(female born, note("") ///
+gr bar edu_*, stack percent over(income) by(female born, note("")) yti("") ///
 	legend(order(1 "Low" 2 "Medium" 3 "High") row(1) pos(11)) ///
-	ti("Educational attainment by income decile")) yti("") ///
 	scheme(burd3) name(edu_inc, replace)
-
-* Crosstabulation.
-bys female born: tab income edu3, row nof chi2 // computed for each subgroup
-tabchi income edu3, p noo noe
 
 * Simplified political scale.
 recode rightwing ///
-	(0/4 = 1 "Left-wing") ///
-	(5 = 2 "Centre") ///
+	(0/4  = 1 "Left-wing")  ///
+	(5    = 2 "Centre")     ///
 	(6/11 = 3 "Right-wing") ///
-	, gen(wing)
+	(else = .), gen(wing)
 tab wing, gen(wing_)
 
 * Visualization of left-right political leaning by income decile and age cohort.
@@ -180,14 +198,16 @@ vif
 predict r, resid
 
 * Diagnostic plots.
-hist r, normal name(r, replace) // distribution of residuals
-rvfplot, yli(0) name(rvf, replace)     // residuals versus fitted values
+hist r, normal ///
+	name(r, replace)   // distribution of residuals
+rvfplot, yli(0) ///
+	name(rvf, replace) // residuals vs. fitted values
 
 * Export.
 eststo clear
 eststo lin_1: reg imdfetn $bl [pw = dpw]
 eststo lin_2: reg imdfetn $bl [pw = dpw], vce(cluster cid)
-esttab lin_? using week11_ols.txt, mti("OLS" "Adj. OLS") replace
+esttab lin_? using week10_ols.txt, mti("OLS" "Adj. OLS") replace
 
 * The diagnostics clearly identify the issue here: the limited number of levels
 * in the DV is causing residuals to follow a low-dimensional pattern that does
@@ -255,7 +275,7 @@ logit nomigrants $bl [pw = dpw], vce(cluster cid) or
 eststo clear
 eststo log_1: logit nomigrants $bl [pw = dpw]
 eststo log_2: logit nomigrants $bl [pw = dpw], vce(cluster cid)
-esttab log_? using week11_logits.txt, mti("Logit" "Adj. logit") replace
+esttab log_? using week10_logits.txt, mti("Logit" "Adj. logit") replace
 
 
 * Marginal effects
@@ -264,14 +284,14 @@ esttab log_? using week11_logits.txt, mti("Logit" "Adj. logit") replace
 * Marginal effects of political attitude: estimated probability of DV at each
 * level of the 10-point left/right scale used in the model, all other factors
 * kept constant (demographics, education and income).
-margins, at(rightwing=(0(1)10))
+margins, at(rightwing = (0(1)10))
 marginsplot, xla(minmax) recast(line) recastci(rarea) ciopts(col(*.6)) ///
 	name(mfx_right, replace)
 
 * Marginal effects of educational attainment, by gender and country of birth.
 * The margins command will generate estimate for all possible permutations of
 * the IV list provided, and then plot them as confidence intervals.
-margins born#female, at(edu3=(1(1)3))
+margins born#female, at(edu3 = (1(1)3))
 marginsplot, xla(minmax) by(female born) ///
 	name(mfx_demog, replace)
 
@@ -282,12 +302,6 @@ marginsplot, xla(minmax) by(female born) ///
 margins born#female, at(age=(25(5)85))
 marginsplot, by(female) recast(line) recastci(rarea) ciopts(col(*.6)) ///
 	name(mfx_age, replace)
-
-* Marginal effects used to be much more cumbersome in previous versions of Stata
-* and were often computed through additional commands like the -spost9- commands
-* by Scott Long and Jeremy Freese. Bill Rising of StataCorp has written a useful
-* presentation on the -margins- commands for a recent Stata Users Group Meeting:
-* http://www.stata.com/meeting/italy12/abstracts/materials/it12_rising.pdf
 
 
 * Sensitivity analysis
@@ -303,8 +317,8 @@ marginsplot, by(female) recast(line) recastci(rarea) ciopts(col(*.6)) ///
 ologit imdfetn $bl [pw = dpw], vce(cluster cid)
 
 
-* Export all models
-* -----------------
+* Export model results
+* --------------------
 
 eststo clear
 eststo lin_1: qui reg imdfetn $bl [pw = dpw], b
@@ -312,7 +326,7 @@ eststo lin_2: qui reg imdfetn $bl [pw = dpw], vce(cluster cid)
 eststo log_1: qui logit nomigrants $bl [pw = dpw]
 eststo log_2: qui logit nomigrants $bl [pw = dpw], vce(cluster cid)
 eststo log_3: qui ologit imdfetn $bl [pw = dpw], vce(cluster cid)
-esttab lin_* log_* using week11_models.txt, constant label beta(2) se(2) r2(2) ///
+esttab lin_* log_* using week10_models.txt, constant label beta(2) se(2) r2(2) ///
 	mti("OLS" "Adj. OLS" "Logit" "Adj. logit" "Ord. logit") replace
 
 

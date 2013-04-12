@@ -11,6 +11,16 @@
    You are expected to submit the second draft of your work very soon: the draft
    paper that you will be submitting will be mostly significance tests, so make
    sure that you have done all the necessary readings and practice by then.
+   
+   Note that significance tests should not be used blindly: run them only when
+   you observe a particular association that you want to quantify, such as a
+   difference in means or proportions. Also remember that a significance test
+   is not a means to test a substantive hypothesis.
+   
+   At that stage, it will become indispensable that you have caught up with the
+   textbook readings, and that you understand enough about Stata syntax to focus
+   on interpreting rather than coding. Use the course material to bring yourself
+   up to speed with both Stata and essential statistical theory.
 
    Last updated 2012-11-13.
 

@@ -27,7 +27,7 @@
    variables that are (or are closer to being) categorical in nature, and will
    go deeper into the core mechanics of regression modelling.
 
-   Last updated 2013-03-29.
+   Last updated 2013-04-12.
 
 ----------------------------------------------------------------------------- */
 
@@ -50,7 +50,7 @@ cap log using code/week9.log, replace
 use data/qog2011, clear
 
 * Rename variables to short handles.
-ren (wdi_fr bl_asyt25 wdi_hiv) (births schooling hiv )
+ren (wdi_fr bl_asyt25 wdi_hiv ciri_wosoc) (births schooling hiv womenrights)
 
 * Transformation of real GDP per capita to logged units.
 gen log_gdpc = ln(unna_gdp/unna_pop)
@@ -77,14 +77,14 @@ la def region 1 "E. Europe and PSU" 2 "Lat. America" ///
 * Check missing values.
 misstable pat births schooling log_gdpc aids, freq
 
-* Check on sample bias caused by low availability of schooling years.
+* Check sampling bias due to low availability of schooling years.
 gen mi = mi(schooling)
 gr hbar (count) schooling (count) mi, over(region, sort(2)des) stack ///
     legend(order(1 "N(schooling)" 2 "Missing data")) ///
     name(mi, replace)
 
 * Delete incomplete observations.
-drop if mi(births, schooling, log_gdpc, aids)
+drop if mi(births, schooling, log_gdpc, aids, womenrights)
 
 * Final sample size.
 count
@@ -104,17 +104,17 @@ stab using week9, replace ///
 
 /* Basic syntax of -stab- command:
 
-- argument: -using NAME-  adds the NAME prefix to the exported file(s)
-- argument: -su()-        summarizes a list of continuous variables (mean, sd, min-max)
-- argument: -fre()-       summarizes a list of categorical variables (frequencies)
+ - using NAME - adds the NAME prefix to the exported file(s)
+ - su()       - summarizes a list of continuous variables (mean, sd, min-max)
+ - fre()      - summarizes a list of categorical variables (frequencies)
 
-- option:   -by-          produces several tables over a given categorical variable
-- option:   -replace-     overwrite any previously existing tables
-- option:   [aw, fw]      use survey weights (use only if you know how they work)
+ - by()       - produces several tables over a given categorical variable
+ - replace    - overwrite any previously existing tables
+ - [aw, fw]   - use survey weights (use only if you know how they work)
 
   In the example above, the -stab- command will export two files to the working
   directory, containing summary statistics (week9_stats.txt) and a correlation
-  matrix (week9_correlations.txt). */
+  matrix (week9_correlations.txt) created with the -corr()- argument. */
 
 
 * =====================
@@ -147,16 +147,44 @@ esttab using "week9_estpost.txt", unstack not compress label replace
 * Simple linear regressions
 * -------------------------
 
+* We have covered simple linear regression last week, and we briefly mentioned 
+* 'lin-log' equations then. There are more situations to cover in theory, so 
+* review both notions together. Recall, first, the regression equation in the 
+* simplest case, where all variables are linear: Y = a + BX.
 
 * IV: Education.
 sc births schooling || lfit births schooling, ///
 	name(simplereg1, replace)
 reg births schooling
 
+* An increase in one unit of schooling (years) is associated to a negative 
+* variation of -.4 births, or rather, 2-3 additional years of schooling are
+* associated with birth rates that are one child lower on average. When the
+* IV is logged, things get complex because the association rule changes.
+
 * IV: Real GDP per capita.
 sc births log_gdpc || lfit births log_gdpc, ///
 	name(simplereg2, replace)
 reg births log_gdpc
+
+* In this 'lin-log' equation, a 1% increase in GDP per capita is associated to a
+* 0.01 * -.8 variation in the birth rate, or more exactly, -.8 * log(1.01). The
+* mathematical trick is now to reverse the equation to understand the mechanism:
+
+* Inverting the terms.
+reg log_gdpc births
+
+* The equation is now log-linear ('log-lin') instead of being 'lin-log'. The
+* interpretation is: an increase in one child per woman is associated to GDP
+* per capita that is 100 * -.8 = 80% lower (remember: on average).
+
+* Illustrate the principle with two regions different by one child per woman.
+tab region if region > 4, su(births)
+tab region if region > 4, su(wdi_gdpc)
+
+* In 'lin-log' and 'log-lin' equations, changes are proportionate rather than
+* absolute. In a 'log-log' model, interpretation is proportionate on both sides
+* of the equation: a 1% change in X is associated to a B% change in Y.
 
 * IV-IV interaction.
 sc schooling log_gdpc || lfit schooling log_gdpc, ///
@@ -208,6 +236,12 @@ su std_*
 reg std_*
 reg births schooling log_gdpc, b
 
+* Using the second command shown above is much quicker than using the 'std_*'
+* trick that is featured here only as a teaching example. Note, finally, that
+* you should NOT report standardized coefficients: their use is controversial,
+* and their interpretation is less substantive than unstandardized ones. Your
+* focus should always be on results expressed in meaningful units.
+
 
 * Dummies (categorical variables)
 * -------------------------------
@@ -242,8 +276,8 @@ cap drop yhat
 predict yhat
 
 * Regression lines for the predicted values of Asia and Africa.
-tw (sc births schooling if region == 4, ms(O)) ///
-    (sc births schooling if region == 6) ///
+tw (sc births schooling if region == 4, mc(blue) ms(O)) ///
+    (sc births schooling if region == 6, mc(red) ms(O)) ///
     (sc births schooling if !inlist(region,4,6), mc(gs10)) ///
     (rcap yhat births schooling if region == 4, ///
     	c(l) lc(blue) lp(dash) msize(tiny)) ///
@@ -257,7 +291,11 @@ tw (sc births schooling if region == 4, ms(O)) ///
     	5 "Residuals (Asia)") row(2)) ///
     name(reg_geo2, replace)
 
-* Visualizing AIDS dummy within the sample.
+* The example above is just a teaching demonstration: geographical continents
+* are not appropriate as predictors. Let's now run some substantive examples,
+* using a dummy and a 4-level categorical predictor.
+
+* Visualizing HIV/AIDS dummy within the sample.
 tw (sc births schooling if !aids, ms(O)) ///
     (sc births schooling if aids, ms(O)) ///
     (lfit births schooling, lc(gs10)), ///
@@ -273,6 +311,26 @@ tw (sc yhat aids) (lfit yhat aids), xlab(0 "Low" 1 "High") ///
 ttest yhat, by(aids)
 reg yhat i.aids
 
+* Switching to fertility and women's rights.
+fre womenrights
+
+* We start by visualizing the average fertility for each level of rights. The 
+* plot contains a LOWESS smoothed trend to show the DV mean at each level.
+sc births womenrights, yti("Fertility rate") || lowess births womenrights, ///
+	name(fert_womenrights, replace)
+
+* Regression model.
+reg births i.womenrights
+
+* The baseline category here is womenrights = 0 (no women's rights). Compared
+* to countries in this category, other countries have lower mean fertility rates
+* and the effect increases as women's rights increases from categories 1 to 3.
+
+* Change the baseline category to highest level "3" of women's rights. This is
+* convenient when you need to compare from a reference category that is not the
+* first one in the coding of the variable, which is the Stata default.
+reg births ib1.womenrights
+
 
 * =========================
 * = REGRESSION DIAGNOSTICS =
@@ -280,7 +338,7 @@ reg yhat i.aids
 
 
 * Rerun regression model. Note that the "i." prefix is optional for dummies.
-reg births schooling log_gdpc aids
+reg births schooling log_gdpc aids i.womenrights
 
 * Storing fitted (predicted) values.
 cap drop yhat
@@ -371,9 +429,9 @@ reg births schooling log_gdpc schoolingXlog_gdpc aids, b
 reg births c.schooling##c.log_gdpc aids, b
 
 
-* =================
-* = MODEL RESULTS =
-* =================
+* ========================
+* = EXPORT MODEL RESULTS =
+* ========================
 
 
 * This section shows how to export regression results, in order to avoid having

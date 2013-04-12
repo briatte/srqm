@@ -21,25 +21,48 @@
    in poorer households, possibly affecting BMI across the life course.
    
    Our data come from the most recent year of the National Health Interview
-   Survey (NHIS). The sample used in the analysis contains = ..,... individuals
+   Survey (NHIS). The sample used in the analysis contains = 21,770 individuals
    selected through state-level stratified probability sampling.
+
+ - The lines above are a quick example of what you should be planning to write
+   up in your first draft: a description of your data, followed by a list of
+   clearly worded and substantively informed hypotheses.
+
+ - Please make sure that your do-file is named like 'Briatte_Petev_1.do' (use
+   your own family names, in alphabetical order). Name your paper the same way
+   and print it to PDF format: do not circulate your work in editable formats.
  
- - This is the stage where you submit your first draft. Please make sure that
-   your do-file is named like 'Briatte_Petev_1.do' (use your own family names
-   in alphabetical order). Name your paper the same way, and print it to PDF.
- 
+ - To simplify your workflow, the course uses a paper template that you will
+   share with your research partner(s) using Google Documents. This template  
+   contains more instructions on the first draft.
+   
+ - Your first draft must inform the reader about simple things: What is your
+   research question? Where does your data come from, how large is the sample
+   and how was it designed? Include references to the data source and codebook.
+   
+ - Your paper also explains what choice of variables you have made, and with
+   what theory to support that choice. You have to substantiate your decisions:
+   providing a mere description of the measurements is insufficient.
+    
+ - In line with that idea, do NOT write your paper as a technical summary of
+   what your code accomplishes: refer to variables not by names but by what they
+   actually measure, and explain how they fit in your general reasoning.
+
+ - Remember that you have been provided with example papers: use them to learn
+   about the writing style and scientific tone to adopt in your own work. This
+   requirement is covered at more length in the rest of the course material.
+
  - Your first do-file can imitate the course do-files in its structure. Your
    code should assess DV normality and explore differences in the DV with graphs
    and confidence intervals over categorical IVs. Analyze results in your paper.
  
+ - Importantly, do NOT produce results in your do-file if you are not going to
+   interpret them at a later stage: produce meaningful code that leads you to
+   learn, understand and analyze the data.
+  
  - Use the -stab- command at the end of this do-file to export summary stats
    to a simple table. The result will be a plain text file that you can copy
    and paste into Google Documents, or import into any other text editor.
-
- - Your first draft must inform the reader about simple things: What is your
-   research question? Where does your data come from, how large is the sample
-   and how was it designed? What choice of variables have you made, and with
-   what theory to support it?
 
    Last updated 2012-11-13.
 
@@ -91,7 +114,7 @@ la def bmi6 ///
 
 * Breakdown of mean BMI by groups.
 d bmi bmi6
-tab bmi6, summ(bmi)
+tab bmi6, su(bmi)
 
 * Progression of BMI groups over years.
 spineplot bmi6 year, scheme(burd6) ///
@@ -152,7 +175,7 @@ misstable pat bmi age female raceb educrec1 earnings health uninsured ybarcare
 * Delete incomplete observations.
 drop if mi(bmi, age, female, raceb, educrec1, earnings, uninsured, ybarcare)
 
-* Final data, showing effective sample size.
+* Final data, showing final sample size.
 codebook bmi age female raceb educrec1 earnings health uninsured ybarcare, c
 
 
@@ -187,8 +210,8 @@ spineplot bmi6 age8, scheme(burd6) ///
      name(age, replace)
 
 * 95% CI estimates:
-tab age4, summ(bmi) // mean BMI in each age group
-bys age4: ci bmi    // confidence bands
+tab age4, su(bmi) // mean BMI in each age group
+bys age4: ci bmi  // confidence bands
 
 
 * IV: Gender
@@ -200,8 +223,8 @@ gr bar bmi, over(female) asyvars over(age8) yline(27) ///
     name(sex_age, replace)
 
 * 95% CI estimates:
-tab female, summ(bmi) // mean BMI in each gender group
-bys female: ci bmi    // confidence bands
+tab female, su(bmi) // mean BMI in each gender group
+bys female: ci bmi  // confidence bands
 
 
 * IV: Race
@@ -213,20 +236,25 @@ spineplot bmi6 raceb, scheme(burd6) ///
 
 * Histogram by race and gender groups.
 hist bmi, bin(10) xline(27) ///
-	by(raceb female, cols(2) note("Vertical lines at sample mean.") legend(off)) ///
+	by(raceb female, cols(2) ///
+	note("Vertical line at sample mean.") legend(off)) ///
 	name(race_sex, replace)
 
 * 95% CI estimates:
-tab raceb, summ(bmi) // mean BMI at each health level
-bys raceb: ci bmi    // confidence bands
+tab raceb, su(bmi) // mean BMI at each health level
+bys raceb: ci bmi  // confidence bands
 
 
 * IV: Education
 * -------------
 
-* Shorter labels for graph.
+* Shorter labels for a cleaner graph.
 la def edu 13 "Grade 12" 14 "Coll 1-3 yrs" 15 "Coll 4" 16 "Coll 5+"
 la val educrec1 edu
+
+* (Reminder on labels: the first command, -la def-, creates new labels for the
+* values of a variable; the second command, -la val-, assigns the value label
+* to the target variable, which is educrec1 in this example.)
 
 * Plot BMI groups for each educational level.
 spineplot bmi6 educrec1, scheme(burd6) ///
@@ -237,8 +265,8 @@ spineplot raceb educrec1, ///
 	name(edu_race, replace)
 
 * 95% CI estimates:
-tab educrec1, summ(bmi) // mean BMI at each education level
-bys educrec1: ci bmi    // confidence bands
+tab educrec1, su(bmi) // mean BMI at each education level
+bys educrec1: ci bmi  // confidence bands
 
 
 * IV: Income
@@ -265,8 +293,8 @@ gr box bmi if inc > 0, over(inc) noout ///
 	name(bmi_inc, replace)
 
 * 95% CI estimates:
-tab inc, summ(bmi) // mean BMI at each education level
-bys inc: ci bmi    // confidence bands
+tab inc, su(bmi) // mean BMI at each education level
+bys inc: ci bmi  // confidence bands
 
 
 * IV: Health insurance
@@ -278,8 +306,8 @@ kdensity bmi if uninsured == 1, addplot(kdensity bmi if uninsured == 2) ///
 	name(uninsured, replace)
 
 * Exploration:
-tab uninsured, summ(bmi) // mean BMI at each health level
-bys uninsured: ci bmi    // confidence bands
+tab uninsured, su(bmi) // mean BMI at each health level
+bys uninsured: ci bmi  // confidence bands
 
 
 * IV: Health affordability
@@ -291,14 +319,19 @@ kdensity bmi if ybarcare == 1, addplot(kdensity bmi if ybarcare == 2) ///
 	name(ybarcare, replace)
 
 * Exploration:
-tab ybarcare, summ(bmi) // mean BMI at each health level
-bys ybarcare: ci bmi    // confidence bands
+tab ybarcare, su(bmi) // mean BMI at each health level
+bys ybarcare: ci bmi  // confidence bands
 
 
-* ==================
-* = EXPORT RESULTS =
-* ==================
+* =============================
+* = EXPORT SUMMARY STATISTICS =
+* =============================
 
+
+* The reader of your research does not know your data. A solution at that stage
+* is therefore to produce a table that holds descriptive (summary) statistics
+* for the variables that you have selected for analysis. This requires using a
+* command that was written especially for the course, to make it very easy.
 
 * The next command is part of the SRQM folder. If Stata returns an error when
 * you run it, set the folder as your working directory and type -run profile-
@@ -311,13 +344,13 @@ stab using week5, replace ///
 
 /* Basic syntax of -stab- command:
 
-- argument: -using NAME-  adds the NAME prefix to the exported file(s)
-- argument: -su()-        summarizes a list of continuous variables (mean, sd, min-max)
-- argument: -fre()-       summarizes a list of categorical variables (frequencies)
+ - using NAME - adds the NAME prefix to the exported file(s)
+ - su()       - summarizes a list of continuous variables (mean, sd, min-max)
+ - fre()      - summarizes a list of categorical variables (frequencies)
 
-- option:   -by-          produces several tables over a given categorical variable
-- option:   -replace-     overwrite any previously existing tables
-- option:   [aw, fw]      use survey weights (use only if you know how they work)
+ - by()       - produces several tables over a given categorical variable
+ - replace    - overwrite any previously existing tables
+ - [aw, fw]   - use survey weights (use only if you know how they work)
 
   In the example above, the -stab- command will export a single file to the
   working directory (week5_stats.txt) containing summary statistics for the
@@ -329,6 +362,11 @@ stab using week5, replace ///
 	by(raceb)
   
   We will later see how to use -stab- to also export correlation tables. */
+
+* Last reminder: your code is the technical document, whereas your paper is the 
+* substantive document. Make sure that the paper is not a descriptive write-up
+* of what happens in your code: you need to produce analytical value-added by
+* explaining what you are hypothesizing about the relationships in the data.
 
 
 * =======

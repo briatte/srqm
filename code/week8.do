@@ -181,9 +181,19 @@ reg births log_gdpc
 
 * The relationship is a 'lin-log' equation, such that a 1% increase in X (IV) is
 * associated with a 0.01 * beta unit increase in Y (DV). In this model, it means
-* that a 15% increase in GDP per capita is associated with -.74*log(1.15) = -.16
+* that a 15% increase in GDP per cap. is associated with -.74 * log(1.15) = -.16
 * births per woman. For GDP per capita to reduce fertility by 1 birth per woman,
-* this model would require exp(100/74) = 3.8, a 380% increase in GDP per capita.
+* this model would require exp(100/74) = 3.8, a 280% increase in GDP per capita.
+* This is easy to observe from the reverse equation: -.74 * log(3.8) = -1.
+
+* Why is that number so high? Recall how linear regression works: by computing
+* the average marginal change that occurs in the DV (the coefficient) for each
+* unit of the IV. This is the average marginal effect, computed over the whole
+* sample. If GDP per capita expresses decreasing returns on fertility, then the
+* average effect is bound to be higher than what is actually required at lower 
+* levels of GDP per capita. What an econometrician would do in that case is to
+* compute semi-elasticities (because the model is semi-logarithmic), but if you
+* only need to quantify the average relationship, converting by hand is enough.
 
 
 * (3) Corruption and Human Development
@@ -236,7 +246,7 @@ sc corrupt yhat2 hdi, yla(0 "Highly corrupt" 10 "Lowly corrupt") ///
 
 
 * (4) Fertility and Democracy
-* ----------------------------
+* ---------------------------
 
 * Create dummy.
 gen democracy:democracy = (gol_polreg == 0) if !mi(gol_polreg)
@@ -273,26 +283,6 @@ reg births if !democracy
 
 * Y = alpha + beta (democracy = 1) = alpha + beta.
 reg births if democracy
-
-
-* (5) Fertility and Women's Rights
-* --------------------------------
-
-* Visualization of the difference in mean of the DV. The plot relies on a LOWESS
-* smoother to show the "running means" through each category of women's rights.
-sc births ciri_wosoc, yti("Fertility rate") || lowess births ciri_wosoc, $ci ///
-	name(fert_wosoc, replace)
-
-
-* Fitting a categorical predictor
-* -------------------------------
-
-* Regression model.
-reg births i.ciri_wosoc
-
-* This time, the baseline category is ciri_wosoc = 0 (no women's rights). Compared
-* to countries in this category, other countries have lower mean fertility rates
-* and the effect increases as women's rights increases from categories 1 to 3.
 
 
 * =======

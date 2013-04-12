@@ -15,8 +15,6 @@
    "[The government] should implement only the laws of the sharia". The variable
    was measured during WVS Wave 4 (1999-2004).
 
-   Coursework instructions:
-
  - Make sure that you understand how to distinguish continuous and categorical
    types of variables by the end of this training session. Also make sure that
    you know how to encode variables and missing values for analysis in Stata.
@@ -246,7 +244,7 @@ xtile age_q4 = age, nq(4)
 * Check that the quartiles each capture roughly a quarter of the distribution.
 fre age_q4
 
-* Inspect how age varies within each quartile.
+* Inspect how age varies within each quartile (e.g. compare top and bottom 25%).
 tab age_q4, sum(age)
 
 * Expectedly, there is more variance in the last, older group. Let's finally get
@@ -337,9 +335,16 @@ la var city4 "City size"
 fre city4
 
 
-* ========================== 
-* = FINALIZING THE DATASET =
-* ==========================
+* ===================== 
+* = FINALIZED DATASET =
+* =====================
+
+
+* Finalizing a dataset before analysis involves doing two things. The first
+* one consists in subsetting to fully measured data, which means dropping all 
+* observations with missing values in the variables selected for analysis.
+* This restriction is required by the kind of models that we will run later on.
+* Prior to that, we will need to subset the data to the countries of interest.
 
 * Recall how the country variable is coded.
 fre country
@@ -350,10 +355,20 @@ keep if inlist(country, 89, 96)
 * Pattern of missing values.
 misstable pat sharia age female edu4 empl married haskids city4
 
+* Studying the pattern of missing values is a crucial requirement: dropping
+* observations with missing values might affect the representativeness of the
+* data, or even bring it to such a low number of observations that statistical
+* power (the capacity of your data to discriminate statistically significant
+* relationships from insignificant ones) will be at risk. Adopt a reasonable
+* strategy at that stage: find equivalents to variables that damage your sample,
+* and adjust your research questions to the available data. Whatever choice you
+* end up making, ensure that you understand how your finalized dataset relates
+* to the original data with regards to representativeness.
+
 * Subset to nonmissing observations.
 drop if mi(sharia, age, female, edu4, empl, married, haskids, city4)
 
-* Final sample size.
+* The second and last task is to get the final sample size (in each country).
 bys country: count
 
 

@@ -69,12 +69,11 @@ fre sex
 fre raceb
 fre earnings
 
-* The default -tab- or -tab1- commands give similar results, minus value labels.
+* The default -tab- command returns similar results, minus value labels.
 tab sex
-tab1 raceb earnings, plot
 
 * High-dimensional, continuous variables.
-fre bmi, rows(100)
+fre bmi, rows(30)
 
 
 * ================
@@ -108,9 +107,8 @@ gr hbox bmi, over(raceb) ///
 gr hbox bmi, over(sex) asyvars over(raceb) ///
 	name(bmi_race_sex, replace)
 
-* The next commands use 'global macros' to illustrate how a distribution
-* can be described through the standard deviation and through outliers. This
-* course does not require that you use them in your own research projects.
+* The next commands use scalars to describe a distribution through its standard 
+* deviation and outliers. This is a teaching example, not a course requirement.
 
 * Obtain summary statistics.
 su bmi, d
@@ -130,8 +128,8 @@ sca de sd   = r(sd)
 
 * Save the 25th and 75th percentiles and compute the interquartile range (IQR),
 * which is the range from the first quartile (Q1) to the third quartile (Q3).
-sca de q1 = r(p25)
-sca de q3 = r(p75)
+sca de q1  = r(p25)
+sca de q3  = r(p75)
 sca de iqr = q3 - q1
 
 * List all saved scalars, which are used in the next sections in combination to
@@ -147,15 +145,15 @@ sca li
 * number of BMI observations that fall between (mean - 1sd) and (mean + 1sd),
 * and then by checking if this number comes close to 68% of all observations.
 count if bmi > mean - sd & bmi < mean + sd
-di r(N), "observations out of", _N, "(" 100 * round(r(N) / _N, .01) "% of the sample)" _n ///
-	"are within 1 standard deviation from the mean."
+di r(N), "observations out of", _N, "(" 100 * round(r(N) / _N, .01) ///
+	"% of the sample) are within one standard deviation from the mean."
 
 * The corresponding result is indeed close to 68% of all observations, and the
 * same verification with the [mean - 2sd, mean + 2sd] range of BMI values is
 * also satisfactorily close to including 95% of all observations.
 count if bmi > mean - 2 * sd & bmi < mean + 2 * sd
-di r(N), "observations out of", _N, "(" 100 * round(r(N) / _N, .01) "% of the sample)" _n ///
-	"are within 2 standard deviations from the mean."
+di r(N), "observations out of", _N, "(" 100 * round(r(N) / _N, .01) ///
+	"% of the sample) are within 2 standard deviations from the mean."
 
 * The properties shown here hold for continuous variables that approach a
 * normal distribution, as discussed below. We could go further and compute
@@ -191,7 +189,7 @@ su bmi if bmi < q1 - 3 * iqr   | bmi > q3 + 3 * iqr
 * of the BMI variable, its kernel density, and an overimposed normal curve
 * that we draw in a different colour using a few graph options.
 hist bmi, bin(15) normal kdensity kdenopts(lp(dash) lc(black) bw(1.5)) ///
-	note("Normal distribution in solid red. Kernel density estimator in dashed black.") ///
+	note("Normal distribution (solid red) and kernel density (dashed black).") ///
 	name(bmi, replace)
 
 * The histogram shows what we knew from reading the mean and median of the
@@ -380,43 +378,6 @@ svy: prop raceb
 * data will increase when the total number of observations decreases. The
 * 95% CI for ethnicity on morbidly obese respondents illustrates that issue.
 prop raceb if bmi > 40
-
-
-* Visualization of standard errors
-* --------------------------------
-
-* Let's illustrate again the problem that arises with low sample sizes with a
-* sample of 25 observations, which will be much more subject to sampling error
-* than the very large sample provided by the original data. You do not need to
-* simulate a lower sample size as shown here for your own research, but you
-* should understand, by now, the importance of maximizing sample size.
-
-* Delete all data but 25 randomly chosen observations.
-sample 25, count
-
-* Compute mean BMI in each racial group.
-bys raceb: egen raceb_mu = mean(bmi)
-
-* Compute standard deviation of BMI in each racial group.
-bys raceb: egen raceb_sd = sd(bmi)
-
-* Compute number of observations in each racial group.
-bys raceb: egen raceb_n = count(bmi)
-
-* Compute standard error of mean BMI in each racial group.
-bys raceb: gen raceb_se = raceb_sd / sqrt(raceb_n)
-
-* Plot using mean, standard error and racial group.
-serrbar raceb_mu raceb_se raceb, ///
-	yti("Mean BMI") xla(1 "White" 2 "Black" 3 "Hispanic" 4 "Asian") ///
-	name(serr, replace)
-
-* The plot that you get shows much larger 95% CI estimates than those previously
-* computed. If you restrict your analysis to a limited number of observations, 
-* e.g. to a limited number of countries with cross-sectional country-level data,
-* you will run into the same issue of very large standard errors. You should
-* therefore spare your estimates and work on a large number of observations to
-* avoid any issues of that kind.
 
 
 * =======
