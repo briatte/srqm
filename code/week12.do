@@ -13,16 +13,15 @@
    We explore that topic this week, as a means of introduction to multiple
    linear regression with individual-level data. Our first approach of linear
    regression will be relatively low-tech, as we will focus on fitting the
-   model without diagnosing its validity. Regression diagnostics are explored
-   next week.
+   model without diagnosing its validity.
 
-   Last updated 2012-12-05.
+   Last updated 2013-04-14.
 
 ----------------------------------------------------------------------------- */
 
 
 * Install required commands.
-foreach p in fre {
+foreach p in estout fre {
 	cap which `p'
 	if _rc == 111 cap noi ssc install `p'
 }
@@ -36,24 +35,36 @@ cap log using code/week12.log, replace
 * ====================
 
 
-use data/gss2010, clear
+* Open data subset for selected survey year.
+use data/gss2010 year == 2010, clear
 
-* Keep most recent year.
-keep if year == 2010
-
-* Inspect DV, drop missing cases.
+* Inspect DV.
 fre partnrs5
-drop if mi(partnrs5)
+
+* Keep only valid observations, excluding outliers.
+clonevar sxp = partnrs5 if partnrs5 < 9
+
+gen missing = mi(partnrs5)
+tab missing, gen(na_)
+
+* Generate six age groups (15-24, 25-34, ..., 65+).
+gen age6:age6 = irecode(age, 24, 34, 44, 54, 64, .)
+replace age6 = 10 * age6 + 15
+la def age6 15 "15-24" 25 "25-34" 35 "35-44" ///
+	45 "45-54" 55 "55-64" 65 "65+", replace
+la var age6 "Age groups"
+
+gr bar (count) age, over(missing) asyvars stack over(age6) over(sex)
+
+prtest missing, by(sex)
+bys sex: ttest age, by(missing)
+bys sex: tab age6 missing, col nof chi2
+
+drop if mi(partnrs5, age, coninc, educ, marital, wrkstat)
 
 * Inspect IVs, drop missing cases.
 fre sex age coninc educ marital wrkstat size, r(10)
-drop if mi(age,coninc,educ,marital,wrkstat)
-
-* Generate age decades.
-gen age10 = 10*floor(age/10)
-
-* Drop small-N category of age < 20.
-drop if age < 20
+drop if 
 
 * Inspect DV by age.
 spineplot partnrs5 age10, scheme(burd8) name(sp, replace)
@@ -68,7 +79,7 @@ drop if wrkstat == 8
 drop if partnrs5 == 9
 
 * Recodes.
-recode sex (1 = 0 "Male") (2 = 1 "Female"), gen(female)
+gen female = (sex == 1) if !mi(sex)
 drop sex
 
 * Final sample size.
