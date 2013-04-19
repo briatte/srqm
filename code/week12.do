@@ -10,11 +10,8 @@
    What makes Americans likely to report high numbers of sexual partners in the
    last five years? What makes them more likely to report low numbers?
    
-   We explore that topic this week, as a means of introduction to multiple
-   linear regression with individual-level data. Our first approach of linear
-   regression will be relatively low-tech, as we will focus on fitting the
-   model without diagnosing its validity.
-
+   For this session, all hypotheses are to be provided by the students.
+   
    Last updated 2013-04-14.
 
 ----------------------------------------------------------------------------- */
@@ -36,51 +33,59 @@ cap log using code/week12.log, replace
 
 
 * Open data subset for selected survey year.
-use data/gss2010 year == 2010, clear
+use data/gss2010 if year == 2010, clear
 
 * Inspect DV.
 fre partnrs5
 
-* Keep only valid observations, excluding outliers.
+* Keep only valid observations, excluding oblivious respondents.
 clonevar sxp = partnrs5 if partnrs5 < 9
 
-gen missing = mi(partnrs5)
-tab missing, gen(na_)
+* Code missing values for deeper inspection.
+gen missing = mi(sxp)
 
 * Generate six age groups (15-24, 25-34, ..., 65+).
 gen age6:age6 = irecode(age, 24, 34, 44, 54, 64, .)
+
+* Code the value as the lower bound of the age groups (the data buckets).
 replace age6 = 10 * age6 + 15
+
+* Assign value labels.
 la def age6 15 "15-24" 25 "25-34" 35 "35-44" ///
 	45 "45-54" 55 "55-64" 65 "65+", replace
 la var age6 "Age groups"
 
-gr bar (count) age, over(missing) asyvars stack over(age6) over(sex)
+* Inspect missing values by age and sex.
+gr bar (count) age, over(missing) asyvars stack over(age6) over(sex) ///
+	name(missing_agesex, replace)
 
-prtest missing, by(sex)
-bys sex: ttest age, by(missing)
+* Chi-squared test for age groups.
 bys sex: tab age6 missing, col nof chi2
 
-drop if mi(partnrs5, age, coninc, educ, marital, wrkstat)
+* Proportions test for sex groups.
+prtest missing, by(sex)
 
-* Inspect IVs, drop missing cases.
-fre sex age coninc educ marital wrkstat size, r(10)
-drop if 
+* Comparison of average age between missing and nonmissing groups, by sex.
+bys sex: ttest age, by(missing)
 
 * Inspect DV by age.
-spineplot partnrs5 age10, scheme(burd8) name(sp, replace)
+spineplot sxp age6, scheme(burd8) name(sp, replace)
 
 * Inspect DV by age, sex and interviewer's sex.
-gr bar partnrs5, over(sex) asyvars over(age10) by(intsex) name(is, replace)
+gr bar sxp, over(sex) asyvars over(age6) by(intsex) name(is, replace) ///
+	name(dv_agesexint, replace)
+
+* Inspect IVs.
+fre sex age coninc educ marital wrkstat size, r(10)
+
+* Drop missing values.
+drop if mi(sxp, age, coninc, educ, marital, wrkstat)
 
 * Drop ambiguous wrkstat category "Other".
 drop if wrkstat == 8
 
-* Drop respondents oblivious of their sexual life.
-drop if partnrs5 == 9
-
-* Recodes.
+* Recode sex.
 gen female = (sex == 1) if !mi(sex)
-drop sex
 
 * Final sample size.
 count
@@ -88,20 +93,26 @@ count
 * Survey weights.
 svyset vpsu [weight = wtssall], strata (vstrata)
 
+* Export summary stats.
+stab using week12, replace ///
+	su(coninc) ///
+	fre(age6 educ marital wrkstat size)
 
-* ====================
-* = DATA DESCRIPTION =
-* ====================
+
+* ===================
+* = DV DISTRIBUTION =
+* ===================
 
 
 * Explore the DV.
-fre partnrs5
-hist partnrs5, bin(10) percent addl norm
+fre sxp
 
-* Bivariate test of hypothesis.
-tab partnrs5 female, nofreq col chi2
-gr hbar partnrs5, over(female)
-ttest partnrs5, by(female)
+* Histogram for normality assessment.
+hist sxp, bin(10) percent addl norm ///
+	name(dv_hist, replace)
+	
+* Bivariate hypothesis test: mean DV by sex.
+ttest sxp, by(female)
 
 
 * =====================
@@ -110,36 +121,35 @@ ttest partnrs5, by(female)
 
 
 * A simple linear regression model test.
-reg partnrs5 i.female
+reg sxp i.female
 
-* Let's add some of our control variables one by one.
-* Let's control for income:
-* Is higher income associated with a higher number of partners in the US?
-reg partnrs5 i.female coninc
+* Let's add some of our control variables one by one. Let's first control for
+* income: is higher income associated with a higher number of partners?
+reg sxp i.female coninc
 
 * Let's transform income into a more meaningful scale: a dollar change in income
-* is not large enough to have a large effect. Let's measure income to 10,000s of
-* U.S. dollars.
-gen inc = coninc/10000
+* is not enough to have a large effect. Let's measure income to 10,000s of USD.
+gen inc = coninc / 10000
 
-reg partnrs5 i.female inc
+* Regress again.
+reg sxp i.female inc
 
 * Let's control for education as well.
-reg partnrs5 i.female inc educ
+reg sxp i.female inc educ
 
 * Let's control for urban size.
-reg partnrs5 i.female inc educ size
+reg sxp i.female inc educ size
 
 * How about working status?
-reg partnrs5 i.female inc educ size i.wrkstat
+reg sxp i.female inc educ size i.wrkstat
 fre wrkstat
 
 * Let's add a control for marital status.
-reg partnrs5 i.female inc educ size i.wrkstat i.marital
+reg sxp i.female inc educ size i.wrkstat i.marital
 fre marital
 
 * Finally, let's control for age.
-reg partnrs5 i.female inc educ size i.wrkstat i.marital age
+reg sxp i.female inc educ size i.wrkstat i.marital age
 
                  
 * Reinterpretation of the constant
@@ -168,7 +178,7 @@ su educ
 gen zeduc = educ - r(mean)
 
 * Replicate the final regression model with transformed continuous variables.
-reg partnrs5 i.female zinc zeduc zsize i.wrkstat i.marital zage
+reg sxp i.female zinc zeduc zsize i.wrkstat i.marital zage
 
 * The results do not change except for the constant. For this model, the constant
 * stands for the average number of partners among respondents who are:
@@ -185,36 +195,43 @@ reg partnrs5 i.female zinc zeduc zsize i.wrkstat i.marital zage
 * -------------------------
 
 * Model with metric coefficients (in units of each variable).
-reg partnrs5 i.female zinc zeduc zsize i.wrkstat i.marital zage
+reg sxp i.female zinc zeduc zsize i.wrkstat i.marital zage
 
 * Model with all coefficients expressed in standard deviation units.
-reg partnrs5 i.female zinc zeduc zsize i.wrkstat i.marital zage, b
+reg sxp i.female zinc zeduc zsize i.wrkstat i.marital zage, b
 
 
 * Residuals
 * ---------
 
-* Distribution of the residuals.
+* Get residuals.
 predict r, resid
+
+* Distribution of the residuals.
 kdensity r, norm
 
 * Residuals-versus-fitted values plot.
 rvfplot
 
+
 * Extensions
 * ----------
 
 recode partnrs5 (0 = 0) (1 = 1) (2 = 2) (3 = 3) (4 = 4) ///
-				(5 = 8) (6 = 15) (7 = 60) (8 = 120) (else = .), gen(sxp)
+				(5 = 8) (6 = 15) (7 = 60) (8 = 120) (else = .), gen(sxp_count)
 
 * Multiple linear regression.
-eststo LIN: reg sxp i.female inc educ size i.wrkstat i.marital age
+eststo LIN: reg sxp_count i.female inc educ size i.wrkstat i.marital age
 
 * Negative binomial regression (for count data).
-eststo NBR: nbreg sxp i.female inc educ size i.wrkstat i.marital age
+eststo NBR: nbreg sxp_count i.female inc educ size i.wrkstat i.marital age
 
 * Compare models.
 esttab LIN NBR, b(1) wide compress mti("Lin. reg." "Neg. bin.")
+
+* Export in wide format.
+esttab LIN NBR using week12_regressions.txt, ///
+	b(1) wide compress mti("Lin. reg." "Neg. bin.")
 
 
 * ========
