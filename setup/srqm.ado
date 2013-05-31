@@ -30,20 +30,20 @@ program srqm
     local clean    = ("`1'"=="clean")
     local folder   = ("`2'"=="folder")
     local packages = ("`2'"=="packages")
-	local data     = ("`2'"=="data")  // new: data preparation utility
     local logged   = ("`logged'"!="")
     local forced   = ("`forced'"!="")
 
     // package list
 
-    local cmdlist = "lookfor_all fre spineplot tab_chi mkcorr tabout estout leanout plotbeta kountry qog wbopendata spmap scheme-burd schemes _gstd01 clarify"
+    local cmdlist = "lookfor_all fre spineplot tab_chi mkcorr tabout estout leanout plotbeta kountry wbopendata spmap scheme-burd schemes _gstd01 clarify"
 
         * catplot ciplot distplot log2do2 outreg2 revrs
         * tufte lean2
+        * qog qogbook
 
     // dataset list
 
-    local datalist = "ess2008 gss2010 nhis2009 qog2011 wvs2000"
+    local datalist = "ess2008 gss0012 nhis2009 qog2013 wvs2000"
 
     // interrupt backup log if any
 
@@ -227,20 +227,6 @@ program srqm
                 if _rc di as err "ERROR: installation of `t' failed with error code", _rc
             }
         }
-		// ... might not work for Windows users running without admin privileges
-		else if `data' {
-			//
-			// DATA PREPARATION
-			//
-	        if strpos("all `datalist'", "`2'") {
-		        cap cd "$srqm_wd"
-				noi do setup/srqm_data.ado "`2'"
-			}
-	        else {
-	            di as err "Use one of the subcommand options: all `datalist'"
-	            exit 198
-		    }
-	    }
         else {
             //
             // SYSTEM OPTIONS

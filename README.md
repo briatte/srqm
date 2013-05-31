@@ -1,6 +1,8 @@
 # SRQM: Setup instructions
 
-This document explains how to setup a computer to follow the [Statistical Reasoning and Quantitative Methods](http://f.briatte.org/teaching/quanti/) (SRQM) course run at Sciences Po by François Briatte and Ivaylo Petev.
+This file listing covers the datasets distributed as part of the [Statistical Reasoning and Quantitative Methods][srqm] course taught by François Briatte and Ivaylo Petev.
+
+[srqm]: http://f.briatte.org/teaching/quanti/
 
 The course requires Internet access, basic computer skills and a working copy of [Stata](http://www.stata.com/), by StataCorp. Stata 11 is already installed on Sciences Po workstations.
 

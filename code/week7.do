@@ -5,7 +5,7 @@
 
  - TOPIC:  Fertility and Education, Part 1
 
- - DATA:   Quality of Government (2011)
+ - DATA:   Quality of Government (2013)
 
    This do-file is the last one that we will run on the topic of association.
    You are expected to submit the second draft of your work very soon: the draft
@@ -22,7 +22,7 @@
    on interpreting rather than coding. Use the course material to bring yourself
    up to speed with both Stata and essential statistical theory.
 
-   Last updated 2012-11-13.
+   Last updated 2013-05-28.
 
 ----------------------------------------------------------------------------- */
 
@@ -42,14 +42,14 @@ cap log using code/week7.log, replace
 * ====================
 
 
-use data/qog2011, clear
+use data/qog2013, clear
 
 * Rename variables to short handles.
 ren wdi_fr births
-ren bl_asyt25 schooling
+ren bl_asy25mf schooling
 ren undp_hdi hdi
 ren ti_cpi corruption
-ren gid_fgm femgov
+ren gid_wip femparl
 
 * Compute GDP per capita.
 gen gdpc = unna_gdp / unna_pop
@@ -69,10 +69,10 @@ la def region 1 "E. Europe and PSU" 2 "Lat. America" ///
 * ----------------
 
 * Have a quick look.
-codebook births schooling gdpc hdi corruption femgov region, c
+codebook births schooling gdpc hdi corruption femparl region, c
 
 * Check missing values.
-misstable pat births schooling gdpc hdi corruption femgov region ccodewb, freq
+misstable pat births schooling gdpc hdi corruption femparl region ccodewb, freq
 
 * You would usually delete incomplete observations at that stage, and then count
 * the number of observations in your finalized sample. We exceptionally keep the
@@ -152,11 +152,11 @@ pwcorr corruption hdi, obs sig
 * ----------------------------------------------
 
 * Obtain summary statistics.
-su femgov corruption
+su femparl corruption
 
 * Visual inspection of the relationship within the mean-mean quadrants.
-sc femgov corruption, yline(15) xline(4) ///
-	name(femgov_corruption, replace)
+sc femparl corruption, yline(15) xline(4) ///
+	name(femparl_corruption, replace)
 
 * No clear pattern emerges from the scatterplot above. Never force a pattern
 * onto the data: relationships should be apparent, not constructed. If there is
@@ -181,12 +181,12 @@ sc femgov corruption, yline(15) xline(4) ///
 * any number of variables. Building a matrix of your DV and IVs allows to spot
 * relationships between IVs, which will be useful later on in your analysis.
 * Note that the example below shows the untransformed measure of GDP per capita.
-gr mat births schooling log_gdpc corruption femgov, ///
+gr mat births schooling log_gdpc corruption femparl, ///
 	name(gr_matrix, replace)
 
 * You could also look at a sparser version of the matrix that shows only half of
 * all plots for a subset of geographical regions.
-gr mat births schooling log_gdpc corruption femgov if inlist(region, 4, 5), half ///
+gr mat births schooling log_gdpc corruption femparl if inlist(region, 4, 5), half ///
 	name(gr_matrix_regions4_5, replace)
 
 * The most practical way to consider all possible correlations in a list of
@@ -194,20 +194,20 @@ gr mat births schooling log_gdpc corruption femgov if inlist(region, 4, 5), half
 * of their respective pairwise correlations. "Pair-wise" indicates that the
 * correlation coefficient uses only pairs of valid, nonmissing observations,
 * and disregards all observations where any of the variables is missing.
-pwcorr births schooling log_gdpc corruption femgov
+pwcorr births schooling log_gdpc corruption femparl
 
 * The most common way to indicate statistically significant correlations in
 * a correlation matrix is to use asterisks (stars) to mark them when their
 * p-value is below the level of statistical significance.
-pwcorr births schooling log_gdpc corruption femgov, star(.05)
+pwcorr births schooling log_gdpc corruption femparl, star(.05)
 
 * For explorative purposes, another option can be used to print out only the
 * statistically significant correlations, which comes in handy especially in
 * very large matrixes with majorily insignificant correlation coefficients.
-pwcorr births schooling log_gdpc corruption femgov, print(.05)
+pwcorr births schooling log_gdpc corruption femparl, print(.05)
 
 * Export a correlation matrix.
-mkcorr births schooling gdpc corruption femgov, ///
+mkcorr births schooling gdpc corruption femparl, ///
 	lab num sig log("week7_correlations.txt") replace
 
 

@@ -23,7 +23,7 @@
    logistic estimator is more appropriate than a linear one, and include draft
    models in your revised draft.
    
-   Last updated 2013-04-05.
+   Last updated 2013-05-31.
 
 ----------------------------------------------------------------------------- */
 
@@ -47,7 +47,7 @@ cap log using code/week10.log, replace
 use data/ess2008, clear
 
 * Subsetting to respondents age 25+ with full data.
-drop if agea < 25 | mi(imdfetn, agea, gndr, brncntr, edulvla, hinctnta, lrscale)
+drop if agea < 25 | mi(imdfetn, agea, gndr, brncntr, eduyrs, hinctnta, lrscale)
 
 * Survey weights (design weight by country, multiplied by population weight).
 gen dpw = dweight * pweight
@@ -78,7 +78,7 @@ la var diff "Allow many/some migrants of different race/ethnicity from majority"
 * IVs: age, gender, country of birth, education, income, left-right scale
 * -----------------------------------------------------------------------
 
-d agea gndr brncntr edulvla hinctnta lrscale
+d agea gndr brncntr eduyrs hinctnta lrscale
 
 * Renaming.
 ren (agea hinctnta lrscale) (age income rightwing)
@@ -95,13 +95,12 @@ la def sex 0 "Male" 1 "Female", replace
 gen born:born = (brncntr == 1)
 la def born 0 "Foreign-born" 1 "Born in country", replace
 
-* Collapse some educational categories.
-recode edulvla ///
-	(1 2  = 1 "Low")    ///
-	(3    = 2 "Medium") ///
-	(4 5  = 3 "High")   ///
-	(else = .), gen(edu3)
+* Recode education years.
+su eduyrs, d
+xtile edu3 = eduyrs if eduyrs < 22, nq(3)
 la var edu3 "Education level"
+la def edu3 1 "Low" 2 "Medium" 3 "High"
+la val edu3 edu3
 
 
 * Export summary statistics

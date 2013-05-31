@@ -5,7 +5,7 @@
 
  - TOPIC:  Fertility and Education, Part 3
 
- - DATA:   Quality of Government (2011)
+ - DATA:   Quality of Government (2013)
  
    This is our final do-file with the Quality of Government example that we have
    been running over three sessions. It explains how to build on correlation and
@@ -27,7 +27,7 @@
    variables that are (or are closer to being) categorical in nature, and will
    go deeper into the core mechanics of regression modelling.
 
-   Last updated 2013-04-12.
+   Last updated 2013-05-28.
 
 ----------------------------------------------------------------------------- */
 
@@ -47,13 +47,13 @@ cap log using code/week9.log, replace
 * ====================
 
 
-use data/qog2011, clear
+use data/qog2013, clear
 
 * Rename variables to short handles.
-ren (wdi_fr bl_asyt25 wdi_hiv ciri_wosoc) (births schooling hiv womenrights)
+ren (wdi_fr bl_asy25mf wdi_hiv ciri_wosoc) (births schooling hiv womenrights)
 
 * Transformation of real GDP per capita to logged units.
-gen log_gdpc = ln(unna_gdp/unna_pop)
+gen log_gdpc = ln(unna_gdp / unna_pop)
 la var log_gdpc "Real GDP/capita (constant USD, logged)"
 
 * Dummy for the highest quartile of HIV/AIDS prevalence.

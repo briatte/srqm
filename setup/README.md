@@ -1,26 +1,42 @@
 # SRQM: Programs
 
-This document lists the programs included with the [Statistical Reasoning and Quantitative Methods](http://f.briatte.org/teaching/quanti/) (SRQM) course run at Sciences Po by François Briatte and Ivaylo Petev.
+This file listing covers the datasets distributed as part of the [Statistical Reasoning and Quantitative Methods][srqm] course taught by François Briatte and Ivaylo Petev.
 
-All commands were written to assist students in completing their research projects. This file describes all commands in more detail than necessary to run them in class.
+[srqm]: http://f.briatte.org/teaching/quanti/
+
+This file describes the commands in more detail than necessary to run them in class. All commands were written to assist students in completing their research projects. The setup also installs the [BuRd][burd] scheme.
+
+[burd]: https://github.com/briatte/burd/
 
 * * *
 
 ## `betaplot`
 
-__Currently in the works.__ This command will produce a `plotbeta`-style plot of coefficients. See the `plotbeta` package.
+Currently in the works. This command will produce a `plotbeta`-style plot of coefficients. See the `plotbeta` package.
 
-## `burd`
+## `find`
 
-The series of `scheme-burd` files contain reversed versions of the `RdBu` [ColorBrewer](http://colorbrewer2.org/) theme, as well as a replacement for the `s2color` scheme. The scheme is used for the course plots (and students get to use it if they want to). See [example plots](https://github.com/briatte/srqm/wiki/BuRd) appear on the course wiki.
+A quicker `lookfor` command, not in use in the course.
+
+## `load`
+
+A quicker `use` command, not in use in the course.
 
 ## `repl`
 
-__Not in use due to limited testing.__ Creates a replication folder out of a do-file. The folder will contain the do-file, log and all plots that were assigned an optional `name()` in the code. It will also contain any file exported by the do-file and a short file manifest in a `README` file.
+Not in use due to limited testing. Creates a replication folder out of a do-file. The folder will contain the do-file, log and all plots that were assigned an optional `name()` in the code. It will also contain any file exported by the do-file and a short file manifest in a `README` file.
+
+## `rvf`
+
+A quicker `rvfplot` command, not in use in the course.
+
+## `sbar`
+
+A categorical plot command, not in use in the couse.
 
 ## `srqm_data`
 
-Prepares the [course datasets](https://github.com/briatte/srqm/blob/master/data/README.md), which are slight variations on the original versions. All datasets are saved in Stata 9/10 format for compatibility. The `ess2008` and `nhis2009` datasets need to be downloaded by hand from the sources and renamed to these handles.
+Prepares the [course datasets](https://github.com/briatte/srqm/blob/master/data/README.md), which are slight variations on the original versions. All datasets are saved in Stata 9/10 format for compatibility.
 
 ## `srqm`
 

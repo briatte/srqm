@@ -1,159 +1,219 @@
+/* --- SRQM data preparation script --------------------------------------------
+
 * This do-file produces the teaching datasets distributed as part of the course.
-* Use only to repair your Teaching Pack if you accidentally overwrite the files.
+* Run it only to repair your Teaching Pack if you accidentally damage the files.
 * Note that the code requires running Stata with admin privileges.
+
+   Last revised 2013-05-31.
+
+*! version 1.2: updated to GSS 2000-2012 (Cumulative Release 1)
+*! version 1.1: updated to QOG 2013 15May13
+*! version 1.0: first release
+
+----------------------------------------------------------------------------- */
 
 cap pr drop srqm_prep
 pr srqm_prep
-	syntax, lab(string asis) zip(name)
+	syntax, label(string asis) filename(name)
 	// Teaching annotation.
 	notes drop _dta
-	la data "`lab'"
-	note _dta: `lab'
+	la data "`label'"
+	note _dta: `label'
 	note _dta: Teaching dataset slightly altered from source.
-	note _dta: Please do not redistribute.
+	note _dta: Please do not redistribute and check original.
 	note _dta: This version: TS
 	// Compress and uncompress.
-	cd data
-	saveold `zip', replace
-	cap rm `zip'.zip
-	zipfile `zip'*, saving(`zip'.zip, replace)
-	unzipfile `zip'.zip, replace
-	ls `zip'*
-	cd ..
+	qui cd data
+	local fn `filename'
+	saveold `fn', replace
+	cap rm `fn'.zip
+	zipfile `fn'*, saving(`fn'.zip, replace)
+	unzipfile `fn'.zip, replace
+	ls `fn'*
+	// Export variables.
+	cap log close `fn'_variables
+	log using `fn'_variables.txt, text name(`fn'_variables) replace
+	d
+	log close `fn'_variables
+	qui cd ..
 end
+
+cap pr drop srqm_trim
+pr srqm_trim
+	// Arbitrary threshold at 25% of observations
+	syntax [, k(real 25)]
+	qui count
+	local t = int(r(N) * `k'/100)
+	// Drop empty variables.
+	foreach v of varlist * {
+	    qui count if !mi(`v')
+		local n = r(N)
+	    if `n' == 0 {
+			local l: var l `v'
+			di as txt "Dropping","`v' (N = 0):","`l'"
+	    	drop `v'
+	    }
+	}
+	// Drop low-N variables.
+	foreach v of varlist * {
+		qui count if !mi(`v')
+		local n = r(N)
+		if `n' < `t' {
+			local l: var l `v'
+			di as txt "Dropping","`v' (`n' < `t'):","`l'"
+	    	drop `v'
+	    }
+	}
+	// Get ready for export.
+	qui cd "$srqm_wd"
+end
+
+// let's go
+
+cap pr drop srqm_data
+pr srqm_data
+
+if "`1'" == "" {
+    di as err "No dataset argument provided."
+    exit 198
+}
+
+cap log close srqm_data
+log using "$srqm_wd/setup/srqm_data.log", name(srqm_data) replace
+local src "~/Documents/Research/Data"
+
+di as inp _n "Updating the `1' teaching dataset." _n
 
 // -------------------------------------------------------------- ESS 2008 -----
 
 if inlist("`1'", "all", "ess2008") {
-	// Get the data (cumulative dataset downloaded from the website).
-	use data/ess2008.dta if essround == 4, clear
+	// Get the data (downloaded from the website).
+	use "`src'/ESS/ESS4e04.1/ESS4e04.1_F1.dta", clear
 
-	// Drop empty variables.
-	foreach v of varlist * {
-	    qui count if !mi(`v')
-	    if r(N)==0 {
-	        di "Dropping: " "`v'"
-	        drop `v'
-	    }
-	}
+	// Trim (very low threshold to cut at approx. 500).
+	srqm_trim, k(1)
 	
-	// Get weighting guide.
-	copy "http://ess.nsd.uib.no/ess/doc/weighting.pdf" data/ess2008_weights.pdf, replace
-
-	srqm_prep, lab(European Social Survey 2008) zip(ess2008)
+	// Get codebook.
+	copy "`src'/ESS/ESS4e04.1/ESS4e04.1.pdf" data/ess2008_codebook.pdf, replace
+	
+	srqm_prep, label(European Social Survey 2008) filename(ess2008)
 }
 
-// -------------------------------------------------------------- GSS 2010 -----
+// -------------------------------------------------------------- GSS 2012 -----
 
-if inlist("`1'", "all", "gss2010") {
+if inlist("`1'", "all", "gss0012") {
 	// Get the data.
-	cap use "~/Documents/Research/Data/GSS/gss7210_r2b.dta"
+	cap use "`src'/GSS/gss7212_r1.dta", clear
 
-	// Download the 1972-2010 cumulative file if needed.
+	// Download the 1972-2012 cumulative file if needed (large, > 300 MB).
 	if _rc==601 {
-		qui conf f gss7210_r2b.dta
-		if _rc==601 {
-			copy "http://publicdata.norc.org/GSS/DOCUMENTS/OTHR/GSS_stata.zip" temp.zip, replace
-			unzipfile temp.zip
-		}
-		use gss7210_r2b.dta, clear
+		local link "http://publicdata.norc.org/GSS/DOCUMENTS/OTHR/GSS_stata.zip"
+		copy `link' temp.zip, replace
+		unzipfile temp.zip
+		use gss7212_r1.dta, clear
+		rm temp.zip
+		rm gss7212_r1.dta // comment that out to keep the full cumulative file
 	}
 
-	// The teaching dataset uses years 2000-2010.
+	// Subset years.
 	drop if year < 2000
 
-	// Remove empty variables.
-	foreach v of varlist * {
-	qui su `v'
-	if r(N)==0 {
-		local l: var l `v'
-	    di as txt "Removing","`v':","`l'"
-	    drop `v'
-	    }
-	}
+	// Trim (very low threshold to accommodate single-year questions)
+	srqm_trim, k(5)
 
-	// Remove low-N variables (arbitrary threshold at 500).
-	foreach v of varlist * {
-		qui count if !mi(`v')
-		if r(N) < 500 {
-		local l: var l `v'
-		di as txt "Removing","`v':","`l'"
-	    drop `v'
-	    }
-	}
+	// Get the codebook.
+	local file data/gss0012_codebook.pdf
+	local link "http://publicdata.norc.org/GSS/DOCUMENTS/BOOK/GSS_Codebook.pdf"
+	cap conf f `file'
+	if _rc==601 copy `link' `file', replace
 
-	// Export mock codebook.
-	log using data/gss2010_codebook.log, name(gss2010) replace
-	d
-	codebook
-	log close gss2010
-
-	// Get weighting guides.
-	copy "http://publicdata.norc.org:41000/gss/documents/OTHR/GSS%20design%20variables.pdf" data/gss2010_weights_pedlow.pdf, replace
-	copy "http://publicdata.norc.org:41000/gss/.%5CDocuments%5CCodebook%5CA.pdf" data/gss2010_weights_codebook.pdf, replace
-	
-	srqm_prep, lab(General Social Survey 2000-2010) zip(gss2010)
+	srqm_prep, label(U.S. General Social Survey 2000-2012) filename(gss0012)
 }
 
 // ------------------------------------------------------------- NHIS 2009 -----
 
 if inlist("`1'", "all", "nhis2009") {
 	// Get the data (downloaded from the website).
-	use data/nhis2009.dta, clear
+	use "`src'/NHIS 2009/NHIS_2009.dta", clear
 
-	// Export mock codebook.
-	log using data/nhis2009_codebook.log, name(nhis2009) replace
-	d
-	codebook
-	log close nhis2009
+	// Trim.
+	srqm_trim
 
-	srqm_prep, lab(National Health Interview Survey 2009) zip(nhis2009)
+	srqm_prep, label(U.S. National Health Interview Survey 2009) filename(nhis2009)
 }
 
-// -------------------------------------------------------------- QOG 2011 -----
+// -------------------------------------------------------------- QOG 2013 -----
 
-if inlist("`1'", "all", "qog2011") {
-	// Get the data (taken from the -qog- command).
-	use "http://www.qogdata.pol.gu.se/data/qog_std_cs.dta", clear
+if inlist("`1'", "all", "qog2013") {
+	// Get the data.
+	cap use "`src'/QOG/QOG Standard 2013/QoG_std_cs_15May13.dta", clear
 
-	// Get the codebook (taken from the -qogbook- command).
-	copy "http://www.qogdata.pol.gu.se/codebook/codebook_standard_20110406.pdf" data/qog2011_codebook.pdf, replace
+	// Download if needed.
+	if _rc==601 use "http://www.qogdata.pol.gu.se/data/qog_std_cs.dta", clear
 
-	srqm_prep, lab(Quality of Government 2011) zip(qog2011)
+	// Trim (lower threshold).
+	srqm_trim, k(12.5)
+	
+	// Get the codebook.
+	local file data/qog2013_codebook.pdf
+	local link "http://www.qogdata.pol.gu.se/data/Codebook_QoG_Std15May13.pdf"
+	cap conf f `file'
+	if _rc==601 copy `link' `file', replace
+
+	srqm_prep, label(Quality of Government 2013) filename(qog2013)
+}
+
+* Note: the -qoguse- command downloads the most recent version of the data, but
+* as of today (May 2013), the -qogbook- command downloads the old 2011 codebook.
+
+// ------------------------------------------------------------ TRUST 2012 -----
+
+if inlist("`1'", "all", "trust2012") {
+	// Get the data.
+	cap use "`src'/trust2012/trust2012.dta"
 }
 
 // -------------------------------------------------------------- WVS 2000 -----
 
 if inlist("`1'", "all", "wvs2000") {
 	// Get the data.
-	copy "http://www.asep-sa.org/wvs/wvs2000/wvs2000_v20090914_stata.zip" temp.zip, replace
+	cap use "`src'/WVS 2008/wvs1981_2008_official_files/wvs2000.dta", clear
 
-	unzipfile temp.zip
-	use wvs2000_v20090914.dta, clear
+	// Download if needed.
+	if _rc==601 {
+		local link "http://www.asep-sa.org/wvs/wvs2000/wvs2000_v20090914_stata.zip"
+		copy `link' temp.zip, replace
+		unzipfile temp.zip
+		use wvs2000_v20090914.dta, clear
+		rm temp.zip
+		rm wvs2000_v20090914.dta
+	}
 
-	rm temp.zip
-	rm wvs2000_v20090914.dta
+	// No trim: missing values are not properly encoded.
+	// Also, some items are asked only in a few countries (e.g. Islam, neighbours).
 
 	// Capitalize country names.
-	// Thanks to William A. Huber: http://stackoverflow.com/q/12591056/635806
 	local sLabelName: value l v2
 	di "`sLabelName'"
 	qui levelsof v2, local(xValues)
 	foreach x of local xValues {
 	    local sLabel: label (v2) `x', strict
-	    local sLabelNew =proper("`sLabel'")
+	    local sLabelNew = proper("`sLabel'")
 	    di as txt "`x': `sLabel' ==> `sLabelNew'"
 	    label define `sLabelName' `x' "`sLabelNew'", modify
 	}
 
-	// Export mock codebook.
-	log using data/wvs2000_codebook.log, name(wvs2000) replace
-	fre v2
-	d
-	codebook
-	log close wvs2000
+	// Get the codebook.
+	local file data/wvs2000_codebook.pdf
+	local link "http://www.worldvaluessurvey.org/wvs/articles/folder_published/survey_2000/files/root_q_2000.pdf"
+	cap conf f `file'
+	if _rc==601 copy `link' `file', replace
 
-	srqm_prep, lab(World Values Survey 2000) zip(wvs2000)
+	srqm_prep, label(World Values Survey 2000) filename(wvs2000)
 }
+
+log close srqm_data
+
+end
 
 // ttyl

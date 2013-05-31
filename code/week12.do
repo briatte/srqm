@@ -12,7 +12,7 @@
    
    For this session, all hypotheses are to be provided by the students.
    
-   Last updated 2013-04-14.
+   Last updated 2013-05-31.
 
 ----------------------------------------------------------------------------- */
 
@@ -33,7 +33,7 @@ cap log using code/week12.log, replace
 
 
 * Open data subset for selected survey year.
-use data/gss2010 if year == 2010, clear
+use data/gss0012 if year == 2010, clear
 
 * Inspect DV.
 fre partnrs5
@@ -72,7 +72,7 @@ bys sex: ttest age, by(missing)
 spineplot sxp age6, scheme(burd8) name(sp, replace)
 
 * Inspect DV by age, sex and interviewer's sex.
-gr bar sxp, over(sex) asyvars over(age6) by(intsex) name(is, replace) ///
+gr bar sxp, over(sex) asyvars over(age6) by(intsex) ///
 	name(dv_agesexint, replace)
 
 * Inspect IVs.
@@ -91,7 +91,7 @@ gen female = (sex == 1) if !mi(sex)
 count
 
 * Survey weights.
-svyset vpsu [weight = wtssall], strata (vstrata)
+svyset vpsu [weight = wtssall], strata (vstrat)
 
 * Export summary stats.
 stab using week12, replace ///
@@ -129,7 +129,7 @@ reg sxp i.female coninc
 
 * Let's transform income into a more meaningful scale: a dollar change in income
 * is not enough to have a large effect. Let's measure income to 10,000s of USD.
-gen inc = coninc / 10000
+gen inc = coninc / 10^4
 
 * Regress again.
 reg sxp i.female inc

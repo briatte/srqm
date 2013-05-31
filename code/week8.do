@@ -5,7 +5,7 @@
 
  - TOPIC:  Fertility and Education, Part 2
 
- - DATA:   Quality of Government (2011)
+ - DATA:   Quality of Government (2013)
 
    This do-file is a continuation from last week's do-file, which we start by
    running in the background. This will prepare the data by renaming variables,
@@ -22,7 +22,7 @@
    variables. Make sure that you understand the logic of ordinary least squares
    (OLS) in order to include simple linear regression models in your next draft.
 
-   Last updated 2012-11-13.
+   Last updated 2013-05-28.
 
 ----------------------------------------------------------------------------- */
 
@@ -249,7 +249,7 @@ sc corrupt yhat2 hdi, yla(0 "Highly corrupt" 10 "Lowly corrupt") ///
 * ---------------------------
 
 * Create dummy.
-gen democracy:democracy = (gol_polreg == 0) if !mi(gol_polreg)
+gen democracy:democracy = (chga_hinst < 3) if !mi(chga_hinst)
 la def democracy 0 "Dictatorship" 1 "Democracy", replace
 
 * Visualization of the difference in mean of the DV.

@@ -43,7 +43,7 @@
    the proportions test, the Chi-squared test and finally linear correlation.
    The Stata Guide also covers these tests. Make sure to read what you need to!
 
-   Last updated 2012-11-13.
+   Last updated 2013-05-29.
 
 ----------------------------------------------------------------------------- */
 
