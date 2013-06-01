@@ -4,39 +4,37 @@ This file listing covers the datasets distributed as part of the [Statistical Re
 
 [srqm]: http://f.briatte.org/teaching/quanti/
 
-This file describes the commands in more detail than necessary to run them in class. All commands were written to assist students in completing their research projects. The setup also installs the [BuRd][burd] scheme.
-
-[burd]: https://github.com/briatte/burd/
+This file describes the commands used in class to assist students in following the course and completing their research projects.
 
 * * *
 
-## `betaplot`
-
-Currently in the works. This command will produce a `plotbeta`-style plot of coefficients. See the `plotbeta` package.
-
-## `find`
-
-A quicker `lookfor` command, not in use in the course.
-
-## `load`
-
-A quicker `use` command, not in use in the course.
-
-## `repl`
-
-Not in use due to limited testing. Creates a replication folder out of a do-file. The folder will contain the do-file, log and all plots that were assigned an optional `name()` in the code. It will also contain any file exported by the do-file and a short file manifest in a `README` file.
-
-## `rvf`
-
-A quicker `rvfplot` command, not in use in the course.
-
 ## `sbar`
 
-A categorical plot command, not in use in the couse.
+__Experimental.__ Produces categorical plots that use colored gradients to draw the bars. Relies on Nick Cox's `catplot` command.
+
+See its [blog post][srqm-sbar] for an example, or type `sbar_demo`.
+
+[srqm-sbar]: http://srqm.tumblr.com/post/44705634349/plotting-survey-data-a-wrapper-for-catplot
 
 ## `srqm_data`
 
-Prepares the [course datasets](https://github.com/briatte/srqm/blob/master/data/README.md), which are slight variations on the original versions. All datasets are saved in Stata 9/10 format for compatibility.
+Prepares the [course datasets][srqm-data], which are slight variations of the original ones. All datasets are saved in Stata 9/10 format for backward compatibility.
+
+[srqm-data]: https://github.com/briatte/srqm/blob/master/data/README.md
+
+## `srqm_get`
+
+Downloads the course material from a personal server address. Used in class to distribute updated versions of the code, programs and slides for the course.
+
+Examples:
+
+    srqm_get week7.pdf
+    srqm_get week11.do
+
+Details:
+
+- The command knows where to put the files and will rename any older files to backup filenames.
+- The command accepts any number of consecutive valid filenames, as in `srqm_get week1.do week1.pdf`.
 
 ## `srqm`
 
@@ -44,7 +42,7 @@ The `srqm` utilities rely on the architecture of the `SRQM` folder, a.k.a the '[
 
 The `srqm` utilities require one command and optionally one subcommand to execute:
 
-	srqm command [subcommand] [, nolog forced]
+	srqm command [subcommand] [, log forced]
 
 The commands and subcommands form four blocks. The first of them, `setup`, is called from the `profile.do` file of the `SRQM` folder and is used to set up computers for the course:
 
@@ -65,15 +63,9 @@ The mock symbolic link to the `SRQM` folder is generally erased at the end of th
 	srqm clean folder
 	srqm clean packages
 
-The utilities also include a built-in course update system that recognizes where files go and keeps older files as backups. The command works with `week#.do` files (code), `week#.pdf` files (slides) and setup (`.ado`) files:
-
-    srqm fetch week7.pdf
-    srqm fetch week11.do
-    srqm fetch stab.ado // caution with that
-
-Finally, the course datasets can be rebuilt by calling `srqm data` followed by `all` or by the name of a course dataset. The command calls the `srqm_data` ado-file.
-
 When the additional `log` option is specified, all commands send verbose output to a log in order to help users report issues.
+
+Usually runs in five minutes or less.
 
 ### `srqm setup`
 
@@ -89,15 +81,19 @@ This command requires to run Stata as administrator on Windows Vista and 7, or i
 
 ### `srqm setup packages`
 
-Installs the additional Stata packages used in the course do-files. Requires Internet access to execute properly. Usually runs in less than five minutes.
+Installs the additional Stata packages used in the course do-files, including the [BuRd][burd] scheme, which was developed for the course. Requires Internet access to execute properly.
+
+[burd]: https://github.com/briatte/burd/
 
 The command will try to run as quickly as possible by skipping packages that are [already installed][statalist-tip]. This behaviour can be overriden by passing the `forced` option.
+
+[statalist-tip]: http://www.stata.com/statalist/archive/2009-12/msg00461.html
 
 ### `srqm check`
 
 Produces a report on the current setup, covering the basic system options obtained with `query` and the list of installed packages obtained with `ado dir`.
 
-If the `demo' option is specified, as in `srqm check, demo(1/4 12)`, the command runs the course do-files to test their executability (the whole course usually runs in less than ten minutes).
+If the `demo' option is specified, as in `srqm check, demo(1/4 12)`, the command runs the course do-files to test their executability (the whole course usually runs in less than five minutes).
 
 ### `srqm check folder`
 
@@ -119,9 +115,16 @@ Unlinks Stata from the `SRQM` folder by erasing the `profile.do` file that is in
 
 Uninstalls course packages. Used for testing purposes.
 
+## `srqm_utils`
+
+Undocumented shortcut commands that slightly modify the behaviour of a few built-in Stata commands.
+
+* `find`: a quicker `lookfor` command.
+* `load`: a quicker `use` command.
+
 ## `stab`
 
-__Currently in the works.__ Produces summary statistics and correlation matrix tables in plain text format, for maximum compatibility with text and spreadsheet editors (the course recommendation is to use Google Documents).
+__Experimental.__ Produces summary statistics and correlation matrix tables in plain text format, for maximum compatibility with external editors like Google Documents.
 
 The basic syntax for `stab` is:
 
@@ -132,5 +135,3 @@ The `su` option produces five-number summaries for continuous variables. The `fr
 The `by(varname)` option creates multiple tables based on the categories of `varname`. The `corr` option adds a correlation matrix of the continuous variables specified in `su`.
 
 Less frequent options are `ttest` to add *t*-tests for all groups, and `float(n)` to modify the level of decimal precision. The command also supports analytical and frequency survey weights, `if` and `in`.
-
-[statalist-tip]: http://www.stata.com/statalist/archive/2009-12/msg00461.html

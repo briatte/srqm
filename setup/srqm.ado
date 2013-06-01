@@ -5,8 +5,9 @@
 *! the SRQM folder. See the README file of the setup folder for details on how
 *! to operate it. If you are a student, just follow the instructions in class.
 
-   Last revised 2013-03-10.
+   Last revised 2013-06-01.
 
+*! version 3.7: outsourced srqm_get
 *! version 3.6: setup bugfix
 *! version 3.5: added spmap
 *! version 3.4: data command
@@ -26,7 +27,6 @@ program srqm
     tokenize `anything'
     local setup    = ("`1'"=="setup")
     local check    = ("`1'"=="check")
-    local fetch    = ("`1'"=="fetch")
     local clean    = ("`1'"=="clean")
     local folder   = ("`2'"=="folder")
     local packages = ("`2'"=="packages")
@@ -51,7 +51,7 @@ program srqm
 
     // check syntax
 
-    if `setup' | `check' | `clean' | `fetch' {
+    if `setup' | `check' | `clean' {
         if `logged' {
             if "`2'"!="" local x = "-`2'"
             cap qui log using setup/`1'`x'.log, name(SRQM) replace
@@ -419,75 +419,6 @@ program srqm
                 cap !rm -R `expr'
             }
         }
-    }
-
-    // =========
-    // = FETCH =
-    // =========
-
-	// ... might not work for Windows users running without admin privileges
-	
-    if `fetch' {
-
-        cap cd "$srqm_wd"
-		
-        //cap qui net
-        if _rc == 631 {
-            di as err "You do not seem to be online." _n ///
-            	"Please fix your Internet connection to fetch course material."
-            exit 631
-        }
-
-		// dot separator
-		local bd = strpos("`2'", ".")
-		// root
-		local br = substr("`2'", 1, `bd' - 1)
-		// extension
-		local be = substr("`2'", `bd' + 1, .)
-		// backup name
-        local bk = subinstr(strtoname("`br' backup `c(current_date)'"), "__", "_", .)
-		
-        if "`be'" == "do"  local bf "code"
-        if "`be'" == "pdf" local bf "course"
-		// careful with that axe eugene
-        if "`be'" == "ado" local bf "setup"
-
-        // path to backup
-        local pb "`bf'/`bk'.`be'"
-        // path to file
-        local pf "`bf'/`2'"
-        
-        if "`bf'" == "" {
-            di as err "Please check the syntax of your filename."
-            exit 198
-        }
-        else {
-        	di as txt _n "Downloading `2' to the `bf' folder..."
-	        cap qui copy "`pf'" "`pb'", public replace
-
-	        cap qui erase "`pf'" // instead of rm for Windows compatibility
-	        cap qui copy "http://briatte.org/srqm-updates/`2'" "`pf'", public replace
-
-	        if !_rc {
-	        	di as txt "Successfully downloaded."
-	        		
-	        	if "`be'" == "pdf" di as inp _n "{stata !open `pf':open `pf'}"
-	        	if "`be'" == "do" di as inp _n "{stata doedit `pf':doedit `pf'}"
-	        }
-	        else {
-	        	di as err "No file updated: error", _rc "." _n ///
-	        		"Check your syntax and connection."
-	        	cap qui copy "`pb'" "`pf'", public replace
-	        	if !_rc {
-	        		cap rm "`pb'"
-	        		di as txt "- `bk'.`be' restored to `2'.`be'"
-	        	}
-	        	else {
-	        		di as err "No backup restored: error", _rc "." 
-	        	}
-	        }
-		}
-
     }
 
     if `logged' {

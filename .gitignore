@@ -1,4 +1,5 @@
 .DS_Store
+.gitignore
 *.dta
 *.txt
 
@@ -16,8 +17,7 @@ data/*
 code/*
 !code/*.do
 
-setup/betaplot.ado
-setup/rvf.ado
+setup/dev/*
 
 *.aux
 *.bbl
