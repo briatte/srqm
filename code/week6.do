@@ -50,7 +50,7 @@
 
 * Additional commands.
 foreach p in fre tab_chi {
-	if "`p'" == "tab_chi" local p = "tabchi" // fix
+	if "`p'" == "tab_chi" local p = "tabchi" // name fix
     cap which `p'
     if _rc == 111 cap noi ssc install `p' // install from online if missing
 }
