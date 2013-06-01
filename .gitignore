@@ -6,7 +6,6 @@
 admin
 
 course/*
-!course/week*.pdf
 !course/syllabus.pdf
 !course/Stata-Guide-2012.pdf
 
