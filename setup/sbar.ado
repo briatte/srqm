@@ -1,10 +1,12 @@
-*! 0.2.3 F. Briatte 20mar2013
+*! sbar: simple bar plots with color gradients
+*! type sbar_demo for examples with NHANES data
+*! 0.3 F. Briatte 1jun2013
 
 cap pr drop sbar
 program sbar
 	syntax varlist(max=3) [if] [in] [aweight fweight iweight/] ///
-		[, Reds Blues Ascending Descending Horizontal Ymax(int 100) ///
-		Float(int 0) Size(real 3.5) ANGLE(int 0) NOPercent XLAb *]
+		[, Reds Blues Greens Purples Ascending Descending Horizontal ///
+		Ymax(int 100) Float(int 0) Size(real 3.5) ANGLE(int 0) NOPercent XLAb *]
 
 	// parse options
 
@@ -13,16 +15,23 @@ program sbar
 	if strpos("`options'", "stack") > 0 local pos = "position(center)"
 
 	if "`nopercents'" == "" local b = "blabel(bar, `pos' size(`size') format(%3.`float'f))"
-		
-	local red = ("`reds'" != "")
-	local blu = ("`blues'"!= "")
-	if `red' + `blu' > 1 {
+
+	local red = ("`reds'"    != "")
+	local blu = ("`blues'"   != "")
+	local grn = ("`greens'"  != "")
+	local pur = ("`purples'" != "")
+	local colorsum = `red' + `blu' + `grn' + `pur'
+	if `colorsum' > 1 {
 		di as err "only one color option allowed"
 		exit 198
 	}
 	else {
+		// colors taken from Cynthia Brewer's ColorBrewer,
+		// using the extreme values from RdBu-7 and PRGn-7
 		if `red' local col = "178 24 43"
 		if `blu' local col = "33 102 172"
+		if `grn' local col = "27 120 55"
+		if `pur' local col = "118 42 131"
 	}
 
 	local asc = ("`ascending'" != "")
@@ -34,7 +43,7 @@ program sbar
 	else {
 		local rev = cond(`des' == 1, 1, 0) // ascending order by default
 		if `asc' + `des' > 0 local y "`y' asyvars"
-		if `asc' + `des' > 0 & `red' + `blu' < 1 di as txt ///
+		if `asc' + `des' > 0 & `colorsum' < 1 di as txt ///
 			"Warning: no color option specified; " ///
 			"sort option ignored"
 	}
@@ -43,7 +52,8 @@ program sbar
 		
 	tokenize `varlist'
 	
-	tab `1' `2' `if' `in', chi2
+	if "`2'" != "" loc stat ", chi2"
+	tab `1' `2' `if' `in' `stat'
 	local ycat = r(r)
 	
 	local angle "lab(angle(`angle'))"
@@ -75,8 +85,8 @@ program sbar
 		}
 	}
 	
-	// plot
-	di as err "`gradient'"
+	// debug catplot command
+	// di as err "`gradient'"
 	
 	cap which catplot
 	if _rc == 111 qui ssc install catplot, replace
@@ -86,3 +96,27 @@ program sbar
 		ti("`t1'", margin(bottom)) yti("") b1ti("`b1'") l1ti("`l1'") ///
 		`gradient' `options' inten(100)
 end
+
+cap pr drop sbar_demo
+program sbar_demo
+
+	gr drop _all
+
+	cap which scheme-burd.scheme
+	if _rc ssc install scheme-burd
+	set scheme burd
+	
+	webuse nhanes2, clear
+	gen bmi_g:bmi_g = irecode(bmi, 18.5, 25, 30)
+	la def bmi_g 0 "Underweight" 1 "Normal" 2 "Overweight" 3 "Obese"
+
+	* unstacked
+	
+	sbar bmi_g    ,  ymax(50)          name(sbar1           , replace)
+	sbar bmi_g sex,  ymax(50)          name(sbar2           , replace)
+	sbar bmi_g sex,  ymax(50) asc red  name(sbar2_gradient  , replace)
+	sbar bmi_g race, asc red stack     name(sbar2_stacked   , replace)
+	
+end
+
+// work in progress
