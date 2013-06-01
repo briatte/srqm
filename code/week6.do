@@ -49,9 +49,10 @@
 
 
 * Additional commands.
-foreach p in fre tab_chi {
-	if "`p'" == "tab_chi" local p = "tabchi" // name fix
+foreach p in fre tab_chi scheme-burd {
     cap which `p'
+	if "`p'" == "tab_chi" cap which tabchi                 // name fix
+	if "`p'" == "scheme-burd" cap which scheme-burd.scheme // name fix
     if _rc == 111 cap noi ssc install `p' // install from online if missing
 }
 

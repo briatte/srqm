@@ -21,6 +21,7 @@ else if _rc {
 
 // load utilities
 cap adopath + "`c(pwd)'/setup"
+cap run setup/srqm_utils.ado
 
 // course folder
 cap noi srqm check folder

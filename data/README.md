@@ -1,12 +1,12 @@
-# SRQM: Data sources
+# SRQM: Data
 
-This file listing covers the datasets distributed as part of the [Statistical Reasoning and Quantitative Methods][srqm] course taught by François Briatte and Ivaylo Petev.
+This folder contains the teaching datasets required to follow the [Statistical Reasoning and Quantitative Methods][srqm] (SRQM) course taught by François Briatte and Ivaylo Petev.
 
 [srqm]: http://f.briatte.org/teaching/quanti/
 
-All files are provided in Stata 9/10 `dta` format on an "as-is" basis: please use them for teaching purposes only, and do not redistribute them.
+All datasets are provided in the Stata 9/10 `dta` format on an "as-is" basis. Please use the datasets for teaching purposes only, and do not redistribute them.
 
-The teaching datasets were prepared with [`setup/srqm_data.ado`][srqm-data], which runs as described in the [README][srqm-setup] file of the `setup` folder. Each dataset comes with a list of variables.
+The teaching datasets were prepared with a [setup script][srqm-data] that runs as described in the [README][srqm-setup] file of the `setup` folder. Each dataset is bundled into a ZIP archive with its codebook and a list of available variables.
 
 [srqm-setup]: https://github.com/briatte/srqm/blob/master/setup/README.md
 [srqm-data]: https://github.com/briatte/srqm/blob/master/setup/srqm_data.ado

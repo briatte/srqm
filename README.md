@@ -1,6 +1,6 @@
-# SRQM: Setup instructions
+# SRQM: README
 
-This file listing covers the datasets distributed as part of the [Statistical Reasoning and Quantitative Methods][srqm] course taught by François Briatte and Ivaylo Petev.
+This file explains how to run the Stata setup required to follow the [Statistical Reasoning and Quantitative Methods][srqm] (SRQM) course taught by François Briatte and Ivaylo Petev.
 
 [srqm]: http://f.briatte.org/teaching/quanti/
 
@@ -8,12 +8,12 @@ The course requires Internet access, basic computer skills and a working copy of
 
 [stat]: http://www.stata.com/
 
-In the setup instructions below, the `SRQM` folder is the folder that you can download from [its webpage][srqm-page] or [repository][srqm-repo]. We call this folder the 'Teaching Pack' in class.
+In the instructions below, the `SRQM` folder is the folder that you can download from its [webpage][srqm-page] or [repository][srqm-repo]. This folder is called the 'Teaching Pack' in class.
 
 [srqm-page]: http://f.briatte.org/srqm/
 [srqm-repo]: https://github.com/briatte/srqm
 
-If you are enrolled in our course, you will read this file and setup your computer during our first class.
+If you are enrolled in the course, you will read this file and setup your workstation during the first or second week of class.
 
 * * *
 
@@ -21,19 +21,19 @@ If you are enrolled in our course, you will read this file and setup your comput
 
 Please follow the instructions closely and ask for help as early as possible, so that we can put configuration issues behind us and move to the actual content of the course.
 
-__One-line USB setup:__ copy the `SRQM` folder to a USB key, open Stata, set the `SRQM` folder as your Stata working directory from the "File", type `run profile` and wait five minutes.
+__Quick setup:__ copy the `SRQM` folder to a USB key, open Stata, set the `SRQM` folder as your Stata working directory with the 'File : Change Working Directory…' menu item, type `run profile`, and wait five minutes until Stata says "Hello!".
 
-### 1. Course material
+### Step 1. Download the course material
 
 Move the whole `SRQM` folder to a stable and easily accessible location on your hard drive. Keep the names of that folder and the folders that lead to it intact throughout the course.
 
-> If you later move the `SRQM` folder by changing its name or the names of the folders that lead to it on your hard drive, you will have to run the next installation steps again.
+> __Important__: If you later move the `SRQM` folder by changing its name or the names of the folders that lead to it on your hard drive, you will have to run the next installation steps again. Other errors will occur if you rename the `code`, `data` or `setup` folders, or some of the files located inside the latter two.
 
-### 2. Application folder
+### Step 2. Check the Stata application folder
 
 Check your Stata installation:
 
-### Windows users: 
+### Windows users:
 
 - Make sure that the *entire Stata application folder* is installed in the `Program Files` folder (sometimes renamed in your language). Stata needs to run _from its own folder_ to work.
 - On Windows Vista, 7 or above, you will need to open Stata by right-clicking the program icon and selecting 'Run as administrator' for this setup procedure to fully complete.
@@ -47,7 +47,7 @@ Check your Stata installation:
 
 Now open Stata and skip the update dialog by disabling automatic updates, as we will learn to update Stata and packages by ourselves, in true nerd spirit.
 
-### 3. Working directory
+### Step 3. Set the Stata working directory
 
 Set the `SRQM` folder as the working directory with the 'File : Change Working Directory…' menu item, also accessible with &#8984;&#8679;J (Command-Shift-J) on Mac OS X.
 
@@ -66,7 +66,7 @@ This path is where the course setup will tell Stata to look for the SRQM teachin
 
 Have you read the "Important" message above?
 
-### 4. Course setup
+### Step 4. Run the course setup
 
 1. Make sure that you are connected to the Internet. At Sciences Po, this requires checking that you logged into the wifi network. 
 2. Then type `run profile` in the Command window and press `Enter`.
@@ -87,7 +87,7 @@ The installation will go fine as long as you are running with administrative pri
 ## Uninstalling
 
 - If you do not like the course graph scheme, type `set scheme s2color` to revert to the default Stata scheme, or use any other scheme of your choice (see `help scheme`).
-- At the end of the semester, type `srqm clean folder` to stop redirecting Stata to the `SRQM` folder.
+- At any stage of the course, type `srqm clean` to remove temporary files. At the end of the class, type `srqm clean folder` to stop redirecting Stata to the `SRQM` folder.
 
 * * *
 

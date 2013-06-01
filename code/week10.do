@@ -30,8 +30,9 @@
 
 * Additional commands.
 foreach p in estout fre tab_chi  {
-	if "`p'" == "tab_chi" local p = "tabchi" // fix
 	cap which `p'
+	if "`p'" == "tab_chi" cap which tabchi                 // name fix
+	if "`p'" == "scheme-burd" cap which scheme-burd.scheme // name fix
 	if _rc == 111 ssc install `p'
 }
 
