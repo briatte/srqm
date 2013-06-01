@@ -1,41 +1,17 @@
 .DS_Store
-.gitignore
-*.dta
 *.txt
+*.log
 
 admin
+draft
+readings
 
-course/*
-!course/syllabus.pdf
-!course/Stata-Guide-2012.pdf
+setup/dev/*
 
 data/*
 !data/README*
 !data/*.zip
 
 code/*
+!code/README*
 !code/*.do
-
-setup/dev/*
-
-*.aux
-*.bbl
-*.blg
-*-blx.bib
-*.ilg
-*.ild
-*.ind
-*.idx
-*.lof
-*.log
-*.lot
-*.nav
-*.out
-*.ppt
-*.snm
-*.sty
-*.synctex.gz
-*.tex
-*.tex.bak
-*.toc
-*run.xml
