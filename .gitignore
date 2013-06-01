@@ -39,7 +39,3 @@ setup/dev/*
 *.tex.bak
 *.toc
 *run.xml
-
-*.chproj
-*.tmproj
-.Rproj.user
