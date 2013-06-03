@@ -56,7 +56,6 @@ end
 
 cap pr drop stab_demo
 pr stab_demo
-
 	webuse nhanes2, clear
 	la var sex "Gender"
 	la var race "Race"
