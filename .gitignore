@@ -8,8 +8,6 @@ admin
 draft
 readings
 
-setup/dev/*
-
 data/*
 !data/README*
 !data/*.zip
