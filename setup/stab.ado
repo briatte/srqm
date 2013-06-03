@@ -10,6 +10,8 @@ pr stab
 
 	qui which estout
 	if _rc == 111 ssc inst estout, replace
+	
+	
 
 	// it saves simple summary statistics tables in plain text
 
@@ -40,13 +42,16 @@ pr stab
 		}
 	}
 
-	qui count `if' `in'
-	loc n `r(N)'
+	qui misstable pat `mean' `prop' `if' `in'
+	loc n `r(N_complete)'
+	loc m `r(N_incomplete)'
+	if `m' > 0 loc m " (excluding `r(N_incomplete)' incomplete observations)"
+	
 	file open `fh' using `out', write append
-	file write `fh' "N = `n'"
+	file write `fh' "N = `n'`m'"
 	file close `fh'
 
-	di as txt _n "N = `n'" _n "File: {browse `out'}"
+	di as txt _n "N = `n'`m'" _n "File: {browse `out'}"
 end
 
 cap pr drop stab_demo
