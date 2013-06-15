@@ -1,17 +1,17 @@
 *! stab: simple tables of summary statistics
 *! type stab_demo for an example with NHANES data
-*! 0.1 F. Briatte 3jun2013
+*! 0.2 F. Briatte 3jun2013
 
 cap pr drop stab
 pr stab
-	syntax [using/] [if] [in] [, Mean(varlist) Prop(varlist) replace]
+	syntax using/ [if] [in] [, Mean(varlist) Prop(varlist) replace]
 
 	// stab is a wrapper for the -estout- package by Ben Jann
 
 	qui which estout
 	if _rc == 111 ssc inst estout, replace
 	
-	
+	if strpos("`using'", ".") == 0 loc using "`using'.txt"
 
 	// it saves simple summary statistics tables in plain text
 

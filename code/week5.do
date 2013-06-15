@@ -339,30 +339,20 @@ bys ybarcare: ci bmi  // confidence bands
 * to run the course setup, then try the command again. If you still experience
 * problems with the -stab- command, please send a detailed email on the issue.
 
-stab using week5, replace ///
-	su(bmi age) ///
-	fr(female raceb educrec1 earnings uninsured ybarcare)
+stab using week5_stats.txt, replace ///
+	mean(bmi age) ///
+	prop(female raceb educrec1 earnings uninsured ybarcare)
 
-/* Basic syntax of -stab- command:
+/* Syntax of the -stab- command:
 
- - using NAME - adds the NAME prefix to the exported file(s)
- - su()       - summarizes a list of continuous variables (mean, sd, min-max)
- - fre()      - summarizes a list of categorical variables (frequencies)
-
- - by()       - produces several tables over a given categorical variable
- - replace    - overwrite any previously existing tables
- - [aw, fw]   - use survey weights (use only if you know how they work)
+ - using FILE  - name of the exported file; plain text (.txt) recommended
+ - replace     - overwrite any previously existing file
+ - mean()      - summarizes a list of continuous variables (mean, sd, min, max)
+ - prop()      - summarizes a list of categorical variables (frequencies)
 
   In the example above, the -stab- command will export a single file to the
   working directory (week5_stats.txt) containing summary statistics for the
-  final sample. To get one table per racial group, the syntax would be:
-  
-  stab using week5, replace ///
-	su(bmi age) ///
-	fr(female educrec1 earnings uninsured ybarcare) ///
-	by(raceb)
-  
-  We will later see how to use -stab- to also export correlation tables. */
+  final sample, as a plain text file of tab-separated values. */
 
 * Last reminder: your code is the technical document, whereas your paper is the 
 * substantive document. Make sure that the paper is not a descriptive write-up

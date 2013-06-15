@@ -95,9 +95,9 @@ count
 svyset vpsu [weight = wtssall], strata (vstrat)
 
 * Export summary stats.
-stab using week12, replace ///
-	su(coninc) ///
-	fre(age6 educ marital wrkstat size)
+stab using week12_stats.txt, replace ///
+	mean(coninc educ size) ///
+	prop(age6 marital wrkstat)
 
 
 * ===================

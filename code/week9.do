@@ -93,24 +93,21 @@ count
 * Export summary statistics
 * -------------------------
 
-* The next command is part of the SRQM folder. The only categorical predictor of
-* the model is the HIV/AIDS prevalence dummy: regions are used only for teaching
-* purposes in the table but should not be treated as predictors.
+* The next command is part of the SRQM folder. If Stata returns an error when
+* you run it, set the folder as your working directory and type -run profile-
+* to run the course setup, then try the command again. If you still experience
+* problems with the -stab- command, please send a detailed email on the issue.
 
-stab using week9, replace ///
-    su(births schooling log_gdpc) ///
-    corr(births schooling log_gdpc) ///
-    fr(aids region)
+stab using week9_stats.txt, replace ///
+    mean(births schooling log_gdpc) ///
+    prop(aids region)
 
-/* Basic syntax of -stab- command:
+/* Syntax of the -stab- command:
 
- - using NAME - adds the NAME prefix to the exported file(s)
- - su()       - summarizes a list of continuous variables (mean, sd, min-max)
- - fre()      - summarizes a list of categorical variables (frequencies)
-
- - by()       - produces several tables over a given categorical variable
- - replace    - overwrite any previously existing tables
- - [aw, fw]   - use survey weights (use only if you know how they work)
+ - using FILE  - name of the exported file; plain text (.txt) recommended
+ - replace     - overwrite any previously existing file
+ - mean()      - summarizes a list of continuous variables (mean, sd, min, max)
+ - prop()      - summarizes a list of categorical variables (frequencies)
 
   In the example above, the -stab- command will export two files to the working
   directory, containing summary statistics (week9_stats.txt) and a correlation

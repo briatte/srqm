@@ -107,10 +107,24 @@ la val edu3 edu3
 * Export summary statistics
 * -------------------------
 
-* Export.
-stab using week10, replace ///
-	su(age rightwing) ///
-	fre(imdfetn female born edu3 income)
+* The next command is part of the SRQM folder. If Stata returns an error when
+* you run it, set the folder as your working directory and type -run profile-
+* to run the course setup, then try the command again. If you still experience
+* problems with the -stab- command, please send a detailed email on the issue.
+
+stab using week10_stats.txt, replace ///
+	mean(age rightwing) ///
+	prop(imdfetn female born edu3 income)
+
+/* Syntax of the -stab- command:
+
+ - using FILE  - name of the exported file; plain text (.txt) recommended
+ - replace     - overwrite any previously existing file
+ - mean()      - summarizes a list of continuous variables (mean, sd, min, max)
+ - prop()      - summarizes a list of categorical variables (frequencies)
+
+  In the example above, the -stab- command will export one file to the working
+  directory, containing summary statistics for the full European sample. */
 
 
 * =====================
@@ -207,7 +221,7 @@ rvfplot, yli(0) ///
 eststo clear
 eststo lin_1: reg imdfetn $bl [pw = dpw]
 eststo lin_2: reg imdfetn $bl [pw = dpw], vce(cluster cid)
-esttab lin_? using week10_ols.txt, mti("OLS" "Adj. OLS") replace
+esttab lin_? using week10_regressions.txt, mti("OLS" "Adj. OLS") replace
 
 * The diagnostics clearly identify the issue here: the limited number of levels
 * in the DV is causing residuals to follow a low-dimensional pattern that does
