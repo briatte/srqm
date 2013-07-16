@@ -31,10 +31,11 @@ if _rc != 0 exit -1
 cap noi srqm setup packages
 
 // system settings
-if c(update_query)=="on" | c(more)=="on" {
+if c(os) != "Unix" cap loc upd = c(update_query)
+if "`upd'" == "on" | c(more) == "on" {
 	noi di as txt _n ///
 		"(It looks like we need to adjust some Stata settings.)"
-	cap noi srqm setup
+	//cap noi srqm setup
 }
 
 // link
