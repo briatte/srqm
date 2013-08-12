@@ -5,7 +5,8 @@
 *.log
 
 admin
-draft
+course/*
+!course/*week[0-9].tex
 readings
 
 data/*
