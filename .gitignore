@@ -7,10 +7,12 @@
 admin
 
 course/*
+!course/README.md
 !course/images
 !course/*week[0-9].tex
 
 guide/*
+!guide/README.md
 !guide/cfg
 !guide/img
 !guide/*.tex
