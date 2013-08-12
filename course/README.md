@@ -17,7 +17,7 @@ Each item on one slide, except for theory and Stata recaps; total max. ~ 12.
 * recap
 	* theory
 	* Stata [list of commands](https://github.com/briatte/srqm/wiki/Code)
-  * [short exercise](https://github.com/briatte/srqm/wiki/Exercises)
 * practice
-  * this week
+  * example
   * coursework
+  * [short exercises](https://github.com/briatte/srqm/wiki/Exercises)

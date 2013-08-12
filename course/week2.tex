@@ -1,3 +1,23 @@
+% Data sources
+  % Data philosophy
+  % Data access
+  % Data portals
+% Data structure
+  % Datasets
+  % Samples
+  % Codebooks
+  % Formatting
+% Data exploration
+  % Open, describe, search
+  % Selection by range
+  % Selection by conditions
+  % Weights, subsets
+% Practice
+  % Example: NHIS dataset
+  % Maps
+  % Coursework
+  % Exercises
+
 \documentclass[t]{beamer}
 \usetheme{hkl}
 
@@ -19,6 +39,26 @@
 	%
 	%
 
+	\begin{frame}[t]{Course logistics}
+
+    \begin{block}{Project management}
+      \begin{enumerate}
+        \item Computer setup
+        \item Register on the \textbf{projects page:}
+      \end{enumerate}
+    \end{block}
+
+    \begin{alertblock}{Weekly reminders}
+      \begin{itemize}
+	       \item \textbf{Emails} start with ``SRQM:''
+	       \item \textbf{Homework} is replication and readings
+      \end{itemize}
+    \end{alertblock}
+    		
+	\end{frame}
+  %
+  %
+  
   %
   %
   \section{Data sources}
@@ -247,7 +287,7 @@
 
 					\begin{itemize}
 						\item All files are preprocessed \texttt{.dta}				
-						\item \texttt{gss2010} and \texttt{nhis2009} hold several years
+						\item \texttt{gss0012} and \texttt{nhis2009} hold several years
 						\item See the \texttt{README} file for details
 					\end{itemize}
 				
@@ -500,21 +540,21 @@
   %
   %
   
-	\begin{frame}[t]{Practice session}
+	\begin{frame}[t]{Coursework}
 
     \begin{block}{Class}
       \comm{Get the do-file for this week.}\\
-      \code{srqm fetch week2.do}\\
+      \code{srqm\_get week2.do}\\
       
 			\comm{Open to read and replicate.}\\
 			\code{doedit code/week2}\\    
     \end{block}
 
-    \begin{alertblock}{Coursework}
+    \begin{alertblock}{Home}
       \begin{itemize}
-	       \item Finish the do-file and read all comments at home.
-	       \item Read from the codebooks in the \texttt{data/} folder. 
-	       \item Start writing some draft code to describe a dataset.
+	       \item \textbf{Finish the do-file} and read all comments at home.
+	       \item \textbf{Read from the codebooks} in the \texttt{data/} folder. 
+	       \item \textbf{Start writing some draft code} to describe a dataset.
       \end{itemize}
     \end{alertblock}
     		
@@ -522,32 +562,5 @@
   %
   %
   
-  %
-  %
-  \subsection{Exercises}
-  %
-  %
-  
-  \begin{frame}{Exercises}
-
-    \begin{exampleblock}{Ex~2.1. European Social Survey 2008}
-      \begin{enumerate}
-        \item Load the data.
-        \item Find all variables on discrimination.
-        \item How many countries are there in the dataset?
-      \end{enumerate}
-    \end{exampleblock}
-		
-    \begin{exampleblock}{Ex.~2.2. Quality of Government 2011}
-      \begin{enumerate}
-        \item Load the data.
-        \item Find all variables on corruption.
-        \item Which one has the most observations?
-      \end{enumerate}
-    \end{exampleblock}
-
-  \end{frame}
-  %
-  %  
 	
 \end{document}
