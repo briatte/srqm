@@ -6,6 +6,7 @@
 
 admin
 course/*
+!course/images
 !course/*week[0-9].tex
 readings
 
