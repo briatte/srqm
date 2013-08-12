@@ -5,9 +5,16 @@
 *.log
 
 admin
+
 course/*
 !course/images
 !course/*week[0-9].tex
+
+guide/*
+!guide/cfg
+!guide/img
+!guide/*.tex
+
 readings
 
 data/*

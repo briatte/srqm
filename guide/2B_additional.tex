@@ -1,0 +1,70 @@
+%
+% 2
+%
+\section{Additional data skills}
+\label{sec:additional-data-skills}
+
+% 2.1
+%
+\subsection{Converting \textsc{csv} and Excel files}
+
+
+% CSV
+\label{sec:insheet}
+\index{Data!Conversion!From \textsc{csv} files}
+
+Files that use \underline{c}omma-\underline{s}eparated \underline{v}alues (\textsc{csv}) can be imported into Stata if you carefully clean the file first from any additional element that is not part of the data itself.
+
+% XLS
+\label{sec:import-excel}
+\index{Data!Conversion!From Excel files}
+
+Microsoft Excel files (\textsc{xls}) are written in a proprietary spreadsheet format that can be imported into Stata with the \cmd{import excel} command.
+
+
+% 2.1
+%
+\subsection{Merging variables}
+\label{sec:merge}
+
+
+%%%% WBOPENDATA
+
+%%%% MERGING COUNTRY REGIONS AND STD NAMES WITH KOUNTRY
+
+
+% 2.3
+%
+\subsection{Rescaling variables for indexes}
+
+You can create indexes out of several variables with \emph{identical} ranges by adding or multiplying them, but when the variables have different ranges, you will need to standardize them on a common scale of measurement if you want to ensure that the resulting index takes each component equally into account.
+
+Standardization is common in disciplines like demography and epidemiology, where mortality rates, for instance, have to be age-standardized to compare across time and space. Such operations typically require additional information about the general population.%
+  \footnote{For a Stata tutorial, see \url{http://data.princeton.edu/eco572/std.html}}
+
+The simplest standardized scale will consider the minimum value of the variable to be $0$ and its maximum to be $1$, and will express all other values as a fraction of the maximum, therefore creating a $0$--$1$ scale out of the variable.
+
+\label{sec:gtsd01}%
+Use the \cmd{std01} command for that purpose. If the command was not installed by the course setup, run this installation command:%
+	
+  \begin{fullwidth}
+	  \begin{docspec}
+		  net install \_gstd01,%
+			  from(\url{http://web.missouri.edu/~kolenikovs/stata})
+	  \end{docspec}  
+  \end{fullwidth}
+	
+The command is an extension to the Stata \cmd{egen} command, and works as shown below, where we merge three \QOG variables on gender equality to a single \texttt{index} variable of range $0$--$3$:%
+
+\begin{docspec}
+	use data/qog2011, clear\\
+	d wdi\_gris gid\_rfmi gid\_fptw\\
+	egen gris01 = std01(wdi\_gris)\\
+	egen rfmi01 = std01(gid\_rfmi)\\
+	egen fptw01 = std01(gid\_fptw)\\
+	gen index = gris01 + rfmi01 + fptw01
+\end{docspec}
+
+There is a fair chance, however, that the result of an index will not intuitively convey much information. It might also suffer from the different variability of each variable, regardless of the common scaling. Further diagnostics are generally in order at that stage, the main one being: what have you \emph{really} gained with an index?
+
+Most of the time, making a decisive choice between two or more variables with meaningful units will indeed be a better idea than dropping both of them for a unit-less measure that comes with little guarantee of being balanced and therefore reliable.\footnote{That being said, I guess that the Society of Indexers would disagree: \url{https://rulesofreason.wordpress.com/2012/11/20/the-international-journal-of-indexing/}}

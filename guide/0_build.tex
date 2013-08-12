@@ -1,0 +1,48 @@
+\documentclass[a4paper, nofonts, notoc]{tufte-book}
+
+	\title{Stata for Social Scientists}
+	\author{François Briatte}
+	\publisher{\url{http://f.briatte.org/teaching/quanti/}}
+
+	\input{cfg/sty} % style
+	\input{cfg/lex} % word shortcuts
+	\input{cfg/doc} % documentation index
+
+\begin{document}
+
+% Front matter
+\frontmatter
+
+  \input{0_cover} %% r-1
+  \input{0_title} %% r-3
+
+	\newpage\tableofcontents %% r-5
+	\cleardoublepage
+	
+\mainmatter %% r-7
+
+  \input{1_intro} %% ... session 1
+	
+  % \input{2_data}        %% ... sessions 2-3 (data, vars)
+  % \input{3_distr}       %% ... sessions 4-5 (summ, distr)     ... draft 1
+  % 
+  % \input{4_hyp}         %% ... sessions 6-7 (distr, ci)
+  % \input{5_ols}         %% ... sessions 8-9 (models, ols)   ... draft 2
+  % 
+  % \input{6_reg}         %% ... sessions 10-11 (reg, logit)  ... final paper
+
+\backmatter
+
+  \appendix
+
+  % \input{A_assignments} %% ... session 12
+	% \input{B_sources}
+
+% \bibliographystyle{chicago}
+% \bibliography{/Users/fr/Documents/Research/Bibliography/REFS-MAIN.bib}
+
+\printindex
+
+\input{0_last}
+
+\end{document}
