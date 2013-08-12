@@ -16,30 +16,45 @@
   \input{0_cover} %% r-1
   \input{0_title} %% r-3
 
-	\newpage\tableofcontents %% r-5
+	\newpage%
+  \tableofcontents %% r-5
 	\cleardoublepage
 	
 \mainmatter %% r-7
 
-  \input{1_intro} %% ... session 1
+  \input{1_intro}         %% ... session 1 (course, toc)
 	
-  % \input{2_data}        %% ... sessions 2-3 (data, vars)
-  % \input{3_distr}       %% ... sessions 4-5 (summ, distr)     ... draft 1
+  % 1) data viz
   % 
-  % \input{4_hyp}         %% ... sessions 6-7 (distr, ci)
-  % \input{5_ols}         %% ... sessions 8-9 (models, ols)   ... draft 2
+  \input{2_data}        %% ... sessions 2-3 (data, vars)
+  \input{3_distr}       %% ... sessions 4-5 (summ, distr) ... ends on: draft 1
+  
+  % 2) hyp tests
   % 
-  % \input{6_reg}         %% ... sessions 10-11 (reg, logit)  ... final paper
+  \input{4_sig}         %% ... sessions 6-7 (ci, ttest)
+  \input{5_ols}         %% ... sessions 8-9 (corr, ols)   ... ends on: draft 2
+
+  % 3) reg models
+  % 
+  \input{6_lin}         %% ... session 10 (reg)
+  \input{7_log}         %% ... session 11 (logit)
+
+  \input{8_paper}         %% ... session 12 (warp)          ... final paper
 
 \backmatter
 
   \appendix
 
-  % \input{A_assignments} %% ... session 12
-	% \input{B_sources}
+  % A1. course setup
+  % 
+  % \input{A_setup}
 
-% \bibliographystyle{chicago}
-% \bibliography{/Users/fr/Documents/Research/Bibliography/REFS-MAIN.bib}
+  % A2. course datasets
+  % 
+	% \input{A_sources}
+
+\bibliographystyle{chicago}
+\bibliography{/Users/fr/Documents/Bibliography/REFS-MAIN.bib}
 
 \printindex
 
