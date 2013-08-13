@@ -1,4 +1,4 @@
-.DS_Store
+.DS_Store*
 .gitignore
 
 *.txt
@@ -6,20 +6,18 @@
 
 admin
 
-course/*
-!course/README.md
+course/slides/*
+!course/slides/README.md
+
+course/guide/*/*
+!course/guide/README.md
+!course/guide/cfg/*
+!course/guide/img/*
+!course/guide/*.cls
+!course/guide/*.def
+!course/guide/*.tex
 !course/images
 !course/*week[0-9].tex
-
-guide/*
-!guide/README.md
-!guide/cfg
-!guide/img
-!guide/*.cls
-!guide/*.def
-!guide/*.tex
-
-readings
 
 data/*
 !data/README*

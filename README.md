@@ -55,10 +55,10 @@ Select the `SRQM` folder and press `OK`.
 
 The folder path that appears in the Results window might look like the following examples:
 
-| System    | Example of a folder path            |
-|:----------|:------------------------------------|
-| Mac OS X  | `/Users/fr/Documents/Teaching/SRQM` |
-| Windows   | `C:\Users\Ivo\Desktop\SRQM`         |
+| System   | Example of a folder path            |  
+| :------- | :---------------------------------- |  
+| Mac OS X | `/Users/fr/Documents/Teaching/SRQM` |  
+| Windows  | `C:\Users\Ivo\Desktop\SRQM`         |  
 
 This path is where the course setup will tell Stata to look for the SRQM teaching material.
 
