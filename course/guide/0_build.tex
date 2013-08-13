@@ -1,0 +1,67 @@
+\documentclass[a4paper, nofonts, notoc]{tufte-book}
+
+	\title{Stata for Social Scientists}
+	\author{François Briatte}
+	\publisher{\url{http://f.briatte.org/teaching/quanti/}}
+
+	\input{config/sty} % style
+	\input{config/lex} % word shortcuts
+	\input{config/doc} % documentation index
+
+\begin{document}
+
+% Front matter
+\frontmatter
+
+  \input{0_cover} %% r-1
+  \input{0_title} %% r-3
+
+	\newpage%
+  \tableofcontents %% r-5
+	\cleardoublepage
+	
+\mainmatter %% r-7
+
+  %
+  %
+  \input{1_intro}         %% ... session 1 (course, toc)
+	
+  % 1) data viz
+  % 
+  \input{2_data}        %% ... sessions 2-3 (data, vars)
+  \input{3_distr}       %% ... sessions 4-5 (summ, distr) ... ends on: draft 1
+  
+  % 2) hyp tests
+  % 
+  \input{4_sig}         %% ... sessions 6-7 (ci, ttest)
+  \input{5_ols}         %% ... sessions 8-9 (corr, ols)   ... ends on: draft 2
+
+  % 3) reg models
+  % 
+  \input{6_lin}         %% ... session 10 (reg)
+  \input{7_log}         %% ... session 11 (logit)
+
+  % 
+  %
+  \input{8_PAPER}         %% ... session 12 (wrap)          ... final paper
+
+\backmatter
+
+  \appendix
+
+  % A1. course datasets
+  % 
+  \input{A_sources}
+
+  % A2. math recap
+  % 
+  \input{A_math}
+
+\bibliographystyle{chicago}
+\bibliography{/Users/fr/Documents/Bibliography/REFS-MAIN.bib}
+
+\printindex
+
+\input{0_last}
+
+\end{document}

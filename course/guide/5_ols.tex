@@ -1,0 +1,140 @@
+\chapter{Least squares}
+\label{ch:ols}
+
+\newthought{Simple linear regression} is a configuration of events where you have only two continuous variables at hand.%
+
+	\newthought{This section} covers correlation and the ``ordinary'' least squares estimator for a bivariate relationship.
+
+\input{5A_correlation}%
+%
+\input{5B_ols}%
+%
+\input{5C_DRAFT2}%
+%
+
+
+% \section{File Hooks}
+% \label{sec:filehooks}
+% 
+% \index{file hooks|(}
+% If you create many documents using the \TL classes, it's easier to
+% store your customizations in a separate file instead of copying them into the
+% preamble of each document.  The \TL classes provide three file hooks:
+% \docfilehook{tufte-common-local.tex}{common}, \docfilehook{tufte-book-local.tex}{book}, and
+% \docfilehook{tufte-handout-local.tex}{handout}.\sloppy
+% 
+% 
+% 
+% \index{file hooks|)}
+% 
+% \section{Numbered Section Headings}
+% \label{sec:numbered-sections}
+% \index{headings!numbered}
+% 
+% While Tufte dispenses with numbered headings in his books, if you require them,
+% they can be anabled by changing the value of the \doccounter{secnumdepth}
+% counter.  From the table below, select the heading level at which numbering
+% should stop and set the \doccounter{secnumdepth} counter to that value.  For
+% example, if you want parts and chapters numbered, but don't want numbering for
+% sections or subsections, use the command:
+% \begin{docspec}
+%   \doccmd{setcounter}\{secnumdepth\}\{0\}
+% \end{docspec}
+% 
+% The default \doccounter{secnumdepth} for the \TL document classes is $-1$.
+% 
+% \begin{table}
+%   \footnotesize
+%   \begin{center}
+%     \begin{tabular}{lr}
+%       \toprule
+%       Heading level & Value \\
+%       \midrule
+%       Part (in \doccls{tufte-book}) & $-1$ \\
+%       Part (in \doccls{tufte-handout}) & $0$ \\
+%       Chapter (only in \doccls{tufte-book}) & $0$ \\
+%       Section & $1$ \\
+%       Subsection & $2$ \\
+%       Subsubsection & $3$ \\
+%       Paragraph & $4$ \\
+%       Subparagraph & $5$ \\
+%       \bottomrule
+%     \end{tabular}
+%   \end{center}
+%   \caption{Heading levels used with the \texttt{secnumdepth} counter.}
+% \end{table}
+% 
+% \section{Changing the Paper Size}
+% \label{sec:paper-size}
+% 
+% % The \TL classes currently only provide three paper sizes: \textsc{a4},
+% % \textsc{b5}, and \textsc{us} letter.  To specify a different paper size (and/or
+% % margins), use the \doccmd[geometry]{geometrysetup} command in the preamble of your
+% % document (or one of the file hooks).  The full documentation of the
+% % \doccmd{geometrysetup} command may be found in the \docpkg{geometry} package
+% % documentation.\cite{pkg-geometry}
+% 
+% \section{Customizing Marginal Material}
+% \label{sec:marginal-material}
+% 
+% Marginal material includes sidenotes, citations, margin notes, and captions.
+% Normally, the justification of the marginal material follows the justification
+% of the body text.  If you specify the \docclsopt{justified} document class
+% option, all of the margin material will be fully justified as well.  If you
+% don't specify the \docclsopt{justified} option, then the marginal material will
+% be set ragged right.
+% 
+% You can set the justification of the marginal material separately from the body
+% text using the following document class options: \docclsopt{sidenote},
+% \docclsopt{marginnote}, \docclsopt{caption}, \docclsopt{citation}, and
+% \docclsopt{marginals}.  Each option refers to its obviously corresponding
+% marginal material type.  The \docclsopt{marginals} option simultaneously sets
+% the justification on all four marginal material types.
+% 
+% Each of the document class options takes one of five justification types:
+% \begin{description}
+%   \item[\docclsopt{justified}] Fully justifies the text (sets it flush left and
+%     right).
+%   \item[\docclsopt{raggedleft}] Sets the text ragged left, regardless of which
+%     page it falls on.
+%   \item[\docclsopt{raggedright}] Sets the text ragged right, regardless of
+%     which page it falls on.
+%   \item[\doccls{raggedouter}] Sets the text ragged left if it falls on the
+%     left-hand (verso) page of the spread and otherwise sets it ragged right.
+%     This is useful in conjunction with the \docclsopt{symmetric} document class
+%     option.
+%   \item[\docclsopt{auto}] If the \docclsopt{justified} document class option
+%     was specified, then set the text fully justified; otherwise the text is set
+%     ragged right.  This is the default justification option if one is not
+%     explicitly specified.
+% \end{description}
+% 
+% \noindent For example, 
+% \begin{docspec}
+%   \doccmdnoindex{documentclass}[symmetric,justified,marginals=raggedouter]\{tufte-book\}
+% \end{docspec}
+% will set the body text of the document to be fully justified and all of the
+% margin material (sidenotes, margin notes, captions, and citations) to be flush
+% against the body text with ragged outer edges.
+% 
+% \newthought{The font and style} of the marginal material may also be modified using the following commands:
+% 
+% \begin{docspec}
+%   \doccmd{setsidenotefont}\{\docopt{font commands}\}\\
+%   \doccmd{setcaptionfont}\{\docopt{font commands}\}\\
+%   \doccmd{setmarginnotefont}\{\docopt{font commands}\}\\
+%   \doccmd{setcitationfont}\{\docopt{font commands}\}
+% \end{docspec}
+% 
+% The \doccmddef{setsidenotefont} sets the font and style for sidenotes, the
+% \doccmddef{setcaptionfont} for captions, the \doccmddef{setmarginnotefont} for
+% margin notes, and the \doccmddef{setcitationfont} for citations.  The
+% \docopt{font commands} can contain font size changes (e.g.,
+% \doccmdnoindex{footnotesize}, \doccmdnoindex{Huge}, etc.), font style changes (e.g.,
+% \doccmdnoindex{sffamily}, \doccmdnoindex{ttfamily}, \doccmdnoindex{itshape}, etc.), color changes (e.g.,
+% \doccmdnoindex{color}\texttt{\{blue\}}), and many other adjustments.
+% 
+% If, for example, you wanted the captions to be set in italic sans serif, you could use:
+% \begin{docspec}
+%   \doccmd{setcaptionfont}\{\doccmdnoindex{itshape}\doccmdnoindex{sffamily}\}
+% \end{docspec}

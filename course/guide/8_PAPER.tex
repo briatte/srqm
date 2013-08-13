@@ -1,0 +1,186 @@
+\chapter{Research projects}%
+	\label{ch:paper}
+
+\newthought{The research project} is the graded coursework component that you work on with a student partner throughout the entire semester. Projects start on Week~2 and end on ``Week~13'', one week after the final course session, when you submit your final paper. Twice during the semester, you will submit drafts of that paper, based on templates. You will also submit some code, in the form of a Stata do-file, to replicate your analysis.
+
+% 1. register your project
+% 2. download the template
+% 3. 
+
+% Project management
+
+\section{Principles}
+
+Keep it simple. Choose a simple opening line that states the most salient characteristic of the issue under scrutiny. ``Cancer commissioning is complex'' or ``Survey weighting is a mess'' are both real, and acceptable, examples.
+
+\subsection{Parsimony}
+
+Substantively, your model is about explaining some relationships between social forces. Statistically, it is about understanding variance by predicting it. for your paper, select only what is needed from your statistical analysis to test your substantive theory. Leave the `tech specs' in your do-file, with comments in the source, and aim at writing an argument that will be based on your expertise rather than on computer code.
+
+Be parsimonious in your approach to modeling: select your findings to the bare logical minimum required by your analysis. Your do-file will contain tons of tests and models, but do not publish every intermediate result that was taken in your analysis: report statistically significant findings for which you can provide an interpretation, and document negative results when they are surprising with reference to your hypotheses.
+
+\paragraph{Tables and numbers} Even in a quantitative environment, you should feel some pressure to reduce the number of numbers in your work to their bare minimum. There are only a few requirements, such as summary statistics or regression estimates. In many circumstances, you might want to leave any other result in your do-file. This, for instance, applies to several crosstabulations that you might have run until now, although you can cite particular percentages or tests.
+
+A simple example of parsimony in numbers concerns precision. Many social science measurements have no serious degree of precision: measures of social attitudes, for example, are taken on 11-point scales at most. If you report value with a lot of digits after the decimal separator, as in \texttt{8.4759}, you are suggesting that your data are reliable at that level of precision, which is very rarely true. Round up, therefore, all numbers to 0, 1 or 2 decimals.
+
+\paragraph{Figures} It is an excellent idea to visually inspect the distributions and relationships in your data. It is also an excellent idea to use graphs where tables could have done but would have carried less information to the reader. Finally, it is great to use graph options to make Stata graphs look a tad better. The gods of data visualization, and their strength is growing in this early century, will be pleased by all that.\footcite{Tufte:2001t}
+
+Your do-file contains a lot of graphic output, and you will have to select figures based on their informative content.
+
+\paragraph{Significance tests} Remember that the principle of statistical significance is to estimate the probability level of the null hypothesis, i.e. an abstract situation where, to make it simple, the variations in your data are compared to the absence of any significant variation. `Rejecting the null' is actually often trivial: you will always find some covariance in social data, even if it is completely spurious and/or statistically powerless.
+
+For these reasons, report $p$-values in your text only when you feel that the reader might want to see it: if you are making an important claim, or if you are interpreting a coefficient or test with a high $p$-value but which you still believe to be significant (recall what was mentioned several times about the freedom of judgement that you should exert around the conventional boundary of $p < .05$).
+
+\subsection{Validation}
+
+Your research question and your statistical model are tied together but you can very well get an answer from one without getting an answer from the other. In other terms, you might be able to secure insights from negative results, which is good news. On the other hand, your model can also make a `Type III error' and bring the right answer to the wrong question.\footnote{Originally from Peter Kennedy's ``The Ten Commandments of Applied Econometrics,'' cited by Christopher S.~McIntosh at \url{http://courses.cals.uidaho.edu/aers/agecon525/sp2010/Lecture21DoingAppliedEconometrics.pdf}.}
+
+\paragraph{Negative findings} Negative findings defy the logic of your background assumptions, which you should have translated as clearly as possible as working hypotheses at the top of your paper. When a negative finding shows up, assess to what extent it affects the general architecture of your model. For example, if one particular factor that you expected to play a critical role turns out to be statistically insignificant, then you have to \emph{revise} that expectation, not \emph{cancel} it.
+
+When confronted to negative results, always take a step back at your model and ask whether it could be diagnosed as an issue in your specifications, i.e. your choice of data and methods. The quality of your data can be excellent but turn out to carry insufficient statistical power. Identically, linear regression, as explained in the previous sections, works as a hammer, and your research question might be hitting at something else than a nail, with mixed success.
+
+\paragraph{Not-so-positive findings} Not-so-positive findings are statistically significant findings that end up being disappointing at the substantive level. If you were expecting a factor to predict a lot of your variable and it turns out to be lowly explicative of its variance, then your initial ambition will have to be toned down. This applies, for instance, to significant predictors with tiny regression coefficients.
+
+In the case where a predictor is `under-performing' in your model, it might simply be that linear regression is not the most appropriate tool, as has been covered elsewhere.
+
+% 
+
+\section{Formatting}
+
+\index{Descriptive statistics!Table format}
+\paragraph{Summary statistics} Table~\ref{tbl:tsst} shows a summary statistics table exported with the \cmmd{tsst} program, which is available from the course website. There are other ways to export summary statistics in more sophisticated ways with \cmmd{tabout} and its supplementary command \copt{tabstatout}{tabout}, or even with \cmmd{estout}, but the \texttt{tsst} command has been written for this course and uses simplified syntax. The command creates tab-separated values (\texttt{.tsv}) that can be read by any spreadsheet editor that also supports \texttt{.csv} files, such as Microsoft Excel or OpenOffice Calc.
+
+{
+	\renewcommand\arraystretch{1.5}
+	\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+	\begin{table}[htp]
+
+	\resizebox{\textwidth}{!}{
+		\begin{tabular}{@{}l*{5}{D{.}{.}{7}}@{}}
+			\hline\hline
+			Variable	&	\ccol{N}	&	\ccol{Mean / \%}	&	\ccol{SD}	&	\ccol{Min.}	&	\ccol{Max.}\\
+			\hline
+			Support for gender equality	&	50308	&	3.57	&	1.26	&	1	&	5\\
+			Age	&	50,996	&	47.57	&	18.54	&	15	&	123\\
+			Income decile	&	36,624	& N/A & N/A & N/A & N/A\\
+			Years in education	&	51,142	&	12.07	&	4.35	&	0	&	25\\
+			Placement on left/right scale	&	43314	&	5.16	&	2.24	&	0	&	10\\
+			\emph{Gender} & & & & &\\
+			--  Male	&	23,458	&	45.9\%	& & &\\
+			--  Female	&	27,684	&	54.1\%	& & &\\
+			\emph{Religious faith} & & & & &\\
+			--  Not religious	&	18,039	&	35.6\% & & &\\
+			--  Christian	&	26,982	&	53.2\% & & &\\
+			--  Jewish	&	2,091	&	4.1\% & & &\\
+			--  Muslim	&	3,627	&	7.1\% & & &\\
+			\hline\hline
+		\end{tabular}
+	}
+ 	\caption[Summary statistics produced with \cmmd{tsst}.]{\label{tbl:tsst}
+	Summary statistics produced with \cmmd{tsst}.}
+	\end{table}%
+	\renewcommand\arraystretch{1}
+	\begin{verbatim}
+		// summary stats
+		do "http://f.briatte.org/teaching/quanti/code/extras/tsst.do" // load tsst command
+		tsst using summstats.tsv, su(geq agea income edu lrscale) fr(female faith) replace
+	\end{verbatim}
+}
+
+\index{Correlation!Matrixes}
+\paragraph{Correlation matrix} Table~\ref{tbl:estout_corr} shows a correlation matrix exported with \cmmd{estout} as shown at p.~\pageref{tbl:correlate_export}. The numbering system saves space on paper, and columns are aligned on the decimal point to increase readability. Variable labels are preferable to less informative variable names. Last, remember to stick a complete caption. \emph{Note:} if you want to use cell colors to `warm up' the table, please feel free to do so, using a soft color theme.
+
+{
+	\renewcommand\arraystretch{1.5}
+	\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+	\begin{table}[htp]
+
+	\resizebox{\textwidth}{!}{
+		\begin{tabular}{@{}l*{8}{D{.}{.}{7}}@{}}
+		\hline\hline
+		& \ccol{(1)} & \ccol{(2)} & \ccol{(3)} & \ccol{(4)} & \ccol{(5)} & \ccol{(6)} & \ccol{(7)} \\
+		\hline
+		1. Average schooling years&  1 &  &  &  &  &  &  \\
+		2. Gender equality (GDI)&    0.853\sym{***}&  1 &  &  &  &  &  \\
+		3. Population &   -0.154 &   -0.185 &  1 &  &  &  &  \\
+		4. Abortion is justifiable&    0.701\sym{***}&    0.648\sym{***}&   -0.104 &  1 &  &  &  \\
+		5. Support for theocracy&   -0.642\sym{***}&   -0.703\sym{***}&   0.0872 &   -0.781\sym{***}&  1 &  &  \\
+		6. $log$(Population) &   -0.227 &   -0.220 &    0.591\sym{***}&   -0.234 &    0.241 &  1 &  \\
+		7. $log$(GDP/capita) &    0.810\sym{***}&    0.948\sym{***}&   -0.189 &    0.684\sym{***}&   -0.679\sym{***}&   -0.227 &  1 \\
+		\hline\hline
+		\multicolumn{8}{l}{\sym{*} \(p<0.05\), \sym{**} \(p<0.01\), \sym{***} \(p<0.001\)}\\
+		\qog{54}\\
+		\end{tabular}
+	}
+ 	\caption[Correlation matrix produced with \cmmd{estout}.]{\label{tbl:estout_corr}
+	Correlation matrix produced with \cmmd{estout}. Stata command shown at p.~\pageref{tbl:correlate_export}.}
+	\end{table}%
+	\renewcommand\arraystretch{1}
+	\begin{verbatim}
+		// export correlation matrix to spreadsheet
+
+		* ssc install estout // install if needed
+		qui estpost correlate *, matrix listwise
+		esttab using correlates.csv, unstack not compress label replace
+	\end{verbatim}
+}
+
+\index{Linear regression!Exporting results}
+\paragraph{Regression output} Table~\ref{tbl:estout_reg} shows regression output exported with \cmmd{estout} as shown at p.~\pageref{tbl:hibbs_yx1_estout}. Models are each in a separate column with a short title, and a lot of information has been dropped to reflect the most relevant aspects of the model. If you are focusing on standardized coefficients, you can produce an even more simplified output with the \copt{beta}{esttab} and \texttt{not} options. Ben Jann's online documentation for \cmmd{estout} contains useful examples.\footnote{\textsc{url:}~\url{http://repec.org/bocode/e/estout/index.html}.}
+
+{
+	\renewcommand\arraystretch{1.5}
+
+	\begin{table}[htp]
+
+	\resizebox{\textwidth}{!}{
+		\begin{tabular}{@{}l*{4}{D{.}{.}{7}}@{}}
+	
+			\hline\hline
+	        &\multicolumn{1}{c}{(1)}&\multicolumn{1}{c}{(2)}&\multicolumn{1}{c}{(3)}&\multicolumn{1}{c}{(4)}\\
+	        &\multicolumn{1}{c}{Full model}&\multicolumn{1}{c}{Partial model}&\multicolumn{1}{c}{Without GDI}&\multicolumn{1}{c}{Without theocracy}\\
+			\hline
+
+			Average Schooling Years (Total)&       0.253\sym{**} &       0.285\sym{**} &       0.160         &       0.333\sym{**} \\
+			                    &      (3.04)         &      (3.22)         &      (2.00)         &      (3.40)         \\
+			[1em]
+			log(Population)     &     -0.0119         &     -0.0260         &     -0.0207         &     -0.0159         \\
+			                    &     (-0.15)         &     (-0.29)         &     (-0.25)         &     (-0.18)         \\
+			[1em]
+			log(GDP/capita)     &       0.734\sym{*}  &       0.323         &       0.104         &       0.644         \\
+			                    &      (2.52)         &      (1.68)         &      (0.58)         &      (1.87)         \\
+			[1em]
+			Gender-Related Development Index&      -6.661\sym{*}  &                     &                     &      -3.271         \\
+			                    &     (-2.65)         &                     &                     &     (-1.12)         \\
+			[1em]
+			Support for theocracy&      -7.713\sym{***}&                     &      -7.018\sym{***}&                     \\
+			                    &     (-5.43)         &                     &     (-4.75)         &                     \\
+			[1em]
+			Constant            &       3.410         &      -1.150         &       4.523\sym{*}  &      -2.048         \\
+			                    &      (1.60)         &     (-0.53)         &      (2.04)         &     (-0.88)         \\
+			\hline
+			Observations        &          54         &          61         &          54         &          61         \\
+			Adjusted \(R^{2}\)  &       0.693         &       0.513         &       0.655         &       0.516         \\
+
+		\hline\hline
+		\multicolumn{5}{l}{\footnotesize Unstandardized coefficients; $t$-statistics in parentheses. All models are OLS estimates.}\\
+		\multicolumn{5}{l}{\footnotesize \sym{*} \(p<0.05\), \sym{**} \(p<0.01\), \sym{***} \(p<0.001\)}\\
+		\qog{54--61}\\
+	\end{tabular}
+	}
+ 	\caption[Regression output produced with \cmmd{estout}.]{\label{tbl:estout_reg}
+	Regression output produced with \cmmd{estout}. Stata command shown at p.~\pageref{tbl:hibbs_yx1_estout}.}
+	\end{table}%
+	\renewcommand\arraystretch{1}
+	\begin{verbatim}
+		// export regression output with estout
+		eststo m1: qui reg wvs_abort bl_asyt25 *_log undp_gdi wvs_theo
+		eststo m2: qui reg wvs_abort bl_asyt25 *_log
+		eststo m3: qui reg wvs_abort bl_asyt25 *_log wvs_theo
+		eststo m4: qui reg wvs_abort bl_asyt25 *_log undp_gdi
+
+		esttab m1 m2 m3 m4 using models_abort.csv, label t ar2 replace // .csv
+	\end{verbatim}
+}
