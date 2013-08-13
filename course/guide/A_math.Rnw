@@ -1,10 +1,19 @@
-\chapter{Math for slackers}
-  \label{ch:Math for slackers}
+%
+% A2
+%
+\chapter{Mathematical notation}%
+  %
+  %
+  \label{ch:math}%
+	\index{Mathematical notation}%
+	%
+	%
 
 <<setup, include=FALSE, cache=FALSE>>=
 library(RColorBrewer)
 palette(colors <- brewer.pal(8,'Set1')) # for ggplot2 figures
 library(ggplot2)
+library(gridExtra)
 library(knitr)
 
 # KNITR
@@ -28,11 +37,9 @@ knit_hooks$set(par=function(before, options, envir){
 
 Many aspects of human survival are related to events, objects or people that can be enumerated. For example, infant mortality, forced migration and market collapse are all quantifiable social problems for which we might want to know how frequently they occur, and under what circumstances. A lot of applied mathematics is therefore used in the formalization of markets, populations and disease, both for industrial and for research purposes.
 
-\section{Notation}
-
 To manipulate things in mathematical form, we rely on symbols and conventions to write down expressions like $y = f(x)$ (the function $f$ that returns the value $y$ for a value of $x$).
 
-\subsection{Greek letters}%
+\paragraph{Greek letters}%
 %
 Table~\ref{tbl:greek} references the Greek letters that are used in conventional notation: if you read a lot of science-fiction, you might be able to skip this, otherwise start familiarizing yourself with them. In practice, we will use only a subset of the Greek alphabet, and we will use only a few letters at a time.
 
@@ -40,7 +47,7 @@ Table~\ref{tbl:greek} references the Greek letters that are used in conventional
 
 % You can read sequences of letters and numbers by simple enunciation: $\Delta x$ is pronounced ``delta-x'' and $\beta_1X_1$ is pronounced ``Beta-One X-One''. Note that the pronunciation of Greek letters varies from your linguistic standard: $\chi^2$, for example, designates the ``Chi-squared'' value, which is pronounced ``Kai-squared''.
 
-\subsection{Mathematical symbols}%
+\paragraph{Mathematical symbols}%
 %
 Table~\ref{tbl:math} references some common math symbols that are used to compose expressions such as: for every ($\forall$) nonnegative real number $(x \in \mathbb{R}^{+})$, there exists ($\exists$) a square root number given by the function $f: x \rightarrow \sqrt{x}$. Again, we will use only a few of these symbols for demonstration purposes.
 
@@ -48,8 +55,8 @@ Table~\ref{tbl:math} references some common math symbols that are used to compos
 
 Some letters have standard representations in statistics, such as $\mu$ and $\bar X$ for the population and sample means, $\sigma$ and $s$ for standard deviation, $\sigma^2$ and $s^2$ for variance, etc. You will learn these conventions through practice. Using a computer will introduce slight deviations to these conventions because statistical software like Stata might denote, for instance, $\chi^2$ as \texttt{chi(2)}.
 
-\section{Numbers}
-
+\paragraph{Numbers}%
+%
 Positive numbers like $\Sexpr{sample(x <- 1:10)[1:3]}$ (the $+$ sign can be omitted) and negative numbers like $\Sexpr{sample(x <- -10:-1)[1:2]}$ are called integers. These numbers can be ordered to form a coordinate system centred around $0$, as shown below:
 
 % \begin{figure}[h]
@@ -87,15 +94,9 @@ Rational and irrational numbers form the set $\mathbb{R}$ of real numbers, which
   \caption{The real number line.}
 \end{figure}
 
-\subsection{Intervals}%
-%
-Hi.
+Intervals. Cartesian planes.
 
-\subsection{Cartesian planes}%
-%
-Hi.
-
-\section{Exponents and logarithms}
+\section*{Exponents and logarithms}
 
 \subsection{Power functions}
 
@@ -105,8 +106,13 @@ Power functions feature an exponent $k$ to raise $x$ to a given power, such that
 %
 Power functions are useful to rewrite large numbers with the function $f: x \to a \times 10^b$, where $a$ is any real number and $b$ is an integer. For example, by the end of August 2012, the U.S. national debt amounted to \$\href{http://www.treasurydirect.gov/NP/BPDLogin?application=np}{16,015,769,788,215.80}. This number can also be written as $16 \times 10^{12}$, i.e. 16 trillion, or as \Sexpr{16*10^12} in scientific notation.
 
-<<fun_xpowerk, fig.cap='Visualization of the power functions $y = x^k$ for $k = [1,2,3]$. In the case where $k = 1$, the growth of $y$ is linear because $y = x$. All three curves are examples of strict monotonicity, i.e. a systematic increase of $y$ when $x$ increases.'>>=
-qplot(c(0, 5), 
+Exponential functions are also useful to handle some phenomena like the exponential growth of the population or labour force in many countries, or the exponential decay of an organism or technology.
+
+<<fun_xpowerk, fig.cap='Top-left: visualization of the power functions $y = x^k$ for $k = [1,2,3]$. In the case where $k = 1$, the growth of $y$ is linear because $y = x$. All three curves are examples of strict monotonicity, i.e. a systematic increase of $y$ when $x$ increases. Top-right: exponential functions. Bottom-left: positive fractional exponentials (decay functions). Bottom-right: comparison of power and exponential progression near $0$.'>>=
+#
+# PLOTS
+#
+p1 <- qplot(c(0, 5), 
       stat = "function", 
       fun = function(x) {
         x^1
@@ -118,38 +124,31 @@ qplot(c(0, 5),
   stat_function(fun=function(x) {x^3}, color=colors[2]) + 
   annotate('text', 4.5, 120, label = "y == x^3", parse=T, ,size=4, color=colors[2]) + 
   theme_classic(10) # + theme(text=element_text(family="Linux Libertine O", size=10))
-@
-
-Exponential functions are also useful to handle some phenomena like the exponential growth of the population or labour force in many countries, or the exponential decay of an organism or technology.
-
-<<fun_expgrowth, fig.cap='Exponentials.'>>=
-qplot(c(-1, 3), stat="function", fun=function(x) {1^x}, geom="line", xlab="x", ylab="y") + 
+p2 <- qplot(c(-1, 3), stat="function", fun=function(x) {1^x}, geom="line", xlab="x", ylab="y") + 
   annotate('text', 3, 2, label = "y == 1^x", parse=T, ,size=4) +
   stat_function(fun=function(x) {2^x}, color=colors[1]) + 
   annotate('text', 3, 9, label = "y == 2^x", parse=T, ,size=4, color=colors[1]) + 
   stat_function(fun=function(x) {3^x}, color=colors[2]) + 
   annotate('text', 3, 22, label = "y == 3^x", parse=T, ,size=4, color=colors[2]) + 
   theme_classic(10) # + theme(text=element_text(family="Linux Libertine O", size=10))
-@
-
-<<fun_expdecay, fig.cap='Positive fractional exponentials: decay.'>>=
-qplot(c(-1, 1), stat="function", fun=function(x) {1^x}, geom="line", xlab="x", ylab="y") + 
+p3 <- qplot(c(-1, 1), stat="function", fun=function(x) {1^x}, geom="line", xlab="x", ylab="y") + 
   annotate('text', -1, 1.1, label = "y == 1^x", parse=T, size=4, hjust=0) +
   stat_function(fun=function(x) {(1/2)^x}, color=colors[1]) + 
   annotate('text', -1, 2.1, label = "y == (1/2)^x", parse=T, size=4, hjust=0, color=colors[1]) + 
   stat_function(fun=function(x) {(1/3)^x}, color=colors[2]) + 
   annotate('text', -.95, 3, label = "y == (1/3)^x", parse=T, size=4, hjust=0, color=colors[2]) + 
   theme_classic(10) # + theme(text=element_text(family="Linux Libertine O", size=10))
-@
-
-A common confusion:
-
-<<fun_powerexp, fig.cap='Power vs. exponential functions.'>>=
-qplot(c(-5, 5), stat="function", fun=function(x) {2^x}, geom="line", xlab="x", ylab="y") + 
+p4 <- qplot(c(-5, 5), stat="function", fun=function(x) {2^x}, geom="line", xlab="x", ylab="y") + 
   annotate('text', 4.35, 30, label = "y == 2^x", parse=T, ,size=4) +
   stat_function(fun=function(x) {x^2}, color=colors[1]) + 
   annotate('text', 4.75, 17.5, label = "y == x^2", parse=T, ,size=4, color=colors[1]) + 
   theme_classic(10) # + theme(text=element_text(family="Linux Libertine O", size=10))
+#
+# COMBINE
+#
+square <- do.call(arrangeGrob, args = list(p1, p2, p3, p4))
+grid.newpage()
+grid.draw(square)
 @
 
 \subsection{Logarithms}
@@ -167,28 +166,31 @@ Early game consoles were often advertised through their bit ratings, which progr
   \item $y(6) = 2^6 = 64$ \quad then, by definition: \quad $\log_2(64) = 6$
 \end{itemize}
 
-<<fun_explog, fig.cap='Logarithmic vs. exponential functions.'>>=
-qplot(c(.1, 5), stat="function", fun=function(x) {x}, geom="line", xlab="x", ylab="y") + 
+The natural logarithm of base $e$ is denoted $\ln(x)$ or simply $\log(x)$, such that $\ln(x)=e^x$.
+
+<<fun_explog, fig.height = 3, fig.cap='Left: logarithmic vs. exponential functions. Right: natural logarithm vs. exponential functions.'>>=
+#
+# PLOTS
+#
+p1 <- qplot(c(.1, 5), stat="function", fun=function(x) {x}, geom="line", xlab="x", ylab="y") + 
  annotate('text', 4.5, 6.5, label = "y == x", parse=T, hjust=0,size=4) +
   stat_function(fun=function(x) {2^x}, color=colors[1]) + 
   annotate('text', 4.5, 20, label = "y == 2^x", parse=T, hjust=0,size=4, color=colors[1]) + 
   stat_function(fun=function(x) {log2(x)}, color=colors[2]) + 
   annotate('text', 4.5, 0, label = "y == log2(x)", parse=T, hjust=0,size=4, color=colors[2]) + 
   theme_classic(10) # + theme(text=element_text(family="Linux Libertine O", size=10))
-@
-
-\subsection{Natural logarithm}
-
-The natural logarithm of base $e$ is denoted $\ln(x)$ or simply $\log(x)$, such that $\ln(x)=e^x$.
-
-<<fun_expln, fig.cap='Natural logarithm vs. exponential functions.'>>=
-qplot(c(-exp(1), exp(1)), stat="function", fun=function(x) {x}, geom="line", xlab="x", ylab="y") + 
+p2 <- qplot(c(-exp(1), exp(1)), stat="function", fun=function(x) {x}, geom="line", xlab="x", ylab="y") + 
   annotate('text', 2, 2.75, label = "y == x", parse=T, hjust=0,size=4) +
   stat_function(fun=function(x) {exp(x)}, color=colors[1]) + 
   annotate('text', 2, 6.25, label = "y == e^x", parse=T, hjust=0,size=4, color=colors[1]) + 
   stat_function(fun=function(x) {log(x)}, color=colors[2]) + 
   annotate('text', 2, 0, label = "y == ln(x)", parse=T, hjust=0,size=4, color=colors[2]) + 
   theme_classic(10) # + theme(text=element_text(family="Linux Libertine O", size=10))
+#
+# COMBINE TWO PLOTS HORIZONTALLY
+#
+dualpane <- do.call(arrangeGrob, args = list(p1, p2, ncol = 2))
+grid.arrange(dualpane)
 @
 
 Hi.

@@ -3,3 +3,4 @@
 * Bring in the rest of version 0.984 (Word).
 * Convert course links to `goo.gl` shortlinks.
 * Add exercises/FAQs into chapters/sections.
+* Section 8.2 needs a better model example.

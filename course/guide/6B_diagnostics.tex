@@ -8,23 +8,65 @@
 	% 6.2.1
 	%
 	\subsection{Residuals}%
-	\index{Linear regression!Diagnostics!Residuals}%
-	\index{Residuals|see{Linear regression}}%
+  	\index{Linear regression!Diagnostics!Residuals}%
+  	\index{Residuals|see{Linear regression}}%
+  	\label{sec:residuals}%
+
+  	% rvf, rvp
+
+  	\paragraph{Leverage}%
+    	\index{Linear regression!Diagnostics!Leverage}
+      %
+      Fitted values $\hat{Y}_i$ and residuals $r_i = Y_i - \hat{Y}_i$. The influence of $Y_i$ on $\hat{Y}_i$ is called \emph{leverage}.%
+	
+  	The leverage of each data point represents the contribution of its value $Y_i$ on its predicted value $\hat{Y}_i$. The sum of leverages of $\hat{Y}_i$ is written as such:%
+
+  	$$\hat{y}_i = h_{i1}y_{i1} + h_{i2}y_{i2} + \cdots + h_{ii}y_i + \cdots + h_{in}y_{in}$$
+	
+  	Leverages can be expressed as a ratio of the number of variables $p$ by the number of observations $n$. Typically, if $h_{ii} > mean(2p/n)$, one of your variables is excessively influencing the predictors.%
+	
+  	Box-Cox transformation:
+
+  	$$
+  	\begin{array}{rll}
+  	  \text{if}~\theta = 2, & DV = y^{2}   &  \text{(square)} \\
+  	  \text{if}~\theta = 1, & DV = y^{1} = y   &  \text{(identity, no transformation)} \\
+
+  	  \text{if}~\theta = \frac{1}{2}, & DV = y^{\frac{1}{2}} = \sqrt{y} &  \text{(square root)} \\
+
+  	  \text{if}~\theta = 0, &  DV = log(y)  &  \text{(logarithmic, or `log'-transformation)} \\
+
+  	  \text{if}~\theta = -1, &  DV = y^{-1} = \frac{1}{y}  &  \text{(inverse)}
+  	\end{array}
+  	$$
 
 	%
 	% 6.2.2
 	%
 	\subsection{Heteroskedasticity}%
-	\index{Linear regression!Diagnostics!Heteroskedasticity}%
-  \index{Heteroskedasticity|see{Linear regression}}%
-  
-  % vif
+  	\index{Linear regression!Diagnostics!Heteroskedasticity}%
+    \index{Heteroskedasticity|see{Linear regression}}%
+  	\label{sec:heteroskedasticity}
+  	%
+  	Here.
+    %
+    % vif
+
+	\paragraph{Robust standard errors}%
+  	\label{sec:clustering}%
+  	%
+  	Here.
 
 	%
 	% 6.2.3
 	%
 	\subsection{Multicollinearity}%
-	\index{Linear regression!Diagnostics!Multicollinearity}%
-  \index{Variance Inflation Factor (VIF)|see{Linear regression}}%
-
-  % recommend interactions
+  	\label{sec:collinearity}%
+  	\index{Linear regression!Diagnostics!Multicollinearity}%
+    \index{Variance Inflation Factor (VIF)|see{Linear regression}}%
+    %
+    % recommend interactions
+    %
+    Here.
+	
+	  A further diagnostic can help you decide what to do in the case of a highly collinear variable. The \cmmd{nestreg} command allows you to build a multiple regression by grouping your variables as separate models, and shows you the change in $R^2$ as it includes new groups of variables.
