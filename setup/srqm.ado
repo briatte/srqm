@@ -170,12 +170,13 @@ program srqm
                     // note: keep special cases at end of local list for the 699 hack to work with them
 
                     if "`t'"=="spmap" {
-						local maps "world-c.dta world-d.dta"
-						foreach y of local maps {
-							cap ssc cp `y'
-							cap copy `y' data/`y'
-							cap rm `y'
-						}
+                      cap noi ssc inst spmap, replace
+          						local maps "world-c.dta world-d.dta"
+          						foreach y of local maps {
+                        ssc cp `y'
+          							cap copy `y' data/`y'
+          							cap rm `y'
+          						}
                     }
                     else if "`t'"=="clarify" {
                         cap which simqi
@@ -190,9 +191,9 @@ program srqm
                         if (_rc==111 | `forced') cap noi net install schemes, from("http://leuven.economists.nl/stata/")
                     }
                     else {
-                        cap noi ssc install `t', replace
-						if _rc==631 di as err "Could not connect to the SSC archive to look for package " as inp "`1'"
-						if _rc==601 di as err "Could not find package " as inp "`1'" as err " at the SSC archive"
+                        cap noi ssc inst `t', replace
+            						if _rc==631 di as err "Could not connect to the SSC archive to look for package " as inp "`1'"
+            						if _rc==601 di as err "Could not find package " as inp "`1'" as err " at the SSC archive"
                     }
                     if _rc==699 {
 
