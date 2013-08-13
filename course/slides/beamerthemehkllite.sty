@@ -1,0 +1,109 @@
+% Lite version of Thomas Kastner's HK Beamer theme
+% https://github.com/sprungknoedl/hk-template
+
+\DeclareOptionBeamer{compress}{\beamer@compresstrue}
+\ProcessOptionsBeamer
+
+\mode<presentation>
+
+% -- inner theme
+
+\useinnertheme{rectangles}
+\setbeamertemplate{enumerate item}[square]
+\setbeamertemplate{itemize item}[square]
+
+% -- outer theme
+
+\RequirePackage{tikz}
+\RequirePackage{hyperref}
+
+% -- fonts
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+
+\RequirePackage[default]{sourcesanspro}
+\RequirePackage{inconsolata}
+
+\setbeamerfont{block title}{family=\sf}
+\setbeamerfont{frametitle}{family=\sf}
+
+\setbeamerfont{frametitle}{series=\bfseries,size=\Large}
+\setbeamerfont{block title}{series=\bfseries}
+
+% -- color theme
+
+\usecolortheme{rose}
+\definecolor{hk}{HTML}{214478}
+
+% -- basic palette
+
+\setbeamercolor{palette primary}{fg=white, bg=hk}
+\setbeamercolor{structure}{bg=white, fg=hk}
+\setbeamercolor{frametitle}{fg=black}
+
+% -- orange-red
+
+\definecolor{or}{rgb}{0.85,0.15,0}
+\newcommand{\red}[1]{\textcolor{or}{#1}}
+
+% -- Stata code
+
+\definecolor{cd}{rgb}{0.15,0,0.85}
+\newcommand{\code}[1]{\textcolor{cd}{\texttt{#1}}}
+
+% -- Stata comments
+
+\definecolor{cm}{rgb}{0.15,0.15,0.15}
+\newcommand{\comm}[1]{\textcolor{cm}{\texttt{*~#1}}}
+
+% -- layout
+
+\providecommand{\absoluteimage}[1]{}
+\renewcommand{\absoluteimage}[1]{
+  \begin{tikzpicture}[remember picture, overlay]
+    \path[use as bounding box] (0, 0) rectangle (\paperwidth, \paperheight);
+    \node[yshift=-\paperheight] at (current page.north west) {%
+	    \begin{tikzpicture}[remember picture, overlay]
+	        #1
+	    \end{tikzpicture}
+	    };
+  \end{tikzpicture}}
+
+% -- title page
+
+\defbeamertemplate*{title page}{theme}{
+  \absoluteimage{ 
+    \usebeamercolor{palette primary}
+    \node[anchor=west] at (.5cm, 7.8cm) { \Huge \color{bg} %
+			\textsc{\inserttitle} };
+    \draw[draw=bg,fill=bg] (0, 0) rectangle (\paperwidth, 1cm);
+    \node[anchor=west] at (.5cm, .5cm) { \color{fg}%
+		  \url{http://f.briatte.org/teaching/quanti/}};
+    \node[anchor=east] at (\paperwidth-.5cm, .5cm) { \color{fg}%
+		  \texttt{\insertdate}};
+}}
+
+% -- title frame
+
+\defbeamertemplate*{frametitle}{theme}{
+	\usebeamercolor{palette primary}
+	\absoluteimage{
+	  \node[anchor=west, minimum width=0.5cm, minimum height=.7cm] 
+	      at (.5, \paperheight-1cm) 
+	      {\color{bg} \insertframetitle };
+	}
+	\vspace{2em}
+}
+
+% -- unused
+
+\defbeamertemplate*{headline}{theme}{}
+\defbeamertemplate*{footline}{theme}{}
+\defbeamertemplate*{navigation symbols}{theme}{}
+
+% -- images
+
+\graphicspath{{images/}}
+
+\mode<all>

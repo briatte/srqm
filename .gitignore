@@ -6,8 +6,12 @@
 
 admin
 
+course/*-cuts*
 course/slides/*
-!course/slides/README.md
+!course/slides/*.md
+!course/slides/*.sty
+!course/slides/*.tex
+!course/slides/images
 
 course/guide/*/*
 !course/guide/README.md

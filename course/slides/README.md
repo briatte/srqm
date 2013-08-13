@@ -1,11 +1,4 @@
-Here are (most of) the draft slides from last semester.
-
-# TODO
-
-* add weeks 9-12
-* brush up spec (below)
-* makes all weeks conform to plan
-* clean up `images` directory
+Here are (most of) the draft slides from last semester, themed with a lite version of [Thomas Kastner's HK Beamer theme](https://github.com/sprungknoedl/hk-template).
 
 # SPEC
 
