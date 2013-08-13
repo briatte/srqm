@@ -13,4 +13,4 @@ Work in progress. See the [TODO](https://github.com/briatte/srqm/wiki/TODO) for 
 * Slight updates to course setup and screenshots in 1.
 * Bring in the rest of version 0.984 (Word).
 * Convert course links to `goo.gl` shortlinks.
-* Put guide source in different branch.
+* Add exercises/FAQs into chapters/sections.
