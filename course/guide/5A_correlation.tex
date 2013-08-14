@@ -55,7 +55,7 @@ You will then build a correlation matrix in order to detect multiple linear code
 
   This association is grounded in the joint variance of the two variables and can be measured as their correlation coefficient. Identically, regression relies on the joint variance of the variables included in the model to estimate its own coefficients. Both require, however, some preliminary graphical check to confirm that their relationship is effectively linear.%
 
-Figure~\ref{fig:grmat} shows another form of correlation matrix, obtained from the \abbr{gr mat}{graph matrix} (\texttt{graph matrix}) that uses scatterplots to show every possible correlation between the variables. The matrix takes a bit of time to display, but is indispensable in any serious analysis of covariance and detection of linear relationships between \emph{all} variables included in your model. 
+Figure~\ref{fig:grmat} shows another form of correlation matrix, obtained from the \cmd{gr mat}{graph matrix} (\texttt{graph matrix}) that uses scatterplots to show every possible correlation between the variables. The matrix takes a bit of time to display, but is indispensable in any serious analysis of covariance and detection of linear relationships between \emph{all} variables included in your model. 
 
 \begin{figure}[htp]
 	\centering
@@ -105,18 +105,18 @@ At that stage, you should have obtained enough information from correlation anal
 
 When you are done with visual inspection with scatterplots (\texttt{sc}), compute correlation coefficients for your selection of variables with the \cmd{pwcorr} command. The \texttt{pw} prefix in the name of the command stands for \emph{pairwise} case deletion of missing data: it means that this command will calculate each correlation coefficient on the specific sample of observations for which the pair of variables is not missing.
 
-\label{casewise}Pairwise case deletion can create serious validity issues if you need to compare coefficients over variables with different patterns of missing data, for which \emph{listwise} case deletion with the \abbr{corr}{correlate} command is more reliable. This situation is probably not so frequent with social science data. Note that, despite their names, pairwise and listwise case deletion are non-destructive subsetting operations that leave the data intact. More information is available at \texttt{help corr} from within Stata or \href{http://www.stata.com/help.cgi?correlate}{from its website}.
+\label{casewise}Pairwise case deletion can create serious validity issues if you need to compare coefficients over variables with different patterns of missing data, for which \emph{listwise} case deletion with the \cmd{corr}{correlate} command is more reliable. This situation is probably not so frequent with social science data. Note that, despite their names, pairwise and listwise case deletion are non-destructive subsetting operations that leave the data intact. More information is available at \statacode{help corr} from within Stata or \href{http://www.stata.com/help.cgi?correlate}{from its website}.
 
 There are a few options to export your correlation matrixes from Stata to a spreadsheet editor or to a text document. The safest solution is always to generate a separate file that can be saved and archived for reference, rather than copying and pasting. This applies to both correlation and scatterplot matrixes.
 
-Table~\ref{tbl:correlate_export} shows two options. The most straightforward command to export a correlation matrix is \cmd{mkcorr}, which can export to comma-separated format (\texttt{.csv}) in one line. The recommended alternative is to use the more polyvalent \cmd{estout} package, which produces very clean results. The documentation page for \cmd{estout} has plenty more options and its \href{http://repec.org/bocode/e/estout/estpost.html#estpost112}{online documentation} is very handy too.
+Table~\ref{tbl:correlate_export} shows two options. The most straightforward command to export a correlation matrix is \cmd{mkcorr}, which can export to comma-separated format (\ext{.csv}) in one line. The recommended alternative is to use the more polyvalent \cmd{estout} package, which produces very clean results. The documentation page for \cmd{estout} has plenty more options and its \href{http://repec.org/bocode/e/estout/estpost.html#estpost112}{online documentation} is very handy too.
 
 \begin{table}[htp]
 	\includegraphics[scale=.5]{images/correlate_export.pdf}
 
 	\caption[Exporting a correlation matrix with \cmd{mkcorr} and \cmd{estout}]{\label{tbl:correlate_export}%
 	Exporting a correlation matrix with \cmd{mkcorr} and \cmd{estout}. %
-  See \texttt{help estout} and related online documentation for options. %
+  See \statacode{help estout} and related online documentation for options. %
 	\qog}
 \end{table}%
 

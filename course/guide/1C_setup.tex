@@ -34,7 +34,7 @@
 		\begin{figure}%
 		  \includegraphics[width=\textwidth]{srqm-folder}
 		  \caption{The contents of the \SRQM folder should match %
-			this screenshot from a Mac~OS~X setup.}
+			this screenshot from a \OSX setup.}
 		  \label{fig:srqm-folder}
 		\end{figure}
 		%
@@ -44,13 +44,13 @@
 		%
 		%	\index{Computers!File and folder paths}%
 	\index{Computers!URLs}%
-	You need to understand the file structure of the course to understand how Stata will locate its files and folders from their \textbf{paths}. The path to the \SRQM folder, for example, will look like this on a Mac~OS~X system:\\[1em]%
+	You need to understand the file structure of the course to understand how Stata will locate its files and folders from their \textbf{paths}. The path to the \SRQM folder, for example, will look like this on a \OSX system:\\[1em]%
 	
 	\begin{docspec}
 		/Users/fr/Documents/Teaching/SRQM
 	\end{docspec}
 	
-	On Mac~OS~X, the \texttt{/Users/fr} part of the path might be abbreviated with a \texttt{$\sim$} tilde. On Windows, the path generally starts on the \texttt{C:} drive and is shown with \texttt{\textbackslash} backslashes.%
+	On \OSX, the \texttt{/Users/fr} part of the path might be abbreviated with a \texttt{$\sim$} tilde. On Windows, the path generally starts on the \texttt{C:} drive and is shown with \texttt{\textbackslash} backslashes.%
 		\footnote{Stata for Windows also understand paths with forward slashes.}%
 	
 	Once a folder has been set as the \emph{working directory}, Stata can locate files and folders from within it by using relative paths. The example below show the relative path of the \texttt{nhis2009.dta} dataset in the \texttt{\data} folder:\\[1em]%
@@ -66,7 +66,7 @@
 	
 	We will use file paths and URLs extensively throughout the course, so make sure that you understand both. I do my best to keep things tidy on my end by using Internet shortlinks and simple, informative folder and file names for the course material. You will have to do the same on your end.%
 		%
-		\footnote{For instance, you will be required to submit your work under a specific group name, as explained in Appendix~\ref{ch:assignments}.}%
+		\footnote{For instance, you will be required to submit your work under a specific group name, as explained in Section~\ref{ch:paper}.}%
 		%
 		%
 
@@ -76,7 +76,7 @@
 		\label{sec:working-directory}%
 		\index{Course!Teaching material}
 
-  \newthought{Open the Stata program.} Mac~OS~X users can simply double-click the application icon (Figure~\ref{fig:stata-icon}). \hlred{\textbf{Windows users} will have to run Stata with administrator privileges: do this by right-clicking the Stata application icon then selecting `Run as Administrator.'} This will allow Stata to save files anywhere on the hard drive, which is required only for this setup.%
+  \newthought{Open the Stata program.} \OSX users can simply double-click the application icon (Figure~\ref{fig:stata-icon}). \hlred{\textbf{Windows users} will have to run Stata with administrator privileges: do this by right-clicking the Stata application icon then selecting `Run as Administrator.'} This will allow Stata to save files anywhere on the hard drive, which is required only for this setup.%
 
 		\begin{marginfigure}
 			\includegraphics[width=.75\textwidth]{stata-icon}
@@ -107,7 +107,7 @@
 
 		\includegraphics{srqm-ls}\\[1em]
 			
-	The \cmd{ls} command below will produce a more focused output by listing only the files located in the \data folder that end with the \texttt{.dta} extension, which is the Stata dataset format (Figure~\ref{fig:stata-dta}):%
+	The \cmd{ls} command below will produce a more focused output by listing only the files located in the \data folder that end with the \ext{.dta} extension, which is the Stata dataset format (Figure~\ref{fig:stata-dta}):%
 
 		\begin{marginfigure}
 			\includegraphics[width=.75\textwidth]{stata-dta-icon}
@@ -119,7 +119,7 @@
 			ls data/*.dta, w
 		\end{docspec}
 			 
-	The command will list the teaching datasets used in the course, for which some documentation is available in Appendix~\ref{ch:data-sources}. The \cmd{ls} command is told to only show their filenames by passing the \coab{wide}{w}{ls} option to it:\\[1em]%
+	The command will list the teaching datasets used in the course, for which some documentation is available as an appendix at p.~\pageref{ch:data-sources}. The \cmd{ls} command is told to only show their filenames by passing the \coab{wide}{w}{ls} option to it:\\[1em]%
  
 		\includegraphics{srqm-ls}\\[1em]
 	

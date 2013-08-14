@@ -1,5 +1,5 @@
 %
-% A2
+% A3
 %
 \chapter{Mathematical notation}%
   %
@@ -100,7 +100,7 @@ Intervals. Cartesian planes.
 
 \subsection{Power functions}
 
-Power functions feature an exponent $k$ to raise $x$ to a given power, such that $f(x) = x^k = x*x*...*x$ ($k$ times). Some examples of power functions, where the exponent is constant, are shown in Figure~\ref{fig:fun_xpowerk}.
+Power functions feature an exponent $k$ to raise $x$ to a given power, such that $f(x) = x^k = x*x*...*x$ ($k$ times). Some examples of power functions, where the exponent is constant, are shown in Figure~\ref{fig:exps-and-powers}.
 
 \paragraph{Example: Scientific notation}%
 %

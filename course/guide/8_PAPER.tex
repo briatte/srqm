@@ -1,5 +1,15 @@
+%
+%
+%
 \chapter{Research projects}%
-	\label{ch:paper}
+  %
+  %
+  \label{ch:paper}%
+  %
+  %
+  \index{Coursework!Research project!Final paper}%
+  %
+  %
 
 \newthought{The research project} is the graded coursework component that you will work on with a student partner throughout the entire semester. It consists in regularly submitting a draft paper with its replication script, in the form of a Stata do-file.
 
@@ -78,15 +88,15 @@ Your research question and your statistical model are tied together.
 
 \newthought{This section} shows how to produce the tables mentioned in the paper template. The examples below use variables from the \qog{} dataset:%
 
-\begin{verbatim}
-// example data
-use bl_lu_25mf undp_gii wvs_abort wvs_theo unna_pop wdi_gdpc using data/qog2013, clear
-// log-transformations
-gen log_pop = ln(unna_pop)
-la var log_pop "Log(Population)"
-gen log_gdpc = ln(wdi_gdpc)
-la var log_gdpc "Log(GDP per capita)"
-\end{verbatim}
+\begin{docspec}
+  * example data\\%
+  use bl\_lu\_25mf undp\_gii wvs\_abort wvs\_theo unna\_pop wdi\_gdpc using data/qog2013, clear\\%
+  * log-transformations\\%
+  gen log\_pop = ln(unna\_pop)\\%
+  la var log\_pop "Log(Population)"\\%
+  gen log\_gdpc = ln(wdi\_gdpc)\\%
+  la var log\_gdpc "Log(GDP per capita)"
+\end{docspec}
 
 %
 \paragraph{Summary statistics}%
@@ -101,7 +111,7 @@ la var log_gdpc "Log(GDP per capita)"
 \paragraph{Correlation matrix}%
   \index{Correlation!Matrixes}%
   %
-  Table~\ref{tbl:estout-corr} shows a correlation matrix exported with the \cmd{estout} package, as shown at p.~\pageref{tbl:correlate_export}.%
+  Table~\ref{tbl:estout_corr} shows a correlation matrix exported with the \cmd{estout} package, as shown at p.~\pageref{tbl:correlate_export}.%
 
   %
   % The numbering system saves space on paper, and columns are aligned on the decimal point to increase readability. Variable labels are preferable to less informative variable names. Last, remember to stick a complete caption. \emph{Note:} if you want to use cell colors to `warm up' the table, please feel free to do so, using a soft color theme.
@@ -113,16 +123,17 @@ la var log_gdpc "Log(GDP per capita)"
     \input{T_estout_correlation}
 		%
 		\caption{Correlation output produced with \cmd{estout} and edited by adding variable numbers.}
-		\label{tbl:estout-corr}
+		\label{tbl:estout_corr}
 	\end{table}
 \end{fullwidth}
 
-\begin{verbatim}
-// export correlation matrix with -estout-
-keep wvs_abort bl_lu_25mf log_*
-qui estpost correlate *, matrix listwise
-esttab using correlates.csv, replace unstack not compress label nonum
-\end{verbatim}
+\begin{docspec}
+  * export correlation matrix with -estout-\\
+  keep wvs\_abort bl\_lu\_25mf log\_*\\
+  qui estpost correlate *, matrix listwise\\
+  esttab using correlates.csv, ///\\%
+    replace unstack not compress label nonum
+\end{docspec}
 
 %
 %
@@ -142,7 +153,7 @@ Table~\ref{tbl:hibbs_yx1_predict} shows how to pass several \cmd{predict} comman
 
 Prior to interpreting the content of the regression table/output, a good idea is to take care of saving the model results straight away, in simplified format.
 
-Table~\ref{tbl:estout-reg} shows regression output exported with \cmd{estout} as shown at p.~\pageref{tbl:hibbs_yx1_estout}. Models are each in a separate column with a short title, and a lot of information has been dropped to reflect the most relevant aspects of the model. If you need more sophisticated output, Ben Jann's online documentation for \cmd{estout} contains useful examples.%
+Table~\ref{tbl:estout_reg} shows regression output exported with \cmd{estout} as shown at p.~\pageref{tbl:hibbs_yx1_estout}. Models are each in a separate column with a short title, and a lot of information has been dropped to reflect the most relevant aspects of the model. If you need more sophisticated output, Ben Jann's online documentation for \cmd{estout} contains useful examples.%
 \footnote{\url{http://repec.org/bocode/e/estout/index.html}.}
 
 % If you are focusing on standardized coefficients, you can produce an even more simplified output with the \opt{beta}{esttab} and \texttt{not} options.
@@ -154,27 +165,27 @@ Table~\ref{tbl:estout-reg} shows regression output exported with \cmd{estout} as
     \input{T_estout_regression}
 		%
 		\caption{Regression output produced with \cmd{estout}.}
-		\label{tbl:estout-reg}
+		\label{tbl:estout_reg}
 	\end{table}
 \end{fullwidth}
 
 To produce this example, we first stored some example specifications of a linear regression model into short names \texttt{m1} to \texttt{m4}. To store a model, simply prefix its command with \texttt{eststo (name): qui}, which will quietly run the model and save it under \texttt{(name)}:
 
-\begin{verbatim}
-// example models
-eststo m1: qui reg wvs_abort bl_lu_25mf log_* c.undp_gii#c.wvs_theo
-eststo m2: qui reg wvs_abort bl_lu_25mf log_*
-eststo m3: qui reg wvs_abort bl_lu_25mf log_* wvs_theo
-eststo m4: qui reg wvs_abort bl_lu_25mf log_* undp_gii
-\end{verbatim}
+\begin{docspec}
+  * example models\\%
+  eststo m1: qui reg wvs\_abort bl\_lu\_25mf log\_* c.undp\_gii\#c.wvs\_theo\\%
+  eststo m2: qui reg wvs\_abort bl\_lu\_25mf log\_*\\%
+  eststo m3: qui reg wvs\_abort bl\_lu\_25mf log\_* wvs\_theo\\%
+  eststo m4: qui reg wvs\_abort bl\_lu\_25mf log\_* undp\_gii
+\end{docspec}
 
 Note that the full model has an interaction term, and that the three other models simply show how the model behaves under slightly different specifications. The entire output is exported with a single command, \cmd{esstab}:
 
-\begin{verbatim}
-// export regression output with -estout-
-esttab m1 m2 m3 m4 using models.csv, ///
-  replace label b(1) se(1) sca(rmse) ///
-	mti("Full model" "Controls" "Theocracy" "GII")
-\end{verbatim}
+\begin{docspec}
+  * export regression output with -estout-\\%
+  esttab m1 m2 m3 m4 using models.csv, ///\\%
+    replace label b(1) se(1) sca(rmse) ///\\%
+  	mti("Full model" "Controls" "Theocracy" "GII")
+\end{docspec}
 
 The \texttt{b(1)} and \texttt{se(1)} options set the unstandardised coefficients and standard errors to one digit precision. The \texttt{sca(rmse)} option adds the RMSE to each model, for which names are set by the \texttt{mti} option.

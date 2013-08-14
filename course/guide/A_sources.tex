@@ -1,5 +1,5 @@
 %
-% A1
+% A2
 %
 \chapter[Sources]{Data sources}%
 	%
@@ -12,7 +12,7 @@
 This appendix lists the data sources for the course and briefly documents how they were assembled. Additional details appear in the the \README file of the \data folder.%
   \footnote{Available online at \url{https://github.com/briatte/srqm/blob/master/data/README.md}}
 
-All course datasets are provided in Stata 9/10 \texttt{.dta} format on an ``as-is'' basis: please use them for teaching purposes only, and do not redistribute them. Modifications to the original files are coded in the \texttt{srqm\_data.ado} ado-file of the \setup folder.\footnote{\url{https://github.com/briatte/srqm/blob/master/setup/srqm\_data.ado}}
+All course datasets are provided in Stata 9/10 \ext{.dta} format on an ``as-is'' basis: please use them for teaching purposes only, and do not redistribute them. Modifications to the original files are coded in the \texttt{srqm\_data.ado} ado-file of the \setup folder.\footnote{\url{https://github.com/briatte/srqm/blob/master/setup/srqm\_data.ado}}
 
 \bigskip
 \begin{table}
@@ -22,15 +22,15 @@ All course datasets are provided in Stata 9/10 \texttt{.dta} format on an ``as-i
 \toprule
 Filename & Data & Year of release \\
 \midrule
-\quad \texttt{ess2008} & European Social Survey & Round 4, 2008 \\
-\quad \texttt{gss2010} & General Social Survey & Survey years 2000-2010  \\
-\quad \texttt{nhis2009} & National Health Interview Survey & Survey years 2000-2009 \\
-\quad \texttt{qog2011} & Quality of Government & 6 April 2011 \\
-\quad \texttt{wvs2000} & World Values Survey & Wave 3, 2000 \\
+\quad \texttt{ess2008} & \ess & Round 4, 2008 \\
+\quad \texttt{gss2010} & \gss & Survey years 2000-2010  \\
+\quad \texttt{nhis2009} & \nhis & Survey years 2000-2009 \\
+\quad \texttt{qog2011} & \qog & 6 April 2011 \\
+\quad \texttt{wvs2000} & \wvs & Wave 3, 2000 \\
 \bottomrule
 \end{tabular}
 \end{center}
-\label{tab:data-source}
+\label{tbl:data-source}
 \end{table}
 
 \section*{\ess (\texttt{ess2008})}
@@ -39,7 +39,7 @@ The \texttt{ess2008} dataset holds Round~4 (2008) of the \ess (\ESS).%
 	\footnote{\url{http://ess.nsd.uib.no/ess/round4/}}
 
 \begin{quote}
-	The European Social Survey (the ESS) is an academically-driven social survey designed to chart and explain the interaction between Europe's changing institutions and the attitudes, beliefs and behaviour patterns of its diverse populations.%
+	The \ESS (the ESS) is an academically-driven social survey designed to chart and explain the interaction between Europe's changing institutions and the attitudes, beliefs and behaviour patterns of its diverse populations.%
 	\footnote{\url{http://www.europeansocialsurvey.org}}
 \end{quote}
 
@@ -53,8 +53,8 @@ The \ESS dataset should be used with the following survey weights:
 See the \ESS weighting guide, bundled with the data, for instructions.
 
 The dataset was created by subsetting the \ESS cumulative dataset to Round~4, and then by removing variables with no observations. The codebook was downloaded from the \ESS data website.%
-\footnote{\url{http://ess.nsd.uib.no/}} %
-A few variables from the \ESS~4 rotating module on welfare attitudes are missing. More recent data is also available up to Round~5 (2010).
+  \footnote{\url{http://ess.nsd.uib.no/}} %
+  A few variables from the \ESS~4 rotating module on welfare attitudes are missing. More recent data is also available up to Round~5 (2010).%
 
 \section*{\gss (\texttt{gss2010})}
 
@@ -62,6 +62,7 @@ The \texttt{gss2010} dataset holds data from the U.S. \gss (\GSS) for years 2000
 
 \begin{quote}
 	The GSS contains a standard 'core' of demographic, behavioral, and attitudinal questions, plus topics of special interest. Many of the core questions have remained unchanged since 1972 to facilitate time-trend studies as well as replication of earlier findings.%
+  %
 	\footnote{\url{http://www3.norc.org/GSS+Website/}}
 \end{quote}
 
@@ -72,16 +73,17 @@ The \GSS dataset should be used with the following survey weights:
 	svyset vpsu [pw = wtssall], strata(vstrata)
 \end{docspec}
 
-See ``Calculating Design-Corrected Standard Errors for the General Social Survey, 1988-2010'' by Steven Pedlow and Appendix~A of the \GSS codebook for other options. Both documents are bundled with the data extract, along with a mock codebook.
+See Appendix~A of the \GSS codebook and the online technical paper ``Calculating Design-Corrected Standard Errors for the General Social Survey, 1988-2010'' by Steven Pedlow for other weighting options. Both documents are bundled with the data extract, along with a mock codebook.%
 
-The dataset is a trimmed-down version of the \GSS 1972-2010 cumulative cross-sectional dataset, Release~2, Feb.~2012. The data preparation code will download a fresh copy of it (caution, the filesize is above 350 MB).
+The dataset is a trimmed-down version of the \GSS 1972-2010 cumulative cross-sectional dataset, Release~2, Feb.~2012. The data preparation code will download a fresh copy of it (caution, the filesize is above 350~MB).%
 
 \section*{\nhis (\texttt{nhis2009})}
 
 The \texttt{nhis2009} dataset holds sample adult data for years 2000--2009 of the U.S. \nhis (\NHIS).
 
 \begin{quote}
-	The National Health Interview Survey (NHIS) has monitored the health of the nation since 1957. NHIS data on a broad range of health topics are collected through personal household interviews. For over 50 years, the U.S. Census Bureau has been the data collection agent for the National Health Interview Survey. Survey results have been instrumental in providing data to track health status, health care access, and progress toward achieving national health objectives.%
+	The \nhis (NHIS) has monitored the health of the nation since 1957. NHIS data on a broad range of health topics are collected through personal household interviews. For over 50 years, the U.S. Census Bureau has been the data collection agent for the \NHIS. Survey results have been instrumental in providing data to track health status, health care access, and progress toward achieving national health objectives.%
+  %
 	\footnote{\url{http://www.cdc.gov/nchs/nhis.htm}} 
 \end{quote}
 
@@ -98,10 +100,12 @@ The data come from the Integrated Health Interview Series website.\footnote{\url
 
 \section*{\qog (\texttt{qog2011})}
 
-The \texttt{qog2011} dataset holds the \qog (\QOG) Standard dataset in its most recent revision of April~6, 2011.
+The \texttt{qog2011} dataset holds the \qog (\QOG) Standard dataset in its most recent revision of May~15, 2013.
 
 \begin{quote}
-	Our research addresses the questions of how to create and maintain high quality government institutions and how the quality of such institutions influences public policy in a broader sense.\footnote{\url{http://www.qog.pol.gu.se/}}
+	Our research addresses the questions of how to create and maintain high quality government institutions and how the quality of such institutions influences public policy in a broader sense.%
+  %
+  \footnote{\url{http://www.qog.pol.gu.se/}}%
 \end{quote}
 
 The data and codebook come from the QOG Standard download page. A simpler version of the dataset, ``QOG Basic'', is also available for students who prefer to work on a more accessible and less extensive version of the data.
@@ -111,7 +115,8 @@ The data and codebook come from the QOG Standard download page. A simpler versio
 The \texttt{wvs2000} dataset holds data from Wave~4 (1999-2004) of the \wvs (\WVS).
 
 \begin{quote}
-	The World Values Survey (WVS) is a worldwide network of social scientists studying changing values and their impact on social and political life. The WVS in collaboration with EVS (European Values Study) carried out representative national surveys in 97 societies containing almost 90 percent of the world's population. These surveys show pervasive changes in what people want out of life and what they believe. In order to monitor these changes, the EVS/WVS has executed five waves of surveys, from 1981 to 2007.%
+	The \wvs (WVS) is a worldwide network of social scientists studying changing values and their impact on social and political life. The WVS in collaboration with EVS (European Values Study) carried out representative national surveys in 97 societies containing almost 90 percent of the world's population. These surveys show pervasive changes in what people want out of life and what they believe. In order to monitor these changes, the EVS/WVS has executed five waves of surveys, from 1981 to 2007.%
+  %
 	\footnote{\url{http://www.worldvaluessurvey.org/}}
 \end{quote}
 

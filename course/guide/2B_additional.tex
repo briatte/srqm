@@ -14,47 +14,35 @@
 \label{sec:insheet}
 \index{Data!Conversion!From \textsc{csv} files}
 
-Files that use \underline{c}omma-\underline{s}eparated \underline{v}alues (\textsc{csv}) can be imported into Stata if you carefully clean the file first from any additional element that is not part of the data itself.
-
-% XLS
-\label{sec:import-excel}
-\index{Data!Conversion!From Excel files}
-
-Microsoft Excel files (\textsc{xls}) are written in a proprietary spreadsheet format that can be imported into Stata~12 with the \cmd{import excel} command.
+\newthought{Plain text files} that use \underline{c}omma-\underline{s}eparated \underline{v}alues (\ext{csv}) can be imported into Stata if you carefully clean the file first from any additional element that is not part of the data itself.%
 
 % Fixed format
 \label{sec:infix}
 \index{Data!Conversion!From fixed format}
 
-Fixed-format data consists of variables that have been separated by a fixed number of spaces. This format is more complex to manipulate, as you have to determine the precise format of the data and run extensive code to name variables and apply labels, sometimes using a `dictionary' file.
-    
-Details on how to proceed with fixed-format data in Stata appear in the help page of the \cmd{infix} command, and short examples can be retrieved from online Stata tutorials.
-    
-For an example with the National Health Interview Survey of 2009%
-\footnote{\url{http://www.cdc.gov/nchs/nhis/nhis_2009_data_release.htm}}, %
-you can try downloading and uncompressing one of the \textsc{ascii} data files for that year%
-\footnote{e.g. \url{ftp://ftp.cdc.gov/pub/Health_Statistics/NCHS/Datasets/NHIS/2009/personsx.exe} (provided in self-extracting \textsc{exe} format)}, %
-and then apply the sample Stata statements provided by the data teams to see what is involved in producing the final dataset.%
-\footnote{e.g. \url{ftp://ftp.cdc.gov/pub/Health_Statistics/NCHS/Program_Code/NHIS/2009/personsx.do}}
-    
-    If you try to process the example above, you will realize that fixed format data is difficult to manipulate. %
-    Unless you have a \emph{lot} of time on your hands to convert and debug the files, do not engage into complex data wrangling with fixed format data.
+\newthought{Fixed-format data} consists of variables that have been separated by a fixed number of spaces. This format is more complex to manipulate than delimited text, as you have to determine the precise format of the data and run extensive code to name variables and apply labels, using a `dictionary' file.%
 
-% coda:
+Details on how to proceed with fixed-format data in Stata appear in the help page of the \cmd{infix} command, and short examples can be retrieved from online Stata tutorials. For an example with the National Health Interview Survey of 2009%
+  \footnote{\url{http://www.cdc.gov/nchs/nhis/nhis_2009_data_release.htm}}, %
+  you can try downloading and uncompressing one of the \textsc{ascii} data files for that year%
+  \footnote{e.g. \url{ftp://ftp.cdc.gov/pub/Health_Statistics/NCHS/Datasets/NHIS/2009/personsx.exe} (provided in self-extracting \textsc{exe} format)}, %
+  and then apply the sample Stata statements provided by the data teams to see what is involved in producing the final dataset.%
+  \footnote{e.g. \url{ftp://ftp.cdc.gov/pub/Health_Statistics/NCHS/Program_Code/NHIS/2009/personsx.do}}%
 
-Last, datasets produced for \textsc{sas}, \textsc{spss} or other statistical software can be converted to Stata using the Stat/Transfer software.%
-  \footnote{\url{http://www.stattransfer.com/}} %
-StataCorp itself recommends the software,%
-  \footnote{\url{http://www.stata.com/products/stat-transfer/}} %
-and Sciences Po has made it available on its microlab workstations.
+If you try to process the example above, you will realize that fixed format data is difficult to manipulate. Unless you have a \emph{lot} of time on your hands to convert and debug the files, do not engage into complex data wrangling with fixed format data.%
 
-A free alternative consists in using the R statistical software with the \texttt{foreign} and \texttt{Hmisc} libraries to import the data in R and then export it to Stata.%
-  \footnote{\url{http://www.statmethods.net/input/importingdata.html}} %
-There is absolutely no guarantee, however, that the conversion process will be error-free.
+% XLS
+\label{sec:import-excel}
+\index{Data!Conversion!From Excel files}
 
-In both cases, if you are taking it on yourself to convert the data rather than to trust the data team responsible for the original data files, then you are exposing yourself to conversion errors and will have to perform time-consuming verifications on your unofficial dataset.
+Microsoft Excel files (\ext{xls}) are written in a proprietary spreadsheet format that can be imported into Stata~12 with the \cmd{import excel} command. Datasets written for \textsc{sas}, \textsc{spss} or other statistical software can be converted with Stat/Transfer,%
+  \footnote{StataCorp recommends this solution: \url{http://www.stata.com/products/stat-transfer/}. Sciences Po has made Stat/Transfer available on its workstations.} %
+  or with free software by using R with the \texttt{foreign} package to import and export the data.%
+  \footnote{See the procedure at \url{http://www.statmethods.net/input/importingdata.html}. The \texttt{foreign} package is reliable but leaves some encoding issues.}%
 
-For these reasons, your safest option is either to use official data files provided in the Stata proprietary dataset, or to rely on a machine-readable format like \textsc{csv} to be able to open the file from any software.
+As soon as you take it on yourself to convert the data rather than to trust the data team responsible for the original data files, you are exposing yourself to conversion errors and will almost certainly have to perform time-consuming verifications on your unofficial dataset.%
+
+For this reason, your safest option is to use official data files provided in the Stata proprietary format, or to rely on a machine-readable format of your data like \ext{csv} (comma-separated values) that can be read in any software.%
 
 % 2.2
 %

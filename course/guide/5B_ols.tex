@@ -23,14 +23,14 @@ In the two regional clusters outlined above, Israel markedly differs from Africa
 	\caption[Regional distributions of support for abortion]{\label{fig:distr}
 	Selected regional distributions of support for abortion. %
   \qog}
-
-	\begin{verbatim}
-	// graph code: plot regional subsets
-	gr hbox wvs_abort if ht_region2 < 6, ///
-	  over(ht_region2, sort(1)des) mark(1, mlab(ccodewb))
-	\end{verbatim}
 	
 \end{figure}%
+
+\begin{docspec}
+	* graph code: plot regional subsets\\%
+	gr hbox wvs\_abort if ht\_region2 < 6, ///\\%
+	  over(ht\_region2, sort(1)des) mark(1, mlab(ccodewb))
+\end{docspec}
 
 Our explanatory intuitions so far lie with the presumed effect of education systems and gender equality on support for abortion, which is also observable in Asian and Latin American countries. However, religious authorities, which we assume to be opposed to abortion at least in principle, can be either providers or strong moral sources of education. The data contain measures of religiousness and religiosity that can be used next to education in order to determine how much of a zero-sum game these factors play with each other.
 
@@ -114,7 +114,7 @@ The very last graph that we drew for this model indicates that the linear estima
   
   \paragraph{Regression output}
 
-  In regression output, the linear estimator for the intercept of the regression line, $\alpha$, is called the \emph{constant}, while the estimated $\beta$ parameters that apply to the independent variable(s) are called regression \emph{coefficients}. Stata performs the parametric estimation of regression coefficients with the \abbr{reg}{regress} command, and can store its results with the \cmd{predict} command.
+  In regression output, the linear estimator for the intercept of the regression line, $\alpha$, is called the \emph{constant}, while the estimated $\beta$ parameters that apply to the independent variable(s) are called regression \emph{coefficients}. Stata performs the parametric estimation of regression coefficients with the \cmd{reg}{regress} command, and can store its results with the \cmd{predict} command.
 
   \paragraph{Standard output}%
   Table~\ref{tbl:hibbs_yx1_regress} shows the standard output for linear regression in Stata:

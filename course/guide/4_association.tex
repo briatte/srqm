@@ -1,7 +1,13 @@
-\chapter{Comparisons}%
-	\label{ch:comparisons}%
-  \index{Estimation (statistical)}%
+\chapter{Associations}%
+	\label{ch:associations}%
 	\index{Significance (statistical)}
+	%
+	%
+  \minitoc
+  %
+  \newpage
+  %
+  %
 
 This chapter deals with two classes of quantitative comparisons:
 
@@ -19,11 +25,11 @@ These topics are given different names in statistical theory:
 
 \newthought{A hypothesis} is a statement that you can either confirm or contradict. ``People at the extremes are happier than political moderates \dots none, it seems, are happier than the Tea Partiers \dots'', for instance, is a verifiable statement that happens to be false in the context in which it was formulated.\footnote{The statement is from a \emph{New York Times} article by Arthur Brooks. See Jay Livingston's blog, ``\href{http://montclairsoci.blogspot.ch/2012/07/bitter-tea.html}{Bitter Tea?}'' (10 July 2012), and Andrew Gelman's blog, ``\href{http://andrewgelman.com/2012/08/1-5-million-people-were-told-that-extreme-conservatives-are-happier-than-political-moderates-approximately-0001-million-americans-learned-that-the-opposite-is-true/}{1.5 million people were told that extreme conservatives are happier than political moderates. Approximately .0001 million Americans learned that the opposite is true}'' (14 August 2012).} You can verify this yourself by looking into the U.S. General Social Survey from 2010:%
 
-\begin{verbatim}
+\begin{docspec}
 use datasets/gss2010, clear
 spineplot happy partyid if partyid < 7 [aw=wtssall], ///
     xla(, alt axis(2)) xti("", axis(2)) scheme(set1)
-\end{verbatim}
+\end{docspec}
 
 The \cmd{spineplot} command above displays proportions of the sample by level of subjective happiness (\texttt{happy}) and political party affiliation (\texttt{partyid}, with over 97\% of the respondents placing themselves on a scale ranging from 0 ``Strong Democrat'' to 6 ``Strong Republican''). The graph options on the last line are optional.
 

@@ -51,14 +51,14 @@ Observation & ID & Variable 1 & Variable 2 & ... \\
 \bottomrule
 \end{tabular}
 \caption{Basic data structures, with observations in rows and variables in columns. Note that the variables have some missing values.}
-\label{tab:basic-data}
+\label{tbl:basic-data}
 \end{center}
 \end{table}
 
 \bigskip
 \newthought{The total number of observations} of a dataset is denoted $N$. It might be small, as with $N = 27$ OECD countries, or huge, as with `big data' where $N > 100,000$. Statistical tests can easily fail to apply when the number of observations is low, typically somewhere around $N < 30$. The data can also suffer from overall sparsity if there are few variables or many missing values. 
 
-Basic data structures like those shown in Table~\ref{tab:basic-data} are \emph{cross-sectional} because they contain data for only one time period. Datasets that contain values for more than one time period $T$ are called \emph{time series}. Table~\ref{tab:csts-data} shows an example of cross-sectional time series.
+Basic data structures like those shown in Table~\ref{tbl:basic-data} are \emph{cross-sectional} because they contain data for only one time period. Datasets that contain values for more than one time period $T$ are called \emph{time series}. Table~\ref{tbl:csts-data} shows an example of cross-sectional time series.
 
 \bigskip
 \begin{table}
@@ -79,11 +79,11 @@ Observation & ID & Year & Variable 1 & ... \\
 \end{tabular}
 \caption{Cross-sectional time series, a.k.a. \smallcaps{csts} data. This data structure is common in some research areas like international relations and comparative politics. In a dataset that counts $N = 27$ countries over $T = 20$ years, the total number of country-year observations will be $27 \times 20 = 540$, or less as soon as there are missing values.}
 \end{center}
-\label{tab:csts-data}
+\label{tbl:csts-data}
 \end{table}
 
 \bigskip
-The structure of the data can get even more complex if there is more than one \emph{level of observation} nested within each other, as when some respondents are taken from the same household, region and country. Furthermore, the observations can repeat over time and form a \emph{panel}, as when epidemiologists observe a cohort of adults through their life course in a longitudinal study. Table~\ref{tab:panel-data} shows an example of cross-country household panel data.
+The structure of the data can get even more complex if there is more than one \emph{level of observation} nested within each other, as when some respondents are taken from the same household, region and country. Furthermore, the observations can repeat over time and form a \emph{panel}, as when epidemiologists observe a cohort of adults through their life course in a longitudinal study. Table~\ref{tbl:panel-data} shows an example of cross-country household panel data.
 
 \bigskip
 \begin{table}
@@ -106,7 +106,7 @@ Observation & Country & Year & Household ID & Person ID & Variable 1 & ... \\
 \end{tabular}
 \caption{Panel data, with individuals nested in households nested into countries. The time period covered by panel data can range from a few years for repeated surveys to decades for longitudinal studies of patient cohorts in biomedicine or financial time series holding stock values.}
 \end{center}
-\label{tab:panel-data}
+\label{tbl:panel-data}
 \end{table}
 
 \newthought{In this course}, we focus on cross-sectional data in which we can assume that the observations are independent from each other. Special methodological requirements apply to panel data and times series, where this requirement is violated by the temporal dependence between recurring observations \cite{BeckKatz:2011e}.
