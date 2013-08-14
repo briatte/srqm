@@ -19,18 +19,18 @@ You will then build a correlation matrix in order to detect multiple linear code
   \subsection{Visualizing correlates}%
     \index{Correlation!Visualizing correlates}
 
-  \begin{wrapfigure}{r}{.5\textwidth}
+  \begin{figure}
     \begin{center}
       \includegraphics[width=0.48\textwidth]{images/abortion_sc_means.pdf}
     \end{center}
-    	\caption[Linear correlation]{\label{fig:correlation_scatterplot}
-  	Scatterplot of support for abortion and mass education.\\
-  	\mlines{} \qog{63}}
-  \end{wrapfigure}%
+    	\caption[Linear correlation]{\label{fig:correlation_scatterplot}%
+  	Scatterplot of support for abortion and mass education. %
+    \qog}
+  \end{figure}%
 
   Figure~\ref{fig:correlation_scatterplot} provides an example of a visual relationship to which linear regression might apply, between public opinion support for abortion and average schooling years at the population level. The visual relationship that you might detect in the data is typical of a linear \emph{correlation}. The average values of each variable are displayed on the graph to show how the data distribute around them: mostly in the bottom-left and top-right quadrants, which define a \emph{positive} linear correlation.%
 
-  The relationships that your model will capture will be \emph{linear} ones. If you detect a quadratic or exponential relationship, correlation and regression will fail to reflect them adequately. Variable transformations can be used to circumvent this issue, but some curvilinear phenomena might persist in the data, in which case you should acknowledge this limitation in your reports.\footnote{Section~[9] covers usual variable transformations, available through the \cmmd{ladder} and \cmmd{gladder} commands in Stata. Ideally, your data might also justify selecting a non-linear model, as in the case of a log-linear relationship.}% \ref{sec:transformations}	
+  The relationships that your model will capture will be \emph{linear} ones. If you detect a quadratic or exponential relationship, correlation and regression will fail to reflect them adequately. Variable transformations can be used to circumvent this issue, but some curvilinear phenomena might persist in the data, in which case you should acknowledge this limitation in your reports.\footnote{Section~[9] covers usual variable transformations, available through the \cmd{ladder} and \cmd{gladder} commands in Stata. Ideally, your data might also justify selecting a non-linear model, as in the case of a log-linear relationship.}% \ref{sec:transformations}	
 
   Figure~\ref{fig:correlation_variance} offers a more detailed visualization of the variance in each variable. Recall the formulae from Section~[9] for the variance $\sigma^2$ and standard deviation $\sigma$ of a variable $X$: % ~\ref{sec:dispersion}
 
@@ -45,9 +45,10 @@ You will then build a correlation matrix in order to detect multiple linear code
   	\includegraphics[width=.48\textwidth]{images/abortion_sc_yvariance.pdf}
   	\includegraphics[width=.48\textwidth]{images/abortion_sc_xvariance.pdf}
 
-  	\caption[Variance in two variables]{\label{fig:correlation_variance}
-  	Scatterplots of support for abortion and mass education.\\
-  	\mlines{} Negative variance in solid lines, positive variance in dashed lines. \qog{63}}
+  	\caption[Variance in two variables]{\label{fig:correlation_variance}%
+  	Scatterplots of support for abortion and mass education. %
+    Negative variance in solid lines, positive variance in dashed lines. %
+    \qog}
   \end{figure}%
 
   What the graphs show at that stage is a clear association in the deviations from the mean: for the values of mass education that are \emph{above} its average level, the level of support for abortion is also \emph{above} its average level, and reversely, at levels of mass education that are \emph{below} its sample mean, support for abortion also tends to fall \emph{below} its sample mean.%
@@ -60,9 +61,8 @@ Figure~\ref{fig:grmat} shows another form of correlation matrix, obtained from t
 	\centering
 	\includegraphics[width=.9\textwidth]{images/abortion_grmat.pdf}
 
-	\caption[Scatterplot matrix with \cmmd{gr mat}]{\label{fig:grmat}
-	Scatterplot matrix produced with \texttt{gr mat}.\\
-	\qog{56-143}}
+	\caption[Scatterplot matrix with \cmd{gr mat}]{\label{fig:grmat}
+	Scatterplot matrix produced with \texttt{gr mat}. \qog}
 \end{figure}%
 
 The scatterplot matrix is susceptible to confirm that several independent variables are moderately or strongly correlated, which creates \emph{interactions} within your model. The linear relationships that occur in parallel to your model create an issue called \emph{multicollinearity}, especially if you fall for the common flaw of including tons of independent variables and end up with a `kitchen-sink' model.\footcite{Schrodt:2011a} Section~\ref{sec:interactions} covers this issue in detail.
@@ -85,9 +85,10 @@ At that stage, you should have obtained enough information from correlation anal
   	\includegraphics[width=.32\textwidth]{images/correlate_neg.pdf}
   	\includegraphics[width=.32\textwidth]{images/correlate_rnd.pdf}
 
-  	\caption[`Extreme' correlation coefficients]{\label{fig:correlation_examples}
-  	`Extreme' correlation coefficients: from left to right, $\rho = +1$, $\rho = -1$ and $\rho \approx 0$.\\
-  	Simulated from random data.}
+  	\caption[`Extreme' correlation coefficients]{\label{fig:correlation_examples}%
+  	`Extreme' correlation coefficients: from left to right, %
+    $\rho = +1$, $\rho = -1$ and $\rho \approx 0$. %
+    Simulated from random data.}
   \end{figure}%
 
   The formula that is generally used for measuring correlation is Pearson's $\rho$, a coefficient measure that divides the \emph{covariance} of $X$ and $Y$ by the product of their standard deviations $\sigma_X$ and $\sigma_Y$, which are themselves the square roots of the variance in $X$ and $Y$:
@@ -102,30 +103,31 @@ At that stage, you should have obtained enough information from correlation anal
   \index{Correlation!Matrixes}%
   \index{Correlation!Exporting results}
 
-When you are done with visual inspection with scatterplots (\texttt{sc}), compute correlation coefficients for your selection of variables with the \cmmd{pwcorr} command. The \texttt{pw} prefix in the name of the command stands for \emph{pairwise} case deletion of missing data: it means that this command will calculate each correlation coefficient on the specific sample of observations for which the pair of variables is not missing.
+When you are done with visual inspection with scatterplots (\texttt{sc}), compute correlation coefficients for your selection of variables with the \cmd{pwcorr} command. The \texttt{pw} prefix in the name of the command stands for \emph{pairwise} case deletion of missing data: it means that this command will calculate each correlation coefficient on the specific sample of observations for which the pair of variables is not missing.
 
 \label{casewise}Pairwise case deletion can create serious validity issues if you need to compare coefficients over variables with different patterns of missing data, for which \emph{listwise} case deletion with the \abbr{corr}{correlate} command is more reliable. This situation is probably not so frequent with social science data. Note that, despite their names, pairwise and listwise case deletion are non-destructive subsetting operations that leave the data intact. More information is available at \texttt{help corr} from within Stata or \href{http://www.stata.com/help.cgi?correlate}{from its website}.
 
 There are a few options to export your correlation matrixes from Stata to a spreadsheet editor or to a text document. The safest solution is always to generate a separate file that can be saved and archived for reference, rather than copying and pasting. This applies to both correlation and scatterplot matrixes.
 
-Table~\ref{tbl:correlate_export} shows two options. The most straightforward command to export a correlation matrix is \cmmd{mkcorr}, which can export to comma-separated format (\texttt{.csv}) in one line. The recommended alternative is to use the more polyvalent \cmmd{estout} package, which produces very clean results. The documentation page for \cmmd{estout} has plenty more options and its \href{http://repec.org/bocode/e/estout/estpost.html#estpost112}{online documentation} is very handy too.
+Table~\ref{tbl:correlate_export} shows two options. The most straightforward command to export a correlation matrix is \cmd{mkcorr}, which can export to comma-separated format (\texttt{.csv}) in one line. The recommended alternative is to use the more polyvalent \cmd{estout} package, which produces very clean results. The documentation page for \cmd{estout} has plenty more options and its \href{http://repec.org/bocode/e/estout/estpost.html#estpost112}{online documentation} is very handy too.
 
 \begin{table}[htp]
 	\includegraphics[scale=.5]{images/correlate_export.pdf}
 
-	\caption[Exporting a correlation matrix with \cmmd{mkcorr} and \cmmd{estout}]{\label{tbl:correlate_export}
-	Exporting a correlation matrix with \cmmd{mkcorr} and \cmmd{estout}. See \texttt{help estout} and related online documentation for options.\\
-	\qog{54}}
+	\caption[Exporting a correlation matrix with \cmd{mkcorr} and \cmd{estout}]{\label{tbl:correlate_export}%
+	Exporting a correlation matrix with \cmd{mkcorr} and \cmd{estout}. %
+  See \texttt{help estout} and related online documentation for options. %
+	\qog}
 \end{table}%
 
-Table~\ref{tbl:pwcorr} shows Stata output for the \cmmd{pwcorr} command with the \copt{obs}{pwcorr} and \copt{star(.05)}{pwcorr} options, which respectively add the number of pairwise observations and appose an asterisk next to statistically significant correlations at $p < .05$.\footnote{Remember not to vow any cult to the statistical significance asterisk. The magnitude of the correlation coefficient, i.e. its closeness to $-1$ or $+1$, is a more reliable metric (and both quickly corroborate). Visual inspection certainly trumps both measures if your goal is to detect genuinely linear relationships.} This type of table is called a \emph{correlation matrix} and is frequently produced prior to linear regression models.
+Table~\ref{tbl:pwcorr} shows Stata output for the \cmd{pwcorr} command with the \opt{obs}{pwcorr} and \opt{star(.05)}{pwcorr} options, which respectively add the number of pairwise observations and appose an asterisk next to statistically significant correlations at $p < .05$.\footnote{Remember not to vow any cult to the statistical significance asterisk. The magnitude of the correlation coefficient, i.e. its closeness to $-1$ or $+1$, is a more reliable metric (and both quickly corroborate). Visual inspection certainly trumps both measures if your goal is to detect genuinely linear relationships.} This type of table is called a \emph{correlation matrix} and is frequently produced prior to linear regression models.
 
 \begin{table}[htp]
 	\includegraphics[scale=.5]{images/abortion_pwcorr.pdf}
 
-	\caption[Correlation matrix with \cmmd{pwcorr}]{\label{tbl:pwcorr}
-	Correlation matrix produced with \texttt{pwcorr, obs star(.05)}.\\
-	\qog{56-143}}
+	\caption[Correlation matrix with \cmd{pwcorr}]{\label{tbl:pwcorr}%
+	Correlation matrix produced with \texttt{pwcorr, obs star(.05)}. %
+  \qog}
 \end{table}%
 
 We passed the previously introduced \texttt{wvs\_abort} (support for abortion) and \texttt{bl\_asyt25} (mass education) variables to the correlation matrix, as well as a few other variables:
@@ -150,14 +152,14 @@ In our matrix, the correlation coefficients for the abortion, education, gender 
 
 The correlation coefficients for support in theocracy (\texttt{wvs\_theo}) differ in several respects. First of all, they are computed on slightly smaller samples due to missing data. Most importantly, the coefficients show that support for theocracy is negatively correlated with the other variables examined, somewhere in the same (relatively high) order of magnitude observed in other variables, and somewhere in the same satisfactory levels of statistical significance.
 
-Last, the correlation coefficients for \texttt{wdi\_pop} and its natural logarithm show the corrective effects of variable transformation on the estimation of significance levels. If you re-run the \cmmd{pwcorr} command shown in Table~\ref{tbl:pwcorr} with the \copt{sig}{pwcorr} option, Stata will show you the $p$-value for each correlation coefficient. This will show clear improvements in coefficient strength and statistical significance for the more normally distributed \texttt{wdi\_pop\_log} variable.
+Last, the correlation coefficients for \texttt{wdi\_pop} and its natural logarithm show the corrective effects of variable transformation on the estimation of significance levels. If you re-run the \cmd{pwcorr} command shown in Table~\ref{tbl:pwcorr} with the \opt{sig}{pwcorr} option, Stata will show you the $p$-value for each correlation coefficient. This will show clear improvements in coefficient strength and statistical significance for the more normally distributed \texttt{wdi\_pop\_log} variable.
 
   \index{Spearman's $\rho$|see{correlation}}\index{Kendall's $\tau$|see{correlation}}%
   \paragraph{Additional options for ordinal data} If your data use a low number of dimensions, additional measures of correlation might come in handy.
 
-  Pearson's $\rho$ is very effective at detecting correlation with continuous data where correlation depends on the values of the observations. However, if the correlational pattern derives from the ranks of the observations, as with $k$-point scales, Spearman's $\rho$ (\cmmd{spearman}) can be more effective at detecting the relationship, because it looks for monotonicity instead of linearity.\footnote{Monotonicity disregards the actual numeric values of the data and focuses on the order of the values. For example, if you are looking at a variable scaled from \texttt{1 "Strongly agree"} to \texttt{5 "Strongly disagree"}, or from \texttt{0 "Never contracted"} to \texttt{3 "Full-time contract"}, the order of the categories takes over the values in meaningfulness.} The command works pretty much like \cmmd{corr}.
+  Pearson's $\rho$ is very effective at detecting correlation with continuous data where correlation depends on the values of the observations. However, if the correlational pattern derives from the ranks of the observations, as with $k$-point scales, Spearman's $\rho$ (\cmd{spearman}) can be more effective at detecting the relationship, because it looks for monotonicity instead of linearity.\footnote{Monotonicity disregards the actual numeric values of the data and focuses on the order of the values. For example, if you are looking at a variable scaled from \texttt{1 "Strongly agree"} to \texttt{5 "Strongly disagree"}, or from \texttt{0 "Never contracted"} to \texttt{3 "Full-time contract"}, the order of the categories takes over the values in meaningfulness.} The command works pretty much like \cmd{corr}.
 
-  Furthermore, if your dataset relies on a relatively small number of observations, you should also give a try to Kendall's $\tau$ (\cmmd{ktau}), which takes some time to compute. If you are hesitant about the relevance of the scaling used in some variables, running through all commands will generally help understand their correlational pattern, and will also prevent your analysis from methodological straitjacketing.
+  Furthermore, if your dataset relies on a relatively small number of observations, you should also give a try to Kendall's $\tau$ (\cmd{ktau}), which takes some time to compute. If you are hesitant about the relevance of the scaling used in some variables, running through all commands will generally help understand their correlational pattern, and will also prevent your analysis from methodological straitjacketing.
 
   Even when the relationship \emph{is} linear and measured as such, you still need to compare your measures of correlation with your theoretical expectations. A correlation coefficient of $\rho = 0.6$ can be empirically insufficient if your model predicted a stronger linear association between the two variables.
 

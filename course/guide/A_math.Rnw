@@ -108,7 +108,7 @@ Power functions are useful to rewrite large numbers with the function $f: x \to 
 
 Exponential functions are also useful to handle some phenomena like the exponential growth of the population or labour force in many countries, or the exponential decay of an organism or technology.
 
-<<fun_xpowerk, fig.cap='Top-left: visualization of the power functions $y = x^k$ for $k = [1,2,3]$. In the case where $k = 1$, the growth of $y$ is linear because $y = x$. All three curves are examples of strict monotonicity, i.e. a systematic increase of $y$ when $x$ increases. Top-right: exponential functions. Bottom-left: positive fractional exponentials (decay functions). Bottom-right: comparison of power and exponential progression near $0$.'>>=
+<<exps-and-powers, fig.cap='Top-left: visualization of the power functions $y = x^k$ for $k = [1,2,3]$. In the case where $k = 1$, the growth of $y$ is linear because $y = x$. All three curves are examples of strict monotonicity, i.e. a systematic increase of $y$ when $x$ increases. Top-right: exponential functions. Bottom-left: positive fractional exponentials (decay functions). Bottom-right: comparison of power and exponential progression near $0$.'>>=
 #
 # PLOTS
 #
@@ -168,7 +168,7 @@ Early game consoles were often advertised through their bit ratings, which progr
 
 The natural logarithm of base $e$ is denoted $\ln(x)$ or simply $\log(x)$, such that $\ln(x)=e^x$.
 
-<<fun_explog, fig.height = 3, fig.cap='Left: logarithmic vs. exponential functions. Right: natural logarithm vs. exponential functions.'>>=
+<<exps-and-logs, fig.height = 3, fig.cap='Left: logarithmic vs. exponential functions. Right: natural logarithm vs. exponential functions.'>>=
 #
 # PLOTS
 #

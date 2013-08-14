@@ -18,11 +18,11 @@ In the two regional clusters outlined above, Israel markedly differs from Africa
 
 \begin{figure}[htp]
 	\centering
-	\includegraphics[width=.9\textwidth]{figures/abortion_box.pdf}
+	\includegraphics[width=.9\textwidth]{images/abortion_box.pdf}
 
 	\caption[Regional distributions of support for abortion]{\label{fig:distr}
-	Selected regional distributions of support for abortion.\\
-	\mlines{} \qog{80}}
+	Selected regional distributions of support for abortion. %
+  \qog}
 
 	\begin{verbatim}
 	// graph code: plot regional subsets
@@ -49,24 +49,24 @@ Figures~\ref{fig:model_quadrant_top} and~\ref{fig:model_quadrant_bottom} show ho
 
 \begin{figure}[htp]
 	\centering
-	\includegraphics[width=.6\textwidth]{figures/abortion_sc_means.pdf}\\
-	\includegraphics[width=.6\textwidth]{figures/abortion_sc_variance.pdf}
+	\includegraphics[width=.6\textwidth]{images/abortion_sc_means.pdf}\\
+	\includegraphics[width=.6\textwidth]{images/abortion_sc_variance.pdf}
 
-	\caption[Support for abortion and mass education (1): Variance]{\label{fig:model_quadrant_top}
-	Scatterplots of variance in support for abortion and mass education.\\
-	\mlines{} \qog{63}}
+	\caption[Support for abortion and mass education (1): Variance]{\label{fig:model_quadrant_top}%
+	Scatterplots of variance in support for abortion and mass education. %
+	\qog}
 \end{figure}%
 
 \paragraph{Model} The top graph shows the linear fit of a simple linear regression, which is the straight line representing the linear function $Y = \alpha + \beta X$, on which each data point has a predicted--or fitted--equivalent. The bottom graph shows how much of the variance of $Y$ it successfully predicts (in green), and how much of it is left unpredicted, or unexplained, by the linear regression model (in red).
 
 \begin{figure}[htp]
 	\centering
-	\includegraphics[width=.6\textwidth]{figures/abortion_sc_lfit.pdf}\\
-	\includegraphics[width=.6\textwidth]{figures/abortion_sc_gfit.pdf}
+	\includegraphics[width=.6\textwidth]{images/abortion_sc_lfit.pdf}\\
+	\includegraphics[width=.6\textwidth]{images/abortion_sc_gfit.pdf}
 
-	\caption[Support for abortion and mass education (2): Model]{\label{fig:model_quadrant_bottom}
-	Scatterplots of a linear model predicting support for abortion from mass education.\\
-	\mlines{} \qog{63}}
+	\caption[Support for abortion and mass education (2): Model]{\label{fig:model_quadrant_bottom}%
+	Scatterplots of a linear model predicting support for abortion from mass education. %
+	\qog}
 \end{figure}%
 
 The very last graph that we drew for this model indicates that the linear estimator is predicting roughly half of the variance in $Y$ from the variance of $X$. Furthermore, the variance predicted by the model is distributed evenly over the data, which means that the linear estimator is performing efficiently in the overall data, and not just in selected areas. The unpredicted variance of the model will be analyzed after we explain how the estimator works in practice.
@@ -83,24 +83,25 @@ The very last graph that we drew for this model indicates that the linear estima
   Figure~\ref{fig:hibbs_data} shows how the `voting' and `bread' variables are distributed. Their association shows a strong, positive linear relationship ($\text{Pearson's}~\rho \approx .8$).
 
   \begin{figure}[htp]
-  	\includegraphics[width=.9\textwidth]{figures/hibbs1.pdf}
+  	\includegraphics[width=.9\textwidth]{images/hibbs1.pdf}
 
   	\caption[U.S. presidential elections]{\label{fig:hibbs_data}
-  	U.S. presidential elections and the economy, 1952--2008.\\
-  	Line at mean value $\bar Y$ (dependent variable). \hibbs{15}}
+  	U.S. presidential elections and the economy, 1952--2008. %
+  	Line at mean value $\bar Y$ (dependent variable). %
+    \hibbs}
   \end{figure}%
 
   Figure~\ref{fig:hibbs_fit} shows what a linear estimator of the form $Y = \alpha + \beta X + \epsilon$ does in practice. The mean value of the dependent variable corresponds to a `null estimator' where the effect (or influence) of $X$ on $Y$ is null, i.e. $\beta = 0$ and $Y = \alpha$, which defines a constant function shown as a vertical line. The line that reduces as much as possible the squared deviations between its points and the data is called the \emph{regression line}, or a \emph{linear fit}. Each data point has a corresponding point on that line, called the \emph{fitted value}. The variance that is better predicted by this model than by a null estimator is shown in green, while the residuals of the model, i.e. the fraction of variance unexplained by its variables, are shown in red.\footnote{The graphs should have reminded you of Figure~\ref{fig:model_quadrant_bottom} at p.~\pageref{fig:model_quadrant_bottom}.}
 
   \begin{figure}[htp]
   	\centering
-  	\includegraphics[width=.32\textwidth]{figures/hibbs2a.pdf}
-  	\includegraphics[width=.32\textwidth]{figures/hibbs2b.pdf}
-  	\includegraphics[width=.32\textwidth]{figures/hibbs2c.pdf}
+  	\includegraphics[width=.32\textwidth]{images/hibbs2a.pdf}
+  	\includegraphics[width=.32\textwidth]{images/hibbs2b.pdf}
+  	\includegraphics[width=.32\textwidth]{images/hibbs2c.pdf}
 
-  	\caption[Linear fit of U.S. presidential elections]{\label{fig:hibbs_fit}
-  	Linear fit of U.S. presidential elections.\\
-  	\hibbs{15}}
+  	\caption[Linear fit of U.S. presidential elections]{\label{fig:hibbs_fit}%
+  	Linear fit of U.S. presidential elections. %
+  	\hibbs}
   \end{figure}%
 
   Since the null estimator is a sort of parabola for the actual values of the data, linear regression considers that the most effective model will leave as little residuals as possible, hence minimizing $\epsilon$. Since the estimator is of the form $Y = \alpha + \beta X + \epsilon$, the formula for the residuals is $\epsilon = Y_i - \alpha - \beta X_i$. Squaring the error term suppresses the issue of positive and negative values, and their sum, the \emph{residual sum of squares} (RSS), is thus derived from this formula:
@@ -113,18 +114,18 @@ The very last graph that we drew for this model indicates that the linear estima
   
   \paragraph{Regression output}
 
-  In regression output, the linear estimator for the intercept of the regression line, $\alpha$, is called the \emph{constant}, while the estimated $\beta$ parameters that apply to the independent variable(s) are called regression \emph{coefficients}. Stata performs the parametric estimation of regression coefficients with the \abbr{reg}{regress} command, and can store its results with the \cmmd{predict} command.
+  In regression output, the linear estimator for the intercept of the regression line, $\alpha$, is called the \emph{constant}, while the estimated $\beta$ parameters that apply to the independent variable(s) are called regression \emph{coefficients}. Stata performs the parametric estimation of regression coefficients with the \abbr{reg}{regress} command, and can store its results with the \cmd{predict} command.
 
   \paragraph{Standard output}%
   Table~\ref{tbl:hibbs_yx1_regress} shows the standard output for linear regression in Stata:
 
   \index{Linear regression!Stata output}%
   \begin{table}[htp]
-      \includegraphics[scale=.5]{figures/hibbs_yx1_regress.pdf}
+      \includegraphics[scale=.5]{images/hibbs_yx1_regress.pdf}
 
-    	\caption[Regression output for a simple linear model]{\label{tbl:hibbs_yx1_regress}
-  	Regression output for a simple linear model.\\
-  	\hibbs{15}}
+    	\caption[Regression output for a simple linear model]{\label{tbl:hibbs_yx1_regress}%
+  	Regression output for a simple linear model. %
+  	\hibbs}
   \end{table}%
 
   % The output is organized in three tables. The \emph{analysis of variance} (top-left) shows how much variance was predicted by the model, and how much is left in the residuals. This information is elaborated in the \emph{goodness of fit} (top-right) of the model. Finally, the \emph{coefficient estimates} (bottom) mention the coefficient for variable $X$ and for the constant (\texttt{\_cons}).

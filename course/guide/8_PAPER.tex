@@ -50,11 +50,9 @@ Substantively, your model is about explaining some relationships between social 
 
 Your research question and your statistical model are tied together. 
 
-\paragraph{Measurement validity} When ``measurable data are not accurate representations of their underlying constructs'' (p.~293), models can only provide a conceptual view of what is occurring in the real world.\footnote{\href{http://projecteuclid.org/euclid.ss/1294167961}{\fullcite{Shmueli:2010a}}.}
+\paragraph{Measurement validity} When ``measurable data are not accurate representations of their underlying constructs'' (p.~293), models can only provide a conceptual view of what is occurring in the real world.\footnote{\href{http://projecteuclid.org/euclid.ss/1294167961}{\footcite{Shmueli:2010a}}.}
 
-\paragraph 
-
-\paragraph{Kitchen-sink models}. Achen.  \href{http://polmeth.wustl.edu/mediaDetail.php?docId=1246}{\fullcite{Schrodt:2011a}}. `Type III error' is when your model brings the right answer to the wrong question.%
+\paragraph{Kitchen-sink models}. Achen.  \href{http://polmeth.wustl.edu/mediaDetail.php?docId=1246}{\footcite{Schrodt:2011a}}. `Type III error' is when your model brings the right answer to the wrong question.%
      %
      \footnote{Originally from Peter Kennedy's ``The Ten Commandments of Applied Econometrics,'' cited by Christopher S.~McIntosh at \url{http://courses.cals.uidaho.edu/aers/agecon525/sp2010/Lecture21DoingAppliedEconometrics.pdf}.} %
      %
@@ -132,14 +130,14 @@ esttab using correlates.csv, replace unstack not compress label nonum
 \index{Linear regression!Exporting results}
 \paragraph{Regression estimates}
 
-Table~\ref{tbl:hibbs_yx1_predict} shows how to pass several \cmmd{predict} commands to store some estimates. We store the fitted values under the name \texttt{yhat} in reference to $\hat{Y}$, the estimated values of the dependent variable $Y$: for every $i=1, \ldots, n$ observations, $Y_i = \hat{Y_i} + \epsilon_i$. To store the residuals in the units of the dependent variable, we use \cmmd{predict} with the \coab{resid}{residuals}{predict} option. The standardized residuals, calculated in standard deviations of their own distribution, are stored with the \coab{rsta}{rstandard}{predict} option.
+Table~\ref{tbl:hibbs_yx1_predict} shows how to pass several \cmd{predict} commands to store some estimates. We store the fitted values under the name \texttt{yhat} in reference to $\hat{Y}$, the estimated values of the dependent variable $Y$: for every $i=1, \ldots, n$ observations, $Y_i = \hat{Y_i} + \epsilon_i$. To store the residuals in the units of the dependent variable, we use \cmd{predict} with the \coab{resid}{residuals}{predict} option. The standardized residuals, calculated in standard deviations of their own distribution, are stored with the \coab{rsta}{rstandard}{predict} option.
 
 \begin{table}[htp]
-	\includegraphics[scale=.5]{figures/hibbs_yx1_predict.pdf}
+	\includegraphics[scale=.5]{images/hibbs_yx1_predict.pdf}
 
-	\caption[Storing estimates with \cmmd{predict}]{\label{tbl:hibbs_yx1_predict}
-	Storing estimates with \cmmd{predict}.\\
-	\hibbs{15}}
+	\caption[Storing estimates with \cmd{predict}]{\label{tbl:hibbs_yx1_predict}%
+	Storing estimates with \cmd{predict}. %
+	\hibbs}
 \end{table}%
 
 Prior to interpreting the content of the regression table/output, a good idea is to take care of saving the model results straight away, in simplified format.
