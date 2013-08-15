@@ -1,7 +1,7 @@
 *! SRQM utilities: rewrites of built-in Stata commands, for speed and profit
-*! version 1.2 F. Briatte 2jun2013
 
 *! find: a more useful -lookfor- command
+*! version 1.2 F. Briatte 2jun2013
 cap pr drop find
 program find, rclass
 	qui lookfor `*'
@@ -11,6 +11,7 @@ program find, rclass
 end
 
 *! load: a more useful -use- command
+*! version 1.2 F. Briatte 2jun2013
 cap pr drop load
 program load
 	syntax anything(everything) [if] [in]
@@ -27,6 +28,17 @@ program load
 	loc n = _N
 	di as txt "`d'", "(N = `n')"
 	notes _dta
+end
+
+*! science: a Stata program by Rudolf Carnap, with assistance from the Vienna Circle
+*! this program has been abandoned
+
+cap pr drop science
+program science
+	di as txt _n "  Science is a system of statements"
+	di as txt "  based on direct experience"
+	di as txt "  and controlled by experimental verification."
+	di as txt _n "  -- Rudolf Carnap" _n
 end
 
 // enjoy

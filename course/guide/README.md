@@ -1,5 +1,5 @@
 
-![](https://raw.github.com/briatte/srqm/master/guide/images/0-this-is-stata.jpg)
+![](https://raw.github.com/briatte/srqm/master/course/guide/images/0-this-is-stata.jpg)
 
 Work in progress. The index is `0_build.tex`. The math appendix has an extra `Rnw` source.
 
