@@ -1,0 +1,65 @@
+
+\section{Coursework}
+
+\newthought{This course} follows the standard regulations of Sciences Po, \ie, attendance is compulsory, every class comes with homework and readings, and plagiarism on any element of coursework is strongly sanctioned. Please turn to your academic regulations for more details on any of these topics.%
+
+\subsection{Replication do-file}
+
+Homework for this course has three different components, the first of which is the replication do-file. You will be distributed one do-file every week. We will start replicating the do-file in class, and you will be asked to finish replicating it at home.%
+
+\newthought{Your mission} for next week is to get through \filename{week1.do}. If you have correctly run through the setup described in Section~\ref{sec:course-setup}, the following command will open the do-file for this week:%
+
+\begin{docspec}
+  doedit code/week1.do
+\end{docspec}
+
+Read through the do-file and execute (run) its commands sequentially, after reading the comments that precede each block of code.%
+
+This practice (replicating the course do-files) will show you how to code various things in Stata. The do-file for this week covers basic Stata settings and data exploration commands.%
+
+\newthought{When you are done with your work}, just quit Stata like you would quit any other program. Stata will ask you whether you want to save your changes: \textbf{say no}.%
+
+In this course, you will \hlred{never save any changes to the original datasets}: keep the teaching material intact at all times, so that it can be used throughout the semester.%
+
+More generally, because you will be coding every modification that you make to the course datasets, your analysis will be fully replicable by others from the original datasets.%
+
+\begin{mybox}%
+  \newthought{The nerdy way to quit Stata} is to quit from the command line. A first optional step is to manually close all opened logs:%
+
+	\begin{docspec}
+		* Close all open logs.\\%
+		log close \_all
+  \end{docspec}
+  
+  The \cmd{exit} command with the \opt{clear}{exit} option then erases any data in memory and quits:%
+  
+  \begin{docspec}
+		* Enjoy your day.\\%
+		exit, clear
+	\end{docspec}
+\end{mybox}
+
+\subsection{Textbook readings}
+
+As mentioned in Section~\ref{sec:textbooks}, the course requires reading from two textbooks: we start the course with Urdan's \citetitle{Urdan:2010a} and later turn to Feinstein and Thomas' \citetitle{FeinsteinThomas:2002d}. Skim through both their first chapters and take a look at their tables of contents.%
+
+The handbook readings for this course will give you a more detailed view of statistics than this guide can provide. Make sure that you are up to date with the readings by the end of every week. Assigned readings appear at the beginning of each section of this guide, in the course syllabus, and on the course website.%
+
+\subsection{Research project}
+
+The research project is the graded coursework component that you will work on with a student partner throughout the entire semester. It consists in regularly submitting a draft paper with its replication script, in the form of a Stata do-file.%
+
+The research projects for this course consist in completing the following steps throughout the semester:%
+
+\begin{itemize}
+  \item \textbf{setting up your computer} to follow the course and access the teaching material from the \SRQM folder (Weeks~1--2);%
+  \item \textbf{registering a research topic} with a student partner from your class in the course projects list (Weeks~2--3);%
+  \item \textbf{exploring the course datasets} to find variables related to your research topic and select some variables of interest (Weeks~3--4);%
+  \item \textbf{submitting your first draft} that presents the topic, the data the distributions of the variables under scrutiny (Weeks~4--5);%
+  \item \textbf{revising your draft} and resubmitting it with additional significance tests of associations in the data (Weeks~5--8); and%
+  \item \textbf{submitting your final paper} in which you model your data with linear or logistic regression (Weeks~9--12).%
+\end{itemize}
+
+\newthought{All teaching material} for the research projects, including the projects list, paper templates and example papers, is distributed through Google Documents and administered in class. You might also be sent additional FAQs by email or through the course website before deadlines.%
+
+\newthought{All deadlines are discussed in class.} The deadline for the first draft is generally set to mid-term (Week~6). The deadline for the revised draft is generally set to Week~10. The deadline for the final paper is generally set to one week after the last course session.%

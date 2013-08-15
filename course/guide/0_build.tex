@@ -1,4 +1,4 @@
-\documentclass[a4paper, nofonts, notoc]{tufte-book}
+\documentclass[a4paper, nobib, nofonts, notoc]{tufte-book}
 
 	\title{Stata for Social Scientists}
 	\author{François Briatte}
@@ -7,6 +7,15 @@
 	\input{config/sty} % style
 	\input{config/lex} % word shortcuts
 	\input{config/doc} % documentation index
+  
+  \usepackage{hyphenat}
+  \usepackage[
+    style=mla,
+    autocite=footnote,
+    guessmedium=false,
+    backend=biber
+  ]{biblatex}
+  \addbibresource{references.bib}
 
 \begin{document}
 
@@ -18,6 +27,7 @@
 
 	\newpage%
   \tableofcontents %% r-5
+  \addcontentsline{toc}{chapter}{Contents}%
 	\cleardoublepage
 	
 \mainmatter %% r-7
@@ -61,8 +71,8 @@
   % 
   \input{A_math}
 
-\bibliographystyle{chicago}
-\bibliography{/Users/fr/Documents/Bibliography/REFS-MAIN.bib}
+\printbibliography%
+\addcontentsline{toc}{chapter}{Bibliography}%
 
 \printindex
 

@@ -33,6 +33,7 @@
 
 		\begin{figure}%
 		  \includegraphics[width=\textwidth]{srqm-folder}
+      
 		  \caption{The contents of the \SRQM folder should match %
 			this screenshot from a \OSX setup.}
 		  \label{fig:srqm-folder}
@@ -44,14 +45,18 @@
 		%
 		%	\index{Computers!File and folder paths}%
 	\index{Computers!URLs}%
-	You need to understand the file structure of the course to understand how Stata will locate its files and folders from their \textbf{paths}. The path to the \SRQM folder, for example, will look like this on a \OSX system:\\[1em]%
+	You need to understand the file structure of the course to understand how Stata will locate its files and folders from their \textbf{paths}. The path to the \SRQM folder, for example, might look like this on \OSX:\\[1em]%
 	
 	\begin{docspec}
 		/Users/fr/Documents/Teaching/SRQM
 	\end{docspec}
 	
-	On \OSX, the \texttt{/Users/fr} part of the path might be abbreviated with a \texttt{$\sim$} tilde. On Windows, the path generally starts on the \texttt{C:} drive and is shown with \texttt{\textbackslash} backslashes.%
+	On Windows, the path generally starts on the \texttt{C:} drive and is shown with \texttt{\textbackslash} backslashes:%
 		\footnote{Stata for Windows also understand paths with forward slashes.}%
+    
+	\begin{docspec}
+		C:\textbackslash{}Users\textbackslash{}Ivo\textbackslash{}Desktop\textbackslash{}SRQM
+	\end{docspec}
 	
 	Once a folder has been set as the \emph{working directory}, Stata can locate files and folders from within it by using relative paths. The example below show the relative path of the \texttt{nhis2009.dta} dataset in the \texttt{\data} folder:\\[1em]%
 	
@@ -173,7 +178,7 @@
 			\quad \cmd{lookfor\_all} & search for variables across datasets \\
 		  \quad \cmd{mkcorr} & export correlation tables\\
 		  \quad \cmd{plotbeta} & regression coefficient plots \\
-		  \quad \cmd{qog} & download \QOG data\\
+      \quad \cmd{scheme-burd} & blue-red graph scheme\\
 			\quad \cmd{spineplot} & mosaic plots \\
 		  \quad \cmd{spmap} & maps \\
 		  \quad \cmd{tab\_chi} & residuals for Chi-squared tests\\
@@ -181,21 +186,13 @@
 		  \quad \cmd{wbopendata} & download World Bank data\\
 			\addlinespace
 			\emph{Installed from elsewhere:} & & \\
-			\quad \label{install-gstd01}\cmd{gstd01} & standardize a variable to $0$-$1$; used at p.~\pageref{sec:gtsd01} \\
+			\quad \label{install-gstd01}\cmd{gstd01} & standardize a variable to $0$-$1$; used at p.~\pageref{sec:gtsd01} \\%
 			\quad \label{install-clarify}\cmd{clarify} & simulation \\%; used at p.~\pageref{sec:clarify} \\
-			\quad \cmd{schemes} & graph schemes \\
-			\emph{Installed with the course setup:} & & \\
-			\quad \cmd{repl} & replication utility (WIP) \\
-			\quad \cmd{srqm\_data} & data preparation script \\
-			\quad \cmd{srqm} & course utility \\
-			\quad \cmd{stab} & export summary statistics tables \\
-			\quad \cmd{svyplot} & plots for survey data (WIP)\\
-			\quad \texttt{burd} & graphs schemes \\
+			\quad \cmd{schemes} & more graph schemes \\
 			\bottomrule\\[.5em]
-			(WIP) work-in-progress versions
 			\end{tabular}
 			%
-			\caption{Additional commands installed by the course setup as of writing.}
+			\caption{Additional commands installed by the course setup.}%
 			\label{tbl:additional-commands}
 		\end{table}
   \end{fullwidth}
@@ -220,7 +217,7 @@
 		%
 		%
 		
-	The setup also provides a few commands like \cmd{srqm fetch}, which is used in class to download the latest version of the course material from a temporary course server, \cmd{stab} to produce \underline{s}imple \underline{tab}les of summary statistics and correlation coefficients, and \cmd{svyplot} to produce categorical plots with survey data. %; see detailed instructions at p.~\pageref{cmd:stab}%
+	The setup also provides a few commands like \cmd{srqm\_get}, which is used in class to download the latest version of the course material from a temporary course server, \cmd{stab} to produce \underline{s}imple \underline{tab}les of summary statistics and correlation coefficients, and \cmd{svyplot} to produce categorical plots with survey data. %; see detailed instructions at p.~\pageref{cmd:stab}%
 		%
 		The \README file of the \setup folder includes some technical documentation on all course commands,%
 	  \footnote{Available online at %

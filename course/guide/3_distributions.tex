@@ -8,13 +8,32 @@
 	\index{Distributions}%
 	%
 	%
-  \minitoc
-  %
-  \newpage
-  %
-  %
+  \begin{mybox}
+    %
+    \newthought{This section} deals with data management. It spans over two weeks of class, Week~2 and Week~3. Over that period, you will also be asked to register your research project, as outlined in Section~\ref{ch:paper}.%
+  
+    Because we will be using course datasets and preinstalled Stata commands, you will need to have \textbf{run the course setup} as explained in Section~\ref{sec:course-setup} to follow from here on.%
 
-%% -- a few words
+    %
+    \paragraph{Replication coursework} %
+    Make sure that you have fully replicated \filename{week2.do} and \filename{week3.do} by the end of this section.%
+
+    %
+    \paragraph{Additional readings} %
+    Read Appendix~\ref{ch:data-sources} on the course datasets as well as \cite[ch.~2--3]{Urdan:2010a} and optionally \cite[ch.~2.1--2.4]{FeinsteinThomas:2002d} before next week.%
+  \end{mybox}
+  %
+  %
+  % \minitoc
+  \startcontents[chapters]%
+  \printcontents[chapters]{l}{1}{\setcounter{tocdepth}{2}}%
+	%
+	\newpage
+	%
+	%
+
+
+% -- INTRO --
 
 \input{3A_description}%
 %
@@ -22,3 +41,10 @@
 %
 \input{3C_DRAFT1}%
 %
+% \input{3D_exercises}
+%
+
+% Label outliers: \code{gr hbox x, mark(1, mlab(ccodealp))
+% Get quartiles: \code{xtile qx = x, nq(4)
+
+\stopcontents[chapters]

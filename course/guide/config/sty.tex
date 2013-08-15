@@ -52,10 +52,11 @@
 %
 % table of contents
 %
-\usepackage{minitoc}
-	\dominitoc[n]
-	\nomtcrule
-	\setcounter{secnumdepth}{1}
+% \usepackage{minitoc}
+%   \dominitoc[n]
+%   \nomtcrule
+%   \setcounter{secnumdepth}{1}
+\usepackage{titletoc}
 
 %
 % tables
@@ -100,6 +101,11 @@
 \usepackage{fancyvrb}
 	\fvset{fontsize=\normalsize}
 
+%
+% bordered boxes, by Dario Taraborelli
+%
+\usepackage{0_myboxes}
+
 %%
 % Prints argument within hanging parentheses (i.e., parentheses that take
 % up no horizontal space).  Useful in tabular environments.
@@ -127,7 +133,7 @@
 %
 % citations
 %
-\newcommand{\footcite}[1]{\citeauthor{#1}\cite{#1}}
+% \newcommand{\footcite}[1]{\citeauthor{#1}\cite{#1}}
 
 %
 % blank page

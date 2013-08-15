@@ -8,7 +8,24 @@
 	\index{Datasets}%
 	%
 	%
-	\minitoc
+  \begin{mybox}
+    %
+    \newthought{This section} deals with data management. Because we will be using course datasets and preinstalled Stata commands, you will need to have \textbf{run the course setup} as explained in Section~\ref{sec:course-setup} to follow from here on.%
+
+    %
+    \paragraph{Replication coursework} %
+    Make sure that you have fully replicated \filename{week2.do} and \filename{week3.do} by the end of this section.%
+
+    %
+    \paragraph{Additional readings} %
+    Read the appendix on the course datasets at p.~\pageref{ch:data-sources}, as well as \citeauthor[ch.~2--3]{Urdan:2010a} and optionally \citeauthor[ch.~2.1--2.4]{FeinsteinThomas:2002d}, before next week.%
+    
+  \end{mybox}
+  %
+  %
+  % \minitoc
+  \startcontents[chapters]%
+  \printcontents[chapters]{l}{1}{\setcounter{tocdepth}{2}}%
 	%
 	\newpage
 	%
@@ -109,7 +126,7 @@ Observation & Country & Year & Household ID & Person ID & Variable 1 & ... \\
 \label{tbl:panel-data}
 \end{table}
 
-\newthought{In this course}, we focus on cross-sectional data in which we can assume that the observations are independent from each other. Special methodological requirements apply to panel data and times series, where this requirement is violated by the temporal dependence between recurring observations \cite{BeckKatz:2011e}.
+\newthought{In this course}, we focus on cross-sectional data in which we can assume that the observations are independent from each other. Special methodological requirements apply to panel data and times series, where this requirement is violated by the temporal dependence between recurring observations \cite{BeckKatz:2011e}.%
 
 A selection of datasets is available from the \data folder. It contains three individual-level surveys using large probability samples: the \ess (\ESS), \gss (\GSS) and \wvs (\WVS). For country-level analysis, the recommended source is the \qog (\QOG) Standard Dataset, which collates together variables from the World Bank and the United Nations as well as academic research and various other sources. All datasets are high quality sources with extensive documentation.
 
@@ -143,59 +160,11 @@ Next to the data itself, you should now turn to the data documentation to start 
 %
 \include{2C_advanced}%
 %
+\include{2D_exercises}
+%
 
-  % %
-  % %
-  % \subsection{Exercises}
-  % %
-  % %
-  % 
-  % \begin{frame}{Exercises}
-  % 
-  %   \begin{exampleblock}{Ex~2.1. European Social Survey 2008}
-  %     \begin{enumerate}
-  %       \item Load the data.
-  %       \item Find all variables on discrimination.
-  %       \item How many countries are there in the dataset?
-  %     \end{enumerate}
-  %   \end{exampleblock}
-  %     
-  %   \begin{exampleblock}{Ex.~2.2. Quality of Government 2011}
-  %     \begin{enumerate}
-  %       \item Load the data.
-  %       \item Find all variables on corruption.
-  %       \item Which one has the most observations?
-  %     \end{enumerate}
-  %   \end{exampleblock}
-  % 
-  % \end{frame}
-  % %
-  % %  
-  
-  % %
-  % %
-  % \subsection{Exercises}
-  % %
-  % %
-  % 
-  % \begin{frame}{Exercises}
-  % 
-  %   \begin{exampleblock}{Ex~3.1. European Social Survey 2008}
-  %     \begin{enumerate}
-  %       \item Load the data.
-  %       \item Find the variable measuring left/right political positioning.
-  %       \item How continuous is the measurement?
-  %     \end{enumerate}
-  %   \end{exampleblock}
-  %     
-  %   \begin{exampleblock}{Ex.~3.2. Quality of Government 2011}
-  %     \begin{enumerate}
-  %       \item Load the data.
-  %       \item Find all variables on democracy.
-  %       \item Which measure seems most reliable?
-  %     \end{enumerate}
-  %   \end{exampleblock}
-  % 
-  % \end{frame}
-  % %
-  % %
+%
+% have a nice day
+%
+
+\stopcontents[chapters]

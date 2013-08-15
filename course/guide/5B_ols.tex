@@ -78,7 +78,7 @@ The very last graph that we drew for this model indicates that the linear estima
 
   The relationship between two or more variables can be represented by a \emph{linear fit} of the data. In statistical terms, this result can be obtained by minimizing the \emph{residual sum of squares} (RSS), i.e. the fraction of the variance $\epsilon$ left unexplained by a linear estimator $Y = \alpha + \beta X + \epsilon$, where $Y$ and $X$ are respectively the dependent and independent variable(s), a.k.a the \emph{predictors}.
 
-  To explain how this works, we will use Douglas Hibbs' `Bread and Peace' voting model for the U.S. presidential election, which was recently updated to assess Barack Obama re-election prospects.\footcite{Hibbs:2012a} The model understands the election votes as a function of the economy, measured in effective variation of wealth at the individual level. Under some historical circumstances, the number of deaths in the U.S. military is added as a significant factor. The compound effect of these factors is called `bread and peace' voting and is a form of retrospective voting theory.
+  To explain how this works, we will use Douglas Hibbs' `Bread and Peace' voting model for the U.S. presidential election, which was recently updated to assess Barack Obama re-election prospects.\cite{Hibbs:2012a} The model understands the election votes as a function of the economy, measured in effective variation of wealth at the individual level. Under some historical circumstances, the number of deaths in the U.S. military is added as a significant factor. The compound effect of these factors is called `bread and peace' voting and is a form of retrospective voting theory.
 
   Figure~\ref{fig:hibbs_data} shows how the `voting' and `bread' variables are distributed. Their association shows a strong, positive linear relationship ($\text{Pearson's}~\rho \approx .8$).
 
@@ -130,3 +130,34 @@ The very last graph that we drew for this model indicates that the linear estima
 
   % The output is organized in three tables. The \emph{analysis of variance} (top-left) shows how much variance was predicted by the model, and how much is left in the residuals. This information is elaborated in the \emph{goodness of fit} (top-right) of the model. Finally, the \emph{coefficient estimates} (bottom) mention the coefficient for variable $X$ and for the constant (\texttt{\_cons}).
 
+  % %
+  % %
+  % \subsection{Exercise}
+  % %
+  % %
+  % 
+  % \begin{frame}{Exercise}
+  % 
+  %     \begin{exampleblock}{Ex~8.1. Quality of Government 2011}
+  % 
+  %       \begin{itemize}
+  %         \item Variables: \texttt{d wdi\_gdpc wdi\_mege wdi\_pb2 wdi\_the}
+  %         \item Plot correlations and estimate simple linear regressions.
+  %       \end{itemize}
+  % 
+  %     \end{exampleblock}
+  % 
+  % 
+  %   \begin{exampleblock}{Ex~8.2. Quality of Government 2011}
+  %       
+  %       \begin{itemize}
+  %         \item Variables: \texttt{d wdi\_pb2 gol\_polreg }
+  %         \item Plot correlations and estimate simple linear regressions, using \texttt{wdi\_pb2}
+  %       \end{itemize}
+  %       
+  %   \end{exampleblock}
+  % 
+  % 
+  % \end{frame}
+  % %
+  % %  

@@ -65,7 +65,7 @@ Figure~\ref{fig:grmat} shows another form of correlation matrix, obtained from t
 	Scatterplot matrix produced with \texttt{gr mat}. \qog}
 \end{figure}%
 
-The scatterplot matrix is susceptible to confirm that several independent variables are moderately or strongly correlated, which creates \emph{interactions} within your model. The linear relationships that occur in parallel to your model create an issue called \emph{multicollinearity}, especially if you fall for the common flaw of including tons of independent variables and end up with a `kitchen-sink' model.\footcite{Schrodt:2011a} Section~\ref{sec:interactions} covers this issue in detail.
+The scatterplot matrix is susceptible to confirm that several independent variables are moderately or strongly correlated, which creates \emph{interactions} within your model. The linear relationships that occur in parallel to your model create an issue called \emph{multicollinearity}, especially if you fall for the common flaw of including tons of independent variables and end up with a `kitchen-sink' model.\cite{Schrodt:2011a} Section~\ref{sec:interactions} covers this issue in detail.
 
 At that stage, you should have obtained enough information from correlation analysis to select variables and draft your model. Correlation measures are only bivariate measures of association and can be unreliable, especially on a low number of observations: Pearson's $\rho$, for instance, requires normally distributed data to stay efficient when $N$ falls below approximately 30 observations. However, correlation is appropriate for exploratory purposes, to refine your intuitions and hypotheses before you start estimating regression models.
 
@@ -164,3 +164,27 @@ Last, the correlation coefficients for \texttt{wdi\_pop} and its natural logarit
   Even when the relationship \emph{is} linear and measured as such, you still need to compare your measures of correlation with your theoretical expectations. A correlation coefficient of $\rho = 0.6$ can be empirically insufficient if your model predicted a stronger linear association between the two variables.
 
 \paragraph{Formatting instructions} See Table~\ref{tbl:estout_corr} at p.~\pageref{tbl:estout_corr} for layout instructions and code.
+
+  % \begin{frame}{Exercise}
+  % 
+  %     \begin{exampleblock}{Ex~7.1. Quality of Government 2011}
+  % 
+  %       \begin{itemize}
+  %         \item Variables: \texttt{d wdi\_brd wdi\_mege wdi\_pb2 wdi\_the}
+  %         \item Inspect and plot the correlation matrix.
+  %       \end{itemize}
+  % 
+  %     \end{exampleblock}
+  % 
+  % 
+  %   \begin{exampleblock}{Ex~7.2. Quality of Government 2011}
+  %       
+  %       \begin{itemize}
+  %         \item Variables: \texttt{d wdi\_puhegdp wdi\_the wdi\_prhe}
+  %         \item Visualize and export the correlations and scatterplots.
+  %       \end{itemize}
+  %       
+  %   \end{exampleblock}
+  % 
+  % 
+  % \end{frame}

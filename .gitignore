@@ -17,6 +17,7 @@ course/guide-old
 course/guide/*
 !course/guide/config
 !course/guide/images
+!course/guide/*.bib
 !course/guide/*.cls
 !course/guide/*.def
 !course/guide/*.md
