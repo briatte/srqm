@@ -1,5 +1,5 @@
 
-![](https://raw.github.com/briatte/srqm/master/guide/img/0-this-is-stata.jpg)
+![](https://raw.github.com/briatte/srqm/master/guide/images/0-this-is-stata.jpg)
 
 Work in progress. The index is `0_build.tex`. The math appendix has an extra `Rnw` source.
 
@@ -7,7 +7,7 @@ See the [wiki](https://github.com/briatte/srqm/wiki/stata-guide) for the outline
 
 # HISTORY
 
-* `[2013-08-15] 0.988` Added exercises, boxed environments, BibLaTeX support.
+* `[2013-08-15] 0.988` Added boxed environments and BibLaTeX support.
 * `[2013-08-13] 0.987` Detailed chapter structure; improved template.
 * `[2013-01-09] 0.986` Reworked chapter structure.
 * `[2012-10-18] 0.985` Pushed into [Tufte-LaTeX](https://code.google.com/p/tufte-latex/) template.
