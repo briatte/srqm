@@ -131,7 +131,8 @@ if inlist("`1'", "all", "wvs2000") {
 	// No trim: missing values are not properly encoded.
 	// Also, some items are asked only in a few countries (e.g. Islam, neighbours).
 
-	// Capitalize country names.
+	// Capitalize country names
+  // Thanks to William A. Huber: http://stackoverflow.com/q/12591056/635806
 	local sLabelName: value l v2
 	di "`sLabelName'"
 	qui levelsof v2, local(xValues)

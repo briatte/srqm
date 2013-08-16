@@ -9,10 +9,7 @@
 	%
 	%
 
-This appendix lists the data sources for the course and briefly documents how they were assembled. Additional details appear in the the \README file of the \data folder.%
-  \footnote{Available online at \url{https://github.com/briatte/srqm/blob/master/data/README.md}}
-
-All course datasets are provided in Stata 9/10 \ext{.dta} format on an ``as-is'' basis: please use them for teaching purposes only, and do not redistribute them. Modifications to the original files are coded in the \texttt{srqm\_data.ado} ado-file of the \setup folder.%
+This appendix lists the data sources for the course and briefly documents how they were assembled. All course datasets are provided in Stata 9/10 \ext{.dta} format on an ``as-is'' basis: please use them for teaching purposes only, and do not redistribute them. Modifications to the original files are coded in the \texttt{srqm\_data.ado} ado-file of the \setup folder.%
   \footnote{\url{https://github.com/briatte/srqm/blob/master/setup/srqm\_data.ado}}
 
 \bigskip
@@ -48,18 +45,22 @@ The \ESS dataset should be used with the following survey weights:
 
 \begin{docspec}
 	use data/ess2008, clear\\
-	svyset [aw = dweight]
+	svyset [pw = dweight]
 \end{docspec}
 
-See the \ESS weighting guide, bundled with the data, for instructions.
+See the \ESS weighting guide for details.%
+  \footnote{\url{http://ess.nsd.uib.no/ess/doc/weighting.pdf}}
 
-The dataset was created by subsetting the \ESS cumulative dataset to Round~4, and then by removing variables with no observations. The codebook was downloaded from the \ESS data website.%
+The dataset was downloaded from the ESS data server,%
+  \footnote{\url{http://nesstar.ess.nsd.uib.no/}} %
+  and the codebook was downloaded from the \ESS data website.%
   \footnote{\url{http://ess.nsd.uib.no/}} %
-  A few variables from the \ESS~4 rotating module on welfare attitudes are missing. More recent data is also available up to Round~5 (2010).%
+  Check the cumulative dataset for other ESS survey waves.%
+  \footnote{\url{http://ess.nsd.uib.no/downloadwizard/}}
 
-\section*{\gss (\texttt{gss2010})}
+\section*{\gss (\texttt{gss0012})}
 
-The \texttt{gss2010} dataset holds data from the U.S. \gss (\GSS) for years 2000-2010.
+The \texttt{gss0012} dataset holds data from the U.S. \gss (\GSS) for years 2000-2012.
 
 \begin{quote}
 	The GSS contains a standard 'core' of demographic, behavioral, and attitudinal questions, plus topics of special interest. Many of the core questions have remained unchanged since 1972 to facilitate time-trend studies as well as replication of earlier findings.%
@@ -70,13 +71,19 @@ The \texttt{gss2010} dataset holds data from the U.S. \gss (\GSS) for years 2000
 The \GSS dataset should be used with the following survey weights:
 
 \begin{docspec}
-	use data/gss2010, clear\\
-	svyset vpsu [pw = wtssall], strata(vstrata)
+	use data/gss0012, clear\\
+	svyset vpsu [pw = wtssall], strata(vstrat)
 \end{docspec}
 
-See Appendix~A of the \GSS codebook and the online technical paper ``Calculating Design-Corrected Standard Errors for the General Social Survey, 1988-2010'' by Steven Pedlow for other weighting options. Both documents are bundled with the data extract, along with a mock codebook.%
+See Appendix~A of the \GSS codebook%
+   \footnote{http://publicdata.norc.org:41000/gss/documents//BOOK/GSS_Codebook_AppendixA.pdf} %
+   and the online technical paper ``Calculating Design-Corrected Standard Errors for the General Social Survey, 1988-2010''%
+   \footnote{http://publicdata.norc.org:41000/gss/documents//OTHR/GSS%20design%20variables.pdf} %
+   by Steven Pedlow for details, especially if you plan to use older survey years for which the sampling and weighting design is different.%
 
-The dataset is a trimmed-down version of the \GSS 1972-2010 cumulative cross-sectional dataset, Release~2, Feb.~2012. The data preparation code will download a fresh copy of it (caution, the filesize is above 350~MB).%
+The data are extracted from the \GSS 1972-2012 cumulative cross-sectional dataset (Release 1, March 2013).%
+  \footnote{\url{http://www3.norc.org/GSS+Website/Download/STATA+v8.0+Format/}} %
+  The data preparation code can download a fresh copy of it (caution, the filesize is above 350~MB).%
 
 \section*{\nhis (\texttt{nhis2009})}
 
@@ -97,11 +104,11 @@ The \NHIS dataset should be used with the following survey weights:
 
 See the IHIS/NHIS user notes on variance estimation for more details.\footnote{\url{http://www.ihis.us/ihis/userNotes_variance.shtml}}
 
-The data come from the Integrated Health Interview Series website.\footnote{\url{http://www.ihis.us/}} A mock codebook is bundled with the data extract.
+The data come from the Integrated Health Interview Series website.\footnote{\url{http://www.ihis.us/}}
 
-\section*{\qog (\texttt{qog2011})}
+\section*{\qog (\texttt{qog2013})}
 
-The \texttt{qog2011} dataset holds the \qog (\QOG) Standard dataset in its most recent revision of May~15, 2013.
+The \texttt{qog2013} dataset holds the \qog (\QOG) Standard cross-sectional dataset in its most recent revision of May~15, 2013. The data are country-level aggregates centered around 2009 $\pm$ 3 years.%
 
 \begin{quote}
 	Our research addresses the questions of how to create and maintain high quality government institutions and how the quality of such institutions influences public policy in a broader sense.%
@@ -109,7 +116,8 @@ The \texttt{qog2011} dataset holds the \qog (\QOG) Standard dataset in its most 
   \footnote{\url{http://www.qog.pol.gu.se/}}%
 \end{quote}
 
-The data and codebook come from the QOG Standard download page. A simpler version of the dataset, ``QOG Basic'', is also available for students who prefer to work on a more accessible and less extensive version of the data.
+The data and codebook come from the QOG Standard download page.%
+   \footnote{\url{http://www.qog.pol.gu.se/data/qogstandarddataset/}}
 
 \section*{\wvs (\texttt{wvs2000})}
 
@@ -125,12 +133,16 @@ The \WVS dataset should be used with the following survey weights:
 
 \begin{docspec}
 	use data/wvs2000, clear\\
-	svyset [aw = s017]
+	svyset [pw = s017]
 \end{docspec}
 
-See the WVS weighting guide for other options.\footnote{\url{http://www.jdsurvey.net/jds/jdsurveyActualidad.jsp?Idioma=I&SeccionTexto=0405}}
+See the WVS weighting guide for details.%
+  \footnote{\url{http://www.jdsurvey.net/jds/jdsurveyActualidad.jsp?Idioma=I&SeccionTexto=0405}}
 
-The data come from the \WVS 2000 official file found at the \WVS website.\footnote{\url{http://www.wvsevsdb.com/wvs/WVSData.jsp}} This version had encoding issues that are used as examples in class for recode commands. The cumulative dataset has different variable names and proper variable encoding. More recent data is also available up to Wave 6 (2010-2013). A mock codebook is bundled with the data.
+The data come from the official file found at the \WVS website.%
+   \footnote{\url{http://www.wvsevsdb.com/}} %
+   This version has encoding issues that are used as examples to teach recoding. The cumulative dataset has different variable names and proper variable encoding. More recent data is also currently getting assembled in Wave~6 (2010-2013) of the \wvs.%
+  \footnote{\url{http://www.wvs-online.com/}}
 
 \section*{Additional data sources}
 
