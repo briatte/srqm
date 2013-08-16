@@ -7,20 +7,13 @@
 
 // --- SETTINGS ----------------------------------------------------------------
 
-if c(os) != "Unix"
-  cap set update_query off
-if c(version) < 12
-  cap set mem 500m, perm
-if c(more) == "on"
-  cap qui set more off, perm
-if c(scrollbufsize) < 500000
-  cap set scrollbufsize 500000
-if c(maxvar) < 7500
-  cap set maxvar 7500, perm
-if c(varabbrev) == "on"
-  cap set varabbrev off, perm
-if c(scheme) != "burd"
-  cap set scheme burd, perm
+if c(os) != "Unix" cap set update_query off
+if c(version) < 12 cap set mem 500m, perm
+if c(more) == "on" cap qui set more off, perm
+if c(scrollbufsize) < 500000 cap set scrollbufsize 500000
+if c(maxvar) < 7500 cap set maxvar 7500, perm
+if c(varabbrev) == "on" cap set varabbrev off, perm
+if c(scheme) != "burd" cap set scheme burd, perm
 
 // --- LOGFILE -----------------------------------------------------------------
 
@@ -43,7 +36,7 @@ cap noi srqm_scan
 if _rc != 0 exit -1
 
 // check packages
-cap noi srqm_pkgs
+cap noi srqm_pkgs, quiet
 
 // check link
 cap noi srqm_link

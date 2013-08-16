@@ -1,17 +1,10 @@
-# SRQM: Data
-
-This folder contains the teaching datasets required to follow the [Statistical Reasoning and Quantitative Methods][srqm] (SRQM) course taught by François Briatte and Ivaylo Petev.
+This folder is part of the [Statistical Reasoning and Quantitative Methods][srqm] (SRQM) course taught by François Briatte and Ivaylo Petev.
 
 [srqm]: http://f.briatte.org/teaching/quanti/
 
-All datasets are provided in the Stata 9/10 `dta` format on an "as-is" basis. Please use the datasets for teaching purposes only, and do not redistribute them.
-
-The teaching datasets were prepared with a [setup script][srqm-data] that runs as described in the [README][srqm-setup] file of the `setup` folder. Each dataset is bundled into a ZIP archive with its codebook and a list of available variables.
+Each dataset in this folder is bundled as a ZIP archive with its codebook and with the list of variables made available in the course version. All datasets are provided on an "as-is" basis: please use them for teaching purposes only. The data preparation script is documented in the [`setup` folder][srqm-setup].
 
 [srqm-setup]: https://github.com/briatte/srqm/blob/master/setup/README.md
-[srqm-data]: https://github.com/briatte/srqm/blob/master/setup/srqm_data.ado
-
-### Data sources:
 
 | Filename       | Data                                  | Year(s)        |
 |:---------------|:--------------------------------------|:---------------|
@@ -20,16 +13,6 @@ The teaching datasets were prepared with a [setup script][srqm-data] that runs a
 | `nhis2009`     | National Health Interview Survey      | 2009           |
 | `qog2013`      | Quality of Government                 | 2009 ± 3 years |
 | `wvs2000`      | World Values Survey                   | Wave 4 (2000)  |
-
-### Coursework:
-
-Open each dataset with the `use` commands provided in this document. These require that the `SRQM` folder has been set as the working directory, as explained in its [README][srqm-readme] file. Then use the `lookfor` and `lookfor_all` commands to explore the variables. Finally, select one dataset and make a selection of variables relevant to your research project.
-
-Bibliographic information and additional documentation is available from the online data sources. Once you have identified a dataset, retrieve that information to describe its sampling and weighting design. Include a full reference to the data in your paper, including author names, release year, version number and URL to the data website.
-
-Indications on weighting the data with the `svyset` command are provided for point estimation. It is unlikely that you will need to do that yourself, but you should include the weighting scheme in your do-file for reference. Place it right after opening the data with the `use` command mentioned above.
-
-Every single minute that you spend learning about your data by reading the documentation and exploring the variables is a minute well spent. It takes several hours to become sufficiently familiar with any complex data source. Finding and skim-reading a few papers that use the data is good practice.
 
 * * *
 
@@ -177,9 +160,3 @@ The data come from the [WVS 2000 official file][wvs-file] found at the [WVS webs
 Thanks to William A. Huber for the [code][so] that capitalizes country names.
 
 [so]: http://stackoverflow.com/q/12591056/635806
-
-* * *
-
-Additional data sources are listed on the [course wiki][srqm-wiki]. Many of the sources are less suitable for cross-national than for longitudinal or pooled time series analysis. It is _very highly_ recommended to stick with the teaching datasets if you want to avoid bleeding out hours of data preparation at the very beginning of the course (experience speaks).
-
-[srqm-wiki]: https://github.com/briatte/srqm/wiki/data

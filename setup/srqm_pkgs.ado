@@ -1,19 +1,21 @@
 *! srqm_pkgs: install selected packages
 *! use option 'force' to force the installation
 *! use option 'clean' to uninstall the packages
-cap pr drop srqm_packages
-program srqm_packages
-  syntax [, force clean]
+*! use option 'quiet' to run silently
+cap pr drop srqm_pkgs
+program srqm_pkgs
+  syntax [, force clean quiet]
 
-local srqm_pkgs = "lookfor_all fre spineplot tab_chi mkcorr tabout estout leanout plotbeta kountry wbopendata spmap scheme-burd schemes _gstd01 clarify"
+global srqm_packages = "lookfor_all fre spineplot tab_chi mkcorr tabout estout leanout plotbeta kountry wbopendata spmap scheme-burd schemes _gstd01 clarify"
+local force = ("`force'" != "")
 
 * catplot ciplot distplot log2do2 outreg2 revrs
 * tufte lean2
 * qog qogbook
 
 if "`clean'" != "" {
-  foreach t of local srqm_pkgs {
-      cap noi ssc uninstall `t'
+  foreach t of global srqm_packages {
+      cap noi ssc uninstall "`t'"
       if !_rc di as txt "uninstalled", as inp "`t'"
   }
   cap ssc uninstall clarify
@@ -23,8 +25,8 @@ if "`clean'" != "" {
 }
 else {
   local i = 0
-  foreach t of local srqm_pkgs {
-      local i = `i'++
+  foreach t of global srqm_packages {
+      local i = `i++'
 
       cap which `t'
 
@@ -37,7 +39,7 @@ else {
       // scheme-burd
       if "`t'"=="scheme-burd" cap which scheme-burd.scheme
 
-      if _rc==111 | "`force'" != "" {
+      if _rc==111 | `force' {
 
           // note: keep special cases at end of local list for the 699 hack to work with them
 
@@ -52,18 +54,18 @@ else {
           }
           else if "`t'"=="clarify" {
               cap which simqi
-              if (_rc==111 | `forced') cap noi net install clarify, from("http://gking.harvard.edu/clarify")
+              if (_rc==111 | `force') cap noi net install clarify, from("http://gking.harvard.edu/clarify")
           }
           else if "`t'"=="_gstd01" {
               cap which _gstd01
-              if (_rc==111 | `forced') cap noi net install _gstd01, from("http://web.missouri.edu/~kolenikovs/stata")
+              if (_rc==111 | `force') cap noi net install _gstd01, from("http://web.missouri.edu/~kolenikovs/stata")
           }
           else if "`t'"=="schemes" {
               cap which scheme-bw.scheme
-              if (_rc==111 | `forced') cap noi net install schemes, from("http://leuven.economists.nl/stata/")
+              if (_rc==111 | `force') cap noi net install schemes, from("http://leuven.economists.nl/stata/")
           }
           else {
-              cap noi ssc inst `t', replace
+              cap noi ssc inst "`t'", replace
   						if _rc==631 di as err "Could not connect to the SSC archive to look for package " as inp "`1'"
   						if _rc==601 di as err "Could not find package " as inp "`1'" as err " at the SSC archive"
           }
@@ -95,7 +97,7 @@ else {
           }
       }
       else {
-       di as inp "`t'", as txt "is already installed"
+       if "`quiet'" == "" di as inp "`t'", as txt "is already installed"
       }
       if _rc di as err "Error: installation of `t' failed with error code", _rc
   }

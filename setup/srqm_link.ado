@@ -5,24 +5,16 @@ cap pr drop srqm_link
 program srqm_link
   syntax [, force clean]
 
-local srqm_pkgs = "lookfor_all fre spineplot tab_chi mkcorr tabout estout leanout plotbeta kountry wbopendata spmap scheme-burd schemes _gstd01 clarify"
-
-* catplot ciplot distplot log2do2 outreg2 revrs
-* tufte lean2
-* qog qogbook
-
+cap confirm file "`c(sysdir_stata)'profile.do"
 if "`clean'" != "" {
-
   cap rm "`c(sysdir_stata)'profile.do"
   if _rc ==0 di as txt _n "Successfully removed", "`c(sysdir_stata)'profile.do." _n "Farewell, enjoy life and Stata."
   if _rc !=0 di as err _n "Nothing to remove at", "`c(sysdir_stata)'profile.do." _n "You have already left. Be well."
   cd "`c(sysdir_stata)'" // to avoid profile.do re-setting up on Macs
-
 }
-else if "$srqm_wd" != "`c(pwd)'" | "`force'" != "" {
-
+else if _rc | "$srqm_wd" != "`c(pwd)'" | "`force'" != "" {
   tempname fh
-  di as txt "Writing SRQM link to the Stata application folder:" _n as res "`c(sysdir_stata)'profile.do"
+  di as txt _n "Linking from the Stata application folder:" _n as res "`c(sysdir_stata)'profile.do"
   cap file open fh using "`c(sysdir_stata)'profile.do", write replace
   if _rc == 0 {
       file write fh _n "*! This do-file automatically sets the working directory to the SRQM folder:" _n
@@ -51,11 +43,11 @@ else if "$srqm_wd" != "`c(pwd)'" | "`force'" != "" {
       file write fh _tab "}" _n
       file write fh "}" _n
       file close fh
-      di as txt _n "Setting the redirect link to the current working directory:" _n as res c(pwd)
+      di as txt _n "Linking to the current working directory:" _n as res c(pwd)
       di as inp ///
-          _n "IMPORTANT: do not modify this folder path!", as txt "If you move or rename its elements," ///
+          _n "IMPORTANT: make sure that the SRQM folder stays available at this location, or" ///
           _n "Stata will not find the course material when you open it, and you will have to" ///
-          _n "setup your computer again (see the README file of the SRQM folder for help)."
+          _n "setup your computer again."
   }
   else {
       //
@@ -70,7 +62,6 @@ else if "$srqm_wd" != "`c(pwd)'" | "`force'" != "" {
           _n "at the beginning of every course session. All apologies to Windows users."
       exit 0
   }
-
 }
 
 end

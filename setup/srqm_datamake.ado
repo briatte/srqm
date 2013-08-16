@@ -1,7 +1,7 @@
 *! SRQM data preparation utility
 *! (labels, zips and lists variables of courses datasets)
 cap pr drop srqm_datamake
-pr srqm_dataprep
+pr srqm_datamake
 	syntax, label(string asis) filename(name)
 	// Teaching annotation.
 	notes drop _dta

@@ -2,7 +2,7 @@
 *! last upgrades: QOG 2013, GSS 2012
 cap pr drop srqm_data
 pr srqm_data
-  syntax anything [using/] [, data(string asis)]
+  syntax anything [using/] [, data(string)]
 
 tokenize `anything'
 
@@ -16,9 +16,9 @@ if "`using'" != "" {
   log using "$srqm_wd/setup/srqm_data.log", name(srqm_data) replace
 }
 
-if "`data" == "" {
-  // personal default
-  local src "~/Documents/Research/Data"
+if "`data'" == "" {
+  local src = "~/Documents/Data"
+  di as txt "Using personal default for local raw files:", "`src'"
 }
 
 di as inp _n "Updating `1' teaching dataset(s)..." _n

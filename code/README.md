@@ -1,5 +1,3 @@
-# SRQM: Code
-
 This folder contains the Stata replication code required to follow the [Statistical Reasoning and Quantitative Methods][srqm] (SRQM) course taught by François Briatte and Ivaylo Petev.
 
 [srqm]: http://f.briatte.org/teaching/quanti/

@@ -41,13 +41,11 @@ program wipe
   if "`ext'" == "" loc ext = "log"
   if "`pwd'" != "" {
     loc expr = "`pre'*.`ext'"
-    di as err "`pre'*.`ext'"
     cap !rm `expr'
   }
   while "`*'" != "" {
     loc dir = "`1'"
     loc expr = "`dir'/`pre'*.`ext'"
-    di as inp "`dir'/`pre'*.`ext'"
     cap !rm `expr'
     macro shift
   }
