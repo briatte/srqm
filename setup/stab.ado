@@ -1,6 +1,6 @@
 *! stab: simple tables of summary statistics
+*! type -stab_demo- for examples with NHANES data
 *! 0.2 F. Briatte 3jun2013
-
 cap pr drop stab
 pr stab
   syntax [using/] [if] [in] [, Mean(varlist) Prop(varlist) replace]
@@ -9,7 +9,7 @@ pr stab
     di as txt "... is a wrapper for the", as inp "estout", ///
       as txt "package that produces plain text tables of summary", _n ///
       "statistics; type", as inp "stab_demo", ///
-      as txt "for an example with NHANES data, using this syntax:", _n _n _skip(4) ///
+      as txt "for an example with NHANES data, which uses this syntax:", _n _n _skip(4) ///
       "stab using stab_demo.txt, m(age height weight bmi) p(sex race) replace"
     exit 0
   }
@@ -61,6 +61,11 @@ pr stab
   file close `fh'
 
   di as txt _n "N = `n'`m'" _n "File: {browse `out'}"
+end
+
+cap pr drop stab_hello
+pr stab_hello
+di "hello subworld"
 end
 
 // enjoy

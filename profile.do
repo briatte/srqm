@@ -5,9 +5,24 @@
 
 *! http://f.briatte.org/teaching/quanti/
 
-cap qui set more off, perm
+// --- SETTINGS ----------------------------------------------------------------
 
-// --- LOG ---------------------------------------------------------------------
+if c(os) != "Unix"
+  cap set update_query off
+if c(version) < 12
+  cap set mem 500m, perm
+if c(more) == "on"
+  cap qui set more off, perm
+if c(scrollbufsize) < 500000
+  cap set scrollbufsize 500000
+if c(maxvar) < 7500
+  cap set maxvar 7500, perm
+if c(varabbrev) == "on"
+  cap set varabbrev off, perm
+if c(scheme) != "burd"
+  cap set scheme burd, perm
+
+// --- LOGFILE -----------------------------------------------------------------
 
 cap log using backup.log, name(backlog) replace
 if _rc==604 {
@@ -21,30 +36,17 @@ else if _rc {
 
 // load utilities
 cap adopath + "`c(pwd)'/setup"
-cap run setup/srqm_utils.ado
+cap run setup/utils.ado
 
-// course folder
-cap noi srqm check folder
+// check folder
+cap noi srqm_scan
 if _rc != 0 exit -1
 
-// additional commands
-cap noi srqm setup packages
+// check packages
+cap noi srqm_pkgs
 
-// system settings
-if c(os) != "Unix" cap loc upd = c(update_query)
-if "`upd'" == "on" | c(more) == "on" {
-	noi di as txt _n ///
-		"(It looks like we need to adjust some Stata settings.)"
-	//cap noi srqm setup
-}
-
-// link
-
-if "$srqm_wd" != "`c(pwd)'" {
-	noi di as txt _n ///
-		"(It looks like we need to (re)locate the SRQM folder.)"
-	cap noi srqm setup folder
-}
+// check link
+cap noi srqm_link
 
 // --- HELLO -------------------------------------------------------------------
 

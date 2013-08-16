@@ -1,3 +1,4 @@
+*! a demo of the -stab- command
 cap pr drop stab_demo
 pr stab_demo
     webuse nhanes2, clear

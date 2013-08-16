@@ -1,7 +1,6 @@
 *! sbar: simple bar plots with color gradients
-*! type sbar_demo for examples with NHANES data
+*! type -sbar_demo- for examples with NHANES data
 *! 0.3 F. Briatte 1jun2013
-
 cap pr drop sbar
 program sbar
 	syntax varlist(max=3) [if] [in] [aweight fweight iweight/] ///

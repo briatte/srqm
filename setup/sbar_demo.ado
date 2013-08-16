@@ -1,7 +1,4 @@
-*! sbar: simple bar plots with color gradients
-*! type sbar_demo for examples with NHANES data
-*! 0.3 F. Briatte 1jun2013
-
+*! a demo of the -sbar- command
 cap pr drop sbar_demo
 program sbar_demo
 

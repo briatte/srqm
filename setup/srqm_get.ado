@@ -1,6 +1,5 @@
 *! srqm_get: download SRQM course material (do-files, programs, slides)
-*! might not work for Windows users running without admin privileges
-
+*! type -srqm_get draft.do- for a demo
 cap pr drop srqm_get
 program srqm_get
 	tokenize "`*'"
