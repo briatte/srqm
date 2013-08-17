@@ -24,4 +24,6 @@ The course requires a working copy of [Stata][stata]. Instructions to set up you
 [wiki-code]: https://github.com/briatte/srqm/wiki/code
 [wiki-utils]: https://github.com/briatte/srqm/wiki/course-utilities
 
-Additional material is distributed through Google Documents. Welcome to the course, and see you soon!
+Additional material is distributed in class through Google Documents.
+
+Welcome to the course, and see you soon!
