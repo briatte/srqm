@@ -5,12 +5,14 @@ program srqm_get
 	tokenize "`*'"
 	
 	cap cd "$srqm_wd"
+  if _rc {
+    di as err "Error: cannot find SRQM folder"
+    exit -1
+  }
 	
 	cap qui net
 	if _rc == 631 {
-	    di as err ///
-	    	"You do not seem to be online." _n ///
-	    	"Please fix your Internet connection."
+	    di as err "Error: no Internet connection"
 	    exit 631
 	}
 	
@@ -36,7 +38,7 @@ program srqm_get
 		local pf "`bf'/`1'"
 		
 		if "`bf'" == "" {
-		    di as err "Wrong filename (should end with .ado, .do or .pdf)."
+		    di as err "Error: wrong filename (should end with .ado, .do or .pdf)"
 		    exit 198
 		}
 		else {
@@ -44,7 +46,7 @@ program srqm_get
 		    cap qui copy "`pf'" "`pb'", public replace
 		
 		    cap qui erase "`pf'" // instead of rm for Windows compatibility
-		    cap qui copy "http://briatte.org/srqm-updates/`1'" "`pf'", public replace
+		    cap qui copy "http://briatte.org/srqm/`1'" "`pf'", public replace
 		
 		    if !_rc {
 		    	di as txt "Successfully downloaded."
@@ -53,7 +55,7 @@ program srqm_get
 		    	if "`be'" == "do" di as inp _n "{stata doedit `pf':doedit `pf'}"
 		    }
 		    else {
-		    	di as err "No file updated: error", _rc "." _n ///
+		    	di as err "Error:", _rc, " (no file updated)" _n ///
 		    		"Check your syntax and connection."
 		    	cap qui copy "`pb'" "`pf'", public replace
 		    	if !_rc {
@@ -61,7 +63,7 @@ program srqm_get
 		    		di as txt "- `bk'.`be' restored to `1'"
 		    	}
 		    	else {
-		    		di as err "No backup restored: error", _rc "." 
+		    		di as err "Error:", _rc, "(no backup restored)" 
 		    	}
 		    }
 		}

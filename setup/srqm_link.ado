@@ -22,12 +22,11 @@ else if _rc | "$srqm_wd" != "`c(pwd)'" | "`force'" != "" {
       file write fh "global srqm_wd " _char(34) "`c(pwd)'" _char(34) _n
       file write fh "cap confirm file " _char(34) _char(36) "srqm_wd`c(dirsep)'setup`c(dirsep)'srqm.ado" _char(34) _n _n
       file write fh "if _rc { // cannot load utilities" _n _tab "noi di as err _n ///" _n
-      file write fh _tab _tab _char(34) "ERROR: The SRQM folder is no longer available at its former location:" _char(34) " as txt _n ///" _n
+      file write fh _tab _tab _char(34) "Error: The SRQM folder is no longer available at its former location:" _char(34) " as txt _n ///" _n
       file write fh _tab _tab _char(34) _char(36) "srqm_wd" _char(34) " _n(2) ///" _n
       file write fh _tab _tab _char(34) "This error occurs when you rename or relocate the SRQM folder." _char(34) " _n ///" _n
       file write fh _tab _tab _char(34) "Use the 'File : Change Working Directory...' menu to manually" _char(34) " _n ///" _n
-      file write fh _tab _tab _char(34) "select the SRQM folder, then execute the {stata run profile} command." _char(34) " _n ///" _n
-      file write fh _tab _tab _char(34) "For more help, see the README file of the SRQM folder." _char(34) _n
+      file write fh _tab _tab _char(34) "select the SRQM folder, then execute the {stata run profile} command." _char(34) _n
       file write fh _tab "exit -1" _n "}" _n "else {" _n
       file write fh _tab "cap cd " _char(34) _char(36) "srqm_wd" _char(34) _n _n
       file write fh _tab "cap noi run profile" _n
@@ -37,8 +36,7 @@ else if _rc | "$srqm_wd" != "`c(pwd)'" | "`force'" != "" {
       file write fh _tab _tab _tab _char(34) "Some essential course material is not available in your working directory." _char(34) " _n(2) ///" _n
       file write fh _tab _tab _tab _char(34) "This error occurs when you modify the folders or files of the SRQM folder." _char(34) " _n ///" _n
       file write fh _tab _tab _tab _char(34) "Restore the SRQM folder from a backup copy or from http://f.briatte.org/srqm" _char(34) " _n ///" _n
-      file write fh _tab _tab _tab _char(34) "Then set it as the working directory and execute the {stata run profile} command." _char(34) " _n ///" _n
-      file write fh _tab _tab _tab _char(34) "For further help, see the README file of the SRQM folder." _char(34) _n
+      file write fh _tab _tab _tab _char(34) "Then set it as the working directory and execute the {stata run profile} command." _char(34) _n
       file write fh _tab _tab "exit -1" _n
       file write fh _tab "}" _n
       file write fh "}" _n
@@ -55,7 +53,7 @@ else if _rc | "$srqm_wd" != "`c(pwd)'" | "`force'" != "" {
       // the application and run it as admin for this bit to work.
       //
       di as err ///
-          _n "ERROR: The Stata application folder is not writable on your system." as txt _n(2) ///
+          _n "Error: the Stata application folder is not writable on your system." as txt _n(2) ///
           _n "Try again while running Stata with admin privileges. If the problem persists," ///
           _n "you will have to manually select the SRQM folder from the 'File : Change" ///
           _n "Working Directory...' menu and then execute the {stata run profile} command."

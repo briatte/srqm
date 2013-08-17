@@ -84,8 +84,8 @@ else {
           }
           else {
               cap noi ssc inst "`t'", replace
-  						if _rc==631 di as err "Could not connect to the SSC archive to look for package " as inp "`1'"
-  						if _rc==601 di as err "Could not find package " as inp "`1'" as err " at the SSC archive"
+  						if _rc==631 di as err "Error 631: could not connect to the SSC archive to look for package " as inp "`1'"
+  						if _rc==601 di as err "Error 601: could not find package " as inp "`1'" as err " at the SSC archive"
           }
           if _rc==699 {
 
@@ -101,7 +101,7 @@ else {
               qui cd "`c(sysdir_plus)'"
               qui cd ..
               cap mkdir personal
-              if !_rc noi di as txt "Could not install to the PLUS folder:" ///
+              if !_rc noi di as err "Warning: could not install to the PLUS folder:" ///
                   _n "`c(sysdir_plus)'" _n ///
                   "Installing to the PERSONAL folder instead:" _n ///
                   "`c(pwd)'/personal"

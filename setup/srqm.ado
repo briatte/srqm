@@ -10,5 +10,9 @@ program srqm
   di as txt "Working directory:", as res c(pwd)
   di as txt "Stata directories:"
   adopath
-
+  di as txt "Teaching material:"
+  di as txt _s(2) "folders: ", as res "$srqm_folders"
+  di as txt _s(2) "datasets:", as res "$srqm_datasets"
+  qui tokenize "$srqm_packages"
+  di as txt _s(2) "packages:", as res "`1',", "`2',", "...", "(`:word count `*'' packages)"
 end
