@@ -2,7 +2,7 @@
 % A1
 %
 
-\chapter{Computers}%
+\chapter{Computers for social scientists}%
   %
   %
   \label{ch:computers}%
@@ -10,39 +10,44 @@
   %
   %
 
+A course on quantitative methods is bound to make intensive use of computer software. You might use computers routinely for many different activities, but your level of familiarity with some of the fundamental aspects of computers can vary dramatically.%
+
+Being reasonably familiar with computers is required for this course: please read this section in full and assess whether you are familiar enough with the notions covered. A reasonable level of familiarity with computers will help you with using Stata and completing assignments.%
+
+Besides building up your scientific and statistical computer skills, there are extrinsic reasons to why you might want to pay some attention to computing in the current times.%
+  \footcite{Doctorow:2011} %
+  The gist of the argument might be put as follows: %
+
 \begin{quote}%
-  Digital technology is programmed. This makes it biased toward those with the capacity to write the code. In a digital age, we must learn how to make the software, or risk becoming the software. It is not too difficult or too late to learn the code behind the things we use—or at least to understand that there \emph{is} code behind their interfaces. Otherwise, we are at the mercy of those who do the programming, the people paying them, or even the technology itself. \cite[128]{Rushkoff:2010}%
+Digital technology is programmed. This makes it biased toward those with the capacity to write the code. In a digital age, we must learn how to make the software, or risk becoming the software. It is not too difficult or too late to learn the code behind the things we use—or at least to understand that there \emph{is} code behind their interfaces. Otherwise, we are at the mercy of those who do the programming, the people paying them, or even the technology itself.%
+\footcite[p.~128]{Rushkoff:2010}%
 \end{quote}
 
-A course on quantitative methods is bound to make intensive use of computer software. You all use computers routinely for many different activities, but your level of familiarity with some of the fundamental aspects of computers can vary dramatically.
-
-Being reasonably familiar with computers is required for this course: please read this section in full and assess whether you are familiar enough with the notions covered. A reasonable level of familiarity with computers will help you with using Stata and completing assignments, and will also generally come in handy.
-
 %
-\section*{Hardware and software}%
-	\index{Computers!Hardware and software}
+\section{Hardware and software}%
+	\index{Computers!Hardware and software}%
 
-Your computer's physical and electronic parts (hardware) include input and output (I/O) devices like your keyboard and screen, a central processing unit (CPU) and memory storage, both as hard drive space and as ``live'' or ``virtual'' random access memory (RAM), which is used to read and write data more rapidly.%
-  \footnote{Stata~11 or older will require that you manually allocate the memory space to store datasets. You are spared from doing that if you are using Stata 12.}%
+\newthought{Your computer's physical and electronic parts (hardware)} include input and output (I/O) devices like your keyboard and screen, a central processing unit (CPU) and memory storage, both as hard drive space and as ``live'' or ``virtual'' random access memory (RAM), which is used to read and write data more rapidly.%
+  \footnote{Stata~11 or older will require that you manually allocate the memory space to store datasets. You are spared from doing that if you are using Stata 12.} %
   All components communicate with each other over a communication network called the bus.%
 
-The software of your computer are the programs that you use to send instructions to the hardware layer. Your operating system provides an initial layer of software that you can then expand with additional programs like Stata to perform more specific tasks. The speed at which you are doing all this is determined by the amount of RAM that you have at hand, by the speed at which you can read or write to your hard drive, and by the speed of your processor, the `CPU'.%
+\newthought{The software layer of your computer} are the programs that you use to send instructions to the hardware layer. Your operating system provides an initial layer of software that you can then expand with additional programs like Stata to perform more specific tasks. The speed at which you can use your computer is determined by the amount of RAM that you have installed, by the speed at which you can read or write to your hard drive, and by the speed of your processor, the `CPU'.%
 
 %
-\section*{CPU (Central Processing Unit)}%
-	\index{Computers!CPU (Central Processing Unit)}
+\subsection{CPU (Central Processing Unit)}%
+	\index{Computers!CPU (Central Processing Unit)}%
 
-The CPU performs arithmetic and logic operations on your computer data and stores their intermediate results. It also controls how tasks are executed on your system by allocating them processor time to compute. If you live in the early twenty-first century, there is a fair chance that your laptop runs a multi-core processor with several linked microchips that can compute separate tasks in parallel.%
+\newthought{The CPU performs arithmetic and logic operations on your computer data} and stores their intermediate results. It also controls how tasks are executed on your system by allocating them processor time to compute. If you live in the early twenty-first century, there is a fair chance that your laptop runs a multi-core processor with several linked microchips that can compute separate tasks in parallel.%
 
 Your CPU operates at a given cycle speed, which is currently calculated in GigaHertz (GHz). The 2.53GHz Intel Core 2 Duo CPU that ships with the Apple MacBook Pro, for example, is a dual-core processor that ticks at the clock rate of 2.53 billion cycles per second. These cycles are used to process low-level program instructions that underlie the software that you use. That software might live on your computer or in the cloud.%
   \footnote{See, for instance, the OpenCPU project for statistical computing: \url{https://public.opencpu.org/pages/}}%
 
 %
-\section*{Logic gates and truth tables}%
+\subsection{Logic gates and truth tables}%
 	\index{Computers!Logic gates}%
 	\index{Computers!Truth tables}
 	
-Your computer is made of digital circuits that implement logic gates, such as the ones shown in Figure~\ref{fig:gates}. These gates provide the basic mathematic logic that is also used in the software layer of your computer, as when you make use of logical statements to manipulate your data in Stata.%
+\newthought{Your computer is made of digital circuits that implement logic gates}, such as the ones shown in Figure~\ref{fig:gates}. These gates provide the basic mathematic logic that is also used in the software layer of your computer, as when you make use of logical statements to manipulate your data in Stata.%
   \footnote{See Table~p.~\ref{tbl:logical-symbols} at p.~\pageref{tbl:logical-symbols}.}%
 
 \begin{figure}[h]
@@ -64,22 +69,78 @@ Your computer is made of digital circuits that implement logic gates, such as th
 These logic gates allow your computer to understand basic truth tables, as with the union of two conditions \texttt{A AND B}, their intersection \texttt{A OR B}, or the negation of \texttt{A}, \texttt{NOT A}. Combinations of logic gates are then used to build electronic circuits with two stable states, a.k.a. ``flip-flops''. All data in a computer are stored in that form as binary digits.%
 
 %
-\section*{Bits and bytes}%
 %
-A \emph{bit} is a single binary digit (0/1). Modern processors use units of data, or ``words'', that go from 8 to 64 bits. A \emph{byte} is a series of eight bits and a ubiquitous standard in computer architecture. Given that a bit take two values, a byte can take $2^8=256$ values to express a number in the $0-255$ range, or to represent up to 256 characters.%
+\subsection{Bits and bytes}%
+	\index{Computers!Binary digits}%
+
+\newthought{A \emph{bit} is a single binary digit (0/1).} Modern processors use units of data, or ``words'', that go from 8 to 64 bits. A \emph{byte} is a series of eight bits and a ubiquitous standard in computer architecture. Given that a bit take two values, a byte can take $2^8=256$ values to express a number in the $0-255$ range, or to represent up to 256 characters.%
 
 In a computer environment, larger arrays of bits and bytes provide more power to process and define whatever stuff you are dealing with. The current Unicode UTF-8 standard, for instance encodes text in several alphabets by using up to four bytes to define thousands of different characters. The same logic applies to graphics on a video game console.%
 
-The current technological frontier puts your computer processor at either 32-bit or, for the most recent machines, at 64-bit. Stata~12 for Windows is distributed in two versions for this reason. Stata~12 for \OSX natively supports both processors. Using the 64-bit application should provide a bit more speed on intensive tasks with large datasets.%
+The current technological frontier puts your computer processor at either 32-bit or, for the most recent machines, at 64-bit; Stata~12 for Windows exists in both versions, whereas Stata~12 for \OSX works only on 64-bit processors. %
+  \footnote{\url{http://www.stata.com/support/faqs/windows/64-bit-compliance/}}
 
 %
-\section*{Operating system}%
 %
-Your operating system (OS) manages your files, I/O devices, memory and networks. It manages each application as a process, uses your hard drive to swap data in and out of virtual memory, and makes multi-tasking possible by switching very quickly between programs. Your OS also comes with a graphical user interface (GUI) that it superimposes on command-line instructions.%
+\subsection{Operating system}%
+  \index{Computers!Graphical User Interface (GUI)}%
+  \index{Computers!Operating system}%
 
-Working with Stata actually requires that you reverse that last operation, and that you do \emph{not} use the graphic user interface of the software but instead learn how to program Stata directly from the command line. This step in turn asks for a more organized computer workflow than you might be used to.%
+\newthought{Your operating system (OS) manages your files, I/O devices, memory and networks.} It manages each application as a process, uses your hard drive to swap data in and out of virtual memory, and makes multi-tasking possible by switching very quickly between programs. Your OS also comes with a graphical user interface (GUI) that makes the computer usable by human beings.%
 
-You have a cardinal imperative to use the command line as soon as you are conducting research that requires to be examinable by others, which is the case in this course and in many research settings. The first step of that process is to make your research \emph{replicable} by bundling the replication material (the code and possibly the data) with your analysis.%
+As explained at p.~\pageref{sec:cli}, working with Stata actually requires that you reverse that last operation, and that you do \textbf{not} use the graphic user interface of the software but instead learn how to program Stata directly from the command line. This, in turn, requires to pay some attention to the principles of computer programming.%
+
+%
+%
+%
+\section{Computer programming}%
+  \index{Programming}%
+  
+\newthought{In many research settings}, you will find yourself under the cardinal imperative to provide findings that can be \emph{replicated} by others. The first step of that process is to make your research \emph{replicable} by bundling the replication material with your analysis.%
+  \footnote{See \citeauthor{King:1995}'s article, ``\citetitle{King:1995}'', and Nicole Janz's blog for more illustrations: \url{https://politicalsciencereplication.wordpress.com/}}
+
+\newthought{When your analysis includes a quantitative component}, this material will consist in the code that produces your results, possibly accompanied by the dataset if it contains original data. Some further principles will guide your computer and research workflows.%
+
+%
+%
+\subsection{Machine readability}%
+  \index{Programming!Machine readability}%
+
+\newthought{Your code is produced in plain text files} because these files are readable in any computer environment and can therefore be parsed and interpreted everywhere. The same applies to your data: using a plain text data format will ensure that everyone will be able to read it.%
+
+When your analysis uses statistical software, you are often given a choice between an application-specific format, which is the \ext{dta} format in Stata, and a machine-readable format like \ext{csv}.%
+
+The course uses the Stata format, but if you produce datasets on your end, maximize their portability by saving them to comma-separated values (\ext{.csv}) format, or to any other plain text delimiter format of your choice.%
+
+%
+%
+\subsection{Literate programming}%
+  \index{Programming!Literate programming}%
+  \index{Stata!Comments (code)}%
+
+\newthought{Making your code readable by others} implies adding a `literate' component to it. This involves including some documentation of what your code does with the code itself, in order to help a human audience to read through your different files and functions.%
+  \footnote{\url{http://www-cs-faculty.stanford.edu/~knuth/lp.html}} %
+
+When writing do-files in Stata, include short comments to help the reader understand your code, and provide some general information about your code—such as the author(s), date and title—in an introductory header, as shown in the course do-files.%
+
+Increasing the readability of your research project is a requirement in courses that set the emphasis on data analysis. The general idea is to consider your code as a communication device with your peers, like a music sheet or as some other form of composition.%
+  \footcite{WickhamGrolemund:2013} %  
+
+%
+%
+\subsection{Free software}%
+  \index{Programming!Free software}%
+
+%TODO: fill in, 3 para.: f/loss (GNU); Stata (open); R (free)
+
+%
+%
+\subsection{Open access}%
+  \index{Programming!Open access}%
+
+%TODO: fill in, 3 para.: principles (FOAS); with CVS (GitHub); open data (OKFN)
+
+% \url{http://foastat.org/philosophy.html}
 
 %
 % end

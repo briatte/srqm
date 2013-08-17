@@ -1,9 +1,15 @@
 
+* Check setup.
+run setup/require estout fre scheme-burd spineplot
+
+* Log results.
+cap log using code/week12.log, replace
+
 /* ------------------------------------------ SRQM Session 12 ------------------
 
    F. Briatte and I. Petev
 
- - TOPIC:  Sexual Partners in the U.S.
+ - TOPIC:  Sexual Partners in the United States
 
  - DATA:   U.S. General Social Survey (2010)
  
@@ -16,24 +22,7 @@
 
 ----------------------------------------------------------------------------- */
 
-
-* Install required commands.
-foreach p in estout fre {
-	cap which `p'
-	if "`p'" == "scheme-burd" cap which scheme-burd.scheme // name fix
-	if _rc == 111 cap noi ssc install `p'
-}
-
-* Log results.
-cap log using code/week12.log, replace
-
-
-* ====================
-* = DATA DESCRIPTION =
-* ====================
-
-
-* Open data subset for selected survey year.
+* Load GSS dataset for selected survey year.
 use data/gss0012 if year == 2010, clear
 
 * Inspect DV.

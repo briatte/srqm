@@ -1,4 +1,10 @@
 
+* Check setup.
+run setup/require fre renvars scheme-burd spineplot tab_chi
+
+* Log results.
+cap log using code/week6.log, replace
+
 /* ------------------------------------------ SRQM Session 6 -------------------
 
    F. Briatte and I. Petev
@@ -47,32 +53,15 @@
 
 ----------------------------------------------------------------------------- */
 
-
-* Additional commands.
-foreach p in fre tab_chi scheme-burd {
-    cap which `p'
-	if "`p'" == "tab_chi" cap which tabchi                 // name fix
-	if "`p'" == "scheme-burd" cap which scheme-burd.scheme // name fix
-    if _rc == 111 cap noi ssc install `p' // install from online if missing
-}
-
-* Log results.
-cap log using code/week6.log, replace
-
-
-* ====================
-* = DATA DESCRIPTION =
-* ====================
-
-
+* Load ESS dataset.
 use data/ess2008, clear
 
 * Survey weights.
 svyset [pw = dweight] // weighting scheme set to country-specific population
 
 * Rename variables to short handles.
-ren (agea gndr hinctnta eduyrs) (age sex income edu) // socio-demographics
-ren (rlgdnm lrscale tvpol) (denom pol tv)            // religion, politics
+renvars agea gndr hinctnta eduyrs \ age sex income edu // socio-demographics
+renvars rlgdnm lrscale tvpol \ denom pol tv            // religion, politics
 
 * Have a quick look.
 codebook cntry age sex income edu denom pol tv, c

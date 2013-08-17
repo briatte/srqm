@@ -1,32 +1,39 @@
 *! srqm_pkgs: install selected packages
 *! use option 'force' to force the installation
 *! use option 'clean' to uninstall the packages
+*! use option 's2color' to restore the default color scheme
 *! use option 'quiet' to run silently
+*! use option 'extra' to install extra packages
 cap pr drop srqm_pkgs
 program srqm_pkgs
-  syntax [, force clean quiet]
+  syntax [anything] [, force clean s2color quiet extra]
 
-global srqm_packages = "lookfor_all fre spineplot tab_chi mkcorr tabout estout leanout plotbeta kountry wbopendata spmap scheme-burd schemes _gstd01 clarify"
+global srqm_packages = "lookfor_all fre spineplot tab_chi mkcorr tabout estout leanout plotbeta kountry wbopendata spmap scheme-burd _gstd01 renvars clarify"
+if "`extra'" != "" global srqm_packages = "$srqm_packages catplot ciplot distplot log2do2 outreg2 revrs schemes scheme_tufte gr0002_3 qog qogbook"
+
+if "`anything'" == "" loc anything = "$srqm_packages"
+tokenize `anything'
+
 local force = ("`force'" != "")
 
-* catplot ciplot distplot log2do2 outreg2 revrs
-* tufte lean2
-* qog qogbook
-
 if "`clean'" != "" {
-  foreach t of global srqm_packages {
-      cap noi ssc uninstall "`t'"
-      if !_rc di as txt "uninstalled", as inp "`t'"
+  while "`*'" != "" {
+      loc t = "`1'"
+      if "`t'" == "renvars" loc t "dm88_1"
+      * cannot use -ssc uninstall- because of a bug with dash in 'scheme-burd'
+      cap qui ado uninstall "`t'"
+      if _rc loc x "already "
+      if "`quiet'" == "" di as inp "`t'", as txt "was `x'uninstalled"
+      macro shift
   }
-  cap ssc uninstall clarify
-  cap ssc uninstall _gstd01
-  set scheme s2color // set scheme back to default
-  di as txt "Uninstalled course packages."
+  if "`s2color'" != "" set scheme s2color // set scheme back to default
 }
 else {
-  local i = 0
-  foreach t of global srqm_packages {
-      local i = `i++'
+  loc i = 0
+  loc s = `:word count `anything''
+  while "`*'" != "" {
+      loc i = `++i'
+      loc t = "`1'"
 
       cap which `t'
 
@@ -36,11 +43,18 @@ else {
       // qog and qoguse
       if "`t'"=="qog" cap which qoguse
     
-      // scheme-burd
+      // clarify
+      if "`t'"=="clarify" cap which simqi
+    
+      // schemes
       if "`t'"=="scheme-burd" cap which scheme-burd.scheme
-
+      if "`t'"=="scheme_tufte" cap which scheme-tufte.scheme
+      if "`t'"=="schemes" cap which scheme-bw.scheme
+      if "`t'"=="gr0002_3" cap which scheme-lean2.scheme
+      
       if _rc==111 | `force' {
 
+          if "`quiet'" == "" di as txt "[`i'/`s'] installing:", as inp, "`t'"
           // note: keep special cases at end of local list for the 699 hack to work with them
 
           if "`t'"=="spmap" {
@@ -51,18 +65,22 @@ else {
   						cap copy `y' data/`y'
   						cap rm `y'
   					}
+            if !_rc di as txt "(moved to data folder: `maps')"
+          }
+          else if "`t'"=="renvars" {
+              cap noi net ins dm88_1, from ("http://www.stata-journal.com/software/sj5-4/")
           }
           else if "`t'"=="clarify" {
-              cap which simqi
-              if (_rc==111 | `force') cap noi net install clarify, from("http://gking.harvard.edu/clarify")
+              cap noi net ins `t', from("http://gking.harvard.edu/clarify")
           }
-          else if "`t'"=="_gstd01" {
-              cap which _gstd01
-              if (_rc==111 | `force') cap noi net install _gstd01, from("http://web.missouri.edu/~kolenikovs/stata")
+          else if "`t'"=="gr0002_3" {
+              cap noi net ins `t', from("http://www.stata-journal.com/software/sj4-3")
           }
           else if "`t'"=="schemes" {
-              cap which scheme-bw.scheme
-              if (_rc==111 | `force') cap noi net install schemes, from("http://leuven.economists.nl/stata/")
+              cap noi net ins `t', from("http://leuven.economists.nl/stata/") 
+          }
+          else if "`t'"=="_gstd01" {
+              cap noi net ins `t', from("http://web.missouri.edu/~kolenikovs/stata")
           }
           else {
               cap noi ssc inst "`t'", replace
@@ -97,9 +115,10 @@ else {
           }
       }
       else {
-       if "`quiet'" == "" di as inp "`t'", as txt "is already installed"
+       if "`quiet'" == "" di as txt "[`i'/`s'] already installed:", as inp, "`t'"
       }
       if _rc di as err "Error: installation of `t' failed with error code", _rc
+      macro shift
   }
 }
 

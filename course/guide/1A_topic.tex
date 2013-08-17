@@ -80,10 +80,47 @@
 		
 % 1.1.2
 %
+\subsection{About this guide}%
+	%
+	%
+	\newthought{This `Stata guide'} was written as an introduction to Stata for students with a background in the social sciences. You are not expected to know anything about statistics, but you are expected to know a few things about social science research from your undergraduate curriculum. You should be familiar, for instance, with notions like cultural capital, gross domestic product per capita and political regimes.%
+		%
+		%
+
+	We will cover the following topics:%
+
+	\begin{itemize}
+		\item This introduction deals with the course basics, essential computer skills and Stata fundamentals. It also explains how to set up a computer for the course.%
+	
+		\item %
+		Section~\ref{ch:data} explains how to prepare data for analysis, and %
+		Section~\ref{ch:distr} explains how to visualize distributions. This segment is primarily about description and univariate statistics. %
+    It ends on instructions to submit your first draft.
+	
+		\item %
+		Section~\ref{ch:asso} introduces statistical significance tests, and %
+		Section~\ref{ch:ols} introduces ordinary least squares and simple linear regression. This segment is about association and bivariate statistics. %
+    It ends on instructions to submit your revised draft.
+
+		\item %
+		Section~\ref{ch:lin} introduces multiple linear regression modelling, and %
+		Section~\ref{ch:log} introduces logistic regression modelling. This segment covers the basics of statistical modelling for continuous and categorical variables in cross-sectional data. %
+
+    The guide also includes an index including all commands cited in the text, and a list of bibliographic references.%
+	\end{itemize}
+
+\newthought{Several sections of the guide are still in draft form}, so watch for updates and read it along other documentation. Its writing started with students questions, and several sections were first written as short tutorials concerning specific issues with data management. One thing led to another, and we ended up with the current document. The aim is to cover 90\% of the course by version 1.0.%
+
+	Several students have already provided very valuable feedback on the text—thanks, and keep the feedback flowing in!%
+
+% 1.1.3
+%
 \subsection{Course outline}%
 	\index{Course!Outline}
 
-\newthought{The course} is organised in twelve two-hour sessions that run over a single semester. Its content is structured around three teaching goals:%
+\newthought{This course} follows the standard regulations of Sciences Po, \ie, attendance is compulsory, every class comes with homework and readings, and plagiarism on any element of coursework is strongly sanctioned. Please turn to your academic regulations for more details on any of these topics.%
+
+\newthought{The course itself} is organised in twelve two-hour sessions that run over a single semester. Its content is structured around three teaching goals:%
 
 \begin{enumerate}
   
@@ -101,6 +138,8 @@
   	Both textbooks appear in the course syllabus%
 		\footnote{\url{https://github.com/briatte/srqm/blob/master/course/syllabus.pdf?raw=true}} as well as in the final bibliography of this document. Please read the course syllabus in full at that stage, and copy the reading schedule to your agenda.%
 		
+    The handbook readings for this course will give you a more detailed view of statistics than this guide can provide. Assigned readings appear at the beginning of each section of this guide, in the course syllabus, and on the course website.%
+
 		Note that the course slides will definitely \emph{not} contain enough material for you to understand the theoretical underpinnings of the methods used in class, and that if you skip the readings, it will inevitably reflect on the general quality of your analysis.%
 
   % 2. Stata
@@ -146,45 +185,6 @@
 	%
 	%
 
-  If you have never used a computer before to carry empirical work with statistical software, or if your self-assessed level of familiarity with computers is dramatically low, then it would be a good idea to also cover Appendix~\ref{ch:computers}, which introduces computer hardware, software and programming.%
-  \footnote{Besides building up your computer skills, there are extrinsic reasons to why you should be paying some attention to computing in the current times; see Cory Doctorow, ``The Coming War on General Computation'', 2011: \url{https://github.com/jwise/28c3-doctorow/blob/master/transcript.md}}%
+  If you have never used a computer before to carry empirical work with statistical software, or if your self-assessed level of familiarity with computers is dramatically low, then it would be a good idea to also cover the computer skills appendix at p.~\pageref{ch:computers}, which introduces computer hardware, software and programming.%
   %
   %
-
-% 1.1.3
-%
-\subsection{About this guide}%
-	%
-	%
-	\newthought{This `Stata guide'} was written as an introduction to Stata for students with a background in the social sciences. You are not expected to know anything about statistics, but you are expected to know a few things about social science research from your undergraduate curriculum. You should be familiar, for instance, with notions like cultural capital, gross domestic product per capita and political regimes.%
-		%
-		%
-
-	We will cover the following topics:%
-
-	\begin{itemize}
-		\item This introduction deals with the course basics, essential computer skills and Stata fundamentals. It also explains how to set up a computer for the course.%
-	
-		\item %
-		Section~\ref{ch:data} explains how to prepare data for analysis, and %
-		Section~\ref{ch:distr} explains how to visualize distributions. This segment is primarily about description and univariate statistics. %
-    It ends on instructions to submit your first draft.
-	
-		\item %
-		Section~\ref{ch:asso} introduces statistical significance tests, and %
-		Section~\ref{ch:ols} introduces ordinary least squares and simple linear regression. This segment is about association and bivariate statistics. %
-    It ends on instructions to submit your revised draft.
-
-		\item %
-		Section~\ref{ch:lin} introduces multiple linear regression modelling, and %
-		Section~\ref{ch:log} introduces logistic regression modelling. This segment covers the basics of statistical modelling for continuous and categorical variables in cross-sectional data. %
-
-		\item %
-		Section~\ref{ch:paper} contains the instructions to submit the final paper, and the appendix add some detail about the course material and requirements.%
-    
-    The guide also includes an index including all commands cited in the text, and a list of bibliographic references.%
-	\end{itemize}
-
-\newthought{Several sections of the guide are still in draft form}, so watch for updates and read it along other documentation. Its writing started with students questions, and several sections were first written as short tutorials concerning specific issues with data management. One thing led to another, and we ended up with the current document. The aim is to cover 90\% of the course by version 1.0.%
-
-	Several students have already provided very valuable feedback on the text—thanks, and keep the feedback flowing in!%

@@ -18,7 +18,7 @@
 
     %
     \paragraph{Additional readings} %
-    Read the appendix on the course datasets at p.~\pageref{ch:data-sources}, as well as \citeauthor[ch.~2--3]{Urdan:2010a} and optionally \citeauthor[ch.~2.1--2.4]{FeinsteinThomas:2002d}, before next week.%
+    Read \citeauthor[ch.~2--3]{Urdan:2010a}, and optionally  \citeauthor[ch.~2.1--2.4]{FeinsteinThomas:2002d}, by the end of this section.%
     
   \end{mybox}
   %
@@ -126,22 +126,23 @@ Observation & Country & Year & Household ID & Person ID & Variable 1 & ... \\
 \label{tbl:panel-data}
 \end{table}
 
-\newthought{In this course}, we focus on cross-sectional data in which we can assume that the observations are independent from each other. Special methodological requirements apply to panel data and times series, where this requirement is violated by the temporal dependence between recurring observations \cite{BeckKatz:2011e}.%
+\newthought{In this course}, we focus on cross-sectional data in which we can assume that the observations are independent from each other. Special methodological requirements apply to panel data and times series, where this requirement is violated by the temporal dependence between recurring observations.\footcite{BeckKatz:2011e}%
 
-A selection of datasets is available from the \data folder. It contains three individual-level surveys using large probability samples: the \ess (\ESS), \gss (\GSS) and \wvs (\WVS). For country-level analysis, the recommended source is the \qog (\QOG) Standard Dataset, which collates together variables from the World Bank and the United Nations as well as academic research and various other sources. All datasets are high quality sources with extensive documentation.
+A selection of datasets is available from the \data folder. It contains three individual-level surveys using large probability samples: the \ess (\ESS), \gss (\GSS) and \wvs (\WVS). For country-level analysis, the recommended source is the \qog (\QOG) Standard Dataset, which collates together variables from the World Bank and the United Nations as well as academic research and various other sources. All datasets are high quality sources with extensive documentation.%
 
-The \GSS dataset, just as the \nhis (\NHIS) dataset, which is used primarily for teaching examples, both contain several years of observations and require to be subset to only one year. The \QOG dataset is a cross-sectional version of time series data, and therefore works with a more flexible period of observation that uses multiple-year figures pooled into representative averages. The \ESS and \WVS datasets correspond to survey waves; the course datasets contain Round 4 (2008) of the \ess and Wave 3 (1999-2001) of the \wvs.
+The \GSS dataset, just as the \nhis (\NHIS) dataset, which is used primarily for teaching examples, both contain several years of observations and require to be subset to only one year. The \QOG dataset is a cross-sectional version of time series data, and therefore works with a more flexible period of observation that uses multiple-year figures pooled into representative averages. The \ESS and \WVS datasets correspond to survey waves; the course datasets contain Round 4 (2008) of the \ess and Wave 3 (1999-2001) of the \wvs.%
 
-\newthought{For your project}, select one of these sources and fetch additional documentation from the \README file of the \data folder.%
-  \footnote{\label{data-readme}Available online at \url{https://github.com/briatte/srqm/blob/master/data/README.md} or as an appendix at p.~\pageref{ch:data-sources}.} %
+\newthought{For your project}, select one of these datasets and fetch additional documentation from the course appendix at p.~\pageref{sec:data-sources}. You will need to get the data codebook as well as information on the \emph{sampling procedure} if you are using survey data. The sampling procedure is the technique that guarantees the representativeness of the sample by ensuring that each member of the target population had an equal probability of selection within the sampling frame.%
+
+Several techniques can enhance simple random sampling procedures, such as stratified or cluster sampling, where primary sampling units (\eg individuals) are selected within nested structures (\eg households). Weighting schemes can also provide postsurvey adjustment to correct for undercoverage, \ie the existence of different probabilities of selection among the survey respondents. You will find mentions to survey weights in the codebooks of your dataset and in the data appendix, so that you can easily set them in your own analysis.%
+
+\newthought{Using external data for your research project} is \textbf{not} recommended for this course, due to the extra workload that it will inflict on your group at the data preparation level. If you plan to ask for an exception, please make that decision reasonably and plan your work well in advance, especially if you have not yet assembled the data, which is an \emph{extremely} time-consuming task. \hlred{You will be asked to abandon any effort that has not been successful in the first month of class.}%
+
 %
-You will need to get the data codebook as well as information on the \emph{sampling procedure} if you are using survey data. The sampling procedure is the technique that guarantees the representativeness of the sample by ensuring that each member of the target population had an equal probability of selection within the \emph{sampling frame}. Several techniques can enhance \emph{simple random sampling} procedures, such as \emph{stratified} or \emph{cluster} sampling, where \emph{primary sampling units} are selected within nested structures like households. \emph{Weighting schemes} can also provide postsurvey adjustment to correct for \emph{undercoverage}, i.e. the existence of different probabilities of selection among the respondents.
-
-\newthought{Additional data sources}%
 	\label{external-data-warning}%
 	\footnote{See \url{https://github.com/briatte/srqm/wiki/data} for a short selection.} %
-		might be possible candidates for cross-sectional analysis. %
-		If you plan to use additional data, you will need to learn additional data skills (see p.~\pageref{sec:additional-data-skills}). Please make that decision reasonably and plan your work well in advance, especially if you have not yet assembled the data, which is an \emph{extremely} time-consuming task. Abandon any effort that has not been successful in the first month of class.
+		might contain possible candidates for cross-sectional analysis. %
+		%
 
 You need to read this section to achieve three goals:
 

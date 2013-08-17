@@ -1,6 +1,9 @@
-This repository contains the [Statistical Reasoning and Quantitative Methods][srqm] (SRQM) course taught at Sciences Po by François Briatte, Joël Gombin and Ivaylo Petev.
+This repository contains the [Statistical Reasoning and Quantitative Methods][srqm] (SRQM) course taught at Sciences Po since 2010 by [François Briatte][fb], [Joël Gombin][jg] and [Ivaylo Petev][ip].
 
 [srqm]: http://f.briatte.org/teaching/quanti/
+[fb]: http://f.briatte.org/
+[jg]: http://joelgombin.fr/
+[ip]: http://ipetev.org/
 
 The course requires a working copy of [Stata][stata]. Instructions to set up your computer for the course are provided in the introduction of the _Stata Guide_ and repeated in class.
 
@@ -21,4 +24,4 @@ The course requires a working copy of [Stata][stata]. Instructions to set up you
 [wiki-code]: https://github.com/briatte/srqm/wiki/code
 [wiki-utils]: https://github.com/briatte/srqm/wiki/course-utilities
 
-Welcome to the course, and see you soon!
+Additional material is distributed through Google Documents. Welcome to the course, and see you soon!

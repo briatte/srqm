@@ -1,7 +1,17 @@
 
+* Check setup.
+run setup/require fre
+
+* Log results.
+cap log using code/week4.log, replace
+
 /* ------------------------------------------ SRQM Session 4 -------------------
 
    F. Briatte and I. Petev
+
+ - TOPIC:  Social Determinants of Adult Obesity in the United States
+
+ - DATA:   U.S. National Health Interview Survey (2009)
 
  - Since last week, you should now know what dataset and variables you plan to
    use for your research project. Please register your project online by writing
@@ -24,23 +34,7 @@
 
 ----------------------------------------------------------------------------- */
 
-
-* Install required commands.
-foreach p in fre {
-	cap which `p'
-	if _rc == 111 cap noi ssc install `p'
-}
-
-* Log results.
-cap log using code/week4.log, replace
-
-
-* ====================
-* = DATA DESCRIPTION =
-* ====================
-
-
-* Data: U.S. National Health Interview Survey (2009).
+* Load NHIS dataset.
 use data/nhis2009, clear
 
 * Subset to most recent year.

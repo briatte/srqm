@@ -1,7 +1,7 @@
 %
 % 1.2
 %
-\section{Setup instructions}%
+\section{Course setup}%
 	%
 	%
 	\label{sec:course-setup}%
@@ -9,9 +9,33 @@
 	%
 	%
 	
-	A course on quantitative methods is bound to make intensive use of computer software. You all use computers routinely for many different activities, but your level of familiarity with more fundamental aspects of computing can vary dramatically.%
-	
-	This section reviews the general setup that is used throughout the course, assuming very little prior knowledge of computers. \hlred{You have to make sure that you \textbf{successfully set up your computer} for the course, and that you keep it that way by running the setup again if needed.}%
+	\newthought{This course uses Stata} as its statistical software of choice. Stata is used by many social scientists working with quantitative data in areas such as economics and political science.%
+	%
+ 	\footnote{For example, you will find Stata output in some of Nate Silver's work at the \emph{New York Times} on his `FiveThirtyEight' electoral blog; see, \eg, ``'\href{http://fivethirtyeight.blogs.nytimes.com/2012/03/12/polling-in-deep-south-has-posed-challenges/}{Polling in Deep South Has Posed Challenges},'' 12 March 2012.} %
+	%
+	Most statistical procedures used in these disciplines know some form of implementation in Stata, and the software is supported by a large user community. It provides a good middle ground between a spreadsheet editor and a statistical programming environment.%
+  	
+	\newthought{This section} explains how to set up Stata to follow the course. It assumes very little knowledge of computers. \hlred{\textbf{Make sure that you successfully set up your computer} for the course, and that you know how to run the setup again if needed.}%
+
+  \newthought{We will use the `Standard Edition'} (\textsc{se}) of Stata~12 that works on most current computers.%
+  \footnote{See the list of Stata products and compatible operating systems: %
+		\url{http://www.stata.com/products/compatible-operating-systems/}}%
+		%
+		The keyboard shortcuts we provide are for \OSX (Mac) and Windows (Win). The installation procedures on both systems are almost identical:% 
+		
+	\begin{description}
+
+		\item[On \OSX] %
+		%
+		The entire Stata application folder should be located in the \texttt{Applications} folder. You should drag the Stata application icon to your Dock for quicker access. The \kbd{Cmd} (Command) key used in keyboard shortcuts is the `Apple' modifier key located left and right of the spacebar.%
+
+		\item[On Windows] %
+		%
+		The entire Stata application folder should be located in the \texttt{Program Files} folder, or whatever your version of Windows calls it. You should drag the Stata application icon to your Taskbar for quicker access. The \kbd{Ctrl} key used in keyboard shortcuts is the `Control' modifier key located bottom-left of the spacebar.%
+
+	\end{description}
+
+	The course runs fine on older versions of Stata. The setup below has been tested on Sciences Po workstations equipped with Stata~11.%
 	
 	% 0.2.1
 	%
@@ -44,6 +68,7 @@
 	The \course folder contains the course slides and syllabus, as well as this guide. The \data folder contains a selection teaching datasets, and the \code folder will host the course do-files (covered below at p.~\pageref{sec:do-files}). The \setup folder and \texttt{profile.do} files provide additional course functionalities. All folders are required for the course to roll out properly.%
 		%
 		%	\index{Computers!File and folder paths}%
+
 	\index{Computers!URLs}%
 	You need to understand the file structure of the course to understand how Stata will locate its files and folders from their \textbf{paths}. The path to the \SRQM folder, for example, might look like this on \OSX:\\[1em]%
 	
@@ -58,7 +83,7 @@
 		C:\textbackslash{}Users\textbackslash{}Ivo\textbackslash{}Desktop\textbackslash{}SRQM
 	\end{docspec}
 	
-	Once a folder has been set as the \emph{working directory}, Stata can locate files and folders from within it by using relative paths. The example below show the relative path of the \texttt{nhis2009.dta} dataset in the \texttt{\data} folder:\\[1em]%
+	Once a folder has been set as the \emph{working directory}, Stata can locate files and folders from within it by using relative paths. The example below shows the relative path of the \texttt{nhis2009.dta} dataset in the \texttt{\data} folder:\\[1em]%
 	
 	\begin{docspec}
 		/Users/fr/Documents/Teaching/SRQM/\hlred{\underline{data/nhis2009.dta}}
@@ -71,7 +96,7 @@
 	
 	We will use file paths and URLs extensively throughout the course, so make sure that you understand both. I do my best to keep things tidy on my end by using Internet shortlinks and simple, informative folder and file names for the course material. You will have to do the same on your end.%
 		%
-		\footnote{For instance, you will be required to submit your work under a specific group name, as explained in Section~\ref{ch:paper}.}%
+		\footnote{For instance, you will be required to submit your work under a specific group name that includes your family names in alphabetical order.}%
 		%
 		%
 
@@ -124,7 +149,7 @@
 			ls data/*.dta, w
 		\end{docspec}
 			 
-	The command will list the teaching datasets used in the course, for which some documentation is available as an appendix at p.~\pageref{ch:data-sources}. The \cmd{ls} command is told to only show their filenames by passing the \coab{wide}{w}{ls} option to it:\\[1em]%
+	The command will list the teaching datasets used in the course, for which some documentation is available in the course appendix at p.~\pageref{sec:data-sources}. The \cmd{ls} command is told to only show their filenames by passing the \coab{wide}{w}{ls} option to it:\\[1em]%
  
 		\includegraphics{srqm-ls}\\[1em]
 	
@@ -180,15 +205,15 @@
 		  \quad \cmd{plotbeta} & regression coefficient plots \\
       \quad \cmd{scheme-burd} & blue-red graph scheme\\
 			\quad \cmd{spineplot} & mosaic plots \\
-		  \quad \cmd{spmap} & maps \\
+		  \quad \cmd{spmap} & maps\\
 		  \quad \cmd{tab\_chi} & residuals for Chi-squared tests\\
 		  \quad \cmd{tabout} & export summary statistics\\
 		  \quad \cmd{wbopendata} & download World Bank data\\
 			\addlinespace
 			\emph{Installed from elsewhere:} & & \\
-			\quad \label{install-gstd01}\cmd{gstd01} & standardize a variable to $0$-$1$; used at p.~\pageref{sec:gtsd01} \\%
-			\quad \label{install-clarify}\cmd{clarify} & simulation \\%; used at p.~\pageref{sec:clarify} \\
-			\quad \cmd{schemes} & more graph schemes \\
+			\quad \label{install-gstd01}\cmd{gstd01} & standardize a variable to $0$-$1$; used at p.~\pageref{sec:gtsd01}\\%
+			\quad \label{install-clarify}\cmd{clarify} & simulation\\%; used at p.~\pageref{sec:clarify}\\
+			\quad \cmd{schemes} & additional graph schemes\\
 			\bottomrule\\[.5em]
 			\end{tabular}
 			%
@@ -207,25 +232,15 @@
 			\item select the \SRQM folder as the working directory, and
 			\item type \texttt{run profile} to go through setup again.
 		\end{enumerate}
-	
-	A more detailed guide appears in the \README file of the \SRQM folder.%
-    \footnote{Available online at \url{https://github.com/briatte/srqm/blob/master/README.md}}%
-		%
-		%
-  
-	The setup overwrites the \texttt{profile.do} file of the Stata application folder to redirect it to the \SRQM folder for the time of the course. From there, it runs another \texttt{profile.do} file that verifies the integrity of the teaching material and reruns parts of the setup if necessary.%
+	  
+	The setup overwrites the \filename{profile.do} file of the Stata application folder to redirect it to the \SRQM folder for the time of the course. From there, it runs another \filename{profile.do} file that verifies the integrity of the teaching material and reruns parts of the setup if necessary.%
 		%
 		%
 		
-	The setup also provides a few commands like \cmd{srqm\_get}, which is used in class to download the latest version of the course material from a temporary course server, \cmd{stab} to produce \underline{s}imple \underline{tab}les of summary statistics and correlation coefficients, and \cmd{svyplot} to produce categorical plots with survey data. %; see detailed instructions at p.~\pageref{cmd:stab}%
-		%
-		The \README file of the \setup folder includes some technical documentation on all course commands,%
-	  \footnote{Available online at %
-			\url{https://github.com/briatte/srqm/blob/master/setup/README.md}} %
-		but you do not need to read that file if you simply follow in class when we use these commands.%
-		%
-		%
+	The setup also loads the \cmd{srqm} teaching utilities, like \cmd{srqm\_get}, which is used in class to download the latest version of the course material from a temporary course server, and \cmd{stab}, which is used to produce \underline{s}imple \underline{tab}les of summary statistics (see its detailed instructions at p.~\pageref{cmd:stab}).%
+    %
+    %
 		
-  \newthought{At the end of the course}, delete the \texttt{profile.do} from the Stata application folder to stop automatically setting the \SRQM folder as your working directory. Alternately, run the \texttt{srqm clean folder} command to do so and get a `\texttt{Bye}' message.%
+  \newthought{At the end of the course}, delete the \texttt{profile.do} from the Stata application folder to stop automatically setting the \SRQM folder as your working directory. Alternately, run the \texttt{srqm\_link, clean} command to do so and get a `\texttt{Bye}' message. This will let you work with Stata from any other working directory.%
 		%
 		%

@@ -1,4 +1,7 @@
 
+* Log results.
+cap log using code/week8.log, replace
+
 /* ------------------------------------------ SRQM Session 8 -------------------
 
    F. Briatte and I. Petev
@@ -26,7 +29,6 @@
 
 ----------------------------------------------------------------------------- */
 
-
 * Replicate last week and clear graphs. The data left in memory is a modified
 * version the Quality of Government dataset, with all necessary recodes and
 * renames already performed. It is very common to use different do-files for
@@ -34,9 +36,6 @@
 * management and the current do-file is used for analysis.
 do code/week7.do
 gr drop _all
-
-* Log results.
-cap log using code/week8.log, replace
 
 * Graph macro. If you remember what we did last week, we used a macro to label
 * the data points with country codes instead of using anonymous dots. Since we

@@ -1,7 +1,17 @@
 
+* Check setup.
+run setup/require fre scheme-burd
+
+* Log results.
+cap log using code/week3.log, replace
+
 /* ------------------------------------------ SRQM Session 3 -------------------
 
    F. Briatte and I. Petev
+
+ - TOPIC:  Support for Sharia Law in Nine Countries
+
+ - DATA:   World Values Survey Wave 4 (2000)
 
  - Welcome again to Stata. This do-file contains the commands used in our third
    session. For coursework, practice with Stata code by running the code again,
@@ -39,24 +49,7 @@
 
 ----------------------------------------------------------------------------- */
 
-
-* Install required commands.
-foreach p in fre {
-	cap which `p'
-	if "`p'" == "scheme-burd" cap which scheme-burd.scheme // name fix
-	if _rc == 111 cap noi ssc install `p'
-}
-
-* Log results.
-cap log using code/week3.log, replace
-
-
-* ====================
-* = DATA DESCRIPTION =
-* ====================
-
-
-* Data: World Values Survey (2000).
+* Load WVS dataset.
 use data/wvs2000, clear
 
 * Survey weights (see WVS documentation).

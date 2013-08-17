@@ -1,4 +1,10 @@
 
+* Check setup.
+run setup/require estout fre tab_chi renvars scheme-burd
+
+* Log results.
+cap log using code/week10.log, replace
+
 /* ------------------------------------------ SRQM Session 10 ------------------
 
    F. Briatte and I. Petev
@@ -27,24 +33,7 @@
 
 ----------------------------------------------------------------------------- */
 
-
-* Additional commands.
-foreach p in estout fre tab_chi  {
-	cap which `p'
-	if "`p'" == "tab_chi" cap which tabchi                 // name fix
-	if "`p'" == "scheme-burd" cap which scheme-burd.scheme // name fix
-	if _rc == 111 ssc install `p'
-}
-
-* Log.
-cap log using code/week10.log, replace
-
-
-* ====================
-* = DATA DESCRIPTION =
-* ====================
-
-
+* Load ESS dataset.
 use data/ess2008, clear
 
 * Subsetting to respondents age 25+ with full data.
@@ -82,7 +71,7 @@ la var diff "Allow many/some migrants of different race/ethnicity from majority"
 d agea gndr brncntr eduyrs hinctnta lrscale
 
 * Renaming.
-ren (agea hinctnta lrscale) (age income rightwing)
+renvars agea hinctnta lrscale \ age income rightwing
 
 * Create age groups.
 gen cohort = irecode(age, 24, 34, 44, 54, 64, 74)

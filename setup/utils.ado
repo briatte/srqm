@@ -16,7 +16,6 @@ cap pr drop load
 program load
 	syntax anything(everything) [if] [in]
 	loc p data/
-	noi di as err "`*'"
 	// open from working directory
 	cap use `*', clear
 	// if fails, open from data/ folder

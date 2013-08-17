@@ -1,11 +1,17 @@
 
+* Check setup.
+run setup/require fre scheme-burd spineplot
+
+* Log results.
+cap log using code/week5.log, replace
+
 /* ------------------------------------------ SRQM Session 5 -------------------
 
    F. Briatte and I. Petev
 
  - TOPIC:  Social Determinants of Adult Obesity in the United States
 
- - DATA:   National Health Interview Survey 2009
+ - DATA:   U.S. National Health Interview Survey (2009)
 
    We study variations in the Body Mass Index (BMI) of insured and uninsured
    American adults, in order to show how differences observed between racial
@@ -68,23 +74,7 @@
 
 ----------------------------------------------------------------------------- */
 
-
-* Install required commands.
-foreach p in fre scheme-burd spineplot {
-	cap which `p'
-	if "`p'" == "scheme-burd" cap which scheme-burd.scheme // name fix
-	if _rc == 111 cap noi ssc install `p'
-}
-
-* Log results.
-cap log using code/week5.log, replace
-
-
-* ====================
-* = DATA DESCRIPTION =
-* ====================
-
-
+* Load NHIS data.
 use data/nhis2009, clear
 
 * Individual survey weights.

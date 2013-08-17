@@ -1,9 +1,19 @@
 
+* Check setup.
+run setup/require fre
+
+* Log results.
+cap log using code/week2.log, replace
+
 /* ------------------------------------------ SRQM Session 2 -------------------
 
    F. Briatte and I. Petev
 
-   Hi! Welcome to your second SRQM do-file.
+ - TOPIC:  Support for Sharia Law in Nine Countries
+
+ - DATA:   U.S. National Health Interview Survey (2009)
+
+ - Hi! Welcome to your second SRQM do-file.
 
  - All the do-files for this course assume that you have set up Stata first by 
    adjusting some parameters, most importantly setting the working directory to
@@ -29,25 +39,7 @@
 
 ----------------------------------------------------------------------------- */
 
-
-* To run this do-file, you might need to have installed the -fre- command. The
-* next lines will check that: select the whole loop and execute it. The loop
-*  spans from -foreach- to the final curly bracket '}' a few lines later.
-foreach p in fre {
-	cap which `p'
-	if _rc == 111 cap noi ssc install `p'
-}
-
-* Log the commands and results from this do-file.
-cap log using code/week2.log, replace
-
-
-* ====================
-* = DATA DESCRIPTION =
-* ====================
-
-
-* Data: U.S. National Health Interview Survey (2009).
+* Load NHIS dataset.
 use data/nhis2009, clear
 
 * Once the dataset is loaded, the Variables window will fill up, and you will

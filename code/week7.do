@@ -1,4 +1,10 @@
 
+* Check setup.
+run setup/require mkcorr renvars
+
+* Log results.
+cap log using code/week7.log, replace
+
 /* ------------------------------------------ SRQM Session 7 -------------------
 
    F. Briatte and I. Petev
@@ -26,30 +32,11 @@
 
 ----------------------------------------------------------------------------- */
 
-
-* Install required commands.
-foreach p in mkcorr {
-	cap which `p'
-	if _rc == 111 cap noi ssc install `p' // install from online if missing
-}
-
-* Log results.
-cap log using code/week7.log, replace
-
-
-* ====================
-* = DATA DESCRIPTION =
-* ====================
-
-
+* Load QOG dataset.
 use data/qog2013, clear
 
 * Rename variables to short handles.
-ren wdi_fr births
-ren bl_asy25mf schooling
-ren undp_hdi hdi
-ren ti_cpi corruption
-ren gid_wip femparl
+renvars wdi_fr bl_asy25mf undp_hdi ti_cpi gid_wip \ births schooling hdi corruption femparl
 
 * Compute GDP per capita.
 gen gdpc = unna_gdp / unna_pop

@@ -1,4 +1,10 @@
 
+* Check setup.
+run setup/require estout fre leanout mkcorr renvars
+
+* Log results.
+cap log using code/week9.log, replace
+
 /* ------------------------------------------ SRQM Session 9 -------------------
 
    F. Briatte and I. Petev
@@ -31,26 +37,11 @@
 
 ----------------------------------------------------------------------------- */
 
-
-* Install required commands.
-foreach p in fre estout leanout mkcorr {
-    cap which `p'
-    if _rc == 111 cap noi ssc install `p' // install from online if missing
-}
-
-* Export log.
-cap log using code/week9.log, replace
-
-
-* ====================
-* = DATA DESCRIPTION =
-* ====================
-
-
+* Load QOG dataset.
 use data/qog2013, clear
 
 * Rename variables to short handles.
-ren (wdi_fr bl_asy25mf wdi_hiv ciri_wosoc) (births schooling hiv womenrights)
+renvars wdi_fr bl_asy25mf wdi_hiv ciri_wosoc \ births schooling hiv womenrights
 
 * Transformation of real GDP per capita to logged units.
 gen log_gdpc = ln(unna_gdp / unna_pop)

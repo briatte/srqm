@@ -14,9 +14,9 @@ pr stab
     exit 0
   }
 
-  qui which estout
+  cap qui which estout
   if _rc == 111 {
-    di as txt "installing", as inp "estout", as txt "first..."
+    noi di as txt "installing", as inp "estout", as txt "first..."
     ssc inst estout, replace
   }
 
