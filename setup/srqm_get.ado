@@ -1,5 +1,5 @@
 *! srqm_get: download SRQM course material (do-files, programs, slides)
-*! type -srqm_get draft.do- for a demo
+*! type -srqm_get demo.do- for a demo
 cap pr drop srqm_get
 program srqm_get
 	tokenize "`*'"
@@ -58,7 +58,7 @@ program srqm_get
 		    	cap qui copy "`pb'" "`pf'", public replace
 		    	if !_rc {
 		    		cap rm "`pb'"
-		    		di as txt "- `bk'.`be' restored to `1'.`be'"
+		    		di as txt "- `bk'.`be' restored to `1'"
 		    	}
 		    	else {
 		    		di as err "No backup restored: error", _rc "." 

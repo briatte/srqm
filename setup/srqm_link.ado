@@ -8,8 +8,8 @@ program srqm_link
 cap confirm file "`c(sysdir_stata)'profile.do"
 if "`clean'" != "" {
   cap rm "`c(sysdir_stata)'profile.do"
-  if _rc ==0 di as txt _n "Successfully removed", "`c(sysdir_stata)'profile.do." _n "Farewell, enjoy life and Stata."
-  if _rc !=0 di as err _n "Nothing to remove at", "`c(sysdir_stata)'profile.do." _n "You have already left. Be well."
+  if _rc ==0 di as txt "Successfully removed", "`c(sysdir_stata)'profile.do" _n "Farewell, enjoy life and Stata."
+  if _rc !=0 di as txt "Nothing to remove at", "`c(sysdir_stata)'profile.do" _n "You have already left. Be well."
   cd "`c(sysdir_stata)'" // to avoid profile.do re-setting up on Macs
 }
 else if _rc | "$srqm_wd" != "`c(pwd)'" | "`force'" != "" {
