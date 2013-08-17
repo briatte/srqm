@@ -5,7 +5,7 @@ This repository contains the [Statistical Reasoning and Quantitative Methods][sr
 [jg]: http://joelgombin.fr/
 [ip]: http://ipetev.org/
 
-The course requires a working copy of [Stata][stata]. Instructions to set up your computer for the course are provided in the introduction of the _Stata Guide_ and repeated in class.
+The course requires a working copy of [Stata][stata]. Instructions to set up your computer for the course are provided in the introduction of the course handbook and repeated in class.
 
 [stata]: http://www.stata.com/
 
