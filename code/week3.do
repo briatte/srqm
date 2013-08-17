@@ -45,7 +45,7 @@ cap log using code/week3.log, replace
    detail, and another draft paragraph that lists your independent variables and
    offers a general theory on the articulation between your variables.
 
-   Last updated 2013-02-18.
+   Last updated 2013-08-17.
 
 ----------------------------------------------------------------------------- */
 

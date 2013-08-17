@@ -29,7 +29,7 @@ cap log using code/week10.log, replace
    logistic estimator is more appropriate than a linear one, and include draft
    models in your revised draft.
    
-   Last updated 2013-05-31.
+   Last updated 2013-08-17.
 
 ----------------------------------------------------------------------------- */
 

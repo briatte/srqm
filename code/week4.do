@@ -30,7 +30,7 @@ cap log using code/week4.log, replace
    no systematic way to assess normality, but your decision should take skewness
    and kurtosis into account.
    
-   Last updated 2013-02-21.
+   Last updated 2013-08-17.
 
 ----------------------------------------------------------------------------- */
 

@@ -49,7 +49,7 @@ cap log using code/week6.log, replace
    the proportions test, the Chi-squared test and finally linear correlation.
    The Stata Guide also covers these tests. Make sure to read what you need to!
 
-   Last updated 2013-05-29.
+   Last updated 2013-08-17.
 
 ----------------------------------------------------------------------------- */
 

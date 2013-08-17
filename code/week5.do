@@ -70,7 +70,7 @@ cap log using code/week5.log, replace
    to a simple table. The result will be a plain text file that you can copy
    and paste into Google Documents, or import into any other text editor.
 
-   Last updated 2012-11-13.
+   Last updated 2013-08-17.
 
 ----------------------------------------------------------------------------- */
 

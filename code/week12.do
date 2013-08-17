@@ -18,7 +18,7 @@ cap log using code/week12.log, replace
    
    For this session, all hypotheses are to be provided by the students.
    
-   Last updated 2013-05-31.
+   Last updated 2013-08-17.
 
 ----------------------------------------------------------------------------- */
 

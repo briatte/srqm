@@ -35,7 +35,7 @@ cap log using code/week2.log, replace
    dataset. Your sample should be all world countries: do not further restrict
    the sample further by subsetting to less observations.
 
-   Last updated 2013-02-17.
+   Last updated 2013-08-17.
 
 ----------------------------------------------------------------------------- */
 

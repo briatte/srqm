@@ -28,7 +28,7 @@ cap log using code/week7.log, replace
    on interpreting rather than coding. Use the course material to bring yourself
    up to speed with both Stata and essential statistical theory.
 
-   Last updated 2013-05-28.
+   Last updated 2013-08-17.
 
 ----------------------------------------------------------------------------- */
 

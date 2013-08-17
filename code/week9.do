@@ -33,7 +33,7 @@ cap log using code/week9.log, replace
    variables that are (or are closer to being) categorical in nature, and will
    go deeper into the core mechanics of regression modelling.
 
-   Last updated 2013-05-28.
+   Last updated 2013-08-17.
 
 ----------------------------------------------------------------------------- */
 

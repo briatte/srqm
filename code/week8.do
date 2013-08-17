@@ -25,7 +25,7 @@ cap log using code/week8.log, replace
    variables. Make sure that you understand the logic of ordinary least squares
    (OLS) in order to include simple linear regression models in your next draft.
 
-   Last updated 2013-05-28.
+   Last updated 2013-08-17.
 
 ----------------------------------------------------------------------------- */
 
