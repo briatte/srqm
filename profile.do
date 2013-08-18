@@ -27,19 +27,29 @@ else if _rc {
 
 // --- COURSE ------------------------------------------------------------------
 
+loc e = 0
+
 // load utilities
-cap adopath + "`c(pwd)'/setup"
+adopath + "`c(pwd)'/setup"
 cap run setup/utils.ado
+if _rc loc e = 2
 
 // check folder
 cap noi srqm_scan
-if _rc != 0 exit -1
+if _rc loc e = 2
 
 // check packages
 cap noi srqm_pkgs, quiet
+if _rc loc e = 1
 
 // check link
 cap noi srqm_link
+if _rc loc e = 1
+
+if `e' > 0 {
+  di as err "Your setup is incomplete."
+  if `e' > 1 exit -1
+}
 
 // --- HELLO -------------------------------------------------------------------
 

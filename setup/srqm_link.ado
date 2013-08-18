@@ -32,7 +32,7 @@ else if _rc | "$srqm_wd" != "`c(pwd)'" | "`force'" != "" {
       file write fh _tab "cap noi run profile" _n
       file write fh _tab "if !_rc noi type profile.do, starbang" _n _n
       file write fh _tab "if _rc | " _char(34) _char(36) "srqm_wd" _char(34) "==" _char(34) _char(34) " { // folder check failed" _n
-      file write fh _tab _tab "noi di as txt ///" _n
+      file write fh _tab _tab "noi di as err ///" _n
       file write fh _tab _tab _tab _char(34) "Some essential course material is not available in your working directory." _char(34) " _n(2) ///" _n
       file write fh _tab _tab _tab _char(34) "This error occurs when you modify the folders or files of the SRQM folder." _char(34) " _n ///" _n
       file write fh _tab _tab _tab _char(34) "Restore the SRQM folder from a backup copy or from http://f.briatte.org/srqm" _char(34) " _n ///" _n
@@ -52,13 +52,13 @@ else if _rc | "$srqm_wd" != "`c(pwd)'" | "`force'" != "" {
       // Windows Vista and 7 machines require the user to right-click
       // the application and run it as admin for this bit to work.
       //
-      di as err ///
-          _n "Error: the Stata application folder is not writable on your system." as txt _n(2) ///
+      di as err _n ///
+          _n "Warning: the Stata application profile is not writable on your system." as txt _n(2) ///
           _n "Try again while running Stata with admin privileges. If the problem persists," ///
           _n "you will have to manually select the SRQM folder from the 'File : Change" ///
-          _n "Working Directory...' menu and then execute the {stata run profile} command."
-          _n "at the beginning of every course session. All apologies to Windows users."
-      exit 0
+          _n "Working Directory...' menu and then execute the {stata run profile} command"
+          _n "to set up your computer for the course. All apologies to Windows users."
+      exit -1
   }
 }
 

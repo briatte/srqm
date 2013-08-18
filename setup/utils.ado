@@ -68,4 +68,49 @@ program science
 	di as txt _n "  -- Rudolf Carnap" _n
 end
 
+*! pkgs: determine if a folder can be used to install Stata packages
+*! version 0.1 F. Briatte 18aug2013
+cap pr drop pkgs
+program pkgs
+  syntax [using/] [, quiet]
+  
+  * test PLUS directory codename by default
+  if "`using'" == "" loc using = c(sysdir_plus)
+  loc pwd = c(pwd)
+  loc trk = "stata.trk"
+
+  * set working directory to install path
+  cap confirm file "`using'"
+  if _rc == 601 cap mkdir "`using'", public
+  qui cd "`using'"
+
+  * determine whether stata.trk exists
+  loc erase = 0
+  cap confirm new file `trk'
+  if _rc == 0 loc erase = 1
+
+  * determine whether the user has admin privileges
+  tempname foo
+  cap file open `foo' using `trk', write append
+  cap file close `foo'
+
+  * declare paths that can write to stata.trk valid
+  if _rc == 0 {
+    sysdir set PLUS "`using'"
+    if "`quiet'" == "" di as txt "Package install path set to:"
+  }
+  else {
+    di as err _n "Warning: invalid package install path" _n "`using'"
+  }
+
+  * erase empty stata.trk created on permissions test
+  if `erase' == 1 {
+  	cap rm `trk'
+  	if _rc di as err "Warning: permissions test failed with code", _rc
+  }
+
+  * return
+  qui cd "`pwd'"
+end
+
 // enjoy

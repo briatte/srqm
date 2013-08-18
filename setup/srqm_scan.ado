@@ -31,7 +31,7 @@ program srqm_scan
                   di as err _n "Error: neither `d'.dta or `d'.zip", ///
                       "could be located" _n "in the `1' folder"
                   qui cd ..
-                  exit -1
+                  exit -2
               }
           }
           cap noi ls *.dta, w
