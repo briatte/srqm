@@ -10,17 +10,13 @@
 	%
   \begin{mybox}
     %
-    \newthought{This section} deals with data management. Because we will be using course datasets and preinstalled Stata commands, you will need to have \textbf{run the course setup} as explained in Section~\ref{sec:course-setup} to follow from here on.%
+    \smallcaps{This section} deals with data management. Because we will be using course datasets and preinstalled Stata commands, you will need to have \textbf{run the course setup} as explained in Section~\ref{sec:course-setup} to follow from here on.%
 
     %
-    \paragraph{Replication coursework} %
-    Make sure that you have fully replicated \filename{week2.do} and \filename{week3.do} by the end of this section.%
-
-    %
-    \paragraph{Additional readings} %
-    Read \citeauthor[ch.~2--3]{Urdan:2010a}, and optionally  \citeauthor[ch.~2.1--2.4]{FeinsteinThomas:2002d}, by the end of this section.%
+    \paragraph{Coursework} %
+    This section is covered in class during Weeks~3--4. Make sure that you have fully replicated the course do-files for these weeks by the end of this section. Read \citeauthor[ch.~2--3]{Urdan:2010a}, and optionally \citeauthor[ch.~2.1--2.4]{FeinsteinThomas:2002d}.%
     
-  \end{mybox}
+  \end{mybox}\bigskip%
   %
   %
   % \minitoc
@@ -30,9 +26,6 @@
 	\newpage
 	%
 	%
-	
-% -- fre correctly pkg{}'d on first instance
-% -- 2013-03-04
 
 % 0. intro:
 
@@ -136,12 +129,10 @@ The \GSS dataset, just as the \nhis (\NHIS) dataset, which is used primarily for
 
 Several techniques can enhance simple random sampling procedures, such as stratified or cluster sampling, where primary sampling units (\eg individuals) are selected within nested structures (\eg households). Weighting schemes can also provide postsurvey adjustment to correct for undercoverage, \ie the existence of different probabilities of selection among the survey respondents. You will find mentions to survey weights in the codebooks of your dataset and in the data appendix, so that you can easily set them in your own analysis.%
 
-\newthought{Using external data for your research project} is \textbf{not} recommended for this course, due to the extra workload that it will inflict on your group at the data preparation level. If you plan to ask for an exception, please make that decision reasonably and plan your work well in advance, especially if you have not yet assembled the data, which is an \emph{extremely} time-consuming task. \hlred{You will be asked to abandon any effort that has not been successful in the first month of class.}%
-
-%
-	\label{external-data-warning}%
-	\footnote{See \url{https://github.com/briatte/srqm/wiki/data} for a short selection.} %
-		might contain possible candidates for cross-sectional analysis. %
+\label{external-data-warning}%
+\newthought{Using external data sources for your research project}%
+	\footnote{See the course wiki for a short selection: \url{https://github.com/briatte/srqm/wiki/data}} %
+  is \textbf{not} recommended for this course, due to the extra workload that it will inflict on your group at the data preparation level. If you plan to ask for an exception, please make that decision reasonably and plan your work well in advance, especially if you have not yet assembled the data, which is an \emph{extremely} time-consuming task. \hlred{You will be asked to abandon any effort that has not been successful in the first month of class.}%
 		%
 
 You need to read this section to achieve three goals:
@@ -152,7 +143,7 @@ You need to read this section to achieve three goals:
 	\item \textbf{Preserve a high sample size.} Your data preparation code will end on a diagnosis of how missing values affect your sample, as you will be required to delete all observations that contain missing values.
 \end{enumerate}
    
-Next to the data itself, you should now turn to the data documentation to start reading about the measurements that you will be manipulating for data preparation.%
+Next to the data itself, you should now also organize and open the data documentation to read about the variables that you will be preparing for analysis.%
 
 %
 \include{2A_essential}%

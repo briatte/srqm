@@ -14,7 +14,7 @@
 \label{sec:insheet}
 \index{Data!Conversion!From \textsc{csv} files}
 
-\newthought{Plain text files} that use \underline{c}omma-\underline{s}eparated \underline{v}alues (\ext{csv}) can be imported into Stata if you carefully clean the file first from any additional element that is not part of the data itself.%
+\newthought{Plain text files} that use \underline{c}omma-\underline{s}eparated \underline{v}alues (\ext{.csv}) can be imported into Stata if you carefully clean the file first from any additional element that is not part of the data itself.%
 
 % Fixed format
 \label{sec:infix}
@@ -35,14 +35,14 @@ If you try to process the example above, you will realize that fixed format data
 \label{sec:import-excel}
 \index{Data!Conversion!From Excel files}
 
-Microsoft Excel files (\ext{xls}) are written in a proprietary spreadsheet format that can be imported into Stata~12 with the \cmd{import excel} command. Datasets written for \textsc{sas}, \textsc{spss} or other statistical software can be converted with Stat/Transfer,%
+Microsoft Excel files (\ext{.xls}) are written in a proprietary spreadsheet format that can be imported into Stata~12 with the \cmd{import excel} command. Datasets written for \textsc{sas}, \textsc{spss} or other statistical software can be converted with Stat/Transfer,%
   \footnote{StataCorp recommends this solution: \url{http://www.stata.com/products/stat-transfer/}. Sciences Po has made Stat/Transfer available on its workstations.} %
   or with free software by using R with the \texttt{foreign} package to import and export the data.%
   \footnote{See the procedure at \url{http://www.statmethods.net/input/importingdata.html}. The \texttt{foreign} package is reliable but leaves some encoding issues.}%
 
 As soon as you take it on yourself to convert the data rather than to trust the data team responsible for the original data files, you are exposing yourself to conversion errors and will almost certainly have to perform time-consuming verifications on your unofficial dataset.%
 
-For this reason, your safest option is to use official data files provided in the Stata proprietary format, or to rely on a machine-readable format of your data like \ext{csv} (comma-separated values) that can be read in any software.%
+For this reason, your safest option is to use official data files provided in the Stata proprietary format, or to rely on a machine-readable format of your data like \ext{.csv} (comma-separated values) that can be read in any software.%
 
 % 2.2
 %
