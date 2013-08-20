@@ -42,16 +42,17 @@ if inlist("`1'", "all", "ess2008") {
 
 if inlist("`1'", "all", "gss0012") {
 	// Get the data.
-	cap use "`src'/GSS/gss7212_r1.dta", clear
+  loc gss gss7212_r2
+	cap use "`src'/GSS/`gss'.dta", clear
 
 	// Download the 1972-2012 cumulative file if needed (large, > 300 MB).
 	if _rc==601 {
 		local link "http://publicdata.norc.org/GSS/DOCUMENTS/OTHR/GSS_stata.zip"
 		copy `link' temp.zip, replace
 		unzipfile temp.zip
-		use gss7212_r1.dta, clear
-		rm temp.zip
-		rm gss7212_r1.dta // comment that out to keep the full cumulative file
+		use `gss'.dta, clear
+		// rm temp.zip // comment out to keep the cumulative data zip
+		// rm `gss'.dta // comment out to keep the cumulative data file
 	}
 
 	// Subset years.
