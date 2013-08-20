@@ -25,13 +25,13 @@
 
 \newthought{Quantitative data} is a form of data that simplifies information into variables that take different types and values. Some variables, such as gross domestic product or monthly income, hold \emph{continuous} data that are strictly numeric, while others hold \emph{categorical} data, such as social class for individuals or political regime type for nation states.%
 
-As in qualitative research, the collection of data for quantitative analysis systematically raises issues of conceptualisation, measurement and reliability, with specific issues related to the sampling design that makes a sample representative of a target population, like the residents of a country.
+As in qualitative research, the collection of data for quantitative analysis systematically raises issues of conceptualisation, measurement and reliability, with specific issues related to the sampling design that makes a sample representative of a target population, like the residents of a country.%
 
-\newthought{Manipulating a dataset} is itself a complex task that requires some familiarity with the structure of the data, with the software commands available to prepare the data, and with the research design of your project. Using predefined datasets, as we will in this course, will simplify these operations a great deal, but will not entirely suppress them, so that we can learn some of the basics of data management and preparation.
+\newthought{Manipulating a dataset} is itself a complex task that requires some familiarity with the structure of the data, with the software commands available to prepare the data, and with the research design of your project. Using predefined datasets, as we will in this course, will simplify these operations a great deal, but will not entirely suppress them, so that we can learn some of the basics of data management and preparation.%
 
-This section describes the essential steps that you should follow to prepare your data before starting your analysis. It also outlines some complementary data skills that will serve you if you have to work with quantitative data beyond the scope of this course.
+This section describes the essential steps that you should follow to prepare your data before starting your analysis. It also outlines some complementary data skills that will serve you if you have to work with quantitative data beyond the scope of this course.%
 
-\newthought{A dataset} is a file that contains a set of variables for a given number of \emph{observations}. Each row of the dataset holds a single observation, and each column holds a single variable. The data will usually start with an `ID' or `Name' variable, which might be the country name or code in a country-level dataset, or a unique identifier code in an anonymous individual-level survey. That variable is set to characterise each \emph{unit of analysis} of the data, which might be just anything: countries, firms, NGOs, individuals, historical events, etc.
+\newthought{A dataset} is a file that contains a set of variables for a given number of \emph{observations}. Each row of the dataset holds a single observation, and each column holds a single variable. The data will usually start with an `ID' or `Name' variable, which might be the country name or code in a country-level dataset, or a unique identifier code in an anonymous individual-level survey. That variable is set to characterise each \emph{unit of analysis} of the data, which might be just anything: countries, firms, NGOs, individuals, historical events, etc.%
 
 \bigskip
 \begin{table}
@@ -43,14 +43,14 @@ Observation & ID & Variable 1 & Variable 2 & ... \\
 \midrule
 \emph{Country-level data:} & & & & \\
 \quad 1. & Afghanistan   & Value   & Value   & ... \\
-\quad 2. & Albania & Value & \hlred{\emph{Missing}} & ... \\
+\quad 2. & Albania & Value & \na & ... \\
 \quad 3. & Algeria   & Value   & Value   & ... \\
 \quad ... & & & & \\
 \addlinespace
 \emph{Individual-level data:} & & & & \\
 \quad 1. & 17534   & Value   & Value   & ... \\
 \quad 2. & 17535 & Value & Value & ... \\
-\quad 3. & 17536   & \hlred{\emph{Missing}}   & Value   & ... \\
+\quad 3. & 17536   & \na   & Value   & ... \\
 \quad ... & & & & \\
 \bottomrule
 \end{tabular}
@@ -76,7 +76,7 @@ Observation & ID & Year & Variable 1 & ... \\
 \quad 2. & France & 2011 & Value & ... \\
 \quad 3. & France & 2012 & Value & ... \\
 \quad 4. & Germany & 2010 & Value & ... \\
-\quad 5. & Germany & 2011 & \hlred{\emph{Missing}} & ... \\
+\quad 5. & Germany & 2011 & \na & ... \\
 \quad 6. & Germany & 2012 & Value & ... \\
 \quad ... & & & & \\
 \bottomrule
@@ -103,8 +103,8 @@ Observation & Country & Year & Household ID & Person ID & Variable 1 & ... \\
 \quad 4. & Turkey & 2012 & 908 & 24104 & Value & ... \\
 \quad 5. & Ukraine & 2011 & 403 & 46889 & Value & ... \\
 \quad 6. & Ukraine & 2012 & 403 & 46890 & Value & ... \\
-\quad 7. & Ukraine & 2011 & 404 & 46891 & \hlred{\emph{Missing}} & ... \\
-\quad 8. & Ukraine & 2012 & 404 & 46892 & \hlred{\emph{Missing}} & ... \\
+\quad 7. & Ukraine & 2011 & 404 & 46891 & \na & ... \\
+\quad 8. & Ukraine & 2012 & 404 & 46892 & \na & ... \\
 \quad ... & & & & & & \\
 \bottomrule
 \end{tabular}
@@ -115,9 +115,7 @@ Observation & Country & Year & Household ID & Person ID & Variable 1 & ... \\
 
 \newthought{In this course}, we focus on cross-sectional data in which we can assume that the observations are independent from each other. Special methodological requirements apply to panel data and times series, where this requirement is violated by the temporal dependence between recurring observations.\footcite{BeckKatz:2011e}%
 
-A selection of datasets is available from the \data folder. It contains three individual-level surveys using large probability samples: the \ess (\ESS), \gss (\GSS) and \wvs (\WVS). For country-level analysis, the recommended source is the \qog (\QOG) Standard Dataset, which collates together variables from the World Bank and the United Nations as well as academic research and various other sources. All datasets are high quality sources with extensive documentation.%
-
-The \GSS dataset, just as the \nhis (\NHIS) dataset, which is used primarily for teaching examples, both contain several years of observations and require to be subset to only one year. The \QOG dataset is a cross-sectional version of time series data, and therefore works with a more flexible period of observation that uses multiple-year figures pooled into representative averages. The \ESS and \WVS datasets correspond to survey waves; the course datasets contain Round 4 (2008) of the \ess and Wave 3 (1999-2001) of the \wvs.%
+A selection of datasets is available from the \data folder. It contains three individual-level surveys using large probability samples: the \ess (\ESS), \gss (\GSS) and \wvs (\WVS). For country-level analysis, the recommended source is the \qog (\QOG) Standard Dataset, which collates together variables from the World Bank and the United Nations as well as academic research and various other sources. All datasets are high quality sources.%
 
 \newthought{For your project}, select one of these datasets and fetch additional documentation from the course appendix at p.~\pageref{sec:data-sources}. You will need to get the data codebook as well as information on the \emph{sampling procedure} if you are using survey data. The sampling procedure is the technique that guarantees the representativeness of the sample by ensuring that each member of the target population had an equal probability of selection within the sampling frame.%
 

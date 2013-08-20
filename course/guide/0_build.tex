@@ -4,6 +4,10 @@
 	\author{François Briatte}
 	\publisher{\url{http://f.briatte.org/teaching/quanti/}}
 
+  % Filter out unwanted warnings and error messages
+  \usepackage{silence}
+    \WarningFilter{latex}{Marginpar}
+
 	\input{config/sty} % style
 	\input{config/lex} % word shortcuts
 	\input{config/doc} % documentation index
