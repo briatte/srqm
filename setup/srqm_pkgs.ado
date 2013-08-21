@@ -69,15 +69,23 @@ else {
           if "`quiet'" == "" di as txt "[`i'/`s'] installing:", as inp, "`t'"
           // note: keep special cases at end of local list for the 699 hack to work with them
 
-          if "`t'"=="spmap" {
-            cap noi ssc inst spmap, replace
+          if "`t'"=="wbopendata" {
+            cap noi ssc inst `t', all replace
   					local maps "world-c.dta world-d.dta"
   					foreach y of local maps {
-              ssc cp `y'
   						cap copy `y' data/`y'
-  						cap rm `y'
+              if !_rc di as txt "(file `y' moved to data folder)"
+  						cap erase `y'
   					}
-            if !_rc di as txt "(moved to data folder: `maps')"
+          }
+          else if "`t'"=="kountry" {
+            cap noi ssc inst `t', all replace
+            local files "kountry.dta k_other_extras.txt"
+  					foreach y of local files {
+  						cap copy `y' "`c(sysdir_plus)'/k/`y'"
+              if !_rc di as txt "(file `y' moved to PLUS folder; nothing to worry about)"
+  						cap erase `y'
+  					}
           }
           else if "`t'"=="renvars" {
               cap noi net ins dm88_1, from ("http://www.stata-journal.com/software/sj5-4/")
