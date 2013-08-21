@@ -53,8 +53,8 @@ cap log using code/week6.log, replace
 
 ----------------------------------------------------------------------------- */
 
-* Load ESS dataset.
-use data/ess2008, clear
+* Load ESS dataset, Round 4.
+use data/ess0810 if essround == 4, clear
 
 * Survey weights.
 svyset [pw = dweight] // weighting scheme set to country-specific population

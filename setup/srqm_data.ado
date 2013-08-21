@@ -26,16 +26,20 @@ di as inp _n "Updating `1' teaching dataset(s)..." _n
 // -------------------------------------------------------------- ESS 2008 -----
 
 if inlist("`1'", "all", "ess2008") {
-	// Get the data (downloaded from the website).
-	use "`src'/ESS/ESS4e04.1/ESS4e04.1_F1.dta", clear
+  // Get the data (downloaded from the website).
+  use "`src'/ESS/ESS4e04.1/ESS4e04.1_F1.dta", clear
 
-	// Trim (very low threshold to cut at approx. 500).
-	srqm_datatrim, k(1)
-	
-	// Get codebook.
-	copy "`src'/ESS/ESS4e04.1/ESS4e04.1.pdf" data/ess2008_codebook.pdf, replace
-	
-	srqm_datamake, label(European Social Survey 2008) filename(ess2008)
+  // Zero-match merge (non-longitudinal survey).
+  merge 1:1 idno cntry edition using "`src'/ESS/ESS5e03.0/ESS5e03.0_F1.dta", nogen
+
+  // Trim (this threshold drops nation-specific questions).
+  srqm_datatrim, k(9)
+
+  // Get codebook.
+  copy "`src'/ESS/ESS4e04.1/ESS4e04.1.pdf" data/ess0810r4_codebook.pdf, replace
+  copy "`src'/ESS/ESS5e03.0/ESS5e03.0.pdf" data/ess0810r5_codebook.pdf, replace
+
+  srqm_datamake, label(European Social Survey 2008-2010) filename(ess0810)
 }
 
 // -------------------------------------------------------------- GSS 2012 -----
