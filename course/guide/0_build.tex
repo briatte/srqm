@@ -13,12 +13,7 @@
 	\input{config/doc} % documentation index
   
   \usepackage{hyphenat}
-  \usepackage[
-    style=mla,
-    autocite=footnote,
-    guessmedium=false,
-    backend=biber
-  ]{biblatex}
+  \usepackage[style=mla, autocite=footnote, guessmedium=false, backend=biber]{biblatex}
   \addbibresource{references.bib}
 
 \begin{document}
@@ -36,8 +31,6 @@
 	
 \mainmatter %% r-7
 
-  %
-  %
   \input{1_intro}         %% ... session 1 (course, toc)    ... incl. setup and coursework
 	
   % 1) data visualization
@@ -58,17 +51,6 @@
 \backmatter
 
   \appendix
-
-  % A1. on computers
-  %
-  % \input{A_computers}
-  
-  % A2. course datasets
-  % 
-  % \input{A_sources}
-
-  % A3. math recap
-  % 
   \input{A_math}
 
 \printbibliography%

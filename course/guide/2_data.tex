@@ -21,7 +21,7 @@
 	\newpage
 	%
 
-% 0. intro:
+% 0. intro (use, count, use if)
 
 \newthought{Quantitative data} is a form of data that simplifies information into variables that take different types and values. Some variables, such as gross domestic product or monthly income, hold \emph{continuous} data that are strictly numeric, while others hold \emph{categorical} data, such as social class for individuals or political regime type for nation states.%
 
@@ -32,6 +32,8 @@ As in qualitative research, the collection of data for quantitative analysis sys
 This section describes the essential steps that you should follow to prepare your data before starting your analysis. It also outlines some complementary data skills that will serve you if you have to work with quantitative data beyond the scope of this course.%
 
 \newthought{A dataset} is a file that contains a set of variables for a given number of \emph{observations}. Each row of the dataset holds a single observation, and each column holds a single variable. The data will usually start with an `ID' or `Name' variable, which might be the country name or code in a country-level dataset, or a unique identifier code in an anonymous individual-level survey. That variable is set to characterise each \emph{unit of analysis} of the data, which might be just anything: countries, firms, NGOs, individuals, historical events, etc.%
+
+% \input{T_data_cs}
 
 \bigskip
 \begin{table}
@@ -64,6 +66,8 @@ Observation & ID & Variable 1 & Variable 2 & ... \\
 
 Basic data structures like those shown in Table~\ref{tbl:basic-data} are \emph{cross-sectional} because they contain data for only one time period. Datasets that contain values for more than one time period $T$ are called \emph{time series}. Table~\ref{tbl:csts-data} shows an example of cross-sectional time series.
 
+% \input{T_data_csts}
+
 \bigskip
 \begin{table}
 \begin{center}
@@ -88,6 +92,8 @@ Observation & ID & Year & Variable 1 & ... \\
 
 \bigskip
 The structure of the data can get even more complex if there is more than one \emph{level of observation} nested within each other, as when some respondents are taken from the same household, region and country. Furthermore, the observations can repeat over time and form a \emph{panel}, as when epidemiologists observe a cohort of adults through their life course in a longitudinal study. Table~\ref{tbl:panel-data} shows an example of cross-country household panel data.
+
+% \inpit{T_data_longit}
 
 \bigskip
 \begin{table}
