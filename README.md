@@ -15,9 +15,9 @@ The course requires a working copy of [Stata][stata]. Instructions to set up you
 
 | Filename       | Data                                  | Year(s)        |
 |:---------------|:--------------------------------------|:---------------|
-| `ess2008`      | European Social Survey                | Round 4 (2008) |
+| `ess0810`      | European Social Survey                | Rounds 4-5 (2008-2010) |
 | `gss0012`      | General Social Survey                 | 2000-2012      |
-| `nhis2009`     | National Health Interview Survey      | 2009           |
+| `nhis9711`     | National Health Interview Survey      | 1977-2011      |
 | `qog2013`      | Quality of Government                 | 2009 ± 3 years |
 | `wvs2000`      | World Values Survey                   | Wave 4 (2000)  |
 
@@ -27,3 +27,10 @@ The course requires a working copy of [Stata][stata]. Instructions to set up you
 Additional material is distributed in class through Google Documents.
 
 Welcome to the course, and see you soon!
+
+# HISTORY
+
+* 4.3: updated NHIS, QOG and ESS datasets.
+* 4.2: specific FTP server for teaching material.
+* 4.1: better workaround for admin restrictions.
+* 4.0: reworked `srqm` course utilities.
