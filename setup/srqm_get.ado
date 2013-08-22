@@ -28,7 +28,8 @@ program srqm_get
 		local bk = subinstr(strtoname("`br' backup `c(current_date)'"), "__", "_", .)
 		
 		if "`be'" == "do"  local bf "code"
-		if "`be'" == "pdf" local bf "course"
+		if "`be'" == "pdf" | "`be'" == "txt" local bf "course"
+		if "`be'" == "zip" | "`be'" == "dta" local bf "data"
 		// careful with that axe eugene
 		if "`be'" == "ado" local bf "setup"
 		
@@ -38,7 +39,7 @@ program srqm_get
 		local pf "`bf'/`1'"
 		
 		if "`bf'" == "" {
-		    di as err "Error: wrong filename (should end with .ado, .do or .pdf)"
+		    di as err "Error: wrong filename (should end with .ado, .do, .dta, .zip or .pdf)"
 		    exit 198
 		}
 		else {
@@ -46,7 +47,7 @@ program srqm_get
 		    cap qui copy "`pf'" "`pb'", public replace
 		
 		    cap qui erase "`pf'" // instead of rm for Windows compatibility
-		    cap qui copy "http://briatte.org/srqm/`1'" "`pf'", public replace
+		    cap qui copy "http://srqm.briatte.org/`1'" "`pf'", public replace
 		
 		    if !_rc {
 		    	di as txt "Successfully downloaded."
