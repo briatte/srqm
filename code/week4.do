@@ -34,22 +34,21 @@ cap log using code/week4.log, replace
 
 ----------------------------------------------------------------------------- */
 
-* Load NHIS dataset.
-use data/nhis2009, clear
+* Load NHIS data for latest survey year.
+use data/nhis9711 if year == 2011, clear
 
-* Subset to most recent year.
-drop if year != 2009
+* Set individual survey weights.
+svyset psu [pw = perweight], strata(strata)
 
 
 * Dependent variable: Body Mass Index
 * -----------------------------------
 
-* Compute the Body Mass Index.
-gen bmi = weight * 703 / height^2
+gen bmi = weight * 703 / height^2 if weight < 996 & height < 96
 la var bmi "Body Mass Index"
 
-* Weight the data with NHIS individual weights.
-svyset psu [pw = perweight], strata(strata)
+* Detailed summary statistics.
+su bmi, d
 
 
 * Independent variables
@@ -308,11 +307,14 @@ ci bmi
 ci bmi, level(99)
 
 * Mean BMI for the full sample with survey weights (better representativeness).
-svy: mean bmi
+svy [pw = perweight, strata(strata)]: mean bmi
+
+* Mean BMI for the full sample with ajusted sample weights (even better).
+mean bmi [pw = sampweight]
 
 * The confidence intervals for the full sample show a high precision, both at
 * the 95% (alpha = 0.05) and 99% (alpha = 0.01) levels. This is due to the high
-* number of observations provided for the BMI variable.
+* number of observations available for the BMI variable.
 
 * If we compute the average BMI for subsamples of the population, such as one
 * category of the population, the total number of observations will drop and

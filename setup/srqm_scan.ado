@@ -3,7 +3,7 @@
 cap pr drop srqm_scan
 program srqm_scan
   syntax [anything] [, force]
-  glo srqm_datasets = "ess0810 gss0012 nhis2009 qog2013 wvs2000"
+  glo srqm_datasets = "ess0810 gss0012 nhis9711 qog2013 wvs2000"
   glo srqm_folders = "code data"
 
   di as txt _n "Working directory:" as txt _n "{browse `c(pwd)'}"

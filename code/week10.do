@@ -34,7 +34,7 @@ cap log using code/week10.log, replace
 ----------------------------------------------------------------------------- */
 
 * Load ESS dataset.
-use data/ess2008, clear
+use data/ess0810, clear
 
 * Subsetting to respondents age 25+ with full data.
 drop if agea < 25 | mi(imdfetn, agea, gndr, brncntr, eduyrs, hinctnta, lrscale)

@@ -74,17 +74,17 @@ cap log using code/week5.log, replace
 
 ----------------------------------------------------------------------------- */
 
-* Load NHIS data.
-use data/nhis2009, clear
+* Load NHIS data for latest survey year.
+use data/nhis9711 if year == 2011, clear
 
-* Individual survey weights.
+* Set individual survey weights.
 svyset psu [pw = perweight], strata(strata)
 
 
 * Dependent variable: Body Mass Index
 * -----------------------------------
 
-gen bmi = weight * 703 / height^2
+gen bmi = weight * 703 / height^2 if weight < 996 & height < 96
 la var bmi "Body Mass Index"
 
 * Detailed summary statistics.
@@ -129,7 +129,7 @@ sc bmi_qm bmi_qt, m(o) c(l) xla(0(10)100) ///
 * Independent variables
 * ---------------------
 
-fre age sex raceb educrec1 earnings health uninsured ybarcare, r(10)
+fre age sex raceb earnings health uninsured pooryn, r(10)
 
 * Recode age to four groups (slow and risky method: using manual categories).
 recode age ///
@@ -148,26 +148,31 @@ gen female:female = (sex == 2) if !mi(sex)
 la def female 0 "Male" 1 "Female", replace
 
 * Recode missing values of income.
-replace earnings = . if inlist(earnings, 97, 99)
+replace earnings = . if !earnings | earnings > 97
 
 * Recode missing values of insurance and medical care.
-mvdecode ybarcare uninsured, mv(9)
+mvdecode uninsured pooryn, mv(9)
+
+* Recode insurance status to dummy.
+replace uninsured = (uninsured == 2) if !mi(uninsured)
+la def uninsured 0 "Insured" 1 "Uninsured", replace
+
+* Recode poverty threshold (note: different from FPL threshold) to dummy.
+gen poor:poor = (pooryn == 2) if !mi(pooryn)
+la def poor 0 "Above poverty threshold" 1 "Below poverty threshold", replace
 
 
 * Subsetting
 * ----------
 
-* Select observations from most recent year.
-keep if year == 2009
-
 * Patterns of missing values.
-misstable pat bmi age female raceb educrec1 earnings health uninsured ybarcare
+misstable pat bmi age female raceb earnings health uninsured poor
 
 * Delete incomplete observations.
-drop if mi(bmi, age, female, raceb, educrec1, earnings, uninsured, ybarcare)
+drop if mi(bmi, age, female, raceb, earnings, uninsured, poor)
 
 * Final data, showing final sample size.
-codebook bmi age female raceb educrec1 earnings health uninsured ybarcare, c
+codebook bmi age female raceb earnings health uninsured poor, c
 
 
 * Normality
@@ -236,30 +241,6 @@ tab raceb, su(bmi) // mean BMI at each health level
 bys raceb: ci bmi  // confidence bands
 
 
-* IV: Education
-* -------------
-
-* Shorter labels for a cleaner graph.
-la def edu 13 "Grade 12" 14 "Coll 1-3 yrs" 15 "Coll 4" 16 "Coll 5+"
-la val educrec1 edu
-
-* (Reminder on labels: the first command, -la def-, creates new labels for the
-* values of a variable; the second command, -la val-, assigns the value label
-* to the target variable, which is educrec1 in this example.)
-
-* Plot BMI groups for each educational level.
-spineplot bmi6 educrec1, scheme(burd6) ///
-    name(edu, replace)
-
-* Plot racial backgrounds for each educational level.
-spineplot raceb educrec1, ///
-	name(edu_race, replace)
-
-* 95% CI estimates:
-tab educrec1, su(bmi) // mean BMI at each education level
-bys educrec1: ci bmi  // confidence bands
-
-
 * IV: Income
 * ----------
 
@@ -271,10 +252,6 @@ la var inc "Total earnings ($)"
 spineplot raceb inc if inc > 0, xla(,alt axis(2)) ///
 	name(inc_race, replace)
 
-* Plot educational levels for each income band.
-spineplot educrec1 inc if inc > 0, scheme(burd4) xla(, alt axis(2)) ///
-	name(inc_edu, replace)
-
 * Plot income quartiles for each BMI group.
 gr box inc if inc > 0, over(bmi6) ///
 	name(inc, replace)
@@ -284,7 +261,7 @@ gr box bmi if inc > 0, over(inc) noout ///
 	name(bmi_inc, replace)
 
 * 95% CI estimates:
-tab inc, su(bmi) // mean BMI at each education level
+tab inc, su(bmi) // mean BMI in each income band
 bys inc: ci bmi  // confidence bands
 
 
@@ -292,26 +269,28 @@ bys inc: ci bmi  // confidence bands
 * --------------------
 
 * Plot BMI distribution for groups who have or do not have health coverage.
-kdensity bmi if uninsured == 1, addplot(kdensity bmi if uninsured == 2) ///
+kdensity bmi if uninsured, addplot(kdensity bmi if !uninsured) ///
 	legend(order(1 "Not covered" 2 "Covered") row(1)) ///
 	name(uninsured, replace)
 
 * Exploration:
-tab uninsured, su(bmi) // mean BMI at each health level
+tab uninsured, su(bmi) // mean BMI for each group
 bys uninsured: ci bmi  // confidence bands
 
 
 * IV: Health affordability
 * ------------------------
 
-* Plot BMI distribution for groups who could or coult not afford medical care.
-kdensity bmi if ybarcare == 1, addplot(kdensity bmi if ybarcare == 2) ///
-	legend(order(1 "Could afford medical care" 2 "Could not") row(1)) ///
-	name(ybarcare, replace)
+exit -1
+
+* Plot BMI distribution for groups above and below the poverty threshold.
+kdensity bmi if poor, addplot(kdensity bmi if !poor) ///
+	legend(order(1 "Above" 2 "Below poverty threshold") row(1)) ///
+	name(poor, replace)
 
 * Exploration:
-tab ybarcare, su(bmi) // mean BMI at each health level
-bys ybarcare: ci bmi  // confidence bands
+tab poor, su(bmi) // mean BMI for each group
+bys poor: ci bmi  // confidence bands
 
 
 * =============================
@@ -331,7 +310,7 @@ bys ybarcare: ci bmi  // confidence bands
 
 stab using week5_stats.txt, replace ///
 	mean(bmi age) ///
-	prop(female raceb educrec1 earnings uninsured ybarcare)
+	prop(female raceb earnings uninsured poor)
 
 /* Syntax of the -stab- command:
 

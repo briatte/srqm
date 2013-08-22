@@ -23,9 +23,9 @@ if "`data'" == "" {
 
 di as inp _n "Updating `1' teaching dataset(s)..." _n
 
-// -------------------------------------------------------------- ESS 2008 -----
+// --------------------------------------------------------- ESS 2008-2010 -----
 
-if inlist("`1'", "all", "ess2008") {
+if inlist("`1'", "all", "ess0810") {
   // Get the data (downloaded from the website).
   use "`src'/ESS/ESS4e04.1/ESS4e04.1_F1.dta", clear
 
@@ -42,7 +42,7 @@ if inlist("`1'", "all", "ess2008") {
   srqm_datamake, label(European Social Survey 2008-2010) filename(ess0810)
 }
 
-// -------------------------------------------------------------- GSS 2012 -----
+// --------------------------------------------------------- GSS 2000-2012 -----
 
 if inlist("`1'", "all", "gss0012") {
 	// Get the data.
@@ -74,16 +74,54 @@ if inlist("`1'", "all", "gss0012") {
 	srqm_datamake, label(U.S. General Social Survey 2000-2012) filename(gss0012)
 }
 
-// ------------------------------------------------------------- NHIS 2009 -----
+// -------------------------------------------------------- NHIS 1997-2011 -----
 
-if inlist("`1'", "all", "nhis2009") {
+if inlist("`1'", "all", "nhis9711") {
 	// Get the data (downloaded from the website).
-	use "`src'/NHIS 2009/NHIS_2009.dta", clear
+  loc data "ihis_00001"
+	copy "`src'/NHIS/9711/`data'.zip" "`data'.zip"
+  unzipfile "`data'.zip"
+  do "`src'/NHIS/9711/`data'.do"
+  erase "`data'.dat"
+  erase "`data'.zip"
+
+  // keep sample children and adults for year 1997-2011
+  qui keep if year > 1997 & astatflg == 1
+  drop cstatflg astatflg
+
+  // simplify race variable
+  qui gen raceb = racea
+  qui replace raceb = 1 if raceb == 100
+  qui replace raceb = 2 if raceb == 200
+  qui replace raceb = 3 if hispeth != 10
+  qui replace raceb = 4 if raceb > 310 & raceb < 570
+  // 310 American Indian, 570 other, 580 unreleasable, 600 multiple
+  qui replace raceb = . if raceb > 4
+  la de raceb_lbl 1 "White" 2 "Black" 3 "Hispanic" 4 "Asian"
+  la val raceb raceb_lbl
+  la var raceb "Racial-ethnic profile"
+  notes raceb: ///
+  	Assembled from hispeth and racea, excluding American Indians and unclassifiable cases.
+
+  // correlate class estimates and official figures of Body Mass Index
+  qui gen bmi2 = weight * 703 / height^2 if weight < 996 & height < 96
+  fre bmi if abs(bmi - bmi2) > 1, r(5)
+  mean bmi bmi2 if bmi < 99.8 [pw = sampweight]
+  kdensity bmi, addplot(kdensity bmi2) ti("") ///
+    legend(order(1 "Official measure" 2 "Public file"))
+  drop bmi bmi2
+
+  // drop 10-pt health status (available only for year 1988)
+  drop health10pt
+  // drop household weights (unused)
+  drop hhweight
+  // drop supp. weights flags (unavailable after 1997)
+  drop supp2wt
 
 	// Trim.
 	srqm_datatrim
 
-	srqm_datamake, label(U.S. National Health Interview Survey 2009) filename(nhis2009)
+	srqm_datamake, label(U.S. National Health Interview Survey 1997-2011) filename(nhis9711)
 }
 
 // -------------------------------------------------------------- QOG 2013 -----
@@ -109,13 +147,7 @@ if inlist("`1'", "all", "qog2013") {
 
 * Note: the -qoguse- command downloads the most recent version of the data, but
 * as of today (May 2013), the -qogbook- command downloads the old 2011 codebook.
-
-// ------------------------------------------------------------ TRUST 2012 -----
-
-if inlist("`1'", "all", "trust2012") {
-	// Get the data.
-	cap use "`src'/trust2012/trust2012.dta"
-}
+* Stefan Dalhberg tells me that it will be updated soon by its author.
 
 // -------------------------------------------------------------- WVS 2000 -----
 

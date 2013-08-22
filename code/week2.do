@@ -40,7 +40,7 @@ cap log using code/week2.log, replace
 ----------------------------------------------------------------------------- */
 
 * Load NHIS dataset.
-use data/nhis2009, clear
+use data/nhis9711, clear
 
 * Once the dataset is loaded, the Variables window will fill up, and you will
 * be able to look at the actual dataset from the Data Editor. Read from the
@@ -82,18 +82,18 @@ tab year
 * the dataset contains observations for more than one year. We will solve that
 * issue by keeping observations for the 2009 survey year only.
 
-* Delete all observations except for 2009.
-drop if year != 2009
+* Keep observations for the single latest survey year.
+keep if year == 2011
 
-* The -drop- command deleted all observations for which the variable 'year' is
-* different (!=) from 2009. An equivalent command would be:
-*
-* keep if year == 2009
-*
-* This command keeps only observations for which the 'year' variable is equal
-* (==) to 2009. Notice that the 'equal to' operator in Stata is a double equal
-* sign (==). Logical operators apply to many commands: read on to find out.
-* Also note that the spaces around logical operators are optional.
+* The -keep- command keeps only observations for which the variable 'year' is
+* equal (==) to 2011: all other dataset observations are dropped. Similarly:
+drop if year != 2011
+
+* The -drop- command tried to delete observations for which the 'year' variable
+* is different (!=) from 2011 (but none were left after the -keep- command).
+
+* Notice that the 'equal to' operator in Stata is a double equal sign (==).
+* The space around logical operators is optional but recommended for clarity.
 
 * Make sure that you fully understand how cross-sectional data are arranged by
 * opening the Data Editor or using the -browse- command to take a quick look.
@@ -124,7 +124,7 @@ svyset psu [pw = perweight], strata(strata)
 * Create the Body Mass Index from height and weight. We can write the -generate-
 * command as its -gen- shorthand. We will later call BMI our dependent variable,
 * and we will use other (independent) variables to try to predict its values.
-gen bmi = weight * 703 / height^2
+gen bmi = weight * 703 / height^2 if weight < 996 & height < 96
 
 * If something looks wrong later on in your analysis, check your BMI equation.
 * Also note that Stata is case-sensitive: we will write 'BMI' in the comments,
@@ -336,14 +336,19 @@ gr dot health, exclude0 yreverse over(sex) over(raceb) ///
 
 * Finally, let's see how many observations have all variables measured for our
 * selection of variables. The -misstable- command produces a pattern that shows
-* the number of observations with no missing values across all listed variables. 
-misstable pat bmi age sex health raceb earnings uninsured, freq
+* the number of observations with no missing values across all listed variables.
+* Let's first check our core demographics and socio-economic indicators:
+misstable pat age sex raceb health earnings uninsured, freq
 
-* There are only 7 missing values in the selection of variables above. Let's see
-* what happens if we also want to analyze the 'strength' and 'vigor' variables,
-* which measure physical activity. We remove the -freq- option to read the size
-* the data with no missing values as a percentage. The loss is still trivial.
-misstable pat bmi age sex health raceb earnings uninsured strength vigor
+* There are only a few missing values in the selection of variables above, due
+* to the fact that our simplified 'raceb' variable excludes some small groups.
+* Now let's see what happens when we add the 'variable' to that list:
+misstable pat age sex health raceb earnings uninsured bmi
+
+* We removed the -freq- option to get the size of the data with no missing 
+* values as a percentage: we lose 10% of the data due to missing values, mostly
+* concentrated in the Body Mass Index measurement. The IHIS/NHIS documentation
+* explains why this happens with the public data files (you can try to guess).
 
 
 * Subsetting
@@ -352,7 +357,7 @@ misstable pat bmi age sex health raceb earnings uninsured strength vigor
 * We can now finalize the dataset by deleting observations with missing data in
 * our selection of variables. The final count is the actual sample size that we
 * will analyze at later stages of the course.
-drop if mi(bmi, age, sex, health, raceb, earnings, uninsured, strength, vigor)
+drop if mi(bmi, age, sex, health, raceb, earnings, uninsured)
 
 * Final count.
 count
