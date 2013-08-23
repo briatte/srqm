@@ -5,18 +5,27 @@
     	\toprule
     	Symbol & Meaning \\
     	\midrule
+      \emph{Logical operators:} &\\
     	\quad \texttt{>} and\texttt{>=} & strictly superior / or equal to \\
-    	\quad \texttt{<} and\texttt{<=} & strictly inferior / or equal to  \\
+    	\quad \texttt{<} and\texttt{<=} & strictly inferior / or equal to \\
     	\quad \texttt{==} & equal to \\
     	\quad \texttt{!=} & \emph{not} equal to \\
-    	\quad \texttt{mi(x, y, z)} & missing any of the variables\texttt{x, y, z}\\
-    	\quad \texttt{!mi(x, y, z)} & \emph{not} missing any of the variables\texttt{x, y, z}\\
-    	\quad \texttt{inlist(x, ...)} & values of variable \texttt{x} in the list \texttt{...}\\
+      \emph{Joint statements:} &\\
     	\quad \texttt{if (...) \& (...)} & if (...) \emph{and} (...)\\
-    	% \quad \texttt{if (...) | (...)}  & if (...) \emph{or} (...)
+      \quad \texttt{if (...) $\vert$ (...)}  & if (...) \emph{or} (...)\\
+      \emph{Missing values:} &\\
+    	\quad \texttt{mi(x, y, z)} & missing any of the variables \texttt{x, y, z}\\
+    	\quad \texttt{!mi(x, y, z)} & \emph{not} missing any of the variables \texttt{x, y, z}\\
+      \emph{Specific values} &\\
+    	\quad \texttt{inlist(x, a, b, c)} & values of variable \texttt{x} in the list \texttt{a, b, c}\\
+    	\quad \texttt{!inlist(x, a, b, c)} & values of variable \texttt{x} \emph{not} in the list \texttt{a, b, c}\\
+      \emph{Advanced options:} &\\
+      \quad \texttt{cond(x, y, z, k)} & if \texttt{x} then \texttt{y} else \texttt{z} or \texttt{k} if missing\\
+      \quad \texttt{regexm(x, r)} & if \texttt{x} matches regular expression \texttt{r}\\
     	\bottomrule
   	\end{tabular}
 	\end{center}
-	\label{tbl:logical-symbols}%
-		\index{Logical statements}\index{Selectors!Logical conditions: \cmd{if}}
+  \caption{Basic logical statements in Stata. Type \texttt{h functions} for additional options.}%
+    \label{tbl:logical-symbols}%
+		\index{Logical statements}\index{Selectors!Logical conditions}
 \end{table}
