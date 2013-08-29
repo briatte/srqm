@@ -47,7 +47,9 @@ program srqm_get
 		    cap qui copy "`pf'" "`pb'", public replace
 		
 		    cap qui erase "`pf'" // instead of rm for Windows compatibility
-		    cap qui copy "http://srqm.briatte.org/`1'" "`pf'", public replace
+		    // this could be redirected to srqm.briatte.org by fixing the
+		    // zone files, but it never worked out properly
+		    cap qui copy "http://srqm.apinc.org/`1'" "`pf'", public replace
 		
 		    if !_rc {
 		    	di as txt "Successfully downloaded."
