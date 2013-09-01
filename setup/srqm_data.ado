@@ -32,6 +32,12 @@ if inlist("`1'", "all", "ess0810") {
   // Zero-match merge (non-longitudinal survey).
   merge 1:1 idno cntry edition using "`src'/ESS/ESS5e03.0/ESS5e03.0_F1.dta", nogen
 
+  // Merge N = 4,784 corrected Israeli weights.
+  merge 1:1 essround cntry idno using "`src'/ESS/IL_DWEIGHT/dweight_corrected.dta", nogen
+
+  replace dweight = dweight_corrected if !mi(dweight_corrected)
+  drop dweight_corrected
+
   // Trim (this threshold drops nation-specific questions).
   srqm_datatrim, k(9)
 
