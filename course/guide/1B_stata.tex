@@ -1,0 +1,498 @@
+%
+% 1.3
+%
+\section{Stata}%
+  %
+  %
+  \label{sec:stata}%
+  \index{Stata!Introduction}%
+  \index{Quantitative software}%
+  %
+  %
+
+\newthought{This course uses Stata}, a statistical software produced by StataCorp,%
+  \footnote{\url{http://stata.com/}} %
+  as its statistical software of choice. This means that we will show you how to code your analysis through scripts of commands written in the Stata language.%  
+
+Stata is used by many social scientists working with quantitative data in areas such as economics and political science.%
+%
+\footnote{For example, you will find Stata output in some of Nate Silver's work at the \emph{New York Times} on his `FiveThirtyEight' electoral blog; see, \eg, ``'\href{http://fivethirtyeight.blogs.nytimes.com/2012/03/12/polling-in-deep-south-has-posed-challenges/}{Polling in Deep South Has Posed Challenges},'' 12 March 2012.} %
+%
+Most statistical procedures used in these disciplines know some form of implementation in Stata, and the software is supported by a large user community. It provides a good middle ground between a spreadsheet editor and a statistical programming environment.%
+
+%
+%
+\newthought{You have probably never used Stata}, but you probably have some limited experience with number-crunching. For most users, this happens in a numerically inaccurate environment called a `spreadsheet editor', in which you can plot multidimensional pie charts and freely delete or edit the data without letting others know. In that kind of environment, programming means writing functions into cells and then hoping for the cells to stay where they are, which they never do (Figure~\ref{fig:dilbert-spreadsheets}).%
+  %
+
+  \begin{figure}
+    \includegraphics{dilbert-excel}
+    \caption{\href{http://dilbert.com/strips/comic/2007-08-08/}{Dilbert on spreadsheets}, by Scott Adams. For a real-world illustration, find the `Reinhart and Rogoff' story online, or read some horror stories compiled by the European Spreadsheet Risks Interest Group (EuSpRIG):   \url{http://www.eusprig.org/horror-stories.htm}}%
+    \label{fig:dilbert-spreadsheets}%
+  \end{figure}
+
+  A more balanced account would find some qualities to spreadsheet editors,%
+  \footnote{See William Huber's answer to the CrossValidated topic ``\href{http://stats.stackexchange.com/a/3398/3582}{Excel as a statistics workbench}''.} %
+   and using Stata will remind you of a few things that you might have already learnt from using these them. This will include using keyboard shortcuts to move around the interface and do things quicker, and will also include using functions like \texttt{if} or \texttt{mean} that you might have already used on spreadsheet cells.%
+  %
+  %
+
+Statistical programming, on the other end, is probably new to you. Its general principle consists in composing a sequence of instructions that enables others to `replicate' your analysis. The current de facto standard in statistical programming is R, a free and open source software with excellent graphics support that lets you crunch numbers like a statistician would want you to: neatly, if at the cost of intuitiveness.%
+  \footnote{\url{http://www.r-project.org/}} %
+  %
+  %
+
+\newthought{Stata is a compromise} between these two worlds that lets you work on a single spreadsheet of data through a set of predefined and user-contributed commands. Its language is arguably more convenient than those developed by other solutions like SAS or SPSS, and its capabilities reach beyond those of more focused software, such as Epi~Info for epidemiology or gretl for econometrics.%
+  %
+  %
+
+Stata has its own limitations: its graphics engine is not bad, but it is far from excellent, and despite being open to user-contributed commands, Stata is a commercial product with a price tag and a closed proprietary format. Finally, and although that can be seen as a feature of the software, Stata can only work on a single dataset at a time, because it works like an accountant's book, one page after the other.%
+  %
+  %
+
+\newthought{This section} first covers some basic computer components. It then explains how to operate Stata from the command line, how to write code in the Stata language, and how to execute it by writing and `running' do-files, scripts of Stata code.%
+
+We will use the `Standard Edition' (\textsc{se}) of Stata~12 that works on most current computers.%
+\footnote{See the list of Stata products and compatible operating systems: %
+  \url{http://www.stata.com/products/compatible-operating-systems/}}%
+  %
+  The keyboard shortcuts we provide are for \OSX (Mac) and Windows (Win). The installation procedures on both systems are almost identical:% 
+
+\begin{description}
+
+  \item[On \OSX] %
+  %
+  The entire Stata application folder should be located in the \texttt{Applications} folder. You should drag the Stata application icon to your Dock for quicker access. The \kbd{Cmd} (Command) key used in keyboard shortcuts is the `Apple' modifier key located left and right of the spacebar.%
+
+  \item[On Windows] %
+  %
+  The entire Stata application folder should be located in the \texttt{Program Files} folder, or whatever your version of Windows calls it. You should drag the Stata application icon to your Taskbar for quicker access. The \kbd{Ctrl} key used in keyboard shortcuts is the `Control' modifier key located bottom-left of the spacebar.%
+
+\end{description}
+
+\index{Course!Requirements!Computer skills}%
+\newthought{Learning Stata requires using a computer for research}, not just as a clever typewriter or as a Web terminal. This in turn requires that you practice using keyboard shortcuts and managing files, and implies that you have daily access to a usable computer that can connect to the Internet, read/write \PDF files and uncompress \ZIP archives.%
+
+You might use computers routinely for many different activities, but your level of familiarity with some of the fundamental aspects of computers can vary dramatically. A reasonable level of familiarity with computers will help you with using Stata and completing assignments.%
+
+Besides building up your scientific and statistical computer skills, there are extrinsic reasons to why you might want to pay some attention to computing in the current times. One aspect of the argument is that computer code is the effective institution that rules over digital communication.%
+  \footcite{Lessig:2006} %
+  The gist of the argument might be put as follows: %
+
+\begin{quote}%
+Digital technology is programmed. This makes it biased toward those with the capacity to write the code. In a digital age, we must learn how to make the software, or risk becoming the software. It is not too difficult or too late to learn the code behind the things we use—or at least to understand that there \emph{is} code behind their interfaces. Otherwise, we are at the mercy of those who do the programming, the people paying them, or even the technology itself.%
+\footcite[p.~128]{Rushkoff:2010}%
+\end{quote}
+
+Another aspect of the argument is that, whereas states are gradually expanding their grip over free and private electronic communication, companies are gradually turning general purpose computers into focused commercial appliances that provide less and less control to the user over the technology.%
+  \footcite{Doctorow:2011} %
+
+% 1.3.1
+%
+\subsection{Working with computers}%
+  %
+  %
+  \label{ch:computers}%
+  \index{Computers}%
+  %
+  %
+
+\index{Computers!Hardware and software}%
+\newthought{Your computer's physical and electronic parts (hardware)} include input and output (I/O) devices like your keyboard and screen, a central processing unit (CPU) and memory storage, both as hard drive space and as ``live'' or ``virtual'' random access memory (RAM), which is used to read and write data more rapidly.%
+  \footnote{Stata~11 or older will require that you manually allocate the memory space to store datasets. You are spared from doing that if you are using a later version of Stata.} %
+  All components communicate with each other over a communication network called the bus.%
+%
+
+\newthought{The software layer of your computer} are the programs that you use to send instructions to the hardware layer. Your operating system provides an initial layer of software that you can then expand with additional programs like Stata to perform more specific tasks. The speed at which you can use your computer is determined by the amount of RAM that you have installed, by the speed at which you can read or write to your hard drive, and by the speed of your processor, the `CPU'.%
+%
+
+%
+\paragraph{CPU (Central Processing Unit)}%
+  \index{Computers!CPU (Central Processing Unit)}%
+  %
+  %
+
+\newthought{The CPU performs arithmetic and logic operations on your computer data} and stores their intermediate results. It also controls how tasks are executed on your system by allocating them processor time to compute. If you live in the early twenty-first century, there is a fair chance that your laptop runs a multi-core processor with several linked microchips that can compute separate tasks in parallel.%
+
+Your CPU operates at a given cycle speed, which is currently calculated in GigaHertz (GHz). The 2.53GHz Intel Core 2 Duo CPU that ships with the Apple MacBook Pro, for example, is a dual-core processor that ticks at the clock rate of 2.53 billion cycles per second. These cycles are used to process low-level program instructions that underlie the software that you use. That software might live on your computer or in the cloud.%
+  \footnote{See, for instance, the OpenCPU project for statistical computing: \url{https://public.opencpu.org/pages/}}%
+
+%
+\paragraph{Logic gates and truth tables}%
+  \index{Computers!Logic gates}%
+  \index{Computers!Truth tables}%
+  %
+  %
+  
+\newthought{Your computer is made of digital circuits that implement logic gates}, such as the ones shown in Figure~\ref{fig:gates}. These gates provide the basic mathematic logic that is also used in the software layer of your computer, as when you make use of logical statements to manipulate your data in Stata.%
+  \footnote{See Table~p.~\ref{tbl:logical-symbols} at p.~\pageref{tbl:logical-symbols}.}%
+%
+
+\begin{figure}[h]
+  \begin{circuitikz}
+    \draw (0,0) node[american and port,color=s1] (aand) {};
+    \draw (2.5,0) node[european and port,color=s2] (eand) {};
+
+    \draw (5,0) node[american or port,color=s1] (aor) {};
+    \draw (7.5,0) node[european or port,color=s2] (eor) {};
+
+    \draw (9,0) node[american not port,color=s1] (anot) {};
+    \draw (12,0) node[european not port,color=s2] (enot) {};
+  \end{circuitikz}
+
+  \caption{The \texttt{AND}, \texttt{OR} and \texttt{NOT} logic gates in American (red) and European (blue) representations.}%
+  \label{fig:gates}
+\end{figure}
+
+These logic gates allow your computer to understand basic truth tables, as with the union of two conditions \texttt{A AND B}, their intersection \texttt{A OR B}, or the negation of \texttt{A}, \texttt{NOT A}. Combinations of logic gates are then used to build electronic circuits with two stable states, a.k.a. ``flip-flops''. All data in a computer are stored in that form as binary digits.%
+%
+
+%
+%
+\paragraph{Bits and bytes}%
+  \index{Computers!Binary digits}%
+  %
+  %
+
+\newthought{A \emph{bit} is a single binary digit (0/1).} Modern processors use units of data, or ``words'', that go from 8 to 64 bits. A \emph{byte} is a series of eight bits and a ubiquitous standard in computer architecture. Given that a bit take two values, a byte can take $2^8=256$ values to express a number in the $0-255$ range, or to represent up to 256 characters.%
+
+In a computer environment, larger arrays of bits and bytes provide more power to process and define whatever stuff you are dealing with. The current Unicode UTF-8 standard, for instance encodes text in several alphabets by using up to four bytes to define thousands of different characters. The same logic applies to graphics on a video game console.%
+
+The current technological frontier puts your computer processor at either 32-bit or, for the most recent machines, at 64-bit; Stata~12 for Windows exists in both versions, whereas Stata~12 for \OSX works only on 64-bit processors. %
+  \footnote{\url{http://www.stata.com/support/faqs/windows/64-bit-compliance/}}
+
+%
+%
+\paragraph{Operating system}%
+  \index{Computers!Graphical User Interface (GUI)}%
+  \index{Computers!Operating system}%
+  %
+  %
+
+\newthought{Your operating system (OS) manages your files, I/O devices, memory and networks.} It manages each application as a process, uses your hard drive to swap data in and out of virtual memory, and makes multi-tasking possible by switching very quickly between programs. Your OS also comes with a graphical user interface (GUI) that makes the computer usable by human beings.%
+
+%
+% 
+% 0.3.2.
+%
+\subsection{Working from the command line} %
+  \label{sec:cli}
+  \index{Computers!Command Line Interface (CLI)}%
+  \index{Stata!Command line interface}%
+  %
+  % graphical user interface
+  % command line
+  % example: sysuse lifeexp
+  %
+
+\newthought{This section explains how to run commands in Stata}, and the next one will explain how to organize them into a do-file. A list of all commands used in the guide appear in the index, and a list of all commands used in the course appear on the course wiki.%
+  \footnote{\url{https://github.com/briatte/srqm/wiki/code}} %
+For now, open the Stata program by double-clicking its application icon (Figure~\ref{fig:stata-icon}).
+
+  \begin{marginfigure}
+    \includegraphics[width=.66\textwidth]{stata-icon}
+    \caption{The Stata~12 icon.}
+    \label{fig:stata-icon}
+  \end{marginfigure}
+
+Stata can be used either through its GUI, like most of the software that you use, or through a Command Line Interface (CLI), which presents itself as a terminal where the user types instructions to produce certain results. The latter approach is more versatile and forces you to write up your operations in the form of a script, which Stata calls a `do-file'. This file is a plain text file containing code written in the Stata language.%
+
+We are going to explore Stata from the command line, which relies only on three windows: the Command line window, the Results window attached to it, and the Do-file Editor window. This minimal setup is shown below in Figure~\ref{fig:stata-ide}. We will not use any other element of the graphic user interface in this course, but feel free to explore Stata and learn about its other functionalities.%
+
+\begin{figure}
+  \includegraphics{stata-ide}%
+  \caption{The Holy Trinity of Stata programming: the Command window (on top), the Results window (below it), and a do-file editor (in the background).}%
+  \label{fig:stata-ide}%
+\end{figure}
+
+  \paragraph{Running commands}
+  
+  In Stata, focus on the Command window by clicking into it or by pressing \kbd{Cmd-1} (Mac) or\kbd{Ctrl-1} (Win). Type the following command and press \texttt{Enter} to run the command, which means to execute its code:%
+    
+  \begin{docspec}%
+    \label{lifeexp}%
+    sysuse lifeexp, clear
+  \end{docspec}
+    
+  A Stata command is simply a line of code written on a distinct line of a do-file. If your command ran successfully, Stata will display its result:\\[1em]
+    
+    \includegraphics{stata-lifeexp-sysuse}\\[1em]
+
+  Note that some commands produce `blank' output, which means that a command can be successfully entered and executed without printing any result. In this case, a simple \texttt{.} line dot will appear in the Results window, as to show that Stata encountered no problem while executing the command, and that it is ready to process another one.%
+    %
+
+  %
+  %
+  \paragraph{Fixing typos}%
+      \index{Stata!Syntax}%
+
+  Stata commands follow a strict syntax, and if you make a typo in a command, the software will return an error in red ink. In that case, you have to fix the issue by re-typing the command correctly. Try for example, to enter the following command:%
+    
+    \begin{docspec}
+      summarizze popgrowth
+    \end{docspec}%
+    \marginnote{Examples with the \texttt{lifeexp} dataset continued from p.~\pageref{lifeexp}.}%
+    
+    The mistake is rather obvious here: the \cmd[su]{summarize} command should take only one `z':\\[1em]%
+    
+    \includegraphics{lifeexp-sum-error-zz}\\[1em]
+    
+    If you need, as in this example, to correct a mispelled command, or to re-run a command that you have used earlier on, you should \textbf{press \kbd{PageUp} on your keyboard} to recall the previous command that you typed.%
+    %
+    \footnote{On laptop keyboards, \kbd{PageUp} is usually replaced by \kbd{Fn-UpArrow}. Past commands can also be examined in the Review window.} %
+    %
+    This allows you to fix your mistake by pulling the last command very quickly and correct only the typo, rather than having to type it again.%
+
+    Here's another common mistake. Try the following in Stata:%
+    
+    \begin{docspec}
+      Summarize popgrowth
+      summarize POPGROWTH
+    \end{docspec}
+
+    In response to these commands, you will get more or less informative error messages. The issue here is that Stata commands are case-sensitive: the capitalized \texttt{Summarize} command is different from \texttt{summarize} command in lowercase. By that virtue, there is no variable called \texttt{POPGROWTH} in uppercase in the \texttt{lifeexp} dataset, but there is one called \texttt{popgrowth} in lowercase:\\[1em]%
+
+    \includegraphics{lifeexp-sum-error-caps}\\[1em]
+    
+    Stata is usually operated in lowercase, although some variable names might show up in uppercase in some datasets. In order to keep things as straightforward as possible, avoid using uppercase yourself when naming variables.%
+    
+    %
+    %
+    \paragraph{Abbreviations}%
+      \index{Stata!Syntax}%
+
+    Most Stata commands can be abbreviated for quicker use. If you run the \statacode{help summarize} command, the help window will tell you that the \texttt{\underline{su}mmarize} command can be abbreviated to \texttt{su}. Type the following example in Stata to see how the language abbreviates:%
+    
+    \begin{docspec}
+      * With a command:\\%
+      summarize popgrowth\\%
+      su popgrowth\\[1em]%
+      %
+      * With help pages:\\%
+      help summarize\\%
+      h su%
+    \end{docspec}%
+        \marginnote{Examples with the \texttt{lifeexp} dataset continued from p.~\pageref{lifeexp}.}%
+
+  Note that the bottom lines show you how to open help pages with the single letter \texttt{h}, which is handy when you are often brought to verify syntax and read examples from the documentation. This guide shows commands that can be abbreviated in both forms, as with \cmd[su]{summarize}, which is shown in the example:\\[1em]%
+
+    \includegraphics{lifeexp-summarize}\\[1em]
+
+  Abbreviations exist for most commands and come in handy especially with commands such as \cmd[tab]{tabulate}, \cmd[d]{describe} or even \cmd[h]{help}. They also work for options like the \coab{d}{detail}{summarize} option for the \cmd[su]{summarize} command:\\[1em]%
+
+    \includegraphics{lifeexp-summarize-d}\\[1em]
+  
+    %
+    %
+    \paragraph{Using help files}%
+      \index{Stata!Help files}
+
+    If you cannot find the right syntax or option for a command, turn to the technical documentation for precisions and examples of any given command. Use the \cmd[h]{help} command to access it in Stata,%
+        \footnote{Stata help is also available online: \url{http://www.stata.com/help.cgi?help}.} %
+        as in these examples:%
+
+    \begin{docspec}
+      * Help for the -summarize- command.\\
+      help summarize\\[1em]
+  
+      * Help for the -lookfor- command.\\
+      help lookfor
+    \end{docspec}
+
+    Getting to use the Stata help pages is a course objective in itself: even experienced Stata users use help pages on a daily basis. The details on each option and the final examples are often very useful in learning to use some commands efficiently.%
+
+    \newthought{You can find additional help} for Stata in the series of manuals and handbooks published by Stata Press. Appropriate references for this course are the ``Getting Started'' manuals, which cover the same basic operations as this guide.%
+      \footnote{\url{http://www.stata-press.com/}} %
+      StataCorp also publishes the \emph{Stata Journal}, a blog and a video channel of Stata tutorials.%
+      \footnote{\url{http://blog.stata.com/2012/09/26/stata-youtube-channel-announced/}}
+  
+    The course website features a list of additional online resources to learn Stata. One particularly interesting resource for beginners is the Stata video series by the LSE Methodology Institute.%
+      \footnote{\url{http://www.youtube.com/user/MethodologyLSE/videos?query=stata}} %
+      Stata users also share questions and answers on Statalist%
+      \footnote{\url{http://stata.com/statalist/}} %
+      and on Stackoverflow.%
+      \footnote{\url{http://stackoverflow.com/questions/tagged/stata}}
+
+%
+%
+\paragraph{Installing commands}%
+  \index{Stata!Packages (additional commands)}%
+
+Stata can install additional commands written by users with programming skills. New commands can be installed by downloading packages from the \SSC server with the \cmd{ssc install} command, which is used at a few points in this guide to install some of these packages. You can install the \cmd{fre} command right away by typing the following command:%
+  
+\begin{docspec}
+  ssc install fre
+\end{docspec}
+  
+Unless you are offline or already have installed the \cmd{fre} package, you should get a few result lines indicating where the package was installed on your hard drive:\\[1em]%
+  
+\includegraphics{ssc-install-fre}\\[1em]
+  
+Other handy user-contributed commands will be installed as part of the course setup that you will run in the next section.%
+
+%
+%
+% 0.3.3
+%
+\subsection{Working from a do-file}%
+  \label{sec:do-files}%
+  \index{Stata!Do-files}%
+  \index{Replication|seealso{Stata!Do-files}}%
+  %
+  % command execution
+  % comments
+  % log
+  %
+
+\newthought{When you run Stata commands} to explore a dataset, you are programming `on the fly', typing commands directly into the Stata command line to get quick results. But when you want to structure a complete analysis of your data, you need to record your commands to a script, which is a plain text file containing Stata code. An important part of your work in this course will therefore be to code your analysis into a script.%
+%
+
+Coding your analysis is meant to provide yourself as well as others with the means to \emph{replicate} your analysis. Maintaining a record of your operations—and commenting them inside as well as outside the code—will not only ensure that others can read and reproduce your work, but also that \emph{you} will be able to remember, in a few months or so, what you precisely ended up doing on your project. In this course as in many research settings,%
+  \footnote{See \citeauthor{King:1995}'s article, \citetitle{King:1995}, and Nicole Janz's blog for more illustrations: \url{https://politicalsciencereplication.wordpress.com/}} %
+  you will be required to bundle your Stata code with your analysis, so that the findings of your research project can be replicated by others. %
+
+\newthought{Stata scripts} end with the \ext{.do} extension and are called \textbf{do-files} (Figure~\ref{fig:stata-do-icon}).%
+  \footnote{Stata do-files will usually show as plain text in your Internet browser; if the browser adds a \ext{.txt} extension to a do-file when downloading it, make sure that you rename the file to \ext{.do} for Stata to recognize it as a do-file.} %
+  %
+  It will be one of your main missions throughout the course to learn how to structure and to write such a document. You will be given plenty of examples through a new course do-file every week, and the short vignette that follows will show you some essential aspects of working in Stata from a do-file.%
+
+\begin{marginfigure}
+  \includegraphics[width=.66\textwidth]{stata-do-icon}
+  \caption{Stata~12 do-file icon.}
+  \label{fig:stata-do-icon}
+\end{marginfigure}
+
+%
+%
+\paragraph{Creating a do-file}
+
+Type \cmd{doedit} in the Command window to open a blank Stata do-file, which is your first piece of draft Stata code. Let's write a few lines into it:%
+
+\begin{docspec}
+  * François Briatte, first do-file\\[1em]%
+  %
+  * Load UN data.\\%
+  sysuse lifeexp, clear\\[1em]%
+  %
+  * Describe the data.\\%
+  d\\[1em]%
+  %
+  * Summarize life expectancy\\%
+  su lexp\\[1em]%
+  %
+  * Scatterplot.\\%
+  sc lexp safewater\\[1em]%
+  %
+  * ttyl\\
+\end{docspec}
+
+Here are step-by-step instructions to the code:
+
+\begin{enumerate}
+  \index{Stata!Comments (code)}%
+  \item First type in your name, preceded by an asterisk and a space. You will notice that the line will turn green, to indicate that it is a \textbf{comment}. Comments are for human readers of the code and are not evaluated by Stata, just passively printed to the Results window.%
+  
+  \item Now add the \cmd{sysuse} command that asks Stata to load a demo dataset in memory, removing any previous unsaved data. If you have run the previous examples, the same dataset will be loaded again.%
+  
+  \item Finally, add the \cmd[d]{describe} command to list the variables, the \cmd[su]{summarize} command to inspect the life expectancy variable, and the \cmd[sc]{scatter} command to produce a plot of the relationship between life expectancy and access to safe water.%
+\end{enumerate}
+
+Stata shows the code of your do-file in monospaced font with line numbers (so that you can easily navigate long documents) and colored syntax (so that you can distinguish syntax elements). The do-file editor should look like Figure~\ref{fig:hello-world-draft} on my system, which also highlights the currently selected line:%
+
+\begin{figure}%
+  \includegraphics[width=\textwidth]{hello-world-draft}%
+  \caption{A draft do-file using the \texttt{lifeexp} dataset.}%
+  \label{fig:hello-world-draft}%
+\end{figure}
+
+
+\index{Stata!Comments (code)}%
+\newthought{Every Stata command requires to be typed on a separate line.} You can skip lines and add whitespace in your code to improve its readability. Most importantly for that purpose, make sure to leave informative comments in your code, to explain how you designed your analysis.%
+
+Increasing the readability of your research project is a requirement in courses that set the emphasis on data analysis. The general idea is to consider your code as a communication device with your peers, like a music sheet or as some other form of composition.%
+  \footcite{WickhamGrolemund:2013} %  
+
+\index{Programming!Literate programming}%
+\newthought{Making your code readable by others} implies adding a `literate' component to it. This involves including some documentation of what your code does with the code itself, in order to help a human audience to read through your different files and functions.%
+  \footnote{\url{http://www-cs-faculty.stanford.edu/~knuth/lp.html}} %
+
+In your own work, you will be required to include short comments in your code to help the reader understand your analysis. Your code will also provide some general information such as the author(s), date and title, in an introductory header.%
+
+\paragraph{Opening and saving do-files}
+
+\newthought{Stata code is saved as plain text} into \ext{.do} files. Stata can open as many do-files as you need in a tabbed window environment, called the Stata do-file editor. You will have to work with course do-files and to write your own for your research project.%
+
+Once you are done copying and editing the demo code from above, use \kbd{Cmd-S} (Mac) or \kbd{Ctrl-S} (Win) to save the do-file as \filename{draft.do} in your \code folder, where you should keep all your do-files within the \SRQM folder.%
+
+Close your first draft and return to the Stata Command window. If you have saved your draft as \filename{draft.do} into the \code folder, as requested, then Stata will be able to open it with the following command:%
+
+\begin{docspec}
+  doedit code/draft
+\end{docspec}
+
+The \cmd{doedit} command opens do-files, and the \texttt{code/draft} argument is the short form of \texttt{"(your working directory)/code/draft.do"}, a file path that should lead Stata to open the do-file that you just saved. Note that \hlred{\textbf{opening a do-file by double-clicking it is not recommended}, because Stata will quietly change the working directory to the location of the do-file,} and you will have to set the working directory back to being the \SRQM folder.%
+  \footnote{The same problem will arises if you open datasets by double-clicking it.}
+
+Similarly, \hlred{\textbf{be careful when you download a do-file}, because your browser might add a \ext{.txt} extension to it}, in which case you will have to to rename the file by turning its file extension back to just \ext{.do} to open it correctly in Stata. Using the ``Save As'' contextual menu option of your browser can fix the issue, as shown in Figure~\ref{fig:save-as} with Google Chrome on \OSX.%
+
+\begin{figure}
+  \includegraphics[scale=.5]{images/macosx-save-as.png}
+  \caption{The ``Save Link As…'' option in Google Chrome for \OSX.}
+  \label{fig:save-as}
+\end{figure}
+
+\paragraph{Running do-files}
+
+\newthought{Having reopened your do-file}, click anywhere on line 2 of your draft do-file and then press \kbd{Cmd-L} (Mac) or \kbd{Ctrl-L} (Win) to select it in full. Then, press \kbd{Shift+DownArrow} or \kbd{Shift+UpArrow} to select the line below or above it.%
+
+Finally, press \kbd{Cmd-A} (Mac) or \kbd{Ctrl-A} (Win) to select all three lines. These keyboard shortcuts show you how to quickly select one or more lines from your code: make sure to memorize them, as they will come in very handy.%
+
+To execute the do-file, press \kbd{Cmd-Shift-D} (Mac) or \kbd{Ctrl-D} (Win). The first line is a comment, as indicated by the asterisk at the beginning of the line, so executing it will not accomplish anything: Stata will just print it to the Results window.%
+
+The second and third lines of your do-file will be printed to the Results window with their respective results. The \cmd{cd} command should print the path to your \SRQM folder, and the \cmd{di} command will print a `hello' message, as shown in Figure~\ref{fig:hello-world-result}.%
+
+\begin{figure}%
+  \includegraphics[width=\textwidth]{hello-world-result}
+
+  \caption{`Hello World' in Stata.}
+  \label{fig:hello-world-result}
+\end{figure}
+
+More generally, to execute (or `run') some code, open its do-file, select any number of lines, and ppress \kbd{Cmd-Shift-D} (Mac) or \kbd{Ctrl-D} (Win). You will practice executing Stata code when we go through the course do-files in class.%
+
+\hlred{\textbf{Important:} check your commands for typos and syntax errors.} If your code fails to execute, Stata will send some red ink to the Results window. Check the code against the correct syntax, looking for forgotten (or extra) letters or spaces.%
+
+\hlred{\textbf{Important:} be careful with copy-pasting to the Command window.} Copy-pasted commands that contain line breaks (\cmd{///}), for example, will not work properly. This point is covered again in the first course do-file.%
+
+\hlred{\textbf{Tip:}} start using keyboard shortcuts as early as possible. For example, during class, you will often need to switch from a window to another one (between a do-file and its results). This can be done from the keyboard: use \kbd{Cmd-`} (Mac) or \kbd{Alt-Tab} (Win). Have a look at the `Window' menu for shortcuts to specific windows of the Stata interface.%
+
+\paragraph{Logging your work}
+
+The log is a text file that, once open with the \cmd{log} command, will save every single command you enter in Stata with its results to a text file. Systematically logging your work is good practice, even when you are just trying out a few things. Logs are useful when you have to read through your work again, share it with someone, or keep dated copies of your results.%
+
+To open a log, type \texttt{log using} followed by a file name ending in \ext{.log} to produce a plain text file. Close a log with the \texttt{log close} command, optionally followed by the name of the log if you added one to it the \opt{name}{log} option. You will find examples of \cmd{log} commands at the very beginning and at the end of the course do-files.%
+
+\index{Programming!Machine readability}%
+\newthought{Your log should be produced as a plain text file} because these files are readable in any computer environment and can therefore be parsed and interpreted everywhere. The same applies to your code and to your data: using plain text formats will ensure that everyone will be able to read it.%
+
+When your analysis uses quantitative data, you are often given a choice between an application-specific format, which is the \ext{dta} format in Stata, and a machine-readable format like \ext{csv}. The course uses the Stata format, but if you produce datasets on your end, maximize their portability by saving them to comma-separated values (\ext{csv}) format.%
+
+\paragraph{Exiting}
+
+When you are done with your work, just quit Stata like you would quit any other program. Stata will ask you whether you want to save your changes: \textbf{say no}. In this course, you will \hlred{never save any changes to the original datasets}: keep the teaching material intact at all times, so that it can be used throughout the semester.%
+    %
+    \footnote{If you ever alter a course dataset by saving it with modifications, quit Stata and delete its \ext{.dta} file in the \data folder. When you reopen Stata, the course setup will restore a pristine copy of the data from the \ZIP archive.}%
+
+\newthought{The nerdy way to quit Stata} is to quit from the command line. A first optional step is to manually close all opened logs:%
+
+\begin{docspec}
+  * Close all open logs.\\%
+  log close \_all
+\end{docspec}
+
+The \cmd{exit} command with the \opt{clear}{exit} option then erases any data in memory and quits:%
+
+\begin{docspec}
+  * Enjoy your day.\\%
+  exit, clear
+\end{docspec}

@@ -1,0 +1,244 @@
+%
+% 6
+%
+\chapter[Linear models]{Linear regression models}%
+  %
+  %
+	\label{ch:lin}%
+	\index{Linear regression}%
+	\index{Regression models!Linear regression}%
+  %
+  \begin{mybox}
+    %
+    \smallcaps{This section} deals with linear models.%
+    %
+    \paragraph{Coursework} %
+    This section is covered in class during Week~10. Make sure that you have fully replicated the course do-file for this week by the end of this section. Read  \citeauthor[ch.~9.2--9.4 and 11]{FeinsteinThomas:2002d}, and optionally ch.~8.1--8.2 and 10.1.%
+    %
+  \end{mybox}\\[4em]%
+  %
+  \startcontents[chapters]%
+  \printcontents[chapters]{l}{1}{\setcounter{tocdepth}{2}}%
+	%
+	\newpage
+	%
+
+\newthought{Regression models} are a large class of statistical models that are very common in the social sciences.%
+
+\newthought{This section} covers reasonably low-tech regression modelling in Stata.%
+
+% handbook
+% jackman western
+% slides s9, 10, 11
+
+\paragraph{Theoretical generalization}
+
+[todo: covariate]
+The general idea that you get from the empirical example is mathematically applicable to any number of variables. In general terms, your concern is to find an appropriate method to observe relationships among several \emph{covariates} -- variables that are mutually interdependent in the real world, and that express some of that complexity in quantifiable form as a covariance matrix.
+
+% http://www.theanalysisfactor.com/confusing-statistical-terms-5-covariate/
+
+[todo]
+
+The generalization of linear models takes two forms. The \emph{General Linear Model} (GLM) is the basic tenet that allows to observe linear relationships in one or more variable(s). Mathematically, it involves building the model as a matrix. \emph{Generalized Linear Models} designate a slightly different form of application that extends the logic of the GLM to non-linear environments, \ie situations where linearity assumptions cannot hold.
+
+% http://www.theanalysisfactor.com/confusing-statistical-term-7-glm/
+
+%
+% -- Outline
+%
+
+\paragraph{Outline}
+
+In this section, we are going to use multiple linear regression to write the level of support for abortion \emph{as a function of} the level of education. We start with plotting the relationship to verify that it is \emph{linear}, and then calculate the \emph{linear dependence} between the two variables, where higher levels of education will act as a \emph{condition}, or \emph{predictor}, of higher support for abortion. We will then extend this \emph{model} of two variables to any number and type of variables.
+
+At some point, our model will be able to predict a fraction of the dependent variable by building an equation out of all others. This model will \emph{fit} the data to some extent, and within the confidence bounds of its \emph{estimated parameters}. The analysis of a model requires additional graphs and attention to detail, as well as an informed consideration of the data. You will be building, fitting, visualizing and interpreting such models for the last part of this course.
+
+Stata performs regression with the \cmd{reg} and \cmd{predict} commands, which are both straightforward and easy to manipulate. Once you have all commands in place, the coding of regression models in Stata can be done very concisely and requires only little effort. The challenge of learning multiple linear regression is less technical than interpretive, as your model estimates will be information-rich results from which you will have to draw your own inferences, observations and conclusions.
+
+This chapter will guide you through some basic steps, and practice will have to do the rest. There is also a technical side to regression, which partially shows up in the last section of the chapter, on regression diagnostics. With a little more background on sampling theory and probability distributions, you can learn how to squeeze the standard error by slicing up the data into simulated subsamples. For now, we concentrate on getting the fundamentals in place.
+
+Sections~\ref{sec:models}--\ref{sec:correlation} introduce statistical modeling with linear regression and the concept of linear dependence. Multiple linear regression is covered in further detail in Section\ref{sec:linreg}, along with common extensions to add categorical data and interactions to a linear regression model. Section~\ref{sec:diagnostics} closes on regression diagnostics. Overall, the chapter aims at giving you a taste of what parametric modeling can produce within its theoretical and practical boundaries.
+
+What you are about to read was initially formulated during the early 19th century. The name ``regression'' is borrowed from biology.
+
+%
+% == MODELS
+%
+
+\paragraph{A few words on statistical models}
+\label{sec:models}
+
+\emph{Statistical modeling} is ultimately a means to forming a vision of the world inspired by the available data. Quantitative models serve as abstract gateways to large-scale empirical phenomena that would otherwise escape us. Because they are abstract, models never refer to reality directly. Instead, just like maps, they require systematic human interpretation and need to be carefully selected on their background assumptions and specifications to yield correct results when compared to the real world.
+
+\emph{Regression} is a statistical technique that applies a specific range of models to your data. These models are written as \emph{functions} that \emph{predict} the values taken by your dependent variable $Y$ from the values of your independent variable $X$, as in the equation $Y = f(X)$. Regression determines the \emph{parameters} of the function $f(X)$ by analyzing how the values of $Y$ and $X$ jointly vary around their respective means.
+
+At it most basic, \emph{simple linear regression} uses one dependent variable $Y$ and one independent variable $X$, and establishes how much of $Y$ can be derived from $X$ by the following function in which $\alpha$ and $\beta$ are the equation parameters:
+
+$$Y = \alpha + \beta X + \epsilon$$%  + \underbrace{\epsilon}_{\text{error term}}$$
+
+The parameters $\alpha$ and $\beta$ allow you to measure precisely how $Y$ depends on $X$ by defining the \emph{linear} function $Y = \alpha + \beta X$, where $\beta$ is the \emph{coefficient} that measures the effect of $X$ on $Y$, and $\alpha$ is the \emph{constant} value of $Y$ when $X = 0$.\footnote{In a graph, the constant is the \emph{intercept}, \ie the intersection of the regression line $y = a + bx$ with the vertical axis $y$ when $x = 0$ and $y = a$ . The coefficient is the \emph{slope} of the regression line.}
+
+With a bit of matrix algebra and computational power, this function can be adapted to derive the constant $\alpha$ and $\beta$ coefficients for any number of independent variables, by treating $X$ as a \emph{vector} of variables. \emph{Multiple linear regression} designates a class of additive models where the linear function takes the following form for $p$ variables and for each unit $i$ out of $n$ observations in the sample:
+
+$$Y_i = \alpha + \beta_1 X_{i1} + \beta_2 X_{i2} + \beta_3 X_{i3} + \cdots + \beta_n X_{pn} + \epsilon \quad (i = 1, 2, 3, \ldots, n) $$ % + \epsilon$$
+
+The parameters $\alpha$ and $\beta$ write out an equation that predicts some of the variance in the dependent variable $Y$ from the variance in the independent variable $X$. The variance of $Y$ that is not successfully predicted by this \emph{linear estimator} is expressed in $\epsilon$, the \emph{error term}, which represents the fraction of $Y$ left unexplained by the model.
+
+The overall success of your prediction is called the \emph{goodness of fit} of your model, while the variance left unpredicted forms the \emph{residuals} of your models. Once your model has run, what you manage to analyze and learn from its residuals with regression \emph{diagnostics} will bring critical added value to the exercise of modeling. Residuals show where your model \emph{fails} to predict $Y$, yielding additional insights on your data and on how your theory fits it or not.
+
+To apply this kind of model to your data, you first need to check whether the variables in your analysis express some form of linear dependence with each other. This operation, which is both graphical and numerical, is described in the next section about correlation.
+
+%
+% -- Visual introduction to linear fits.
+%
+
+
+
+
+
+% \subsection{Extensions}
+% 
+%   So far, however, we have focused on continuous measurements. Dummies or ordinal data will not play out well with scatterplots, correlation and linear regression, unless you play a bit around to make them fit your model's specifications. Similarly, the potential interactions between our independent variables are not taken into account by our linear estimator so far. Finally, there are little things that we can do about the standard error of our estimates to make them more reliable.
+%   
+%   We will start working again with the model of support for abortion (\texttt{wvs\_abort}) that we left in Figure~\ref{fig:grmat} at p.~\pageref{fig:grmat}. Our main predictors are education (\texttt{bl\_ayt25}), gender equality (\texttt{undp\_gdi}), political regimes and economic wealth.
+% 
+%   \paragraph{Simulations}%
+%   \label{sec:sim}%
+%   %
+%   There are several ways to use fictional data generated by simulations in statistical analysis. Random imputation, for instance, can be used to tackle missing data when the pattern of `missingness' is random, but you will need more advanced skills than those covered here to apply these methods properly.\footcite[For an introduction in a social survey setting with R code, see][ch.~25]{GelmanHill:2007a}
+% 
+%   The \cmd{clarify} package implements an accessible technique that tests your model by computing its effects over a large number of simulated observations.\cite{TomzWittenberg:2001a} This is useful to rely less on $p$-values and significance tests, and more on the confidence bounds of the regression coefficients. In a few commands, \cmd{clarify} simulates 1,000 expected values of the dependent variable $Y$, which can then be used for point prediction and marginal effects\index{Marginal effects!Linear regression}. These notions, however, are arguably more relevant to probabilities and logistic regression than they are with linear regression: turn to Figure~\ref{fig:diabetic_95ci} at p.~\pageref{fig:diabetic_95ci} for an illustration.
+% 
+%   The more general point about simulated data is that they try to compensate for the unrealistic assumption of \emph{i.i.d} error terms, which states that the residuals of your model are \emph{independent} and \emph{identically distributed} around the mean. A simulation of your model provides more credible confidence intervals for its parameters than the estimation of these bounds from the normal distribution.
+
+	% bootstrap, panel with xtreg
+
+% \section{Developments}
+% \label{sec:developments}
+% 
+% Regression analysis is a very good hammer, and you can do a lot of things with a good hammer, from fixing a kitchen to contemporary artwork. There are, however, several situations in which you will not want to hammer at all. The next paragraphs describe a few other tools that you will hopefully get an opportunity to study in future quantitative methods courses. This short shopping list is just to give you a taste of what awaits beyond linear regression, with a specific emphasis on logistic regression, which might actually better correspond to your own research project at that stage.
+% 
+%   \paragraph{Advanced linear models}%
+%   \label{sec:nl}\index{Linear regression!Quantile regression}%
+%   %
+%   Regression works through a linear estimator, but you can teach the estimator to capture nonlinear relationships. This is the basic principle behind variable transformations, and behind more sophisticated versions of nonlinear regression analysis.
+% 
+%   % splice the data: loess
+%   
+%   Another way to amend regression analysis is to change the central component of the model, the mean value of the dependent variable $\bar Y$, and to replace it by another value of $Y$, such as its median or any other percentile. By doing so, you are telling your model to `regress' towards a different value than the average value of $Y$, \ie to maximize predicted variance in relation to a substantive (rather than null) value of the dependent variable.
+% 
+%   The \cmd{qreg} command performs these types of \emph{quantile regression}, which are useful for linear models where there is more than one linear effect in the model, as with relationships that show thresholds. For example, if your dependent variable is influenced primarily by an independent variable $X_1$ until it reaches a certain level, it might then be better predicted by another variable $X_2$ in the remaining part of the relationship. In that case, the distribution of $Y$ is better predicted by two separate models $Y = \alpha + \beta X_1 + \beta X_2 + \cdots + \beta X_p + \epsilon$, which you can combine to just one model by regressing to the approximate value of $Y$ where both models converge.
+% 
+%   In brief, you should turn to the \cmd{qreg} command and related documentation on quantile regression if you are examining a dependent variable that is distributed on a continuum, but for which you can clearly differentiate \emph{two} different groups within the observations. Your data need to be properly sampled to apply for quantile regression, and your control variables need to be available for both groups under examination.
+% 
+%   \paragraph{Regression for categorical data}%
+%   \label{ch:log}\index{Logistic regression}%
+%   %
+%   Linearity and normality are irrelevant when your dependent variable is not a continuous measure of interval data. If you are analyzing categorical data, such as nominal categories or dichotomous/binary outcomes of the ``yes/no'' form, as well as independent event counts\index{Data!Count data} where each event is probabilistically equivalent to a `repeated trial' following a Poisson distribution (\eg road traffic accidents), then the principles underlying \emph{logistic regression} will better capture the probability distribution of your data.
+% 
+%   Logistic regression models your data differently from linear regression. Instead of modeling the \emph{expected values} of the dependent variable $Y$ given the values of independent variable(s) $X$, which is written $E(Y|X)$, it models the \emph{probability} of $Y$ at each value of $X$, which is written $Pr(Y=1|X)$. The \cmd{logit} command, as well as its ordinal and multinomial versions \cmd{ologit} and \cmd{mlogit}, produce different versions of this model for ordinal and nominal data.\footnote{There are also \cmd{probit} commands that produce identical models under slightly different settings in their link function, with different results towards the tails of the probability distribution. In practice, you might prefer \cmd{logit} for its easily interpretable output, and switch to \cmd{probit} in advanced settings like multilevel models with \cmd{mvprobit}.}
+% 
+%   Stata offers a wide list of commands to perform regression with categorical data, and Stata~12 offers new commands to plot the marginal effects\index{Logistic regression!Marginal effects}\index{Marginal effects|seealso{Logistic regression}} of predictors in a logistic regression, which gives you very fine tuning over the actual effects of each independent variable. A full-fledged course would be needed to introduce how logistic regression works, and an excellent handbook by \citeauthor{LongFreese:2001a} is available for regression models with categorical data in Stata.\footcite{LongFreese:2001a}
+% 
+%   If your dependent variable is lowly dimensional, such as a 4-point scale outcome that might be further simplified into a 0--1 dichotomy by grouping ``disagree'' and ``agree'' answers, you can take a quick look at logistic regression straight away. Make sure that your dependent variable is either binary, discrete (\ie nominal) or split into ordered categories, as with ``very much---not at all'' attitudinal scales.
+%   
+%   Table~\ref{tbl:logit} shows how to run a logistic regression, simply by substituting the \cmd{logit} command to the \cmd{reg} command. The model in this example tries to predict whether individuals from a sample of American adults are obese by looking at their age, sex, educational attainment, race and physical activity. The \opt{nolog}{logit} option simply reduces the amount of output.
+%   
+%   \begin{table}[htp]
+%     \includegraphics[scale=.5]{images/obese_logit.pdf}
+% 
+%       \caption[Standard \cmd{logit} output (1): Log odds coefficients]{\label{tbl:logit}
+%     Standard \cmd{logit} output (1): Log odds coefficients.\\
+%     \nhis{24,187}}
+%   \end{table}%
+% 
+%   The coefficients of a logistic regression are radically different to those of a linear model. The \emph{link function} that underlies the model does not take the form $Y = \alpha + \beta X$ but instead define the log-likelihood of $Y$, where the likelihood of $Y$ is the sum of its `successes' $Pr(Y=1)=p$ divided by the sum of its `failures' $Pr(Y=0)=1-p$. The ratio $p/(1-p)$ is then transformed to its natural logarithm, in order to escape the 0--1 bounds of the probability $p$ and obtain regression coefficients as \emph{log odds}, which can range from 0 to infinity, and which basically measure the magnitude of each independent variable as a probabilistic predictor of $Y$.
+%   
+%   In a logistic model, just as with linear regression, the constant is the null estimator, or $Pr(Y=1)=\alpha$ when all other variables are held constant. The constant indicates that the models `starts' with a probability of being obese of $exp(.94)/(1-exp(.94))=.71$, or 71\%.\footnote{You can ask Stata to display that result, with the \cmd{di}{display} command: \texttt{di exp(.94)/(1-exp(.94))} (turn to \statacode{help math functions} for more math equation fun).} This probability is then enhanced by positive coefficients or penalized by negative ones, proportionally to their estimated values. In this model, race increases the log odds of being obese for individuals in the categories 2 (Blacks) and 3 (Hispanics); reversely, the negative log odds of the fourth race group (Asians) indicates a reduced risk of obesity. Similarly, every year of education above Grade 12 also predicts a lesser likelihood of being obese: for each increase in \texttt{educrec1}, a measure of educational attainment, the odds of being obese drop by $exp(-.16)/(1-exp(-.16))=.46$, or 46\%.
+% 
+%   % [todo: expand on OR] http://www.theanalysisfactor.com/why-use-odds-ratios/
+%   
+%   Table~\ref{tbl:logodds} shows how \emph{odds ratios}\index{Odds ratios!Logistic regression}\index{Odds ratios|seealso{Logistic regression}} offer to read logistic coefficients, by taking the exponents $e^\beta$ of the log odds. The \opt{or}{logit} option replaces log odds with odds ratios in a \cmd{logit} output. These ratios read as increases in proportions: in this model, the risk of obesity is 67\% \ie two thirds higher among Blacks than it is among Whites. Odds ratios inferior to 1 denote, on the contrary, a reduction in likelihood, as with Asians, who are $.32$  \ie one third \emph{less} likely to be obese than Whites.
+% 
+%   \begin{table}[htp]
+%     \includegraphics[scale=.5]{images/obese_logodds.pdf}
+% 
+%       \caption[Standard \cmd{logit} output (2): Odds ratios]{\label{tbl:logodds}
+%     Standard \cmd{logit} output (2): Odds ratios (shown with the \opt{or}{logit} option).\\
+%     \nhis{24,187}}
+%   \end{table}%
+% 
+%   Table~\ref{tbl:wald} shows how you can further measure the probability that two coefficients are simultaneously significant by performing a Wald significance test with the \cmd{test} command\index{Significance tests!Wald test}. In this example, the coefficients for Blacks and Hispanics are shown to be both significantly different from the null hypothesis. Using a Wald test that fits your theoretical insights is arguably a better method of validation for your model than looking at its overall fit, which is not as easy to measure or interpret in nonlinear models.
+%   
+%   \begin{table}[htp]
+%     \includegraphics[scale=.5]{images/obese_wald.pdf}
+% 
+%       \caption[Wald significance test on logistic regression coefficients]{\label{tbl:wald}
+%     Wald significance test on logistic regression coefficients.\\
+%     \nhis{24,187}}
+%   \end{table}%
+% 
+%   Table~\ref{tbl:obese_aic_bic} shows a comparison of two models, displayed with \cmd{estout}. The $R^2$ is a pseudo-measurement in a logistic regression model that hardly reflects the actual fit of the model, even in refined measurements like McKelvey and Zavoina's $R^2$. Some researchers will use AIC and BIC, two criteria with slightly different assumptions but that should converge in most cases, with higher values indicating better fit, as is the case here when race and education are considered. Fit statistics for logistic models, however, are not that useful overall.
+% 
+%   \begin{table}[htp]
+%     \includegraphics[scale=.5]{images/obese_wald.pdf}
+% 
+%       \caption[Fit statistics in \cmd{estout} output for \cmd{logit} models]{\label{tbl:obese_aic_bic}
+%     Fit statistics in \cmd{estout} output for \cmd{logit} models. See \statacode{help estout} and related online documentation for options.\\
+%     \nhis{24,187}}
+%   \end{table}%
+% 
+%   Table~\ref{tbl:ologit} shows that, just as with linear regression, the output of logistic regression in Stata can be simplified with the \cmd{leanout} command, first shown at p.~\pageref{sec:leanout}. The model is an \emph{ordinal logit}, where the dependent variable comes in ordered categories for which the numerical interval makes little sense: here, for instance, being underweight is coded as `1' and obesity is coded as `3', but it makes no sense to consider that being obese is like being three times underweight, or that being normal is to be `2' right in the middle.\index{Data!Ordinal data} Ordinal models come with \emph{cut points} that define the probability level of each category, which provide additional information to assess the likelihood of each category of the dependent variable.\footnote{Stata uses a specific notation for ordinal results: \url{http://www.stata.com/support/faqs/stat/oprobit.html}.}
+% 
+%   \begin{table}[htp]
+%     \includegraphics[scale=.5]{images/obese_ologit.pdf}
+% 
+%       \caption[Fit statistics in \cmd{estout} output for \cmd{logit} models]{\label{tbl:ologit}
+%     Ordinal logit model estimated with \cmd{ologit} and processed with \cmd{leanout}. See \statacode{help estout} and related online documentation for options.\\
+%     \nhis{24,187}}
+%   \end{table}%
+%   
+%    Figure~\ref{fig:diabetic_95ci} finally shows how logistic models can be simulated with the commands of the \cmd{clarify} package, previously mentioned at p.~\pageref{sec:sim}. These commands allow to estimate the effects attributable to a single predictor by holding other variables constant, while setting a clear `starting point' to the simulation. The figure shows how five years of education set apart American adults in their risk of becoming diabetic: throughout the life course, the probability level $Pr(\text{diabetic}=1)$ ends up being approximately twice as large at low versus high levels of education, independently of all other factors included in the model.
+% 
+%   \begin{figure}[htp]
+%     \includegraphics[width=.9\textwidth]{images/diabetic_95ci.pdf}
+% 
+%     \caption[Simulated probabilities of diabetes by age and education]{\label{fig:diabetic_95ci}
+%     Simulated probabilities of diabetes by age and education. Code adapted from the replication material for \cite{KingTomz:2000a}.\\
+%     \nhis{24,187} (1,000 simulations)}
+%   \end{figure}%
+% 
+%   Plotting the marginal effects or odds ratios of logistic models can be done in various ways, and regression diagnostics also exist for all the models mentioned above. There are also many applications of count models in health and social sciences. The overall diversity of regression models is one of its strengths as a method of analysis, as it indicates careful attention to the background assumptions that go into statistical analysis; the drawback, of course, is that model selection can become quite difficult and erratic.
+% 
+%   \paragraph{Time series}%
+%   \label{sec:ts}\index{Data!Times series}\index{Time series|see{Data}}%
+%   %
+%   Time series hold unique observations for $N$ units at $\bar T = 1, \ldots, t$ temporal units, usually years or quarters. It contrasts with longitudinal panel data because it often aims at forecasting the forthcoming values of the series, rather than simply clustering them to reduce the standard error of the model. Time series are also helpful for analyzing the probability of occurrence of recurrence of some historical events, which can apply to a broad range of subjects and has tons of interesting applications in the social sciences.\footcite{Box-SteffensmeierJones:2004b}
+% 
+%   Stata understands that the data are time series once you pass it a few parameters about your $t$ variable and its format with the \cmd{tsset} command. You would then have to check the properties of your time series, such as stationarity or autocorrelation, in order to set up an appropriate model for your series. A large class of these models are said to be autoregressive, as they primarily rely on the past values of $X$ ($X_{t-1}, X_{t-2}, \ldots, X_{t-k}$) to linearly infer its more recent values.
+%   
+%   The methods of time series analysis use differentiation to analyze significant variations in the current series, and simulations to identify the confidence interval for future values. These methods have important applications for country-level data because cross-sectional times series often underemphasize the substantive significance of autocorrelation, which can closely reflect the notion of  ``institutional stickiness'' and related concepts. This use of time series analysis would greatly benefit to comparative politics and other fields of inquiry where path dependence and feedback effects are determinant.
+% 
+%   %
+%   %
+%   %
+%   \paragraph{Bayesian statistics}%
+%   %
+%   \index{Bayesian \emph{versus} frequentist statistics}%
+%   \label{sec:bayesian}
+%   %
+%   \emph{Bayesian data analysis} uses Bayes' Theorem to promote another understanding of probability than the one promoted by the Central Limit Theorem and \emph{frequentist} statistics. Instead of relying on normally distributed probabilities, it injects subjective probabilities into the model, in order to reflect prior information accessible to the subjects modeled by the estimator. This approach is quite relevant to social science subjects, given that units of observation like households, governments or companies can be expected to use such information in the formation of their preferences. This approach is also relevant to account for bias in addition to strategic behavior, which eventually makes it very appropriate in many social contexts. Most approaches to multilevel models will introduce you to Bayesian statistics.\footcite[For a book-length introduction with R code, see][but get a serious grip at frequentist statistics first.]{GelmanHill:2007a}
+
+\input{6A_interpretation}%
+%
+\input{6B_diagnostics}%
+%
+\input{6C_interactions}%
+%
+
+\stopcontents[chapters]
+
+%
+% have a nice day
+%

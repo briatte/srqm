@@ -66,9 +66,21 @@ renvars rlgdnm lrscale tvpol \ denom pol tv            // religion, politics
 * Have a quick look.
 codebook cntry age sex income edu denom pol tv, c
 
+* Inspect religious variables further.
+tab denom rlgblg, miss nolab
+
+* Add non-religious to denominations.
+replace denom = 0 if rlgblg == 2
+
+* Append the value label accordingly.
+la de rlgdnm 0 "Not religious", add
+
 
 * Subsetting
 * ----------
+
+* Check how much data is missing.
+misstable pat cntry age sex income edu denom pol tv
 
 * Delete incomplete observations.
 drop if mi(age, sex, income, edu, denom, pol, tv)
@@ -97,29 +109,38 @@ recode trrtort ///
     (3 = .) (else = .), gen(torture)
 la var torture "Opposition to torture"
 
-* Average opposition to torture in Europe.
+* Average opposition to torture in the European sample.
 fre torture
 tab torture [aw = dweight * pweight] // weighted by overall European population
 
-* Average opposition to torture in each country.
+* Average opposition to torture in each country sample.
 gr dot torture [aw = dweight], over(cntry, sort(1) des) scale(.75) ///
     name(torture2, replace)
 
-* Create a dummy for Israel vs. other European countries.
+* Create a dummy for Israeli respondents.
 gen israel:israel = (cntry == "IL")
 la def israel 1 "Israel" 0 "Other EU"
 
 * Estimate DV proportions in Israel.
-prop torture if israel
+svy: prop torture if israel
 
 * Compare average opposition to torture inside and outside Israel.
 prtest torture, by(israel)
 
-* Subset to all European countries but Israel.
+* Subset to respondents in Israel.
 keep if israel
 
 * Final sample size.
 count
+
+* Note that the sample is deliberately not representative of the general
+* population of Israel. We took that step when we dropped respondents who did
+* not provide a political placement or an income measure, and again when we
+* removed neutral answers (the "neither-or" response item) to the original
+* survey question. To work on a representative sample, you would need to keep
+* all observations and apply survey weights (which were corrected in August 2013
+* after it emerged that the original data contained faulty weights for Israel).
+* A further and more advanced step would be to impute missing values of income.
 
 
 * ======================
