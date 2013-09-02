@@ -8,7 +8,7 @@ This repository contains the [Statistical Reasoning and Quantitative Methods][sr
 
 The course requires a working copy of [Stata][stata]. Instructions to set up your computer for the course are provided in the introduction of the course handbook and repeated in class. Additional material is distributed in class, usually through Google Documents.
 
-Please check with your instructor if you have any questions or are having difficulties with the course setup. If you are reading this online at GitHub, please feel free to [report issues](https://github.com/briatte/srqm/issues) or ask for enhancements.
+Please check with your instructor if you have any questions or are having difficulties with the course setup. If you are reading this online at GitHub, please feel free to [report issues](https://github.com/briatte/srqm/issues) or ask for enhancements. Thanks in advance for your feedback, welcome to the course, and talk to you soon!
 
 [stata]: http://www.stata.com/
 
@@ -29,8 +29,6 @@ Please check with your instructor if you have any questions or are having diffic
 
 [wiki-code]: https://github.com/briatte/srqm/wiki/code
 [wiki-utils]: https://github.com/briatte/srqm/wiki/course-utilities
-
-Welcome to the course, and see you soon!
 
 # HISTORY
 
