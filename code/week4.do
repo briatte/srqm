@@ -306,10 +306,10 @@ ci bmi
 * Mean BMI for the full sample with a 99% CI (more confidence, less precision).
 ci bmi, level(99)
 
-* Mean BMI for the full sample with survey weights (better representativeness).
-svy [pw = perweight, strata(strata)]: mean bmi
+* Mean BMI for full sample with survey design weights (as set earlier).
+svy: mean bmi
 
-* Mean BMI for the full sample with ajusted sample weights (even better).
+* Mean BMI for full sample with ajusted sample weights.
 mean bmi [pw = sampweight]
 
 * The confidence intervals for the full sample show a high precision, both at

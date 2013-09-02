@@ -281,8 +281,6 @@ bys uninsured: ci bmi  // confidence bands
 * IV: Health affordability
 * ------------------------
 
-exit -1
-
 * Plot BMI distribution for groups above and below the poverty threshold.
 kdensity bmi if poor, addplot(kdensity bmi if !poor) ///
 	legend(order(1 "Above" 2 "Below poverty threshold") row(1)) ///

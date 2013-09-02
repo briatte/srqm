@@ -564,8 +564,8 @@ local rhs "ib45.age6 female i.health lowinc ib2.pol3"
 * (the line below AND the -reg- commands), or the whole do-file.
 
 * Store robust models.
-eststo FRr: reg hsat `rhs' if cntry == "FR", vce(cluster regionfr)
-eststo GBr: reg hsat `rhs' if cntry == "GB", vce(cluster regiongb)
+eststo FRr: reg hsat `rhs' if cntry == "FR", vce(cluster region)
+eststo GBr: reg hsat `rhs' if cntry == "GB", vce(cluster region)
 
 * Compare both versions for a more realistic assessment of the standard errors.
 esttab est1 FRr est2 GBr, nogaps b(2) se(2) sca(rmse) compress ///

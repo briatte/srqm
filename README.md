@@ -30,7 +30,8 @@ Welcome to the course, and see you soon!
 
 # HISTORY
 
+* 4.4: correct ESS design weights for Israel; [cleaner repo](http://rtyley.github.io/bfg-repo-cleaner/).
 * 4.3: updated NHIS, QOG and ESS datasets.
-* 4.2: specific FTP server for teaching material.
+* 4.2: dedicated FTP server for additional teaching material.
 * 4.1: better workaround for admin restrictions.
 * 4.0: reworked `srqm` course utilities.
