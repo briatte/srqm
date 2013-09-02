@@ -6,9 +6,13 @@ This repository contains the [Statistical Reasoning and Quantitative Methods][sr
 [ip]: http://ipetev.org/
 [fk]: http://www.cee.sciences-po.fr/en/le-centre/phd-and-new-doctors/phd-candidates/153-filip-kostelka.html
 
-The course requires a working copy of [Stata][stata]. Instructions to set up your computer for the course are provided in the introduction of the course handbook and repeated in class.
+The course requires a working copy of [Stata][stata]. Instructions to set up your computer for the course are provided in the introduction of the course handbook and repeated in class. Additional material is distributed in class, usually through Google Documents.
+
+Please check with your instructor if you have any questions or are having difficulties with the course setup. If you are reading this online at GitHub, please feel free to [report issues](https://github.com/briatte/srqm/issues) or ask for enhancements.
 
 [stata]: http://www.stata.com/
+
+# FILES
 
 * The `course` folder contains draft teaching material.
 * The `code` folder contains the [replication code][wiki-code].
@@ -26,8 +30,6 @@ The course requires a working copy of [Stata][stata]. Instructions to set up you
 [wiki-code]: https://github.com/briatte/srqm/wiki/code
 [wiki-utils]: https://github.com/briatte/srqm/wiki/course-utilities
 
-Additional and up-to-date material is distributed in class, usually through Google Documents. Please check with your instructor if you are taking the course at Sciences Po.
-
 Welcome to the course, and see you soon!
 
 # HISTORY
@@ -36,4 +38,7 @@ Welcome to the course, and see you soon!
 * 4.3: updated NHIS, QOG and ESS datasets.
 * 4.2: dedicated FTP server for additional teaching material.
 * 4.1: better workaround for admin restrictions.
-* 4.0: reworked `srqm` course utilities.
+* 4.0: reworked `srqm` course utilities (Spring 2013).
+* 3.0: reworked `srqm` utilities (Spring 2012).
+* 2.0: reworked `srqm` utilities (Fall 2012).
+* 1.0: first release (Spring 2011).
