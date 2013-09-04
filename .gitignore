@@ -22,6 +22,7 @@ course/guide/*
 !course/guide/*.def
 !course/guide/*.md
 !course/guide/*.Rnw
+!course/guide/*.sty
 !course/guide/*.tex
 
 data/*
