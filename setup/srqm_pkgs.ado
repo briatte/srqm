@@ -11,13 +11,17 @@ program srqm_pkgs
 global srqm_packages = "lookfor_all fre spineplot tab_chi mkcorr tabout estout leanout plotbeta kountry wbopendata spmap scheme-burd _gstd01 renvars clarify"
 if "`extra'" != "" global srqm_packages = "$srqm_packages catplot ciplot distplot log2do2 outreg2 revrs schemes scheme_tufte gr0002_3 qog qogbook"
 
+* prepare to fall back to adopath alternatives (Win/UNIX)
+if "`c(os)'" != "MacOSX" cap mkdir "`c(sysdir_oldplace)'", public
 * use -pkgs- to test writing to stata.trk in PLUS codename directory
-pkgs, quiet
-* on Sciences Po computers, switch path to PERSONAL, c:\ado\personal
-if _rc pkgs using "`c(sysdir_personal)'", quiet
-* on even more restricted systems, try to switch to SRQM user folder
-if _rc pkgs using "setup/pkg", quiet
-* complain if it fails, as it break executability of course do-files
+cap pkgs, quiet
+if _rc {
+  * switch path to PERSONAL (at Sciences Po, c:\ado\personal)
+  cap pkgs using "`c(sysdir_personal)'", quiet
+  * fall back to local install (for fully restricted systems)
+  if _rc cap pkgs using "setup/pkg", quiet
+}
+* complain if it all fail (breaks executability of course do-files)
 if _rc {
   di as err _n "Warning: could not find a way to install packages"
   exit -1
@@ -71,21 +75,12 @@ else {
 
           if "`t'"=="wbopendata" {
             cap noi ssc inst `t', all replace
-  					local maps "world-c.dta world-d.dta"
-  					foreach y of local maps {
-  						cap copy `y' data/`y'
+            local maps "world-c.dta world-d.dta"
+            foreach y of local maps {
+              cap copy `y' data/`y'
               if !_rc di as txt "(file `y' moved to data folder)"
-  						cap erase `y'
-  					}
-          }
-          else if "`t'"=="kountry" {
-            cap noi ssc inst `t', all replace
-            local files "kountry.dta k_other_extras.txt"
-  					foreach y of local files {
-  						cap copy `y' "`c(sysdir_plus)'/k/`y'"
-              if !_rc di as txt "(file `y' moved to PLUS folder; nothing to worry about)"
-  						cap erase `y'
-  					}
+              cap erase `y'
+            }
           }
           else if "`t'"=="renvars" {
               cap noi net ins dm88_1, from ("http://www.stata-journal.com/software/sj5-4/")
@@ -104,8 +99,8 @@ else {
           }
           else {
               cap noi ssc inst "`t'", replace
-  						if _rc==631 di as err "Error 631: could not connect to the SSC archive to look for package " as inp "`1'"
-  						if _rc==601 di as err "Error 601: could not find package " as inp "`1'" as err " at the SSC archive"
+              if _rc==631 di as err "Error 631: could not connect to the SSC archive to look for package " as inp "`1'"
+              if _rc==601 di as err "Error 601: could not find package " as inp "`1'" as err " at the SSC archive"
           }
           * Restricted systems fail here with error 699 (see explanation and
           * possible fixes in Lembcke's "Introduction to Stata" at page 48);

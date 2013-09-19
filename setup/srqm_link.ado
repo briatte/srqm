@@ -56,7 +56,7 @@ else if _rc | "$srqm_wd" != "`c(pwd)'" | "`force'" != "" {
           _n "Warning: the Stata application profile is not writable on your system." as txt _n(2) ///
           _n "Try again while running Stata with admin privileges. If the problem persists," ///
           _n "you will have to manually select the SRQM folder from the 'File : Change" ///
-          _n "Working Directory...' menu and then execute the {stata run profile} command"
+          _n "Working Directory...' menu and then execute the {stata run profile} command" ///
           _n "to set up your computer for the course. All apologies to Windows users."
       exit -1
   }

@@ -9,7 +9,7 @@ cap log using code/week2.log, replace
 
    F. Briatte and I. Petev
 
- - TOPIC:  Support for Sharia Law in Nine Countries
+ - TOPIC:  Social Determinants of Adult Obesity in the United States
 
  - DATA:   U.S. National Health Interview Survey (2009)
 

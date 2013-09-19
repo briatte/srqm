@@ -32,6 +32,7 @@ Please check with your instructor if you have any questions or are having diffic
 
 # HISTORY
 
+* 4.5: patches for new Sciences Po computer setups.
 * 4.4: correct ESS design weights for Israel; [cleaner repo](http://rtyley.github.io/bfg-repo-cleaner/).
 * 4.3: updated NHIS, QOG and ESS datasets.
 * 4.2: dedicated FTP server for additional teaching material.
