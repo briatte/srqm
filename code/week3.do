@@ -188,7 +188,7 @@ fre v223
 * Recode gender as a meaningful binary (either female or not) using a logical
 * operator (in brackets), excluding missing observations from the operation and
 * applying the 'female' label to the new 'female' dummy variable:
-gen female:female = (v223 == 1) if !mi(v223)
+gen female:female = (v223 == 2) if !mi(v223)
 
 * Label the values.
 la def female 0 "Male" 1 "Female", replace
