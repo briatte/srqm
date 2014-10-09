@@ -1,6 +1,6 @@
 *! stab: simple tables of summary statistics
 *! type -stab_demo- for examples with NHANES data
-*! 0.2 F. Briatte 3jun2013
+*! 0.21 F. Briatte 9oct2014
 cap pr drop stab
 pr stab
   syntax [using/] [if] [in] [, Mean(varlist) Prop(varlist) replace]
@@ -36,9 +36,11 @@ pr stab
 
   // continuous variables passed to summarize() get a mean, sd and min-max
   
-  qui estpost summarize `mean' `if' `in'
-  esttab, `dsu' `fmt' collabels(, lhs("Variable"))
-  qui esttab using `out', tab append `dsu' `fmt' collabels(, lhs("Variable"))
+  if "`mean'" != "" {
+	qui estpost summarize `mean' `if' `in'
+	esttab, `dsu' `fmt' collabels(, lhs("Variable"))
+	qui esttab using `out', tab append `dsu' `fmt' collabels(, lhs("Variable"))
+  }
 
   // categorical variables passed to frequencies() get percentages
   
