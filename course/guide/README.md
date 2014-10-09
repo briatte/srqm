@@ -1,7 +1,7 @@
 
-![](https://raw.github.com/briatte/srqm/master/course/guide/images/0-this-is-stata.jpg)
+<img src="images/0-this-is-stata.jpg" width ="600" />
 
-Work in progress. The index is `0_build.tex`. The math appendix has an extra `Rnw` source.
+Work in progress. The entry point for LaTeX compilation is `0_build.tex`. The math appendix has an extra `A_math.Rnw` source for compilation with `knitr` in `R`.
 
 See the [wiki](https://github.com/briatte/srqm/wiki/stata-guide) for the outline.
 

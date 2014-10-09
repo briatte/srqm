@@ -11,7 +11,7 @@
 	\input{config/sty} % style
 	\input{config/lex} % word shortcuts
 	\input{config/doc} % documentation index
-  
+
   \usepackage{hyphenat}
   \usepackage[style=mla, autocite=footnote, guessmedium=false, backend=biber]{biblatex}
   \addbibresource{references.bib}
@@ -28,23 +28,23 @@
   \tableofcontents %% r-5
   \addcontentsline{toc}{chapter}{Contents}%
 	\cleardoublepage
-	
+
 \mainmatter %% r-7
 
   \input{1_intro}         %% ... session 1 (course, toc)    ... incl. setup and coursework
-	
+
   % 1) data visualization
-  % 
+  %
   \input{2_data}          %% ... sessions 2-3 (data, vars)
-  \input{3_distributions} %% ... sessions 4-5 (summ, distr) ... ends on: draft 1
-  
+  \input{3_distributions} %% ... sessions 4-5 (summ, distr, ci) ... ends on: draft 1
+
   % 2) association tests
-  % 
-  \input{4_association}   %% ... sessions 6-7 (ci, ttest)
-  \input{5_ols}           %% ... sessions 8-9 (corr, ols)   ... ends on: draft 2
+  %
+  \input{4_association}   %% ... sessions 6-7 (ttest, tab)
+  \input{5_ols}           %% ... sessions 8-9 (sc, corr, least sq) ... ends on: draft 2
 
   % 3) regression models
-  % 
+  %
   \input{6_linear}        %% ... session 10 (reg)
   \input{7_logistic}      %% ... session 11 (logit)
 
