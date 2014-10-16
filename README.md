@@ -8,9 +8,9 @@ This repository contains the [Statistical Reasoning and Quantitative Methods][sr
 
 The course requires a working copy of [Stata][stata]. Instructions to set up your computer for the course are provided in the introduction of the course handbook. Additional material is distributed in class through Google Docs.
 
-If you are reading this online on GitHub, please feel free to [report issues](https://github.com/briatte/srqm/issues) or ask for enhancements. Feedback on [running the course in Stata 13](https://github.com/briatte/srqm/issues/12) is partucarly welcome.
+If you are reading this online on GitHub, please feel free to [report issues][issues] or ask for enhancements. Feedback on [running the course in Stata 13](https://github.com/briatte/srqm/issues/12) is particularly welcome.
 
-__Students__ -- please check with your instructor _as soon as possible_ if you have any questions or are having difficulties with the course setup, which will be explained extensively in class. Welcome to the course, and talk to you soon!
+__Students__ – please check with your instructor _as soon as possible_ if you have any questions or are having difficulties with the course setup, which will be explained extensively in class. Welcome to the course, and talk to you soon!
 
 [stata]: http://www.stata.com/
 
@@ -23,12 +23,19 @@ __Students__ -- please check with your instructor _as soon as possible_ if you h
 
 | Filename       | Data                                  | Year(s)        |
 |:---------------|:--------------------------------------|:---------------|
-| `ess0810`      | European Social Survey                | Rounds 4-5 (2008-2010) |
-| `gss0012`      | General Social Survey                 | 2000-2012      |
-| `nhis9711`     | National Health Interview Survey      | 1977-2011      |
-| `qog2013`      | Quality of Government                 | 2009 ± 3 years |
-| `wvs2000`      | World Values Survey                   | Wave 4 (2000)  |
+| `ess0810`      | [European Social Survey][ess]         | Rounds 4-5 (2008-2010) |
+| `gss0012`      | [General Social Survey][gss]          | 2000-2012      |
+| `nhis9711`     | [National Health Interview Survey][nhis] | 1997-2011   |
+| `qog2013`      | [Quality of Government][qog]          | 2009 ± 3 years |
+| `wvs2000`      | [World Values Survey][wvs]            | Wave 4 (2000)  |
 
+[ess]: http://www.europeansocialsurvey.org/
+[gss]: http://www3.norc.org/GSS+Website/
+[nhis]: http://www.cdc.gov/nchs/nhis.htm
+[qog]: http://www.qog.pol.gu.se/data/datadownloads/qogstandarddata/
+[wvs]: http://www.worldvaluessurvey.org/
+
+[issues]: https://github.com/briatte/srqm/issues
 [wiki-code]: https://github.com/briatte/srqm/wiki/code
 [wiki-utils]: https://github.com/briatte/srqm/wiki/course-utilities
 
