@@ -6,9 +6,11 @@ This repository contains the [Statistical Reasoning and Quantitative Methods][sr
 [ip]: http://ipetev.org/
 [fk]: http://www.cee.sciences-po.fr/en/le-centre/phd-and-new-doctors/phd-candidates/153-filip-kostelka.html
 
-The course requires a working copy of [Stata][stata]. Instructions to set up your computer for the course are provided in the introduction of the course handbook and repeated in class. Additional material is distributed in class, usually through Google Documents.
+The course requires a working copy of [Stata][stata]. Instructions to set up your computer for the course are provided in the introduction of the course handbook. Additional material is distributed in class through Google Docs.
 
-Please check with your instructor if you have any questions or are having difficulties with the course setup. If you are reading this online at GitHub, please feel free to [report issues](https://github.com/briatte/srqm/issues) or ask for enhancements. Thanks in advance for your feedback, welcome to the course, and talk to you soon!
+If you are reading this online on GitHub, please feel free to [report issues](https://github.com/briatte/srqm/issues) or ask for enhancements. Thanks in advance for your feedback!
+
+__Students__ -- please check with your instructor _as soon as possible_ if you have any questions or are having difficulties with the course setup, which will be explained extensively in class. Welcome to the course, and talk to you soon!
 
 [stata]: http://www.stata.com/
 
