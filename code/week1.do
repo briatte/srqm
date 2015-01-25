@@ -3,6 +3,9 @@
 * you have the appropriate files and packages to successfully run the code.
 run setup/require fre lookfor_all
 
+* Allow Stata to scroll through the results.
+set more off
+
 /* ------------------------------------------ SRQM Session 1 -------------------
 
    F. Briatte and I. Petev
@@ -112,12 +115,10 @@ scatter lexp safewater
 * you are done inspecting the graph. Finally, type the following command after
 * uncommenting it (remove the asterisk and trailing space):
 
-* doedit example
+* doedit
 
-* The previous command creates an empty do-file called 'example.do'. The file
-* is located in your working directory, which should be the SRQM folder.
-* Stata has also opened the file in the Do-file Editor so that you can edit it
-* from its programming interface. Copy and paste the four following lines into
+* The previous command creates an empty do-file in the Do-file Editor, so that
+* you can edit it from Stata directly. Copy and paste the four lines below into
 * that empty do-file window:
 
 // Example do-file.

@@ -2,6 +2,9 @@
 * Check setup.
 run setup/require fre renvars scheme-burd spineplot tab_chi
 
+* Allow Stata to scroll through the results.
+set more off
+
 * Log results.
 cap log using code/week6.log, replace
 

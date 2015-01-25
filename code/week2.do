@@ -2,6 +2,9 @@
 * Check setup.
 run setup/require fre
 
+* Allow Stata to scroll through the results.
+set more off
+
 * Log results.
 cap log using code/week2.log, replace
 

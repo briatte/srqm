@@ -2,6 +2,9 @@
 * Check setup.
 run setup/require fre scheme-burd spineplot
 
+* Allow Stata to scroll through the results.
+set more off
+
 * Log results.
 cap log using code/week5.log, replace
 

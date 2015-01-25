@@ -2,6 +2,9 @@
 * Check setup.
 run setup/require estout fre tab_chi renvars scheme-burd
 
+* Allow Stata to scroll through the results.
+set more off
+
 * Log results.
 cap log using code/week10.log, replace
 

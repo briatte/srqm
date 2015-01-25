@@ -2,6 +2,9 @@
 * Check setup.
 run setup/require mkcorr renvars
 
+* Allow Stata to scroll through the results.
+set more off
+
 * Log results.
 cap log using code/week7.log, replace
 
