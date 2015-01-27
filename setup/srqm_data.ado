@@ -25,34 +25,35 @@ di as inp _n "Updating `1' teaching dataset(s)..." _n
 
 // --------------------------------------------------------- ESS 2008-2010 -----
 
+* URL: http://www.europeansocialsurvey.org/
+
 if inlist("`1'", "all", "ess0810") {
   // Get the data (downloaded from the website).
-  use "`src'/ESS/ESS4e04.1/ESS4e04.1_F1.dta", clear
+  use "`src'/ESS/ESS4e04_3.stata/ESS4e04_3.dta", clear
 
   // Zero-match merge (non-longitudinal survey).
-  merge 1:1 idno cntry edition using "`src'/ESS/ESS5e03.0/ESS5e03.0_F1.dta", nogen
+  merge 1:1 idno cntry edition using "`src'/ESS/ESS5e03_2.stata/ESS5e03_2.dta", nogen
 
-  // Merge N = 4,784 corrected Israeli weights.
-  merge 1:1 essround cntry idno using "`src'/ESS/IL_DWEIGHT/dweight_corrected.dta", nogen
-
-  replace dweight = dweight_corrected if !mi(dweight_corrected)
-  drop dweight_corrected
+  // Encode missing values (same code for both ESS rounds).
+  run "`src'/ESS/ESS4e04_3.stata/ESS_miss.do"
 
   // Trim (this threshold drops nation-specific questions).
   srqm_datatrim, k(9)
 
   // Get codebook.
-  copy "`src'/ESS/ESS4e04.1/ESS4e04.1.pdf" data/ess0810r4_codebook.pdf, replace
-  copy "`src'/ESS/ESS5e03.0/ESS5e03.0.pdf" data/ess0810r5_codebook.pdf, replace
+  copy "`src'/ESS/ESS4_data_documentation_report_e05_3.pdf" data/ess0810r4_codebook.pdf, replace
+  copy "`src'/ESS/ESS5_data_documentation_report_e03_2.pdf" data/ess0810r5_codebook.pdf, replace
 
   srqm_datamake, label(European Social Survey 2008-2010) filename(ess0810)
 }
 
 // --------------------------------------------------------- GSS 2000-2012 -----
 
+* URL: http://www3.norc.org/GSS+Website/
+
 if inlist("`1'", "all", "gss0012") {
 	// Get the data.
-  loc gss gss7212_r2
+  	loc gss GSS7212_R6
 	cap use "`src'/GSS/`gss'.dta", clear
 
 	// Download the 1972-2012 cumulative file if needed (large, > 350 MB).
@@ -61,15 +62,19 @@ if inlist("`1'", "all", "gss0012") {
 		copy `link' gss.zip, replace
 		unzipfile gss.zip
 		use `gss'.dta, clear
-		// rm gss.zip // comment out to keep the cumulative data zip
-		// rm `gss'.dta // comment out to keep the cumulative data file
+		rm gss.zip // comment out to keep the cumulative data zip
+		rm `gss'.dta // comment out to keep the cumulative data file
 	}
 
 	// Subset years.
 	drop if year < 2000
 
-	// Trim (very low threshold to accommodate single-year questions)
-	srqm_datatrim, k(5)
+	// Trim (low threshold to accommodate single-year questions)
+	// Note: be carefult to maintain a threshold that is sufficiently high to
+	// keep less than 2047 veriables in order for the course to run under old
+	// or limited of versions of Stata (at Sciences Po, Stata 11 IC). The value
+	// below leaves 2,045 variables.
+	srqm_datatrim, k(5.75)
 
 	// Get the codebook.
 	local file data/gss0012_codebook.pdf
@@ -81,6 +86,8 @@ if inlist("`1'", "all", "gss0012") {
 }
 
 // -------------------------------------------------------- NHIS 1997-2011 -----
+
+* URL: http://www.cdc.gov/nchs/nhis.htm
 
 if inlist("`1'", "all", "nhis9711") {
 	// Get the data (downloaded from the website).
@@ -132,11 +139,16 @@ if inlist("`1'", "all", "nhis9711") {
 
 // -------------------------------------------------------------- QOG 2013 -----
 
+* URL: http://qog.pol.gu.se/
+
 if inlist("`1'", "all", "qog2013") {
 	// Get the data.
-	cap use "`src'/QOG/QOG Standard 2013/QoG_std_cs_15May13.dta", clear
+	cap use "`src'/QOG/QOG Standard 2013 (December)/qog_std_cs.dta", clear
 
-	// Download if needed.
+	// Download if needed. This version was uploaded to the server in 2014,
+	// but is still QOG Standard December 2013. This might change later, so
+	// the code will need a small update to avoid downloading more recent
+	// QOG data, which is much heavier.
 	if _rc==601 use "http://www.qogdata.pol.gu.se/data/qog_std_cs.dta", clear
 
 	// Trim (lower threshold).
@@ -144,22 +156,24 @@ if inlist("`1'", "all", "qog2013") {
 	
 	// Get the codebook.
 	local file data/qog2013_codebook.pdf
-	local link "http://www.qogdata.pol.gu.se/data/Codebook_QoG_Std15May13.pdf"
+	local link "`src'/QOG/QOG Standard 2013 (December)/qog2013_codebook.pdf"
 	cap conf f `file'
-	if _rc==601 copy `link' `file', replace
+	if _rc==601 copy "`link'" "`file'", replace
 
 	srqm_datamake, label(Quality of Government 2013) filename(qog2013)
 }
 
-* Note: the -qoguse- command downloads the most recent version of the data, but
-* as of today (May 2013), the -qogbook- command downloads the old 2011 codebook.
-* Stefan Dalhberg tells me that it will be updated soon by its author.
+* Note: the -qog- and -qogbook- packages available from SSC have been outdated
+* for over a year. They can still be installed by using the -srqm_pkgs- command
+* with the -extra- option, but are not likely to work properly.
 
 // -------------------------------------------------------------- WVS 2000 -----
 
+* URL: http://www.worldvaluessurvey.org/
+
 if inlist("`1'", "all", "wvs2000") {
 	// Get the data.
-	cap use "`src'/WVS 2008/wvs1981_2008_official_files/wvs2000.dta", clear
+	cap use "`src'/WVS/wvs2000/wvs2000_v20090914.dta", clear
 
 	// Download if needed.
 	if _rc==601 {
@@ -175,7 +189,7 @@ if inlist("`1'", "all", "wvs2000") {
 	// Also, some items are asked only in a few countries (e.g. Islam, neighbours).
 
 	// Capitalize country names
-  // Thanks to William A. Huber: http://stackoverflow.com/q/12591056/635806
+  	// Thanks to William A. Huber: http://stackoverflow.com/q/12591056/635806
 	local sLabelName: value l v2
 	di "`sLabelName'"
 	qui levelsof v2, local(xValues)
@@ -188,7 +202,7 @@ if inlist("`1'", "all", "wvs2000") {
 
 	// Get the codebook.
 	local file data/wvs2000_codebook.pdf
-	local link "http://www.worldvaluessurvey.org/wvs/articles/folder_published/survey_2000/files/root_q_2000.pdf"
+	local link "`src'/WVS/wvs2000/wvs2000_codebook.pdf"
 	cap conf f `file'
 	if _rc==601 copy `link' `file', replace
 

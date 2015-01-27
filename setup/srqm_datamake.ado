@@ -9,7 +9,7 @@ pr srqm_datamake
 	la data "`label'"
 	note _dta: `label'
 	note _dta: Teaching dataset. Please do not redistribute.
-	note _dta: This version: TS
+	note _dta: Teaching version production date: TS
 
 	qui cd data
 	local fn `filename'
