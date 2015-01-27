@@ -21,6 +21,13 @@ if _rc {
   * fall back to local install (for fully restricted systems)
   if _rc cap pkgs using "setup/pkg", quiet
 }
+* Stata 11: assume Sciences Po computer and fall back to local install
+if c(version) < 12 {
+	di as txt _n "Warning: assuming your computer is at Sciences Po" ///
+          	_n "The setup will install all packages locally after" ///
+	          _n "you type the {stata run profile} command."
+	cap pkgs using "setup/pkg", quiet
+}
 * complain if it all fail (breaks executability of course do-files)
 if _rc {
   di as err _n "Warning: could not find a way to install packages"

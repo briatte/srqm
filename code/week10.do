@@ -287,28 +287,34 @@ esttab log_? using week10_logits.txt, mti("Logit" "Adj. logit") replace
 * Marginal effects
 * ----------------
 
-* Marginal effects of political attitude: estimated probability of DV at each
-* level of the 10-point left/right scale used in the model, all other factors
-* kept constant (demographics, education and income).
-margins, at(rightwing = (0(1)10))
-marginsplot, xla(minmax) recast(line) recastci(rarea) ciopts(col(*.6)) ///
-	name(mfx_right, replace)
+* Note: this section runs properly only on Stata 12+. If you are using an older
+* version of Stata, you will be able to execute the -margins- commands, but not
+* the -marginsplot- commands.
+if c(version) > 11 {
 
-* Marginal effects of educational attainment, by gender and country of birth.
-* The margins command will generate estimate for all possible permutations of
-* the IV list provided, and then plot them as confidence intervals.
-margins born#female, at(edu3 = (1(1)3))
-marginsplot, xla(minmax) by(female born) ///
-	name(mfx_demog, replace)
+	* Marginal effect of political attitude: estimated probability of DV at each
+	* level of the 11-point left/right scale used in the model, with all other
+	* factors kept constant (demographics, education and income).
+	margins, at(rightwing = (0(1)10))
+	marginsplot, xla(minmax) recast(line) recastci(rarea) ciopts(col(*.6)) ///
+		name(mfx_right, replace)
 
-* Effect of increasing age on the probability of the DV being equal to 1, by sex
-* and country of birth. The overlap in confidence intervals illustrates the weak
-* value of age as a predictor for the DV: the marginal effect of age is residual
-* in the model, at least in comparison to other predictors.
-margins born#female, at(age=(25(5)85))
-marginsplot, by(female) recast(line) recastci(rarea) ciopts(col(*.6)) ///
-	name(mfx_age, replace)
+	* Marginal effect of educational attainment, by gender and country of birth.
+	* The -margins- command will generate estimate for all possible permutations
+	* of the IV list provided, and then plot them as confidence intervals.
+	margins born#female, at(edu3 = (1(1)3))
+	marginsplot, xla(minmax) by(female born) ///
+		name(mfx_demog, replace)
 
+	* Effect of increasing age on the probability of the DV being equal to 1, by
+	* sex and country of birth. The overlap in confidence intervals illustrates
+	* the weak value of age as a predictor for the DV: the marginal effect of 
+	* age is residual in the model, at least in comparison to other predictors.
+	margins born#female, at(age=(25(5)85))
+	marginsplot, by(female) recast(line) recastci(rarea) ciopts(col(*.6)) ///
+		name(mfx_age, replace)
+
+}
 
 * Sensitivity analysis
 * --------------------

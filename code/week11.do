@@ -484,22 +484,29 @@ sc rst_fr yhat_fr, by(pol3 lowinc, col(2) legend(off)) yline(0) ///
 * Briefly recall the model by calling -reg- without any new specification.
 reg
 
-* What is observable above is the (positive) linear effect of one predictor onto
-* the DV: all other things kept equal, rightwing views lead to a higher level of
-* satisfaction with health services, independently of age, gender, income and so
-* on. You can show the same thing by predicting the marginal effect of the IV on
-* the DV with the -margins- command.
-margins pol3
-marginsplot, ///
-	name(margins_pol3_fr, replace)
+* Note: this section runs properly only on Stata 12+. If you are using an older
+* version of Stata, you will be able to execute the -margins- commands, but not
+* the -marginsplot- commands.
+if c(version) > 11 {
 
-* Let's plot a more complex interaction where we observe the effect of political
-* views and health status combined. The linear effect of political views remains
-* observable at good health but becomes indistinguishable when health degrades.
-margins health#pol3
-marginsplot, recast(line) recastci(rarea) ciopts(fi(25)) legend(row(1)) ///
-	name(margins_health_pol3_fr, replace)
+	* What is observable above is the (positive) linear effect of one predictor
+	* onto the DV: all other things kept equal, rightwing views lead to a higher
+	* level of satisfaction with health services, independently of age, gender,
+	* income and so on. You can show the same thing by predicting the marginal
+	* effect of the IV on the DV with the -margins- command.
+	margins pol3
+	marginsplot, ///
+		name(margins_pol3_fr, replace)
 
+	* Let's plot a more complex interaction where we observe the effect of 
+	* political views and health status combined. The linear effect of political
+	* views remains observable at good health but becomes indistinguishable when
+	* health degrades.
+	margins health#pol3
+	marginsplot, recast(line) recastci(rarea) ciopts(fi(25)) legend(row(1)) ///
+		name(margins_health_pol3_fr, replace)
+
+}
 
 * (3) Britain: Exercise
 * ---------------------
