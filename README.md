@@ -1,10 +1,11 @@
-This repository contains the [Statistical Reasoning and Quantitative Methods][srqm] (SRQM) course taught at Sciences Po from 2010 to 2013 by [François Briatte][fb] and [Ivaylo Petev][ip]. [Joël Gombin][jg] and [Filip Kostelka][fk] are also running their own forks.
+This repository contains the [Statistical Reasoning and Quantitative Methods][srqm] (SRQM) course taught at Sciences Po from 2010 to 2013 by [François Briatte][fb] and [Ivaylo Petev][ip]. [Joël Gombin][jg], [Filip Kostelka][fk] and [Antonin de Laever][adl] are also running their own forks.
 
 [srqm]: http://f.briatte.org/teaching/quanti/
 [fb]: http://f.briatte.org/
 [jg]: http://joelgombin.fr/
 [ip]: http://ipetev.org/
 [fk]: http://www.cee.sciences-po.fr/en/le-centre/phd-and-new-doctors/phd-candidates/153-filip-kostelka.html
+[adl]: http://www.ens-cachan.fr/version-francaise/haut-de-page/annuaire/de-laever-antonin-96902.kjsp
 
 The course requires a working copy of [Stata][stata]. Instructions to set up your computer for the course are provided in the introduction of the course handbook. Additional material is distributed in class through Google Docs.
 
@@ -13,6 +14,7 @@ If you are reading this online on GitHub, please feel free to [report issues][is
 __Students__ – please check with your instructor _as soon as possible_ if you have any questions or are having difficulties with the course setup, which will be explained extensively in class. Welcome to the course, and talk to you soon!
 
 [stata]: http://www.stata.com/
+[issues]: https://github.com/briatte/srqm/issues
 
 # FILES
 
@@ -29,19 +31,22 @@ __Students__ – please check with your instructor _as soon as possible_ if you 
 | `qog2013`      | [Quality of Government][qog]          | 2009 ± 3 years |
 | `wvs2000`      | [World Values Survey][wvs]            | Wave 4 (2000)  |
 
+Note -- the zipped versions of the datasets available in this repository are those used in class. They are teaching versions that contain only a selection of variables, based on a missing value threshold. Please refer to the original sources for the full versions and for additional waves collected in more recent years.
+
 [ess]: http://www.europeansocialsurvey.org/
 [gss]: http://www3.norc.org/GSS+Website/
 [nhis]: http://www.cdc.gov/nchs/nhis.htm
 [qog]: http://www.qog.pol.gu.se/data/datadownloads/qogstandarddata/
 [wvs]: http://www.worldvaluessurvey.org/
 
-[issues]: https://github.com/briatte/srqm/issues
 [wiki-code]: https://github.com/briatte/srqm/wiki/code
 [wiki-utils]: https://github.com/briatte/srqm/wiki/course-utilities
 
 # HISTORY
 
-* 4.5: patches for new Sciences Po computer setups.
+* 4.7: code compatibility with all flavours of Stata 11, 12 and 13.
+* 4.6: updated ESS, GSS and QOG datasets (Winter 2015).
+* 4.5: patches for new Sciences Po computer setups (Fall 2013).
 * 4.4: correct ESS design weights for Israel; [cleaner repo](http://rtyley.github.io/bfg-repo-cleaner/).
 * 4.3: updated NHIS, QOG and ESS datasets.
 * 4.2: dedicated FTP server for additional teaching material.
