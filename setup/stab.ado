@@ -1,6 +1,6 @@
 *! stab: simple tables of summary statistics
 *! type -stab_demo- for examples with NHANES data
-*! 0.21 F. Briatte 9oct2014
+*! 0.22 F. Briatte 27jan2015
 cap pr drop stab
 pr stab
   syntax [using/] [if] [in] [, Mean(varlist) Prop(varlist) replace]
@@ -38,8 +38,8 @@ pr stab
   
   if "`mean'" != "" {
 	qui estpost summarize `mean' `if' `in'
-	esttab, `dsu' `fmt' collabels(, lhs("Variable"))
-	qui esttab using `out', tab append `dsu' `fmt' collabels(, lhs("Variable"))
+	esttab ., `dsu' `fmt' collabels(, lhs("Variable"))
+	qui esttab . using `out', tab append `dsu' `fmt' collabels(, lhs("Variable"))
   }
 
   // categorical variables passed to frequencies() get percentages
@@ -48,8 +48,8 @@ pr stab
     foreach v of varlist `prop' {
       local l: var l `v'
       qui estpost tabulate `v' `if' `in', nototal
-      esttab, `dfr' `fmt' collabels("%", lhs("`l'"))
-      qui esttab using `out', tab append `dfr' `fmt' collabels("%", lhs("`l'"))
+      esttab ., `dfr' `fmt' collabels("%", lhs("`l'"))
+      qui esttab . using `out', tab append `dfr' `fmt' collabels("%", lhs("`l'"))
     }
   }
 
@@ -63,11 +63,6 @@ pr stab
   file close `fh'
 
   di as txt _n "N = `n'`m'" _n "File: {browse `out'}"
-end
-
-cap pr drop stab_hello
-pr stab_hello
-di "hello subworld"
 end
 
 // enjoy
