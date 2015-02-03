@@ -36,7 +36,18 @@ program srqm_scan
           }
           cap noi ls *.dta, w
       }
-      if "`1'" == "code" cap noi ls *.do, w
+      if "`1'" == "code" {
+				cap noi ls *.do, w
+				foreach i of numlist 1/12 {
+					cap confirm file week`i'.do
+					if _rc==601 {
+            di as err _n "Error: the do-file week`i'.do", ///
+                "could be located in the `1' folder"
+            qui cd ..
+            exit -2
+					}
+				}
+			}
       qui cd ..
       macro shift
   }

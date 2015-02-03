@@ -7,6 +7,12 @@
 
 // --- SETTINGS ----------------------------------------------------------------
 
+if c(version) < 11 {
+	noi di as err "Warning: this teaching material " ///
+		"has been tested on Stata 11, 12 and 13." _n ///
+		"Unexpected issues might arise on older versions of the software."
+}
+
 if c(os) != "Unix" cap set update_query off
 if c(version) < 12 cap set mem 500m, perm
 if c(more) == "on" cap qui set more off, perm
@@ -34,7 +40,7 @@ adopath + "`c(pwd)'/setup"
 cap run setup/utils.ado
 if _rc loc e = 2
 
-// check folder
+// check code and data
 cap noi srqm_scan
 if _rc loc e = 2
 
