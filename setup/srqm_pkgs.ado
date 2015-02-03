@@ -11,9 +11,14 @@ program srqm_pkgs
 global srqm_packages = "lookfor_all fre spineplot tab_chi mkcorr tabout estout leanout plotbeta kountry wbopendata spmap scheme-burd _gstd01 renvars clarify"
 if "`extra'" != "" global srqm_packages = "$srqm_packages catplot ciplot distplot log2do2 outreg2 revrs schemes scheme_tufte gr0002_3 qog qogbook"
 
+* Restricted systems can fail to write to the PLUS folder (see why and 
+* possible fixes in Lembcke's "Introduction to Stata" at page 48); the
+* next bit of code tries hard to avoid the issue, and will resort to a
+* local package installation in setup/pkg if everything fails.
+
 * prepare to fall back to adopath alternatives (Win/UNIX)
 if "`c(os)'" != "MacOSX" cap mkdir "`c(sysdir_oldplace)'", public
-* use -pkgs- to test writing to stata.trk in PLUS codename directory
+* test writing to stata.trk in PLUS codename directory
 cap pkgs, quiet
 if _rc {
   * switch path to PERSONAL (at Sciences Po, c:\ado\personal)
@@ -21,14 +26,7 @@ if _rc {
   * fall back to local install (for fully restricted systems)
   if _rc cap pkgs using "setup/pkg", quiet
 }
-* Stata 11: assume Sciences Po computer and fall back to local install
-if c(version) < 12 {
-	di as txt _n "Warning: assuming your computer is at Sciences Po" ///
-          	_n "The setup will install packages locally after you" ///
-	          _n "type the {stata run profile} command."
-	cap pkgs using "setup/pkg", quiet
-}
-* complain if it all fail (breaks executability of course do-files)
+* complain if it all fails (breaks executability of do-files)
 if _rc {
   di as err _n "Warning: could not find a way to install packages"
   exit -1
@@ -109,9 +107,6 @@ else {
               if _rc==631 di as err "Error 631: could not connect to the SSC archive to look for package " as inp "`1'"
               if _rc==601 di as err "Error 601: could not find package " as inp "`1'" as err " at the SSC archive"
           }
-          * Restricted systems fail here with error 699 (see explanation and
-          * possible fixes in Lembcke's "Introduction to Stata" at page 48);
-          * this should be fixed by the initial calls to the -pkgs- utility.
       }
       else {
        if "`quiet'" == "" di as txt "[`i'/`s'] already installed:", as inp, "`t'"

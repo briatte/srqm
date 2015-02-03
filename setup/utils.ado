@@ -111,6 +111,7 @@ program pkgs
 
   * return
   qui cd "`pwd'"
+  exit _rc
 end
 
 // enjoy

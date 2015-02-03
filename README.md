@@ -44,6 +44,7 @@ Note -- the zipped versions of the datasets available in this repository are tho
 
 # HISTORY
 
+* 4.8: bugfixes in `stab` and Sciences Po computer patch.
 * 4.7: code compatibility with all flavours of Stata 11, 12 and 13.
 * 4.6: updated ESS, GSS and QOG datasets (Winter 2015).
 * 4.5: patches for new Sciences Po computer setups (Fall 2013).
