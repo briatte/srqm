@@ -24,8 +24,8 @@ if _rc {
 * Stata 11: assume Sciences Po computer and fall back to local install
 if c(version) < 12 {
 	di as txt _n "Warning: assuming your computer is at Sciences Po" ///
-          	_n "The setup will install all packages locally after" ///
-	          _n "you type the {stata run profile} command."
+          	_n "The setup will install packages locally after you" ///
+	          _n "type the {stata run profile} command."
 	cap pkgs using "setup/pkg", quiet
 }
 * complain if it all fail (breaks executability of course do-files)

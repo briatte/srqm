@@ -97,7 +97,7 @@ program pkgs
   * declare paths that can write to stata.trk valid
   if _rc == 0 {
     sysdir set PLUS "`using'"
-    if "`quiet'" == "" di as txt "Package install path set to:"
+    if "`quiet'" == "" di as txt "Package install path set to:" _n "`using'"
   }
   else {
     di as err _n "Warning: invalid package install path" _n "`using'"
