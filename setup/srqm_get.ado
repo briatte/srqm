@@ -43,13 +43,12 @@ program srqm_get
 		    exit 198
 		}
 		else {
-			di as txt _n "Downloading `1' to the `bf' folder..."
+			di as txt _n "Source: http://f.briatte.org/stata/`1'"
+			di as txt "Downloading `1' to the `bf' folder..."
 		    cap qui copy "`pf'" "`pb'", public replace
 		
-		    cap qui erase "`pf'" // instead of rm for Windows compatibility
-		    // this could be redirected to srqm.briatte.org by fixing the
-		    // zone files, but it never worked out properly
-		    cap qui copy "http://srqm.apinc.org/`1'" "`pf'", public replace
+		    cap noi erase "`pf'" // instead of rm for Windows compatibility
+		    cap noi copy "http://f.briatte.org/stata/`1'" "`pf'", public replace
 		
 		    if !_rc {
 		    	di as txt "Successfully downloaded."
