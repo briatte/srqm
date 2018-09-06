@@ -15,7 +15,7 @@
 \documentclass[t]{beamer}
 \usetheme{hkllite}
 
-\title{estimation / draft 1}
+\title{estimation}
 	\author{François Briatte \& Ivaylo Petev}
 	\date{Week~\#5}
 
@@ -33,232 +33,232 @@
 	%
 	%
 
-	%
-	%
-	\section{Draft No. 1}	
-	%
-	%
-	
-	%
-	%
-	\subsection{Description}
-	%
-	%
-	
-	\begin{frame}[t]{Draft No. 1}
-	
-	\begin{columns}[T]
-		\column{.3\textwidth}
-
-			\textbf{Univariate\\statistics}\\[.5em]
-	
-			\begin{itemize}
-				\item Introduction
-				% (topic)
-				\item Datasets
-				% (observations and variables)
-				\item Distributions
-				% (central tendency, variability, normality)
-				\item Estimation
-				% (PDF, CLT, LLN, CIs)
-			\end{itemize}
-
-			\begin{center}
-				\red{First draft}\\[.5em]
-				\fbox{\includegraphics[width=.75\textwidth]{holy-grail2.jpg}}
-			\end{center}
-		
-		\column{.3\textwidth}
-		
-			\textbf{Bivariate\\statistics}
-	
-			\begin{itemize}
-				\item Significance
-				% (comparison of means and proportions)
-				\item Comparisons
-				% (t-test, Chi-squared test)
-				\item Correlation
-				% (scatterplot and correlation matrixes)
-				\item Regression
-				% (Simple OLS linear regression)
-			\end{itemize}
-
-			\begin{center}
-				Revised draft\\[.5em]
-			\end{center}
-		
-		\column{.3\textwidth}
-
-			\textbf{Statistical\\modelling}
-	
-			\begin{itemize}
-				\item Basics
-				% (residuals)
-				\item Extensions
-				% (dummies)
-				\item Diagnostics
-				% (multicollinearity, heteroscedasticity)
-				\item Conclusion
-				% (extensions)
-			\end{itemize}
-
-			\begin{center}
-				Final paper\\[.5em]
-				\fbox{\includegraphics[width=.75\textwidth]{holy-grail.jpg}}
-			\end{center}
-			
-	\end{columns}
-		
-	\end{frame}
-	%
-	%
-
-	%
-	%
-	\subsection{Instructions}
-	%
-	%
-	
-	\begin{frame}[t]{Instructions}
-		
-		\begin{block}{Catch up}
-			\begin{itemize}
-				\item \textbf{Readings:} handbook chapters, Stata Guide
-				\item \textbf{Replication:} all do-files so far
-				\item \textbf{Projects:} full registration required!
-			\end{itemize}
-		\end{block}
-
-		\begin{block}{Write up}
-			\begin{itemize}
-				\item \textbf{Copy} the paper template to your Google Drive
-				\item \textbf{Share} the (renamed) template within your group
-				\item \textbf{Upload} the draft PDF and do-file to the ENTG
-			\end{itemize}
-		\end{block}
-		
-	\end{frame}
-	%
-	%
-
-	\begin{frame}[t]{\red{Common mistakes}}
-		
-		\begin{alertblock}{Project files}
-			\begin{itemize}
-				\item \textbf{Filenames:} use your \red{group shortname}
-				\item \textbf{Formats:} use \red{PDF} (paper) and \red{.do} (code)
-				\item \textbf{ENTG:} use groups %
-					\texttt{57344}, \texttt{57345} and \texttt{57346}
-			\end{itemize}
-		\end{alertblock}
-
-		\begin{alertblock}{Paper content}
-			\begin{itemize}
-				\item \textbf{Paragraphs:} respect limits, write analytically 
-				\item \textbf{Table formats:} single-paged, rounded figures
-				\item \textbf{Sources:} format your bibliography, cite the data
-			\end{itemize}
-		\end{alertblock}
-		
-	\end{frame}
-	%
-	%
-
-	%
-	%
-	\subsection{Tips and tricks}
-	%
-	%
-	
-	\begin{frame}[t]{Survival techniques}
-		
-		\begin{block}{Code}
-			\begin{itemize}
-				\item \textbf{Copy} code chunks from the course do-files
-				\item \textbf{Run} the code entirely to check for errors
-				\item \textbf{Log} your results to analyze them later
-			\end{itemize}
-		\end{block}
-		
-		\begin{block}{Paper}
-			\begin{itemize}
-				\item \textbf{Write} as the authors of the example papers
-				\item \textbf{Hypothesize} from structural determinants to covariates 
-				\item \textbf{Select} only the statistics that you can analyze
-			\end{itemize}
-		\end{block}
-		
-	\end{frame}
-	%
-	%
-
-	\begin{frame}[t]{Extra tips}
-
-		\begin{block}{Research tips}
-			\begin{itemize}
-				\item \textbf{Maximize sample size:} %
-					keep the data representative
-				\item \textbf{For a continuous DV,} %
-					normality matters for linear regression
-				\item \textbf{For a categorical DV,} %
-					recode to binary for logistic regression
-			\end{itemize}
-		\end{block}
-		
-		\begin{block}{Graph tips}
-			\begin{itemize}
-				\item \textbf{Keep graphs open} %
-					with \code{name()}; leave them out of the paper
-				\item \textbf{Plot over small multiples} %
-					with \code{over()} and \code{by()} 
-				\item \textbf{Use the IOTT} %
-					to decide whether to keep or ditch a graph
-			\end{itemize}
-		\end{block}
-		
-	\end{frame}
-	%
-	%
-
-	%
-	%
-	\subsection{Grading}
-	%
-	%
-	
-	\begin{frame}[t]{Grading scheme}
-
-		\begin{block}{Protocol}
-			\begin{enumerate}
-				\item \textbf{Replicate findings:} %
-					run code, open results log
-				\item \textbf{Review design:} %
-					check sources, hypotheses
-				\item \textbf{Suggest improvements:} %
-					variables, plots, references, …
-			\end{enumerate}
-		\end{block}
-		
-		\begin{exampleblock}{Best papers}
-			\begin{itemize}
-				\item \textbf{Questions on front page}, %
-					with line numbers for code issues
-				\item \textbf{No spelling mistakes}, %
-					with no formatting issues throughout
-				\item \textbf{Selected, rounded statistics}, %
-					all with a specific interpretation
-			\end{itemize}
-		\end{exampleblock}
-		
-	\end{frame}
-	%
-	%
+  % %
+  % %
+  % \section{Draft No. 1}
+  % %
+  % %
+  %
+  % %
+  % %
+  % \subsection{Description}
+  % %
+  % %
+  %
+  % \begin{frame}[t]{Draft No. 1}
+  %
+  % \begin{columns}[T]
+  %   \column{.3\textwidth}
+  %
+  %     \textbf{Univariate\\statistics}\\[.5em]
+  %
+  %     \begin{itemize}
+  %       \item Introduction
+  %       % (topic)
+  %       \item Datasets
+  %       % (observations and variables)
+  %       \item Distributions
+  %       % (central tendency, variability, normality)
+  %       \item (Estimation)
+  %       % (PDF, CLT, LLN, CIs)
+  %     \end{itemize}
+  %
+  %     \begin{center}
+  %       \red{First draft}\\[.5em]
+  %       \fbox{\includegraphics[width=.75\textwidth]{holy-grail2.jpg}}
+  %     \end{center}
+  %
+  %   \column{.3\textwidth}
+  %
+  %     \textbf{Bivariate\\statistics}
+  %
+  %     \begin{itemize}
+  %       \item Significance
+  %       % (comparison of means and proportions)
+  %       \item Comparisons
+  %       % (t-test, Chi-squared test)
+  %       \item Correlation
+  %       % (scatterplot and correlation matrixes)
+  %       \item Regression
+  %       % (Simple OLS linear regression)
+  %     \end{itemize}
+  %
+  %     \begin{center}
+  %       Revised draft\\[.5em]
+  %     \end{center}
+  %
+  %   \column{.3\textwidth}
+  %
+  %     \textbf{Statistical\\modelling}
+  %
+  %     \begin{itemize}
+  %       \item Basics
+  %       % (residuals)
+  %       \item Extensions
+  %       % (dummies)
+  %       \item Diagnostics
+  %       % (multicollinearity, heteroscedasticity)
+  %       \item Conclusion
+  %       % (extensions)
+  %     \end{itemize}
+  %
+  %     \begin{center}
+  %       Final paper\\[.5em]
+  %       \fbox{\includegraphics[width=.75\textwidth]{holy-grail.jpg}}
+  %     \end{center}
+  %
+  % \end{columns}
+  %
+  % \end{frame}
+  % %
+  % %
+  %
+  % %
+  % %
+  % \subsection{Instructions}
+  % %
+  % %
+  %
+  % \begin{frame}[t]{Instructions}
+  %
+  %   \begin{block}{Catch up}
+  %     \begin{itemize}
+  %       \item \textbf{Readings:} Stata Guide (and handbook chapters)
+  %       \item \textbf{Replication:} all do-files so far
+  %       \item \textbf{Projects:} student list at \href{http://goo.gl/xNGmDA}{goo.gl/xNGmDA}
+  %     \end{itemize}
+  %   \end{block}
+  %
+  %   \begin{block}{Write up}
+  %     \begin{itemize}
+  %       \item \textbf{Copy} the paper template to your Google Drive
+  %       \item \textbf{Share} the renamed template within your group
+  %       \item \textbf{Share} the renamed template with me :)
+  %     \end{itemize}
+  %   \end{block}
+  %
+  % \end{frame}
+  % %
+  % %
+  %
+  %   % \begin{frame}[t]{\red{Common mistakes}}
+  %   %
+  %   %   \begin{alertblock}{Project files}
+  %   %     \begin{itemize}
+  %   %       \item \textbf{Filenames:} use your \red{group shortname}
+  %   %       \item \textbf{Formats:} use \red{PDF} (paper) and \red{.do} (code)
+  %   %       \item \textbf{ENTG:} use groups %
+  %   %         \texttt{57344}, \texttt{57345} and \texttt{57346}
+  %   %     \end{itemize}
+  %   %   \end{alertblock}
+  %   %
+  %   %   \begin{alertblock}{Paper content}
+  %   %     \begin{itemize}
+  %   %       \item \textbf{Paragraphs:} respect limits, write analytically
+  %   %       \item \textbf{Table formats:} single-paged, rounded figures
+  %   %       \item \textbf{Sources:} format your bibliography, cite the data
+  %   %     \end{itemize}
+  %   %   \end{alertblock}
+  %   %
+  %   % \end{frame}
+  %   % %
+  %   % %
+  %
+  % %
+  % %
+  % \subsection{Tips and tricks}
+  % %
+  % %
+  %
+  % \begin{frame}[t]{Survival techniques}
+  %
+  %   \begin{block}{Code}
+  %     \begin{itemize}
+  %       \item \textbf{Copy} code chunks from the course do-files
+  %       \item \textbf{Run} the code entirely to check for errors
+  %       \item \textbf{Log} your results to analyze them later
+  %     \end{itemize}
+  %   \end{block}
+  %
+  %   \begin{block}{Paper}
+  %     \begin{itemize}
+  %       \item \textbf{Write} as the authors of the example papers
+  %       \item \textbf{Hypothesize} from structural determinants to covariates
+  %       \item \textbf{Select} only the statistics that you can analyze
+  %     \end{itemize}
+  %   \end{block}
+  %
+  % \end{frame}
+  % %
+  % %
+  %
+  % \begin{frame}[t]{Extra tips}
+  %
+  %   \begin{block}{Research tips}
+  %     \begin{itemize}
+  %       \item \textbf{Maximize sample size:} %
+  %         keep the data representative
+  %       \item \textbf{For a continuous DV,} %
+  %         normality matters for linear regression
+  %       \item \textbf{For a categorical DV,} %
+  %         recode to binary for logistic regression
+  %     \end{itemize}
+  %   \end{block}
+  %
+  %   \begin{block}{Graph tips}
+  %     \begin{itemize}
+  %       \item \textbf{Keep graphs open} %
+  %         with \code{name()}; leave them out of the paper
+  %       \item \textbf{Plot over small multiples} %
+  %         with \code{over()} and \code{by()}
+  %       \item \textbf{Use the IOTT} %
+  %         to decide whether to keep or ditch a graph
+  %     \end{itemize}
+  %   \end{block}
+  %
+  % \end{frame}
+  % %
+  % %
+  %
+  % %
+  % %
+  % \subsection{Grading}
+  % %
+  % %
+  %
+  % \begin{frame}[t]{Grading scheme}
+  %
+  %   \begin{block}{Protocol}
+  %     \begin{enumerate}
+  %       \item \textbf{Replicate findings:} %
+  %         run code, open results log
+  %       \item \textbf{Review design:} %
+  %         check sources, hypotheses
+  %       \item \textbf{Suggest improvements:} %
+  %         variables, plots, references, …
+  %     \end{enumerate}
+  %   \end{block}
+  %
+  %   \begin{exampleblock}{Best papers}
+  %     \begin{itemize}
+  %       \item \textbf{Questions on front page}, %
+  %         with line numbers for code issues
+  %       \item \textbf{No spelling mistakes}, %
+  %         with no formatting issues throughout
+  %       \item \textbf{Selected, rounded statistics}, %
+  %         all with a specific interpretation
+  %     \end{itemize}
+  %   \end{exampleblock}
+  %
+  % \end{frame}
+  % %
+  % %
 	
 	\begin{frame}[t,plain]
 		
 		\vspace{.3\paperwidth}
 		\begin{center}
-			{\Large And now, \red{estimation.}}\\
+			{\Large Brace yourself for a \red{little math}.}
 		\end{center}
 		
 		\vspace{1em}

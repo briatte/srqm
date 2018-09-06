@@ -19,7 +19,7 @@
 		\titlepage\\[7.25em]
 		\begin{columns}[T]
 			\column{.50\textwidth}
-				\tableofcontents[hideallsubsections]
+				% \tableofcontents[hideallsubsections]
 			\column{.35\textwidth}
 				\includegraphics[width=\textwidth]{pie-no}
 		\end{columns}
@@ -31,15 +31,17 @@
 
     \begin{block}{Project management}
       \begin{enumerate}
-        \item Register on the \textbf{projects page:} 
-        
+        \item \textbf{Register} at \red{\href{https://frama.link/srqm-2017-groups}{frama.link/srqm-2017-groups}}%
+        \item \textbf{Catch up} on any late work
+        \item \textbf{Get ready} for your first assignment after Session 4
       \end{enumerate}
     \end{block}
 
-    \begin{alertblock}{Weekly reminders}
+    \begin{alertblock}{Reading guide}
       \begin{itemize}
-	       \item \textbf{Emails} start with ``SRQM:''
-	       \item \textbf{Homework} is replication and readings
+	      \item \textbf{Course emails}, Sessions 1--4
+        \item \textbf{Stata~Guide}, Sections 1--8%
+	      \item \textbf{Weekly readings}, Sessions 1--4
       \end{itemize}
     \end{alertblock}
     		
@@ -47,112 +49,112 @@
   %
   %
 
+	% %
+	% %
+	% \section{Definitions}
+	% %
+	% %
 	%
+	% \begin{frame}[t]{Definitional issues}
 	%
-	\section{Definitions}
+	%      \begin{block}{Mathematical foundations}
 	%
+	%         \begin{itemize}
+	%   				\item \textbf{Random variables:} numbers assigned to states
+	%           \item \textbf{Continuous variables:} ranges of values
+	%       		\item \textbf{Discrete variables:} sets of values
+	%         \end{itemize}
 	%
-	
-	\begin{frame}[t]{Definitional issues}
-	
-     \begin{block}{Mathematical foundations}
+	%      \end{block}
+	%
+	%    \begin{block}{Dimensions and types}
+	%
+	%      \begin{itemize}
+	% 	     \item \textbf{Continuous:} infinite/large number of possible values
+	% 	     \item \textbf{Categorical:} finite/small number of possible values
+	% 	     \item \textbf{Ordinal:} meaningful ordering of the values
+	%      \end{itemize}
+	%
+	%    \end{block}
+	%
+	% \end{frame}
+	%   %
+	%   %
+	%
+	% %
+	% %
+	% \section{Issues}
+	% %
+	% %
+	%
+	% \begin{frame}[t]{Issues}
+	%
+	%    \begin{block}{Measurement}
+	%
+	%      \begin{itemize}
+	% 			 \item \textbf{Availability} of the data
+	% 	     \item \textbf{Accuracy} of the measurement
+	% 	     \item \textbf{Meaningfulness} of the unit
+	%      \end{itemize}
+	%
+	%      % Examples: unit-less indexes, baseline growth rates, `standardized' Likert scales, breaks in methodology and/or availability, …
+	%
+	%    \end{block}
+	%
+	%      \begin{block}{Coding}
+	%
+	%         \begin{itemize}
+	%           \item \textbf{Values:} \texttt{-1 0.7 9} (numeric), \texttt{"UK"} (string), \texttt{.} (missing)
+	%       		\item \textbf{Variable labels:} \texttt{"Fertility rate"}
+	%       		\item \textbf{Value labels:} \texttt{1 "White" 2 "Black" 3 "Hispanic" ...}
+	%         \end{itemize}
+	%
+	%      \end{block}
+	%
+	% \end{frame}
+	% %
+	% %
 
-        \begin{itemize}
-  				\item \textbf{Random variables:} numbers assigned to states
-          \item \textbf{Continuous variables:} ranges of values
-      		\item \textbf{Discrete variables:} sets of values
-        \end{itemize}
-     
-     \end{block}     	
-
-	   \begin{block}{Dimensions and types}
-	     
-	     \begin{itemize}
-		     \item \textbf{Continuous:} infinite/large number of possible values
-		     \item \textbf{Categorical:} finite/small number of possible values
-		     \item \textbf{Ordinal:} meaningful ordering of the values
-	     \end{itemize}
-
-	   \end{block}
-
-	\end{frame}
-  %
-  %
-	
+	% %
+	% %
+	% \section{Recoding}
+	%   %
+	%   %
 	%
+	% \begin{frame}[t]{Recoding}
 	%
-	\section{Issues}
+	%     \begin{block}{Rationale}
 	%
+	% 	\begin{itemize}
+	% 		\item \textbf{Create groups}, e.g. age cohorts, social classes
+	% 		\item \textbf{Create dummies}, i.e. binary (0/1), true/false indicators
+	% 		\item \textbf{Change encoding} for missing values
+	% 	\end{itemize}
 	%
-	
-	\begin{frame}[t]{Issues}
+	%     \end{block}
+	%
+	%     \begin{block}{Stata commands}
+	%
+	%     \begin{itemize}
+	%       \item Create variables: \code{gen}, \code{tab, gen()}, \code{clonevar}, …
+	%       \item Recode values: \code{recode}, \code{irecode}, \code{replace}, …
+	%       \item Assign labels: \code{la var}, \code{la def}, \code{la val}, …
+	%     \end{itemize}
+	%
+	%     \end{block}
+	% \end{frame}
+	% %
+	% %
 
-	   \begin{block}{Measurement}
-     
-	     \begin{itemize}
-				 \item \textbf{Availability} of the data
-		     \item \textbf{Accuracy} of the measurement
-		     \item \textbf{Meaningfulness} of the unit
-	     \end{itemize}
-	     
-	     % Examples: unit-less indexes, baseline growth rates, `standardized' Likert scales, breaks in methodology and/or availability, …
-
-	   \end{block}
-		 
-     \begin{block}{Coding}
-
-        \begin{itemize}
-          \item \textbf{Values:} \texttt{-1 0.7 9} (numeric), \texttt{"UK"} (string), \texttt{.} (missing)
-      		\item \textbf{Variable labels:} \texttt{"Fertility rate"}
-      		\item \textbf{Value labels:} \texttt{1 "White" 2 "Black" 3 "Hispanic" ...}
-        \end{itemize}
-     
-     \end{block}
+	% %
+	% %
+	% \section{Practice}
+	% %
+	% %
 		
-	\end{frame}
-	%
-	%
-
-	%
-	%
-	\section{Recoding}
-  %
-  %
-  
-	\begin{frame}[t]{Recoding}
-		
-    \begin{block}{Rationale}
-
-		\begin{itemize}
-			\item \textbf{Create groups}, e.g. age cohorts, social classes
-			\item \textbf{Create dummies}, i.e. binary (0/1), true/false indicators
-			\item \textbf{Change encoding} for missing values
-		\end{itemize}
-    
-    \end{block}
-    	
-    \begin{block}{Stata commands}
-    
-	    \begin{itemize}
-	      \item Create variables: \code{gen}, \code{tab, gen()}, \code{clonevar}, …
-	      \item Recode values: \code{recode}, \code{irecode}, \code{replace}, …
-	      \item Assign labels: \code{la var}, \code{la def}, \code{la val}, …
-	    \end{itemize}
-
-    \end{block}
-	\end{frame}
-	%
-	%
-
-	%
-	%
-	\section{Practice}
-	%	
-	%
-		
-	\subsection{Example: WVS dataset}
+	% \subsection{Example: WVS dataset}
 	
-	\begin{frame}[t]{Practice: \red{WVS dataset}}
+	\begin{frame}[t]{Practice: \red{WVS 2000 dataset}}
 
 		\begin{quote}
 		``[The government] should implement only \\
@@ -173,39 +175,40 @@
 				\column{.725\textwidth}
 				
 				\begin{itemize}
-					\item World Values Survey (WVS)
+					\item \href{http://www.worldvaluessurvey.org/wvs.jsp}{World Values Survey} (WVS)%
 					\item Sample: resident populations aged 15+
 				\end{itemize}
 	
 				\column{.2\textwidth}
-				\includegraphics[width=\textwidth]{logo-wvs}
+				\href{http://www.worldvaluessurvey.org/wvs.jsp}{\includegraphics[width=\textwidth]{logo-wvs}}%
 			\end{columns}
 	
 	\end{frame}
 	%
 	%
 
-	%
-	%
-	\subsection{Practice session}
-  %
-  %
+	% %
+	% %
+	% \subsection{Coursework}
+	%   %
+	%   %
   
-	\begin{frame}[t]{Practice session}
+	 \begin{frame}[t]{Coursework \red{for next week}}
 
-    \begin{block}{Class}
-      \comm{Get the do-file for this week.}\\
-      \code{srqm\_get week3.do}\\
-      
-			\comm{Open to read and replicate.}\\
-			\code{doedit code/week3}\\    
+    \begin{block}{Replication}
+			Open the do-file that we started in class:
+			\begin{center}
+				\code{doedit code/week3}
+			\end{center}
+
+      Replicate the full analysis by \textbf{executing all commands} in the do-file, \textbf{reading all comments} as you go along.%
     \end{block}
 
     \begin{alertblock}{Coursework}
       \begin{itemize}
-	       \item Finish the do-file and read all comments at home.
-	       \item Follow instructions on top of the code.
-	       \item \textbf{Form a group and write a common draft do-file.}
+	       \item \textbf{Read the Stata Guide}, Sections 5--8.
+	       \item \textbf{Meet with your group} to start discussing your project.
+	       \item \textbf{Start writing code} to describe and prepare variables.
       \end{itemize}
     \end{alertblock}
     		
