@@ -41,10 +41,10 @@ cap log using code/week9.log, replace
 ----------------------------------------------------------------------------- */
 
 * Load QOG dataset.
-use data/qog2013, clear
+use data/qog2016, clear
 
 * Rename variables to short handles.
-renvars wdi_fr bl_asy25mf wdi_hiv ciri_wosoc \ births schooling hiv womenrights
+renvars wdi_fertility bl_asy25mf wdi_hivtot1549 ciri_wecon \ births schooling hiv womenrights
 
 * Transformation of real GDP per capita to logged units.
 gen log_gdpc = ln(unna_gdp / unna_pop)
@@ -69,7 +69,7 @@ la def region 1 "E. Europe and PSU" 2 "Lat. America" ///
 * ----------
 
 * Check missing values.
-misstable pat births schooling log_gdpc aids, freq
+misstable pat births schooling log_gdpc aids womenrights, freq
 
 * Check sampling bias due to low availability of schooling years.
 gen mi = mi(schooling)
@@ -171,7 +171,7 @@ reg log_gdpc births
 
 * Illustrate the principle with two regions different by one child per woman.
 tab region if region > 4, su(births)
-tab region if region > 4, su(wdi_gdpc)
+tab region if region > 4, su(wdi_gdppccur)
 
 * In 'lin-log' and 'log-lin' equations, changes are proportionate rather than
 * absolute. In a 'log-log' model, interpretation is proportionate on both sides
@@ -348,7 +348,7 @@ kdensity r, norm legend(off) ti("") ///
     name(diag_kdens, replace)
 
 * Homoskedasticity of the residuals versus fitted values (DV).
-rvfplot, yline(0) ms(i) mlab(ccodewb) name(diag_rvf, replace)
+rvfplot, yline(0) ms(i) mlab(ccodealp) name(diag_rvf, replace)
 
 * Store the standardized residuals.
 cap drop rsta
@@ -356,7 +356,7 @@ predict rsta, rsta
 
 * Identify outliers beyond 2 standard deviation units.
 sc rsta yhat, yline(-2 2) || sc rsta yhat if abs(rsta) > 2, ///
-    ylab(-3(1)3) mlab(ccodewb) legend(lab(2 "Outliers")) ///
+    ylab(-3(1)3) mlab(ccodealp) legend(lab(2 "Outliers")) ///
     name(diag_rsta, replace)
 
 
@@ -370,7 +370,7 @@ sc rsta yhat, yline(-2 2) || sc rsta yhat if abs(rsta) > 2, ///
 * are responsible for the overall sampling distribution of the residuals, which
 * means that the model is captive of a restricted number of predictors.
 sc r schooling, ///
-	yline(0) mlab(ccodewb) legend(lab(2 "Outliers")) ///
+	yline(0) mlab(ccodealp) legend(lab(2 "Outliers")) ///
 	name(diag_edu1, replace)
 
 * The trend in the error term can be visualized as a LOWESS curve to show when

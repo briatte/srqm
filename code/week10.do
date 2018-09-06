@@ -32,7 +32,7 @@ cap log using code/week10.log, replace
    logistic estimator is more appropriate than a linear one, and include draft
    models in your revised draft.
    
-   Last updated 2013-08-17.
+   Last updated 2017-04-14.
 
 ----------------------------------------------------------------------------- */
 
@@ -236,7 +236,7 @@ tab diff imdfetn
 * -------------------
 
 * Binarize the DV again to have 1 = no immigrants.
-gen nomigrants = (imdfetn > 2)
+gen nomigrants = (imdfetn > 2) if !mi(imdfetn)
 
 * Column percentages (conditional probabilities).
 tab cohort nomigrants, col nof

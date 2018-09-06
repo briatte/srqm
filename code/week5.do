@@ -73,12 +73,12 @@ cap log using code/week5.log, replace
    to a simple table. The result will be a plain text file that you can copy
    and paste into Google Documents, or import into any other text editor.
 
-   Last updated 2013-08-17.
+   Last updated 2016-09-29.
 
 ----------------------------------------------------------------------------- */
 
 * Load NHIS data for latest survey year.
-use data/nhis9711 if year == 2011, clear
+use data/nhis9711 if inlist(year, 2001, 2011), clear
 
 * Set individual survey weights.
 svyset psu [pw = perweight], strata(strata)
@@ -91,7 +91,7 @@ gen bmi = weight * 703 / height^2 if weight < 996 & height < 96
 la var bmi "Body Mass Index"
 
 * Detailed summary statistics.
-su bmi, d
+bys year: su bmi, d
 
 
 * Breakdowns
@@ -108,11 +108,14 @@ la def bmi6 ///
 
 * Breakdown of mean BMI by groups.
 d bmi bmi6
-tab bmi6, su(bmi)
+bys year: tab bmi6, su(bmi)
 
 * Progression of BMI groups over years.
 spineplot bmi6 year, scheme(burd6) ///
     name(bmi6, replace)
+
+* Restrict data to most recent year.
+keep if year == 2011
 
 * Breakdown of BMI to percentiles.
 xtile bmi_qt = bmi, nq(100)
@@ -151,7 +154,7 @@ gen female:female = (sex == 2) if !mi(sex)
 la def female 0 "Male" 1 "Female", replace
 
 * Recode missing values of income.
-replace earnings = . if !earnings | earnings > 97
+replace earnings = . if !earnings | earnings > 96
 
 * Recode missing values of insurance and medical care.
 mvdecode uninsured pooryn, mv(9)

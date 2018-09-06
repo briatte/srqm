@@ -122,7 +122,7 @@ gr dot torture [aw = dweight], over(cntry, sort(1) des) scale(.75) ///
 
 * Create a dummy for Israeli respondents.
 gen israel:israel = (cntry == "IL")
-la def israel 1 "Israel" 0 "Other EU"
+la def israel 1 "Israel" 0 "Not Israel"
 
 * Estimate DV proportions in Israel.
 svy: prop torture if israel

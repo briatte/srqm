@@ -14,7 +14,7 @@ cap log using code/week7.log, replace
 
  - TOPIC:  Fertility and Education, Part 1
 
- - DATA:   Quality of Government (2013)
+ - DATA:   Quality of Government (2016)
 
    This do-file is the last one that we will run on the topic of association.
    You are expected to submit the second draft of your work very soon: the draft
@@ -36,10 +36,10 @@ cap log using code/week7.log, replace
 ----------------------------------------------------------------------------- */
 
 * Load QOG dataset.
-use data/qog2013, clear
+use data/qog2016, clear
 
 * Rename variables to short handles.
-renvars wdi_fr bl_asy25mf undp_hdi ti_cpi gid_wip \ births schooling hdi corruption femparl
+renvars wdi_fertility bl_asy25mf undp_hdi ti_cpi \ births schooling hdi corruption
 
 * Compute GDP per capita.
 gen gdpc = unna_gdp / unna_pop
@@ -59,10 +59,10 @@ la def region 1 "E. Europe and PSU" 2 "Lat. America" ///
 * ----------------
 
 * Have a quick look.
-codebook births schooling gdpc hdi corruption femparl region, c
+codebook births schooling gdpc hdi corruption region, c
 
 * Check missing values.
-misstable pat births schooling gdpc hdi corruption femparl region ccodewb, freq
+misstable pat births schooling gdpc hdi corruption region ccodealp, freq
 
 * You would usually delete incomplete observations at that stage, and then count
 * the number of observations in your finalized sample. We exceptionally keep the
@@ -110,7 +110,7 @@ sc log_gdpc schooling, ///
 su log_gdpc schooling
 
 * Visual inspection of the relationship within the mean-mean quadrants.
-sc log_gdpc schooling, yline(7.5) xline(6) ///
+sc log_gdpc schooling, yline(8.2) xline(8.1) ///
 	name(log_gdpc_schooling, replace)
 
 * Verify inspection computationally.
@@ -125,7 +125,7 @@ pwcorr gdpc log_gdpc schooling, obs sig
 * and 10 marks very low corruption). To enhance visual interpretation, we
 * therefore use an inverted axis scale, and add horizontal axis labels to it.
 sc corruption hdi, ysc(rev) ///
-	xla(0 "Low" 1 "High") yla(0 "Highly corrupt" 10 "Lowly corrupt", angle(h)) ///
+	xla(0 "Low" 1 "High") yla(8 "Highly corrupt" 90 "Lowly corrupt", angle(h)) ///
 	name(corruption_hdi, replace)
 
 * The pattern that appears graphically is not linear: corruption is stationary
@@ -136,26 +136,6 @@ sc corruption hdi, ysc(rev) ///
 * the relationship between corruption and HDI as approximately linear, but we
 * will lose some of the information observed visually by doing so.
 pwcorr corruption hdi, obs sig
-
-
-* (4) Female government ministers and corruption
-* ----------------------------------------------
-
-* Obtain summary statistics.
-su femparl corruption
-
-* Visual inspection of the relationship within the mean-mean quadrants.
-sc femparl corruption, yline(15) xline(4) ///
-	name(femparl_corruption, replace)
-
-* No clear pattern emerges from the scatterplot above. Never force a pattern
-* onto the data: relationships should be apparent, not constructed. If there is
-* no straightforward relationship, disregard it. Identically, never include a
-* graph in your work if the relationship that it intends to show will not
-* strike the reader between the eyes (i.e. run an intra-ocular trauma test).
-* Inconclusive visual inspection can come with significant correlations, as is
-* the case here if you actually compute the coefficient, but visual inspection
-* and theoretical elaboration provide no substantive justification for it.
 
 
 * ================
@@ -171,12 +151,12 @@ sc femparl corruption, yline(15) xline(4) ///
 * any number of variables. Building a matrix of your DV and IVs allows to spot
 * relationships between IVs, which will be useful later on in your analysis.
 * Note that the example below shows the untransformed measure of GDP per capita.
-gr mat births schooling log_gdpc corruption femparl, ///
+gr mat births schooling log_gdpc corruption, ///
 	name(gr_matrix, replace)
 
 * You could also look at a sparser version of the matrix that shows only half of
 * all plots for a subset of geographical regions.
-gr mat births schooling log_gdpc corruption femparl if inlist(region, 4, 5), half ///
+gr mat births schooling log_gdpc corruption if inlist(region, 4, 5), half ///
 	name(gr_matrix_regions4_5, replace)
 
 * The most practical way to consider all possible correlations in a list of
@@ -184,20 +164,20 @@ gr mat births schooling log_gdpc corruption femparl if inlist(region, 4, 5), hal
 * of their respective pairwise correlations. "Pair-wise" indicates that the
 * correlation coefficient uses only pairs of valid, nonmissing observations,
 * and disregards all observations where any of the variables is missing.
-pwcorr births schooling log_gdpc corruption femparl
+pwcorr births schooling log_gdpc corruption
 
 * The most common way to indicate statistically significant correlations in
 * a correlation matrix is to use asterisks (stars) to mark them when their
 * p-value is below the level of statistical significance.
-pwcorr births schooling log_gdpc corruption femparl, star(.05)
+pwcorr births schooling log_gdpc corruption, star(.05)
 
 * For explorative purposes, another option can be used to print out only the
 * statistically significant correlations, which comes in handy especially in
 * very large matrixes with majorily insignificant correlation coefficients.
-pwcorr births schooling log_gdpc corruption femparl, print(.05)
+pwcorr births schooling log_gdpc corruption, print(.05)
 
 * Export a correlation matrix.
-mkcorr births schooling gdpc corruption femparl, ///
+mkcorr births schooling gdpc corruption, ///
 	lab num sig log("week7_correlations.txt") replace
 
 
@@ -209,10 +189,10 @@ mkcorr births schooling gdpc corruption femparl, ///
 * in a global macro and apply them by calling the macro with a dollar sign ($).
 * The following global macro is a list of graph options to make scatterplots
 * more informative by showing country codes instead of anonymous data points:
-global ccode "ms(i) mlabpos(0) mlab(ccodewb) legend(off)"
+global ccode "ms(i) mlabpos(0) mlab(ccodealp) legend(off)"
 
 * The options contained in the global macro make the marker symbol invisible,
-* then center the marker label and fill it with the ccodewb variable (holding
+* then center the marker label and fill it with the ccodealp variable (holding
 * country codes from the World Bank) in replacement of the usual dot markers.
 * In the following plots, passing the $ccode option will result in actually
 * passing these graph options, stored in the ccode ("country codes") macro.

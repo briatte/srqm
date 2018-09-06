@@ -480,7 +480,7 @@ lookfor health immig
 * -------------------------------
 
 * Load.
-use data/qog2013, clear
+use data/qog2016, clear
 
 * Example search.
 lookfor devel orig
@@ -496,11 +496,11 @@ use data/wvs2000, clear
 lookfor army homo
 
 
-* (5) General Social Survey, 2012
+* (5) General Social Survey, 2014
 * -------------------------------
 
 * Load.
-use data/gss0012, clear
+use data/gss0014, clear
 
 * Example search.
 lookfor army homo

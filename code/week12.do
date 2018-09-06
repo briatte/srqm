@@ -26,7 +26,7 @@ cap log using code/week12.log, replace
 ----------------------------------------------------------------------------- */
 
 * Load GSS dataset for selected survey year.
-use data/gss0012 if year == 2010, clear
+use data/gss0014 if year == 2010, clear
 
 * Inspect DV.
 fre partnrs5

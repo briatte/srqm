@@ -11,7 +11,7 @@ cap log using code/week8.log, replace
 
  - TOPIC:  Fertility and Education, Part 2
 
- - DATA:   Quality of Government (2013)
+ - DATA:   Quality of Government (2016)
 
    This do-file is a continuation from last week's do-file, which we start by
    running in the background. This will prepare the data by renaming variables,
@@ -251,7 +251,7 @@ sc corrupt yhat2 hdi, yla(0 "Highly corrupt" 10 "Lowly corrupt") ///
 * ---------------------------
 
 * Create dummy.
-gen democracy:democracy = (chga_hinst < 3) if !mi(chga_hinst)
+gen democracy:democracy = (wel_dr > 75) if !mi(wel_dr)
 la def democracy 0 "Dictatorship" 1 "Democracy", replace
 
 * Visualization of the difference in mean of the DV.
