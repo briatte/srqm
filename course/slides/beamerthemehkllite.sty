@@ -23,7 +23,8 @@
 \usepackage[utf8]{inputenc}
 
 \RequirePackage[default]{sourcesanspro}
-\RequirePackage{inconsolata}
+\RequirePackage{fontspec}
+\setmonofont{Inconsolata Regular}
 
 \setbeamerfont{block title}{family=\sf}
 \setbeamerfont{frametitle}{family=\sf}
@@ -61,6 +62,7 @@
 
 \providecommand{\absoluteimage}[1]{}
 \renewcommand{\absoluteimage}[1]{
+	% \makebox[\textwidth][c]{
   \begin{tikzpicture}[remember picture, overlay]
     \path[use as bounding box] (0, 0) rectangle (\paperwidth, \paperheight);
     \node[yshift=-\paperheight] at (current page.north west) {%
@@ -69,6 +71,7 @@
 	    \end{tikzpicture}
 	    };
   \end{tikzpicture}}
+% }
 
 % -- title page
 
