@@ -1,25 +1,56 @@
-*! SRQM setup utilities
-*! version 4.0 (split to parts and utils)
+*! check integrity of the course utilities
+*! returns error -1 if anything is missing
+*!
+*! ARGUMENTS
+*!
+*! , i , info    : print system information
+*! , v , verbose : print ado-file descriptions
+*!
 cap pr drop srqm
 program srqm
-  syntax, [Verbose]
-  di as txt "Date:", as res c(current_date), c(current_time)
-  di as txt "Software: Stata", as res c(stata_version)
-  di as txt "OS:", as res c(os), c(osdtl)
-  di as txt "Computer:", as res c(machine_type)
-  di as txt "Working directory:", as res c(pwd)
-  di as txt "Stata directories:"
+  syntax, [Info] [Verbose]
+  
+  loc pid "[SRQM]"
+  
+  di as txt "`pid' Date:", as res c(current_date), c(current_time)
+  di as txt "`pid' Software: Stata", as res c(stata_version)
+  di as txt "`pid' OS:", as res c(os), c(osdtl)
+  di as txt "`pid' Computer:", as res c(machine_type) _n
+
+  di as txt "`pid' Stata directories:"
   adopath
-  di as txt "Course material:"
-  di as txt _s(2) "folders: ", as res "$srqm_folders"
-  di as txt _s(2) "datasets:", as res "$srqm_datasets"
-  qui tokenize "$srqm_packages"
-  di as txt _s(2) "packages:", as res "`1',", "`2',", "...", "(`:word count `*'' packages)"
-  if "`verbose'" == "" exit 0
-  foreach x in srqm_data srqm_datamake srqm_datatrim srqm_demo srqm_get srqm_link srqm_pkgs srqm_scan srqm_wipe stab stab_demo sbar sbar_demo utils {
-    loc f "setup/`x'.ado"
-    di as txt _n "`f'"
-    cap noi type `f', star
-    if _rc di as err "Error: utility `x' is missing"
+
+  di as txt _n "`pid' Working directory:", as res c(pwd)
+  di as txt "`pid' Course folders: ", as res "$SRQM_FOLDERS"
+  di as txt "`pid' Course datasets:", as res "$SRQM_DATASETS"
+  qui tokenize "$SRQM_PACKAGES"
+  di as txt "`pid' Installed packages:", ///
+    as res "`1',", "`2',", "...", "(`:word count `*'' packages)"
+  
+  foreach x in $SRQM_ADOFILES $SRQM_DOFILES {
+    
+    loc f = "$SRQM_SETUP/`x'"
+    if !regexm("`x'", ".do") loc f = "`f'.ado"
+
+    cap confirm f "`f'"
+    
+    if _rc {
+      
+      di ///
+        as err "`pid' ERROR:" , ///
+        as txt "missing"      , ///
+        as inp "`f'"
+        
+      exit -999 // quit with bogus error code
+      
+    }
+    else if "`verbose'" != ""  {
+      
+      noi di as txt _n "`pid' `f'"
+      cap noi type "`f'", star
+      
+    }
+        
   }
+  
 end
