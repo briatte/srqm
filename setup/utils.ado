@@ -56,6 +56,7 @@ program updates
   cap qui ssc hot
   if !_rc cap noi adoupdate, update all
   if _rc di as err "Error: could not go online to check for updates."
+  if _rc di as err "ERROR: could not go online to check for updates."
 end
 
 *! science: a program by Rudolf Carnap, with assistance from the Vienna Circle
@@ -101,12 +102,14 @@ program pkgs
   }
   else {
     di as err _n "Warning: invalid package install path" _n "`using'"
+    di as err _n "WARNING: invalid package install path" _n "`using'"
   }
 
   * erase empty stata.trk created on permissions test
   if `erase' == 1 {
   	cap rm `trk'
   	if _rc di as err "Warning: permissions test failed with code", _rc
+  	cap erase `trk'
   }
 
   * return

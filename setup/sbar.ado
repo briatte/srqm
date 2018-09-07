@@ -43,7 +43,7 @@ program sbar
 		local rev = cond(`des' == 1, 1, 0) // ascending order by default
 		if `asc' + `des' > 0 local y "`y' asyvars"
 		if `asc' + `des' > 0 & `colorsum' < 1 di as txt ///
-			"Warning: no color option specified; " ///
+			"WARNING: no color option specified; " ///
 			"sort option ignored"
 	}
 

@@ -15,7 +15,7 @@ program srqm_demo
   }
   
   if "`sessions'" == "" {
-    di as err "Error: no session numlist was provided"
+    di as err "ERROR: no session numlist was provided"
     exit 198
   }
   
