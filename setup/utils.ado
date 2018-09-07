@@ -55,7 +55,6 @@ cap pr drop updates
 program updates
   cap qui ssc hot
   if !_rc cap noi adoupdate, update all
-  if _rc di as err "Error: could not go online to check for updates."
   if _rc di as err "ERROR: could not go online to check for updates."
 end
 
@@ -80,10 +79,10 @@ program pkgs
   loc pwd = c(pwd)
   loc trk = "stata.trk"
 
-  * set working directory to install path
-  cap confirm file "`using'"
-  if _rc == 601 cap mkdir "`using'", public
-  qui cd "`using'"
+  * set working directory to install path, or...
+  cap cd "`using'"
+	* ... create directory if missing (_rc == 601)
+  if _rc cap mkdir "`using'", public
 
   * determine whether stata.trk exists
   loc erase = 0
@@ -101,15 +100,13 @@ program pkgs
     if "`quiet'" == "" di as txt "Package install path set to:" _n "`using'"
   }
   else {
-    di as err _n "Warning: invalid package install path" _n "`using'"
     di as err _n "WARNING: invalid package install path" _n "`using'"
   }
 
   * erase empty stata.trk created on permissions test
   if `erase' == 1 {
-  	cap rm `trk'
-  	if _rc di as err "Warning: permissions test failed with code", _rc
   	cap erase `trk'
+  	if _rc di as err "WARNING: permissions test failed with code", _rc
   }
 
   * return
