@@ -1,5 +1,5 @@
 
 srqm_scan
-srqm_pkgs `*', quiet
+noi srqm_pkgs `*', quiet
 
 //bye
