@@ -1,65 +1,108 @@
-*! srqm_link: point Stata to the SRQM folder
-*! use option 'force' to force the installation
-*! use option 'clean' to uninstall the link
+*! add working directory to setup/profile.do and copy it to application folder
+*!
+*! ARGUMENTS
+*!
+*! , f , force  : force copy
+*! , o , off    : remove profile.do from application folder
+*!
 cap pr drop srqm_link
 program srqm_link
-  syntax [, force clean]
+  syntax [, Force Off]
 
-cap confirm file "`c(sysdir_stata)'profile.do"
-if "`clean'" != "" {
-  cap rm "`c(sysdir_stata)'profile.do"
-  if _rc ==0 di as txt "Successfully removed", "`c(sysdir_stata)'profile.do" _n "Farewell, enjoy life and Stata."
-  if _rc !=0 di as txt "Nothing to remove at", "`c(sysdir_stata)'profile.do" _n "You have already left. Be well."
-  cd "`c(sysdir_stata)'" // to avoid profile.do re-setting up on Macs
-}
-else if _rc | "$srqm_wd" != "`c(pwd)'" | "`force'" != "" {
-  tempname fh
-  di as txt _n "Linking from the Stata application folder:" _n as res "`c(sysdir_stata)'profile.do"
-  cap file open fh using "`c(sysdir_stata)'profile.do", write replace
-  if _rc == 0 {
-      file write fh _n "*! This do-file automatically sets the working directory to the SRQM folder:" _n
-      file write fh "*! `c(pwd)'" _n _n
-      file write fh "global srqm_wd " _char(34) "`c(pwd)'" _char(34) _n
-      file write fh "cap confirm file " _char(34) _char(36) "srqm_wd`c(dirsep)'setup`c(dirsep)'srqm.ado" _char(34) _n _n
-      file write fh "if _rc { // cannot load utilities" _n _tab "noi di as err _n ///" _n
-      file write fh _tab _tab _char(34) "Error: The SRQM folder is no longer available at its former location:" _char(34) " as txt _n ///" _n
-      file write fh _tab _tab _char(34) _char(36) "srqm_wd" _char(34) " _n(2) ///" _n
-      file write fh _tab _tab _char(34) "This error occurs when you rename or relocate the SRQM folder." _char(34) " _n ///" _n
-      file write fh _tab _tab _char(34) "Use the 'File : Change Working Directory...' menu to manually" _char(34) " _n ///" _n
-      file write fh _tab _tab _char(34) "select the SRQM folder, then execute the {stata run profile} command." _char(34) _n
-      file write fh _tab "exit -1" _n "}" _n "else {" _n
-      file write fh _tab "cap cd " _char(34) _char(36) "srqm_wd" _char(34) _n _n
-      file write fh _tab "cap noi run profile" _n
-      file write fh _tab "if !_rc noi type profile.do, starbang" _n _n
-      file write fh _tab "if _rc | " _char(34) _char(36) "srqm_wd" _char(34) "==" _char(34) _char(34) " { // folder check failed" _n
-      file write fh _tab _tab "noi di as err ///" _n
-      file write fh _tab _tab _tab _char(34) "Some essential course material is not available in your working directory." _char(34) " _n(2) ///" _n
-      file write fh _tab _tab _tab _char(34) "This error occurs when you modify the folders or files of the SRQM folder." _char(34) " _n ///" _n
-      file write fh _tab _tab _tab _char(34) "Restore the SRQM folder from a backup copy or from http://f.briatte.org/srqm" _char(34) " _n ///" _n
-      file write fh _tab _tab _tab _char(34) "Then set it as the working directory and execute the {stata run profile} command." _char(34) _n
-      file write fh _tab _tab "exit -1" _n
-      file write fh _tab "}" _n
-      file write fh "}" _n
-      file close fh
-      di as txt _n "Linking to the current working directory:" _n as res c(pwd)
-      di as inp ///
-          _n "IMPORTANT: make sure that the SRQM folder stays available at this location, or" ///
-          _n "Stata will not find the course material when you open it, and you will have to" ///
-          _n "setup your computer again."
+loc pid "[LINK]"
+loc default "<default>"
+
+loc source  "$SRQM_SETUP/profile.do"
+loc target  "`c(sysdir_stata)'profile.do"
+
+cap confirm f "`target'"
+
+if "`off'" != "" { //  must come first
+  
+  cap erase "`target'"
+
+  if _rc == 601 {
+  
+    di as txt "`pid' no file to remove at", as inp "`target'"
+  
+  }
+  else if _rc {
+    
+    di ///
+      as err "`pid' ERROR:"     , ///
+      as txt "failed to remove" , ///
+      as inp "`target'"         , ///
+      as txt "(code", _rc ")"
+    
   }
   else {
-      //
-      // Windows Vista and 7 machines require the user to right-click
-      // the application and run it as admin for this bit to work.
-      //
-      di as err _n ///
-          _n "Warning: the Stata application profile is not writable on your system." as txt _n(2) ///
-          _n "Try again while running Stata with admin privileges. If the problem persists," ///
-          _n "you will have to manually select the SRQM folder from the 'File : Change" ///
-          _n "Working Directory...' menu and then execute the {stata run profile} command" ///
-          _n "to set up your computer for the course. All apologies to Windows users."
-      exit -1
+
+    // go to application folder to avoid profile.do re-setting up on Macs
+    qui cd "`c(sysdir_stata)'"
+  
+    di ///
+      as txt "`pid' removed"                    , ///
+      as inp "`target'"                        _n ///
+      as txt "`pid' working directory set to"   , ///
+      as inp "`c(pwd)'"                        _n ///
+      as txt "`pid' You have left the course." _n ///
+             "`pid' Farewell! Enjoy life and Stata."
+  
   }
+  
+  exit 0 // quit cleanly
+
+}
+if _rc | "`force'" != "" {
+
+  di ///
+    as txt "`pid' telling Stata to find the SRQM folder at startup" _n ///
+    as txt "`pid' source:"      , ///
+    as inp "`c(pwd)'/`source'" _n ///
+    as txt "`pid' target:"      , ///
+    as inp "`target'"
+
+	// escape all backslashes in path to working directory (required for Windows)
+	loc replacement = subinstr("$SRQM_WD", "\", "\BS", .)
+	
+  // copy setup/profile.do to profile template, and move to application folder
+  cap filefilter "`source'" "`target'", ///
+  	from("\Q`default'\Q") to("\Q`replacement'\Q") ///
+  	replace
+
+  if !r(occurrences) {
+  
+    di ///
+      as err "`pid' ERROR:"                    , ///
+      as txt "no replacement string found in" , ///
+      as inp "`source'"
+
+  }
+
+  if _rc {
+    
+    di ///
+      as err "`pid' ERROR:"    , ///
+      as txt "failed to copy (code", _rc ")"
+    
+  }
+    
+  if _rc | !r(occurrences) {
+    
+    exit -1 // bogus error code
+  
+  }
+  else {
+    
+    noi di as txt "`pid' working directory successfully set"
+    
+  }
+    
+}
+else {
+
+  exit 0 // exit cleanly
+
 }
 
 end
