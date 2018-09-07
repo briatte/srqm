@@ -8,8 +8,7 @@ cap pr drop srqm_pkgs
 program srqm_pkgs
   syntax [anything] [, force clean s2color quiet extra]
 
-global srqm_packages = "lookfor_all fre spineplot tab_chi mkcorr tabout estout leanout plotbeta kountry wbopendata spmap scheme-burd _gstd01 renvars clarify"
-if "`extra'" != "" global srqm_packages = "$srqm_packages catplot ciplot distplot log2do2 outreg2 revrs schemes scheme_tufte gr0002_3 qog qogbook"
+loc pid "[PKGS]"
 
 * Restricted systems can fail to write to the PLUS folder (see why and 
 * possible fixes in Lembcke's "Introduction to Stata" at page 48); the
@@ -18,41 +17,70 @@ if "`extra'" != "" global srqm_packages = "$srqm_packages catplot ciplot distplo
 
 * prepare to fall back to adopath alternatives (Win/UNIX)
 if "`c(os)'" != "MacOSX" cap mkdir "`c(sysdir_oldplace)'", public
+
 * test writing to stata.trk in PLUS codename directory
 cap pkgs, quiet
 if _rc {
+  
   * switch path to PERSONAL (at Sciences Po, c:\ado\personal)
   cap pkgs using "`c(sysdir_personal)'", quiet
+  
   * fall back to local install (for fully restricted systems)
   if _rc cap pkgs using "setup/pkg", quiet
-}
-* complain if it all fails (breaks executability of do-files)
-if _rc {
-  di as err _n "Warning: could not find a way to install packages"
-  exit -1
+  
 }
 
-if "`anything'" == "" loc anything = "$srqm_packages"
+* complain if it all fails (breaks executability of do-files)
+if _rc {
+  
+  di ///
+    as err "`pid' ERROR:"            , ///
+	  as txt "could not find a way to" , ///
+    as txt "install packages"        , ///
+           "(code", _rc ")"
+  
+  exit _rc
+  
+}
+
+* ------------------------------------------------------------------------------
+* by default, cycle through all course packages
+* ------------------------------------------------------------------------------
+
+if "`anything'" == "" {
+  
+  loc anything = "$SRQM_PACKAGES"
+  
+}
+
 tokenize `anything'
 
 local force = ("`force'" != "")
 
 if "`clean'" != "" {
+  
   while "`*'" != "" {
+    
       loc t = "`1'"
       if "`t'" == "renvars" loc t "dm88_1"
       * cannot use -ssc uninstall- because of a bug with dash in 'scheme-burd'
       cap qui ado uninstall "`t'"
       if _rc loc x "already "
-      if "`quiet'" == "" di as inp "`t'", as txt "was `x'uninstalled"
+      if "`quiet'" == "" di as txt "`pid' " as inp "`t'", as txt "was `x'uninstalled"
       macro shift
+      
   }
+  
   if "`s2color'" != "" set scheme s2color // set scheme back to default
+  
 }
 else {
+  
   loc i = 0
   loc s = `:word count `anything''
+  
   while "`*'" != "" {
+    
       loc i = `++i'
       loc t = "`1'"
 
@@ -75,45 +103,119 @@ else {
       
       if _rc==111 | `force' {
 
-          if "`quiet'" == "" di as txt "[`i'/`s'] installing:", as inp, "`t'"
-          // note: keep special cases at end of local list for the 699 hack to work with them
+          noi di as txt _n "`pid' installing required package", as inp "`t'"
 
-          if "`t'"=="wbopendata" {
+          // note: keep special cases at end of local list for 
+          // the 699 hack to work with them
+
+          if "`t'" == "wbopendata" {
+            
             cap noi ssc inst `t', all replace
-            local maps "world-c.dta world-d.dta"
-            foreach y of local maps {
+            loc maps "world-c.dta world-d.dta"
+            
+            foreach y of loc maps {
+              
               cap copy `y' data/`y'
-              if !_rc di as txt "(file `y' moved to data folder)"
+              
+              if !_rc {
+                
+                di ///
+                  as txt "`pid' file"  , ///
+                  as inp "`y'"         , ///
+                  as txt "moved to"    , ///
+                  as inp "data"        , ///
+                  as txt "folder"
+
               cap erase `y'
-            }
+              
+              } // fi error
+              
+            } // fi foreach
+            
           }
           else if "`t'"=="renvars" {
-              cap noi net ins dm88_1, from ("http://www.stata-journal.com/software/sj5-4/")
+              cap noi net ins dm88_1, ///
+                  from ("http://www.stata-journal.com/software/sj5-4")
           }
           else if "`t'"=="clarify" {
-              cap noi net ins `t', from("http://gking.harvard.edu/clarify")
+          	  cap noi net ins `t', ///
+          	      from("http://gking.harvard.edu/clarify")
           }
           else if "`t'"=="gr0002_3" {
-              cap noi net ins `t', from("http://www.stata-journal.com/software/sj4-3")
+              cap noi net ins `t', ///
+                  from("http://www.stata-journal.com/software/sj4-3")
           }
-          else if "`t'"=="schemes" {
-              cap noi net ins `t', from("http://leuven.economists.nl/stata/") 
-          }
+          // else if "`t'"=="schemes" {
+          //    cap noi net ins `t', ///
+          //        from("http://leuven.economists.nl/stata") 
+          // }
           else if "`t'"=="_gstd01" {
-              cap noi net ins `t', from("http://web.missouri.edu/~kolenikovs/stata")
+              cap noi net ins `t', ///
+                  from("http://staskolenikov.net/stata")
           }
           else {
+            
               cap noi ssc inst "`t'", replace
-              if _rc==631 di as err "Error 631: could not connect to the SSC archive to look for package " as inp "`1'"
-              if _rc==601 di as err "Error 601: could not find package " as inp "`1'" as err " at the SSC archive"
-          }
-      }
+              
+              if _rc == 631 {
+                
+                di ///
+                  as err "`pid' ERROR:"                         , ///
+              	  as txt "could not connect to the SSC archive" , ///
+              	         "to look for package"                  , ///
+              	  as inp "`1'"                                  , ///
+                  as txt "(code 631)"
+                  
+              }
+              else if _rc == 601 {
+                
+                di ///
+                  as err "`pid' ERROR:"           , ///
+              	  as txt "could not find package" , ///
+              	  as inp "`1'"                    , ///
+                  as txt "at the SSC archive"     , ///
+                         "(code 601)"
+
+              }
+              else if _rc {
+              
+                di ///
+                  as err "`pid' ERROR:"         , ///
+              	  as txt "failed to install "   , ///
+              	  as inp "`1'"                  , ///
+                  as txt "from the SSC archive" , ///
+                         "(code", _rc ")"
+                
+              } // fi _rc
+          
+          } // fi ssc inst
+              
+      } // fi _rc == 111
       else {
-       if "`quiet'" == "" di as txt "[`i'/`s'] already installed:", as inp, "`t'"
+        
+      	if "`quiet'" == "" {
+          
+          di ///
+            as txt "`pid' [`i'/`s'] already installed:", ///
+       	    as inp, "`t'"
+          
+        }
+
       }
-      if _rc di as err "Error: installation of `t' failed with error code", _rc
+      
+      if _rc {
+      
+        di ///
+          as err "`pid' ERROR:"      , ///
+          as txt "failed to install" , ///
+          as inp "`t'"               , ///
+          as txt "(code", _rc ")"
+      
+      }
+          
       macro shift
   }
+  
 }
 
 end
