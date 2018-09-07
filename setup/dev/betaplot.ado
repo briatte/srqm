@@ -164,8 +164,8 @@ else twoway (rcap ul ll x, msiz(0) hor `ylab1') (scatter x est) (scatter x ul, `
 restore
 end
 
-use data/qog2011, clear
+use data/qog2016, clear
 tab ht_region, gen(rg_)
-reg wdi_fr wdi_gdpc rg_*
+reg wdi_fertility wdi_gdpc rg_*
 //plotbeta2 gdp | income | Edu | democulture | PolPluralism, vertical
 plotbeta2 wdi_gdpc | rg_1 | rg_2 | rg_3 | rg_4, labels cifmt(%5.1f) scheme(bw) savedata(test)
