@@ -34,17 +34,26 @@ For additional information on the files in each folder, see the wiki pages:
 
 # VERSION
 
-This is version [0.6.0][wiki-hist] (Fall 2018) of the course.
+This is version [0.6.2][wiki-hist] (Fall 2018) of the course.
 
 [wiki-hist]: https://github.com/briatte/srqm/wiki/course-history
 
 # THANKS
 
-Thanks to all instructors who have run their own forks of the course, including [Joël Gombin][jg], [Filip Kostelka][fk], [Antonin de Laever][adl], [Antoine Marsaudon][am], [Haley McAvay][hma], [Pavlos Vasilopoulos][pv], and many, many others.
+Thanks to all instructors who have run their own forks of the course, including [Cyril Benoît][cb], [Joël Gombin][jg], [Filip Kostelka][fk], [Antonin de Laever][adl], [Antoine Marsaudon][am], [Haley McAvay][hma], [Pavlos Vasilopoulos][pv], and many others.
 
+[cb]: http://cyrilbenoit.com/
 [jg]: https://datactivist.coop/
 [fk]: https://filipkostelka.com/
 [adl]: https://fr.linkedin.com/in/antonin-de-laever-a2039958
 [am]: https://www.parisschoolofeconomics.eu/en/marsaudon-antoine/
 [hma]: http://haleymcavay.weebly.com/
 [pv]: http://pvasilopoulos.weebly.com/
+
+Thanks also to all the students -- especially Alba Guesch, Leila Ferrali and Laura Fuehrer, from one of the PSIA Fall 2010 classes -- who generously suggested improvements to early versions of the course.
+
+# LICENSE
+
+This repository contains Stata datasets that were downloaded from [various data providers](https://github.com/briatte/srqm/wiki/data), and then slightly altered for teaching purposes. Please do not redistribute those.
+
+The rest of the repository is under a [CC-BY-SA](https://creativecommons.org/licenses/by-sa/4.0/) license, where 'by' are François Briatte and Ivaylo Petev (Stata code) or François Briatte alone (related teaching material).
