@@ -1,4 +1,4 @@
-This repository contains the [Statistical Reasoning and Quantitative Methods][srqm] (SRQM) course taught at Sciences Po by [François Briatte][fb] (2010-2018) and [Ivaylo Petev][ip] (2010-2013).
+This repository contains the [Statistical Reasoning and Quantitative Methods][srqm] (SRQM) course taught at Sciences Po by [François Briatte][fb] (2010-2019) and [Ivaylo Petev][ip] (2010-2013).
 
 [srqm]: https://f.briatte.org/teaching/quanti/
 [fb]: https://f.briatte.org/
