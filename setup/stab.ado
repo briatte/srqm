@@ -56,7 +56,12 @@ pr stab
   qui misstable pat `mean' `prop' `if' `in'
   loc n `r(N_complete)'
   loc m `r(N_incomplete)'
-  if `m' > 0 loc m " (excluding `r(N_incomplete)' incomplete observations)"
+  if `m' > 0 {
+    loc m " (excluding `r(N_incomplete)' incomplete observations)"
+  }
+  else {
+    loc m ""
+  }
   
   file open `fh' using `out', write append
   file write `fh' "N = `n'`m'"
