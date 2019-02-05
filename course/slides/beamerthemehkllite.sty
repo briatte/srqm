@@ -22,8 +22,9 @@
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 
-\RequirePackage[default]{sourcesanspro}
-\RequirePackage{fontspec}
+\RequirePackage{sourcesanspro} % required as package for small caps
+
+\usepackage{fontspec}
 \setmonofont{Inconsolata Regular}
 
 \setbeamerfont{block title}{family=\sf}
@@ -62,41 +63,41 @@
 
 \providecommand{\absoluteimage}[1]{}
 \renewcommand{\absoluteimage}[1]{
-	% \makebox[\textwidth][c]{
+  % \makebox[\textwidth][c]{
   \begin{tikzpicture}[remember picture, overlay]
     \path[use as bounding box] (0, 0) rectangle (\paperwidth, \paperheight);
     \node[yshift=-\paperheight] at (current page.north west) {%
-	    \begin{tikzpicture}[remember picture, overlay]
-	        #1
-	    \end{tikzpicture}
-	    };
+      \begin{tikzpicture}[remember picture, overlay]
+          #1
+      \end{tikzpicture}
+      };
   \end{tikzpicture}}
 % }
 
 % -- title page
 
 \defbeamertemplate*{title page}{theme}{
-  \absoluteimage{ 
+  \absoluteimage{
     \usebeamercolor{palette primary}
     \node[anchor=west] at (.5cm, 7.8cm) { \Huge \color{bg} %
-			\textsc{\inserttitle} };
+      \textsc{\inserttitle} };
     \draw[draw=bg,fill=bg] (0, 0) rectangle (\paperwidth, 1cm);
     \node[anchor=west] at (.5cm, .5cm) { \color{fg}%
-		  \url{http://f.briatte.org/teaching/quanti/}};
+      \url{http://f.briatte.org/teaching/quanti/}};
     \node[anchor=east] at (\paperwidth-.5cm, .5cm) { \color{fg}%
-		  \texttt{\insertdate}};
+      \texttt{\insertdate}};
 }}
 
 % -- title frame
 
 \defbeamertemplate*{frametitle}{theme}{
-	\usebeamercolor{palette primary}
-	\absoluteimage{
-	  \node[anchor=west, minimum width=0.5cm, minimum height=.7cm] 
-	      at (.5, \paperheight-1cm) 
-	      {\color{bg} \insertframetitle };
-	}
-	\vspace{2em}
+  \usebeamercolor{palette primary}
+  \absoluteimage{
+    \node[anchor=west, minimum width=0.5cm, minimum height=.7cm]
+        at (.5, \paperheight-1cm)
+        {\color{bg} \insertframetitle };
+  }
+  \vspace{2em}
 }
 
 % -- unused
