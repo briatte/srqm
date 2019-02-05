@@ -450,7 +450,7 @@ esttab est2 est4 est6, lab nogaps beta(2) se(2) sca(rmse) r2 ///
 
 reg hsat ib45.age6 female i.health lowinc ib2.pol3 if cntry == "FR"
 
-* Variance inflation.
+* Variance inflation (explained in Week 9).
 vif
 
 * Residuals-versus-fitted values plot.

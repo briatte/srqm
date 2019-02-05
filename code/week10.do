@@ -197,7 +197,7 @@ reg imdfetn $bl [pw = dpw], vce(cluster cid)
 * observe some form of within-sample clustering, which violates the assumption
 * that the error term is independently distributed across the observations.
 
-* Variance inflation.
+* Variance inflation (explained in Week 9).
 vif
 
 * Inspect residuals.
