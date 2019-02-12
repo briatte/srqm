@@ -1,5 +1,5 @@
 
-*! SRQM version 2018-09
+*! SRQM version 2019-02
 *! URL: https://f.briatte.org/teaching/quanti/
 
 /* --- SRQM --------------------------------------------------------------------
@@ -74,10 +74,13 @@ else {
 
 // --- COURSE SETTINGS ---------------------------------------------------------
 
+noi di as txt _n "`pid' Setting up Stata for the course..."
+
 loc debug = 0
 
-if c(version) < 11 | c(version) > 13 | `debug' {
-	noi di as txt _n "`pid' WARNING: code tested only with Stata 11, 12 and 13"
+if c(version) < 11 | c(version) >= 14 | `debug' {
+  noi di as err "`pid' WARNING:", ///
+    as txt "code tested only with Stata 11, 12 and 13" _n
 }
 
 cap pr drop srqm_error
@@ -86,67 +89,67 @@ pr de srqm_error
 end
 
 if c(os) != "Unix" &  c(update_query) == "on" | `debug' {
-	noi di as txt "`pid' permanently disabling -update_query-"
-	cap set update_query off
-	srqm_error
+  noi di as txt "`pid' permanently disabling -update_query-"
+  cap set update_query off
+  srqm_error
 }
 
 if c(more) == "on" | `debug' {
-	noi di as txt "`pid' permanently disabling -more-"
-	cap qui set more off, perm
-	noi srqm_error
+  noi di as txt "`pid' permanently disabling -more-"
+  cap qui set more off, perm
+  noi srqm_error
 }
 
 if c(varabbrev) == "on" | `debug' {
-	noi di as txt "`pid' permanently disabling -varabbrev-"
-	cap set varabbrev off, perm
-	noi srqm_error
+  noi di as txt "`pid' permanently disabling -varabbrev-"
+  cap set varabbrev off, perm
+  noi srqm_error
 }
 
 if c(version) < 12 | `debug' {
-	noi di as txt "`pid' permanently setting -memory- to 500MB"
-	cap set mem 500m, perm
-	noi srqm_error
+  noi di as txt "`pid' permanently setting -memory- to 500MB"
+  cap set mem 500m, perm
+  noi srqm_error
 }
-	
+
 if c(maxvar) < 7500 | `debug' {
-	noi di as txt "`pid' permanently setting -maxvar- to 7,500"
-	cap set maxvar 7500, perm
-	noi srqm_error
+  noi di as txt "`pid' permanently setting -maxvar- to 7,500"
+  cap set maxvar 7500, perm
+  noi srqm_error
 }
 
 if c(scrollbufsize) < 500000 | `debug' {
-	noi di as txt "`pid' setting -scrollbufsize- to 500,000"
-	cap set scrollbufsize 500000
-	noi srqm_error
+  noi di as txt "`pid' setting -scrollbufsize- to 500,000"
+  cap set scrollbufsize 500000
+  noi srqm_error
 }
 
 if c(scheme) != "burd" | `debug' {
   noi di as txt "`pid' permanently setting -scheme- to 'burd'"
-	cap set scheme burd, perm
-	noi srqm_error
+  cap set scheme burd, perm
+  noi srqm_error
 }
 
 // --- COURSE FOLDERS ----------------------------------------------------------
 
 foreach x of glo SRQM_FOLDERS {
-  
+
   cap cd "`x'"
-  
+
   if _rc {
-    
+
     noi di ///
       as err "`pid' ERROR:" , ///
       as txt "missing"      , ///
       as inp "`x'"          , ///
     as txt "folder"
-    
+
     exit _rc // fatal
-  
+
   }
-	
-	cd ..
-  
+
+  cd ..
+
 }
 
 // --- COURSE UTLITIES ---------------------------------------------------------
@@ -176,13 +179,13 @@ cap noi srqm_scan
 
 if _rc {
   if _rc noi di ///
-	  as err "`pid' ERROR:", ///
-		as txt "incomplete", ///
-		as inp "$SRQM_CODE", ///
-		as txt "folder"
+    as err "`pid' ERROR:", ///
+    as txt "incomplete", ///
+    as inp "$SRQM_CODE", ///
+    as txt "folder"
   exit _rc // fatal
 }
-else if `e' {  
+else if `e' {
   noi di as txt _n "`pid' WARNING: setup encountered nonfatal error(s)"
 }
 
@@ -200,12 +203,12 @@ if inlist("`t'", "early", "late") {
 
   noi di as inp _n _col(8) "It is too `t' to do statistics.", ///
     as txt "Go (back) to bed." _n
-      
+
 }
 else {
-  
+
   noi di as inp _n _col(8) "Good `t',", as txt "and welcome to the course." _n
-    
+
 }
 
 // ttyl
