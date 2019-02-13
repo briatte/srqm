@@ -1,8 +1,8 @@
 
 // -------------------------------------------------------- NHIS 1999-2011 -----
 
-* Last modified: 2019-02-12
-* URL: http://www.cdc.gov/nchs/nhis.htm
+* Last modified: 2019-02-13
+* URL: https://www.cdc.gov/nchs/nhis/index.htm
 
 // ------------------------------------------------------------- get the data --
 
