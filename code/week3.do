@@ -10,11 +10,11 @@ cap log using code/week3.log, replace
 
 /* ------------------------------------------ SRQM Session 3 -------------------
 
-   F. Briatte and I. Petev
+   F. Briatte
 
  - TOPIC:  Support for Sharia Law in Nine Countries
 
- - DATA:   World Values Survey Wave 4 (2000)
+ - DATA:   World Values Survey Wave 4 (c. 2000)
 
  - Welcome again to Stata. This do-file contains the commands used in our third
    session. For coursework, practice with Stata code by running the code again,
@@ -48,7 +48,7 @@ cap log using code/week3.log, replace
    detail, and another draft paragraph that lists your independent variables and
    offers a general theory on the articulation between your variables.
 
-   Last updated 2013-08-17.
+   Last updated 2019-02-15.
 
 ----------------------------------------------------------------------------- */
 
@@ -74,16 +74,27 @@ table country, c(min s020 max s020)
 * Inspect the overall dependent variable.
 fre iv166
 
-* Clone the nonmissing values of the dependent variable (exclude 'DK/NA' codes).
-clonevar sharia = iv166 if iv166 > 0 & iv166 < 8
+* Clone the nonmissing values of the variable: exclude 'DK/NA' codes.
+clonevar sharia = iv166 if inrange(iv166, 1, 5)
 
 * We use -clonevar- to create a variable with the same coding and labels as the
-* original one, but exclude missing values from the clone with the -if- logical
-* operator. The first argument is the name of the new variable that we created.
+* original one. The first argument ('sharia') is the name of the new variable
+* that we want to create. The new variable appears at the end of the dataset, as
+* the -d- command (for -describe-) would show.
 
-* This approach to data preparation allows to rename and recode while preserving
-* the original variable. The new variable will appear at the end of the dataset,
-* as the -d- command (for -describe-) would show.
+* The rest of the command excludes missing values from the cloned variable: we
+* use the -if- logical operator to do that. The condition used above means that
+* only values within the '1 to 5' range will be cloned from iv166 into sharia.
+
+* In the present case, we could have obtained the same result by using any of
+* the following commands:
+
+// clonevar sharia = iv166 if iv166 > 0 & iv166 < 6
+// clonevar sharia = iv166 if iv166 > 0 & iv166 < 8
+
+* Using -clonevar- allows us to use a new variable name, to recode the missing
+* values, and to copy the valuable attributes of the original variable (variable
+* and value labels), all while preserving the original variable for reference.
 
 * Inspect the clean version of the variable.
 fre sharia
@@ -91,8 +102,11 @@ fre sharia
 * Find in which countries the variable was measured.
 fre country if !mi(sharia)
 
-* Remove other countries.
-drop if mi(sharia)
+* Create a variable counting nonmissing observations in each country.
+bys country: egen sharia_count = count(sharia)
+
+* Keep only countries for which the variable has nonmissing observations.
+drop if !sharia_count
 
 * In the first command, the -!mi- operator means 'not missing' and therefore
 * produces the list of countries for which the DV is available. In the second
@@ -191,7 +205,7 @@ fre v223
 * Recode gender as a meaningful binary (either female or not) using a logical
 * operator (in brackets), excluding missing observations from the operation and
 * applying the 'female' label to the new 'female' dummy variable:
-gen female:female = (v223 == 2) if !mi(v223)
+gen female:female = (v223 == 2) if inrange(v223, 1, 2)
 
 * Label the values.
 la def female 0 "Male" 1 "Female", replace
@@ -216,11 +230,18 @@ tab prosharia female, col nof
 
 fre v225
 
-* Strangely enough, '99' is a missing value here, so we replace '99' values with
-* a missing value code. The -replace- command is the quickest way to do that.
-replace v225 = . if v225 == 99
+* Strangely enough, '98' and '99' are missing values here, so we replace those
+* values with the proper code for missing values. The -replace- command is the
+* quickest way to do that.
+replace v225 = . if inlist(v225, 98, 99)
 
-* We can now clone the variable.
+* There are often more than one way to do things like recoding. The command
+* above could have been written in many different ways, including this one:
+
+// gen age = v225 if v225 < 98
+// replace v225 = . if v225 == 98 | v225 == 99
+
+* Now that the missing values are correctly encoded, we clone the variable.
 clonevar age = v225
 
 * Use -summarize- (or simply -su-) to get the summary statistics, as appropriate
@@ -349,8 +370,14 @@ fre country
 * Subset to two countries of interest.
 keep if inlist(country, 89, 96)
 
-* Pattern of missing values.
+* Overall (i.e. both countries pooled together) pattern of missing values.
 misstable pat sharia age female edu4 empl married haskids city4
+
+* Pattern of missing values for Egypt.
+misstable pat sharia age female edu4 empl married haskids city4 if country == 89
+
+* Pattern of missing values for Algeria.
+misstable pat sharia age female edu4 empl married haskids city4 if country == 96
 
 * Studying the pattern of missing values is a crucial requirement: dropping
 * observations with missing values might affect the representativeness of the
@@ -365,7 +392,7 @@ misstable pat sharia age female edu4 empl married haskids city4
 * Subset to nonmissing observations.
 drop if mi(sharia, age, female, edu4, empl, married, haskids, city4)
 
-* The second and last task is to get the final sample size (in each country).
+* Last step: get the final sample size (in each country).
 bys country: count
 
 
