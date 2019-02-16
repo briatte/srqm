@@ -15,7 +15,9 @@
 
    NOTE -- this script currently does not work due to the WVS website requiring
    cookies to get past its main index page. See Anthony J. Damico's lodown R
-   package for a workaround.
+   package for a workaround:
+   
+   https://github.com/ajdamico/lodown/blob/master/R/wvs.R#L272
 
 ----------------------------------------------------------------------------- */
 
