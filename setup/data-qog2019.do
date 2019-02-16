@@ -13,21 +13,27 @@
 
    Last modified: 2019-02-14
 
-   Note: the -qog- and -qogbook- Stata packages available from SSC contain
+   NOTE -- the -qog- and -qogbook- Stata packages available from SSC contain
    outdated links to both downloads and are not used here.
 
 ----------------------------------------------------------------------------- */
 
 * dataset
 loc f "qog2019.dta"
+loc u "https://www.qogdata.pol.gu.se/data/qog_std_cs_jan19.dta"
 
-use "https://www.qogdata.pol.gu.se/data/qog_std_cs_jan19.dta", clear
+di as inp "qog2019:", as txt "downloading", "`u'"
+
+use `u', clear
 saveold `f', replace // Stata 12
 
 * codebook -- WARNING: large file, 168 MB
 loc f "qog2019_codebook.pdf"
+loc u "https://www.qogdata.pol.gu.se/data/qog_std_jan19.pdf"
 
-copy "https://www.qogdata.pol.gu.se/data/qog_std_jan19.pdf" `f', clear
+di as inp "qog2019:", as txt "downloading", "`u'"
+
+copy `u' `f', clear
 
 // ------------------------------------------------------------ label dataset --
 
