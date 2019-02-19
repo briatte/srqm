@@ -4,29 +4,25 @@
 *!
 *! srqm_grab [FILE] [FILE] ...
 *!
-*! OPTIONS
+*! ARGUMENTS
 *!
-*! , using  : set remote source to grab [FILE] from
-*!            defaults to http://f.briatte.org/stata (HTTP only)
+*! , using  :  set remote source to grab [FILE] from
+*!             defaults to http://f.briatte.org/stata (HTTP only)
 *!
-*! , backup : keep a timestamped backup of any existing [FILE] (default)
+*! , backup :  keep a timestamped backup of any existing [FILE] (default)
 *!
 *! NOTES
 *!
-*! - multi-file calls are allowed, e.g.
-*!
-*!     srqm_grab foo/bar.pdf bar/foo.zip
-*!
-*! - [FILE] specifies both the location of the file on the remote source and
-*!   the local destination, e.g.
+*! [FILE] specifies both the location of the file on the remote source and the
+*! local destination, e.g.
 *!
 *!     srqm_grab code/week3.do
 *!
-*!   ... will try to grab code/week3.do on the remote source, and will then
-*!   save it there on disk
+*! ... will try to grab code/week3.do on the remote source, and will then save
+*! it to code/week3.do on disk
 *!
 cap pr drop srqm_grab
-program srqm_grab
+pr srqm_grab
 
   syntax anything [using/] [, nobackup]
 

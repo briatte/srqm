@@ -1,14 +1,14 @@
-*! srqm_data  : download and prepare course datasets
+*! srqm_data : download and prepare course datasets
 *!
 *! USAGE
 *!
-*! srqm_data `name`       : run data preparation do-file for dataset `name`
-*! srqm_data all          : run all data preparation do-files
+*! srqm_data [NAME]  : run data preparation do-file for dataset [NAME]
+*! srqm_data all     : run all data preparation do-files
 *!
 cap pr drop srqm_data
 pr srqm_data
 
-  syntax anything [, log]
+  syntax anything
 
   loc pid "[DATA]"
   loc d "data"
@@ -158,4 +158,4 @@ pr srqm_data
 
 end
 
-// ttyl
+// --------------------------------------------------------------------- ttyl --
