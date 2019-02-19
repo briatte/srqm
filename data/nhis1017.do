@@ -4,9 +4,9 @@
    Data:   U.S. National Health Interview Survey (NHIS)
    Source: U.S. Centers for Disease Control (CDC), NCHS
 
-   URL: https://www.cdc.gov/nchs/nhis/index.htm
+   URL: https://www.cdc.gov/nchs/`n'/index.htm
 
-   - Downloads survey years 2010 and 2017
+   - Downloads survey years 2010 and 2017 with their codebooks
    - Selects a few variables from the sample adult and persons
    - Renames the variables according to older NHIS years
    - Recodes race/ethnicity to a simplified form
@@ -26,11 +26,17 @@ loc x "2017 2010"
 
 foreach y in `x' {
   
-  cap confirm f nhis`y'.dta
+  cap confirm f `n'`y'.dta
   if !_rc continue
 
+  loc n "nhis"
   loc u "ftp://ftp.cdc.gov/pub/Health_Statistics/NCHS/"
   loc s "/NHIS/`y'/"
+
+  // ------------------------------------------------------ download codebook --
+
+  loc f `n'1017_codebook_`y'.pdf
+  copy "`u'Dataset_Documentation`s'srvydesc.pdf" `f', public replace
 
   // -------------------------------- download sample adults and persons data --
 
@@ -43,7 +49,7 @@ foreach y in `x' {
     cap confirm f `z'
     if _rc {
       loc a "`u'Datasets`s'`z'"
-      noi di as inp "nhis`y':", as txt "downloading", "`a'"
+      noi di as inp "`n'`y':", as txt "downloading", "`a'"
       copy `a' `z', replace
     }
     unzipfile `z', replace // ASCII (.dat)
@@ -51,7 +57,7 @@ foreach y in `x' {
     * run preparation do-file
     loc d "`f'.do"
     loc a "`u'Program_Code`s'`d'"
-    noi di as inp "nhis`y':", as txt "running", "`a'"
+    noi di as inp "`n'`y':", as txt "running", "`a'"
     cap run `a', nostop
 
     * clean up
@@ -63,13 +69,13 @@ foreach y in `x' {
 
     * save sample adults (merged and overwritten below)
     if "`f'" == "samadult" {
-      save nhis`y', replace
+      save `n'`y', replace
     }
 
   }
 
   * merge only matched adults, ensuring all of sample adults are merged
-  merge 1:1 hhx fmx fpx using nhis`y', assert(1 3) keep(3)
+  merge 1:1 hhx fmx fpx using `n'`y', assert(1 3) keep(3)
 
   // -------------------- rename variables from sample adults (samadult) data --
 
@@ -171,7 +177,7 @@ foreach y in `x' {
   keep  `v'
   order `v'
   
-  save nhis`y', replace
+  save `n'`y', replace
   
 }
 
@@ -180,7 +186,7 @@ foreach y in `x' {
 tokenize `x'
 
 * load first year listed
-loc f nhis`1'
+loc f `n'`1'
 
 use `f', clear
 cap erase `f'.dta // ... and clean up
@@ -190,7 +196,7 @@ macro shift
 * cycle through other years
 foreach i in `*' {
 
-  loc f nhis`i'
+  loc f `n'`i'
  
   merge 1:1 year h_id p_id f_id using `f', ///
     assert(1 2) nogen nol nonote norep

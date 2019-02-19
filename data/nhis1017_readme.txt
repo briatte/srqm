@@ -11,9 +11,9 @@ File manifest
 
 The nhis1017.zip file contains:
 
-  nhis1017           .dta  -- dataset in Stata 12+ format
-  nhis1017_codebook  .pdf  -- official codebook
-  nhis1017_variables .txt  -- list of all variables
+  nhis1017            .dta  -- dataset in Stata 12+ format
+  nhis1017_codebook_* .pdf  -- official codebooks (2010 and 2017)
+  nhis1017_variables  .txt  -- list of all variables
 
   as well as this README file.
 
