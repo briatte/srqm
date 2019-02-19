@@ -1,62 +1,46 @@
 *! srqm_grab : grab SRQM course material from remote source
-*!             (requires an active Internet connection)
 *!
 *! USAGE
 *!
-*! srqm_grab [URL]
-*! 
-*! Multi-file calls are allowed: srqm_copy data/foo.dta code/bar.pdf ...
+*! srqm_grab [FILE] [FILE] ...
 *!
 *! OPTIONS
 *!
-*! , using  : set remote source; defaults to http://f.briatte.org/stata
-*! , backup : save a backup file (on by default)
+*! , using  : set remote source to grab [FILE] from
+*!            defaults to http://f.briatte.org/stata (HTTP only)
+*!
+*! , backup : keep a timestamped backup of any existing [FILE] (default)
+*!
+*! NOTES
+*!
+*! - multi-file calls are allowed, e.g.
+*!
+*!     srqm_grab foo/bar.pdf bar/foo.zip
+*!
+*! - [FILE] specifies both the location of the file on the remote source and
+*!   the local destination, e.g.
+*!
+*!     srqm_grab code/week3.do
+*!
+*!   ... will try to grab code/week3.do on the remote source, and will then
+*!   save it there on disk
 *!
 cap pr drop srqm_grab
 program srqm_grab
 
   syntax anything [using/] [, nobackup]
 
-  tokenize "`*'"
-
-  if "`using'" == "" {
-    
-    * a logical step here would be to allow both HTTP and HTTPS by inserting the
-    * 's' in the http protocol:
-    *
-    * loc s = cond(c(version) >= 13, "s", "")
-    * 
-    * however, my Web server enforces (what I suppose to be) an AES encryption
-    * protocol that is not supported by Stata (13), so I modified my .htaccess
-    * instead, forcing HTTP only on the /stata folder (2019-02-16)
-    
-    loc using "http`s'://f.briatte.org/stata"
-    
-  }
+  tokenize `anything'
 
   loc pid "[GRAB]"
-  loc url "`using'"
-  
+
   * ----------------------------------------------------------------------------
-  * run from the SRQM folder
+  * test Internet connection
   * ----------------------------------------------------------------------------
 
-  cap qui cd "$SRQM_WD"
-  //noi di as txt "`pid' running from", as inp "$srqm_wd"
-      
-  if _rc {
-  
-    di ///
-      as err "`pid' ERROR:", ///
-      as txt "SRQM folder is not set"
-
-    exit -1 // bogus error code
-  
-  }
-  
   cap qui net
   if _rc == 631 {
-    
+
       di ///
         as err "`pid' ERROR:", ///
         as txt "no active Internet connection"
@@ -64,86 +48,197 @@ program srqm_grab
       exit 631
 
   }
-  
+
+  * ----------------------------------------------------------------------------
+  * set remote source
+  * ----------------------------------------------------------------------------
+
+  if "`using'" == "" {
+
+    * [NOTE, 2019-02-16] it would be nice to allow both HTTP and HTTPS here, by
+    * injecting an 's' in the http protocol when Stata (13+) supports it:
+    *
+    * loc s = cond(c(version) >= 13, "s", "")
+    *
+    * however, my Web server enforces (what I suppose to be) an AES encryption
+    * protocol that is not supported by Stata (13), so I modified my .htaccess
+    * instead, forcing HTTP only on the stata/ folder
+
+    loc using "http`s'://f.briatte.org/stata" // always uses http://
+
+  }
+
+  * ----------------------------------------------------------------------------
+  * run from SRQM folder
+  * ----------------------------------------------------------------------------
+
+  * save working directory, to be restored before exiting
+  loc pwd "`c(pwd)'"
+
+  qui cd "$SRQM_WD"
+
+  * ----------------------------------------------------------------------------
+  * cycle through arguments
+  * ----------------------------------------------------------------------------
+
   while "`*'" != "" {
-  
-    // dot separator
-    local bd = strpos("`1'", ".")
-    // filename
-    local br = substr("`1'", 1, `bd' - 1)
-    // extension
-    local be = substr("`1'", `bd' + 1, .)
-    // backup name
-    local bk = subinstr(strtoname("`br' backup `c(current_date)'"), "__", "_", .)
-    
-    if "`be'" == "do"  local bf "code"
-    if "`be'" == "pdf" | "`be'" == "txt" local bf "course"
-    if "`be'" == "zip" | "`be'" == "dta" local bf "data"
-    // careful with that axe eugene
-    if "`be'" == "ado" local bf "setup"
-    
-    // path to backup
-    local pb "`bf'/`bk'.`be'"
-    // path to file
-    local pf "`bf'/`1'"
-    
-    if "`bf'" == "" {
-      
-        di ///
-          as err "`pid' ERROR:"                 , ///
-          as txt "invalid file extension"       , ///
-          as inp "`be'"                        _n ///
-          as txt "`pid' supported extensions:"  , ///
-          as inp ".ado .do .dta .pdf .zip"
-          
-        exit 198
-        
+
+    di as txt "`pid' source:", as inp "`using'/`1'"
+    di as txt "`pid' target:", as inp "`1'"
+
+    // ------------------------------------------------------ parse filenames --
+
+    * dirname
+    loc d = regexm("`1'", "(.*)/") // greedy
+    if `d' > 0 {
+      loc d = regexs(1)
     }
     else {
-      di as txt "`pid' source:", as inp "`url'/`1'"
-      di as txt "`pid' target:", as inp "`c(pwd)'/`bf'/`1'"
-
-      // save backup version
-      cap qui copy "`pf'" "`pb'", public replace
-      
-      // erase current version
-      cap qui erase "`pf'" 
-      
-      // copy remote version
-      cap qui copy "`url'/`1'" "`pf'", public replace
-    
-        if !_rc {
-          di as txt "`pid' successfully downloaded"
-            
-          //if "`be'" == "pdf" di as inp _n "{stata !open `pf':open `pf'}"
-          //if "`be'" == "do" di as inp _n "{stata doedit `pf':doedit `pf'}"
-        }
-        else {
-          
-          di ///
-            as err "`pid' ERROR:" , ///
-            as txt "failed to copy remote source file (code", _rc ")"
-          
-          // restore backup file
-          cap qui copy "`pb'" "`pf'", public replace
-          
-          if !_rc {
-            
-            cap erase "`pb'"
-            di as txt "(`1' restored from backup `bk'.`be')"
-            
-          }
-          else if "`nobackup" == "" {
-            
-            di as txt "`pid' (no backup could be restored)"
-            
-          }
-          
-        }
+      loc d "" // no directory, download to root (SRQM) folder
     }
+
+    * basename
+    loc f = regexm("`1'", "(.*)\.") // greedy
+    if `f' > 0 {
+      loc f = regexs(1)
+    }
+    else {
+      loc f "`1'" // no file extension
+    }	
+    if "`d'" != "" loc f = regexr("`f'", "^`d'/", "")
+
+    * file extension
+    loc e = regexr("`1'", "`f'", "")
+    if "`d'" != "" loc e = regexr("`e'", "^`d'/", "")
+
+    * quit if no file extension (e.g. '.foo')
+    if "`f'" == "" {
+
+      di ///
+        as err "`pid' ERROR:", ///
+        as txt "malformed filename"
+
+      qui cd "`pwd'"
+      exit -1 // bogus error code
+
+    }
+
+    // ------------------------------------------------- create a backup copy --
+
+    * backup filename
+    loc b = subinstr("`f' backup `c(current_date)'", " ", "_", .)
+    loc b = cond("`d'" == "", "`b'`e'", "`d'/`b'`e'")
+
+    * always create a backup
+    cap qui copy "`1'" "`b'", public replace
+    if !_rc {
+      di as txt "`pid' backup:", as inp "`b'"
+    }
+    else {
+      di as txt "`pid' (no backup created, file does not exist yet)"
+    }
+
+    // --------------------------------------------------- erase and download --
+
+    * erase destination
+    cap qui erase "`1'"
+
+    * replace with remote file
+    cap qui copy "`using'/`1'" "`1'", public replace
+
+    if !_rc {
+
+      di as txt "`pid' successfully downloaded"
+
+      // ------------------------------ recommendations to open/load the file --
+
+      * Stata do-files
+      *
+      if regexm("`e'", "\.a?do$") {
+        di "`pid' {stata doedit `1':doedit `1'}"
+      }
+      *
+      * Stata datasets
+      *
+      else if "`e'" == ".dta" {
+        di "`pid' {stata use `1', clear:use `1', clear}"
+      }
+      *
+      * CSV or TSV datasets (Stata 12 or 13+; might also work with Stata 11-)
+      * https://www.stata.com/help12.cgi?import
+      *
+      else if regexm("`e'", "\.[ct]sv$") {
+
+        loc f = cond(c(version) >= 13, "import delim", "insheet")
+        di "`pid' {stata `f' `1', clear:`f' `1', clear}"
+
+      }
+      *
+      * Excel spreadsheets (Stata 13+)
+      *
+      else if regexm("`e'", "\.xlsx?$") & c(version) >= 13 {
+        di "`pid' {stata import excel `1', clear:import excel `1', clear}"
+      }
+      *
+      * PDF files (Mac/Unix only)
+      *
+      else if "`e'" == ".pdf" & !regexm("`c(os)'", "Win") {
+        di "`pid' {stata !open `1':open `1'}"
+      }
+      else {
+        // not handling TXT, which can be many things
+        // not handling ZIP, but could -unzipfile- in the right directory?
+      }
+
+    }
+    else {
+
+      // ----------------------------- handle download errors: restore backup --
+
+      loc e "failed to copy file from remote source"
+
+      if _rc == 601 {
+        loc e "file does not exist on remote source"
+      }
+
+      di as err "`pid' ERROR:" , as txt "`e' (code", _rc ")"
+
+      * restore backup file
+      cap qui copy "`b'" "`1'", public replace
+
+      if !_rc {
+
+        cap erase "`b'"
+        di as txt "`pid' (target left intact, restored from backup)"
+
+      }
+      else {
+        * handle both errors and no-backup-file situations
+        di as txt "`pid' (no backup to restore)"
+      }
+
+    }
+
+    // --------------------- if [, nobackup] and backup exists, get rid of it --
+
+    cap conf f `b'
+    if !_rc & "`backup'" == "nobackup" {
+
+      di as txt "`pid' (erasing backup)"
+      cap erase "`b'"
+
+    }
+
     macro shift
+
   }
+
+  * ----------------------------------------------------------------------------
+  * restore previous working directory
+  * ----------------------------------------------------------------------------
+
+  qui cd "`pwd'"
 
 end
 
-// bye
+// ------------------------------------------------------------------ kthxbye --
