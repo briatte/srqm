@@ -32,7 +32,7 @@ program srqm
     loc f = "$SRQM_SETUP/`x'"
     if !regexm("`x'", ".do") loc f = "`f'.ado"
 
-    cap confirm f "`f'"
+    cap conf f "`f'"
     
     if _rc {
       

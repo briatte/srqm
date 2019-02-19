@@ -15,7 +15,7 @@ loc default "<default>"
 loc source  "$SRQM_SETUP/profile.do"
 loc target  "`c(sysdir_stata)'profile.do"
 
-cap confirm f "`target'"
+cap conf f "`target'"
 
 if "`off'" != "" { //  must come first
   

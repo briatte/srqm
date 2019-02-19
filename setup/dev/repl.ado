@@ -17,7 +17,7 @@ if "`pwd'" != "$srqm_wd" {
 cap mkdir `namelist', public
 cap qui copy `namelist'.do `namelist'/temp.do, replace
 if _rc ==0 di as txt "Replication do-file: code/`namelist'.do"
-cap confirm f `namelist'/`namelist'.do
+cap conf f `namelist'/`namelist'.do
 if _rc != 0 {
 	di as err "Do-file error", _rc
 	di as err "Please use -repl- on a do-file from the Code folder."
@@ -80,10 +80,10 @@ cap file write fh ///
 	"What: `namelist'" _n ///
 	"When: `c(current_date)'" _n _n "Files:" _n _n
 
-confirm f "`namelist'.do"
+conf f "`namelist'.do"
 if _rc == 0 cap file write fh "- `namelist'.do" _n
 
-confirm f "`namelist'.log"
+conf f "`namelist'.log"
 if _rc == 0 cap file write fh "- `namelist'.log" _n
 
 // --- PLOTS -------------------------------------------------------------------

@@ -72,7 +72,7 @@ program srqm_scan
               * check for existence of dta file
               * ----------------------------------------------------------------
 
-              cap confirm f `d'.dta
+              cap conf f `d'.dta
 
               * ----------------------------------------------------------------
               * if not (1): try restoring from zip
@@ -198,7 +198,7 @@ program srqm_scan
               }
 
               // check whether the zip successfully unpacked the dta file
-              cap confirm f `d'.dta
+              cap conf f `d'.dta
 
               * ----------------------------------------------------------------
               * if not (2): try restoring from sources
@@ -221,7 +221,7 @@ program srqm_scan
               }
 
               // check whether the source files created the dta file
-              cap confirm f `d'.dta
+              cap conf f `d'.dta
 
               * ----------------------------------------------------------------
               * if both fallback options failed, exit
@@ -260,7 +260,7 @@ program srqm_scan
 
         foreach i of numlist 1/12 {
 
-          cap confirm f week`i'.do
+          cap conf f week`i'.do
 
           * --------------------------------------------------------------------
           * if not: try restoring from remote source
@@ -292,7 +292,7 @@ program srqm_scan
           * if failed, exit
           * --------------------------------------------------------------------
 
-          cap confirm f week`i'.do
+          cap conf f week`i'.do
 
           if _rc == 601 {
 
