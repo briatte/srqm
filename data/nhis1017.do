@@ -43,7 +43,7 @@ foreach y in `x' {
     cap confirm f `z'
     if _rc {
       loc a "`u'Datasets`s'`z'"
-      di as inp "nhis`y':", as txt "downloading", "`a'"
+      noi di as inp "nhis`y':", as txt "downloading", "`a'"
       copy `a' `z', replace
     }
     unzipfile `z', replace // ASCII (.dat)
@@ -51,7 +51,7 @@ foreach y in `x' {
     * run preparation do-file
     loc d "`f'.do"
     loc a "`u'Program_Code`s'`d'"
-    di as inp "nhis`y':", as txt "running", "`a'"
+    noi di as inp "nhis`y':", as txt "running", "`a'"
     cap run `a', nostop
 
     * clean up
