@@ -1,18 +1,9 @@
-*! srqm_data  : run data preparation do-files
-*!              returns an error if source files are missing
+*! srqm_data  : download and prepare course datasets
 *!
 *! USAGE
 *!
 *! srqm_data `name`       : run data preparation do-file for dataset `name`
-*!
 *! srqm_data all          : run all data preparation do-files
-*!
-*! OPTIONS
-*!
-*! , log    : create a log of each data preparation do-file executed (default)
-*!            the log will be located in the source file folder
-*!
-*! , nolog  : do not log data preparation
 *!
 cap pr drop srqm_data
 pr srqm_data
@@ -74,18 +65,6 @@ pr srqm_data
     }
     else {
     
-      // ------------------------------------ log data download / preparation --
-      
-      if "`log'" != "" {
-  
-        di as txt "[DATA] logging to", ///
-          as inp "`d'/`1'.log"
-        
-        cap log close `1'
-        cap qui log using "`1'.log", name(`1') replace
-  
-      }
-
       // ---------------------------------- run download / preparation script --
 
       loc s "`1'.do"
@@ -168,8 +147,6 @@ pr srqm_data
     	qui unzipfile `1'.zip, replace
 
     	noi ls `1'*
-      
-      cap qui log close `1'
       
     }
   
