@@ -15,6 +15,10 @@
 
 ----------------------------------------------------------------------------- */
 
+loc n "nhis"
+loc u "ftp://ftp.cdc.gov/pub/Health_Statistics/NCHS/"
+loc s "/NHIS/`y'/"
+
 * selected survey years
 loc x "2017 2010"
 
@@ -28,10 +32,6 @@ foreach y in `x' {
   
   cap confirm f `n'`y'.dta
   if !_rc continue
-
-  loc n "nhis"
-  loc u "ftp://ftp.cdc.gov/pub/Health_Statistics/NCHS/"
-  loc s "/NHIS/`y'/"
 
   // ------------------------------------------------------ download codebook --
 

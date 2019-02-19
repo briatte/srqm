@@ -18,22 +18,24 @@
 
 ----------------------------------------------------------------------------- */
 
+loc n "qog2019"
+
 // -------------------------------------------------------- download codebook --
 // WARNING: large file, 168 MB
 
-loc f "qog2019_codebook.pdf"
+loc f "`n'_codebook.pdf"
 loc u "https://www.qogdata.pol.gu.se/data/qog_std_jan19.pdf"
 
-noi di as inp "qog2019:", as txt "downloading", "`u'"
+noi di as inp "`n':", as txt "downloading", "`u'"
 
 copy `u' `f', public replace
 
 // --------------------------------------------------------- download dataset --
 
-loc f "qog2019.dta"
+loc f "`n'.dta"
 loc u "https://www.qogdata.pol.gu.se/data/qog_std_cs_jan19.dta"
 
-noi di as inp "qog2019:", as txt "downloading", "`u'"
+noi di as inp "`n':", as txt "downloading", "`u'"
 
 use `u', clear
 

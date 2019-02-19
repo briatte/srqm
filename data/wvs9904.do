@@ -19,6 +19,7 @@
 
 ----------------------------------------------------------------------------- */
 
+loc n "wvs9904"
 loc d "data/"
 loc v "_v20180912"
 
@@ -30,7 +31,7 @@ loc f "F00008074-WV4_Codebook`v'"
 noi srqm_grab "`d'`f'.pdf", nobackup
 
 * rename
-copy `f'.pdf "wvs9904_codebook.pdf", public replace
+copy `f'.pdf "`n'_codebook.pdf", public replace
 erase `f'.pdf
 
 // --------------------------------------------------- download questionnaire --
@@ -41,7 +42,7 @@ loc f "F00001316-WVS_2000_Questionnaire_Root.pdf"
 noi srqm_grab "`d'`f'", nobackup
 
 * rename
-copy `f' "wvs9904_questionnaire.pdf", public replace
+copy `f' "`n'_questionnaire.pdf", public replace
 erase `f'
 
 // --------------------------------------------------------- download dataset --
