@@ -7,53 +7,64 @@
    http://www.worldvaluessurvey.org/
    http://www.worldvaluessurvey.org/WVSDocumentationWV4.jsp
 
+   - Downloads the codebook and questionnaire
    - Downloads Wave 4 (1999-2004), v2018-09-12 official release
-   - Downloads the codebook
    - Makes all variables lowercase
 
-   Last modified: 2019-02-16
+   Last modified: 2019-02-19
 
-   NOTE -- this script currently does not work due to the WVS website requiring
-   cookies to get past its main index page. See Anthony J. Damico's lodown R
-   package for a workaround:
-   
-   https://github.com/ajdamico/lodown/blob/master/R/wvs.R#L272
+   NOTE -- downloading from the WVS website requires setting cookies, which is
+   not possible via Stata alone; to make sure that this script runs fine on 
+   standard Windows, it downloads the files from my own access point instead.
 
 ----------------------------------------------------------------------------- */
 
-* common URL / filename parts
-loc w "WV4_"
-loc b "http://www.worldvaluessurvey.org/wvsdc/DC00012/F00008074-`w'"
+loc d "data/"
 loc v "_v20180912"
 
-// -------------------------------------------------------------- get dataset --
+// -------------------------------------------------------- download codebook --
 
-loc f "wv9904"
-loc u "`b'Data_Stata`v'.zip"
+loc f "F00008074-WV4_Codebook`v'"
 
-di as inp "wvs9904:", as txt "downloading", "`u'"
+* grab from own remote source
+noi srqm_grab "`d'`f'.pdf", nobackup
 
-* ZIP file
-copy "`u'" `f'.zip, replace
+* rename
+copy `f'.pdf "wvs9904_codebook.pdf", public replace
+erase `f'.pdf
+
+// --------------------------------------------------- download questionnaire --
+
+loc f "F00001316-WVS_2000_Questionnaire_Root.pdf"
+
+* grab from own remote source
+noi srqm_grab "`d'`f'", nobackup
+
+* rename
+copy `f' "wvs9904_questionnaire.pdf", public replace
+erase `f'
+
+// --------------------------------------------------------- download dataset --
+
+loc f "F00008070-WV4_Data_Stata`v'"
+
+* grab from own remote source
+noi srqm_grab "`d'`f'.zip", nobackup
+
+* .zip
 unzipfile `f'.zip
 rm `f'.zip
 
-* DTA file
-use `w'Data_Stata`v'.dta, clear
-rm `w'Data_Stata`v'.dta
+loc f = subinstr("`f'", "F00008070-", "", 1)
 
-// ------------------------------------------------- make variables lowercase --
+* .dta
+use `f'.dta, clear
+rm `f'.dta
 
+// ----------------------------------------------------------------- finalize --
+
+* make all variable names lowercase
 rename *, lower
-
-// ------------------------------------------------------------- get codebook --
-
-loc f `f'_codebook.pdf
-loc u "`b'Codebook`v'.pdf"
-
-di as inp "wvs9904:", as txt "downloading", "`u'"
-
-copy `u' `f', replace
 
 // ------------------------------------------------------------ label dataset --
 
