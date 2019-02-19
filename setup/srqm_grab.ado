@@ -104,7 +104,7 @@ program srqm_grab
     }
     else {
       loc f "`1'" // no file extension
-    }	
+    }
     if "`d'" != "" loc f = regexr("`f'", "^`d'/", "")
 
     * file extension
