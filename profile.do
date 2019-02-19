@@ -91,7 +91,7 @@ end
 if c(os) != "Unix" &  c(update_query) == "on" | `debug' {
   noi di as txt "`pid' permanently disabling -update_query-"
   cap set update_query off
-  srqm_error
+  noi srqm_error
 }
 
 if c(more) == "on" | `debug' {
