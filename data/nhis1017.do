@@ -11,13 +11,12 @@
    - Renames the variables according to older NHIS years
    - Recodes race/ethnicity to a simplified form
 
-   Last modified: 2019-02-14
+   Last modified: 2019-02-19
 
 ----------------------------------------------------------------------------- */
 
 loc n "nhis"
 loc u "ftp://ftp.cdc.gov/pub/Health_Statistics/NCHS/"
-loc s "/NHIS/`y'/"
 
 * selected survey years
 loc x "2017 2010"
@@ -30,7 +29,9 @@ loc x "2017 2010"
 
 foreach y in `x' {
   
-  cap confirm f `n'`y'.dta
+  loc s "/NHIS/`y'/"
+
+  cap conf f `n'`y'.dta
   if !_rc continue
 
   // ------------------------------------------------------ download codebook --
@@ -46,7 +47,7 @@ foreach y in `x' {
     * download ZIP file
     loc z "`f'.zip"
     
-    cap confirm f `z'
+    cap conf f `z'
     if _rc {
       loc a "`u'Datasets`s'`z'"
       noi di as inp "`n'`y':", as txt "downloading", "`a'"
