@@ -15,7 +15,8 @@ The nhis1017.zip file contains:
   nhis1017_codebook_* .pdf  -- official codebooks (2010 and 2017)
   nhis1017_variables  .txt  -- list of all variables
 
-  as well as this README file.
+  ... as well as the nhis1017.do Stata do-file, which was used to create the
+  nhis1017 dataset, and this README file.
 
 Production context
 ------------------
