@@ -42,8 +42,8 @@ gl SRQM_PACKAGES = "`P_VARS' `P_DATA' `P_PLOTS' `P_SCHEMES' `P_TABLES' `P_MISC'"
 
 // ado-files
 
-loc A_CORE  = "srqm srqm_grab srqm_demo srqm_link srqm_pkgs srqm_scan srqm_wipe"
-loc A_DATA  = "srqm_data"
+loc A_CORE  = "srqm srqm_data srqm_grab srqm_link srqm_pkgs srqm_scan"
+loc A_ELSE  = "srqm_demo srqm_wipe"
 loc A_UTILS = "stab stab_demo sbar sbar_demo utils"
 
 gl SRQM_ADOFILES = "`A_CORE' `A_DATA' `A_UTILS'"
@@ -76,7 +76,7 @@ else {
 
 noi di as txt _n "`pid' Setting up Stata for the course..."
 
-loc debug = 0
+loc debug 0
 
 if c(version) < 11 | c(version) >= 14 | `debug' {
   noi di as err "`pid' WARNING:", ///
@@ -163,27 +163,28 @@ if _rc {
   exit -999 // bogus error code
 }
 
-loc e = 0
+loc e 0
 
 // check global profile.do
 cap noi srqm_link
-if _rc loc e = 1 // non-fatal
+if _rc loc e 1 // non-fatal
 
 // check package installs
 adopath + "`c(pwd)'/setup/pkgs" // find packages installed on restricted systems
 cap noi srqm_pkgs, quiet
-if _rc loc e = 1 // non-fatal
+if _rc loc e 1 // non-fatal
 
 // check code and data
 cap noi srqm_scan
 
 if _rc {
-  if _rc noi di ///
-    as err "`pid' ERROR:", ///
-    as txt "incomplete", ///
-    as inp "$SRQM_CODE", ///
-    as txt "folder"
+
+  noi di ///
+    as err "`pid' ERROR:" , ///
+    as txt "essential course material is missing and could not be restored"
+
   exit _rc // fatal
+
 }
 else if `e' {
   noi di as txt _n "`pid' WARNING: setup encountered nonfatal error(s)"
@@ -193,11 +194,11 @@ else if `e' {
 
 loc h = real(substr("`c(current_time)'", 1, 2)) // hour
 
-if `h' <   6 loc t = "early"     // before 6am
-if `h' >=  6 loc t = "morning"   // 6am  +
-if `h' >= 12 loc t = "afternoon" // noon +
-if `h' >= 18 loc t = "evening"   // 6pm  +
-if `h' >= 22 loc t = "late"      // 10pm
+if `h' <   6 loc t "early"     // before 6am
+if `h' >=  6 loc t "morning"   // 6am  +
+if `h' >= 12 loc t "afternoon" // noon +
+if `h' >= 18 loc t "evening"   // 6pm  +
+if `h' >= 22 loc t "late"      // 10pm
 
 if inlist("`t'", "early", "late") {
 
@@ -206,9 +207,7 @@ if inlist("`t'", "early", "late") {
 
 }
 else {
-
   noi di as inp _n _col(8) "Good `t',", as txt "and welcome to the course." _n
-
 }
 
-// ttyl
+// ------------------------------------------------------------------ alright --
