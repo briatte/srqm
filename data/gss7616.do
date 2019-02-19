@@ -30,7 +30,7 @@ noi di as inp "`n':", as txt "downloading", "`u'"
 copy `u' `f'.zip, public replace
 
 * .zip
-unzipfile `f'.zip
+unzipfile `f'.zip, replace
 rm `f'.zip
 
 * .pdf
@@ -48,7 +48,7 @@ noi di as inp "`n':", as txt "downloading", "`u'"
 copy `u' `f'.zip, public replace
 
 * .zip
-unzipfile `f'.zip
+unzipfile `f'.zip, replace
 rm `f'.zip
 
 * extra file

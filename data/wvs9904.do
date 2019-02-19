@@ -53,7 +53,7 @@ loc f "F00008070-WV4_Data_Stata`v'"
 noi srqm_grab "`d'`f'.zip", nobackup
 
 * .zip
-unzipfile `f'.zip
+unzipfile `f'.zip, replace
 rm `f'.zip
 
 loc f = subinstr("`f'", "F00008070-", "", 1)
