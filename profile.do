@@ -27,14 +27,14 @@ gl SRQM_FOLDERS  = "$SRQM_CODE $SRQM_DATA $SRQM_SETUP"
 
 // datasets
 
-gl SRQM_DATASETS = "ess0810 ess1214 gss0014 nhis9711 qog2016 wvs2000"
+gl SRQM_DATASETS = "ess0810 ess1214 gss0014 nhis1017 qog2016 wvs9904"
 
 // packages
 
 loc P_VARS    = "_gstd01 fre lookfor_all renvars" // revrs
-loc P_DATA    = "kountry spmap wbopendata" // qog qogbook
+loc P_DATA    = "kountry spmap wbopendata"
 loc P_PLOTS   = "plotbeta spineplot" // catplot ciplot distplot
-loc P_SCHEMES = "scheme-burd" // gr0002_3 blindschemes scheme_tufte
+loc P_SCHEMES = "scheme-burd" // gr0002_3 (lean) blindschemes scheme_tufte
 loc P_TABLES  = "estout leanout mkcorr tab_chi tabout" // outreg2
 loc P_MISC    = "" // clarify log2do2
 
@@ -42,8 +42,8 @@ gl SRQM_PACKAGES = "`P_VARS' `P_DATA' `P_PLOTS' `P_SCHEMES' `P_TABLES' `P_MISC'"
 
 // ado-files
 
-loc A_CORE  = "srqm srqm_copy srqm_demo srqm_link srqm_pkgs srqm_scan srqm_wipe"
-loc A_DATA  = "srqm_data srqm_datamake srqm_datatrim"
+loc A_CORE  = "srqm srqm_grab srqm_demo srqm_link srqm_pkgs srqm_scan srqm_wipe"
+loc A_DATA  = "srqm_data"
 loc A_UTILS = "stab stab_demo sbar sbar_demo utils"
 
 gl SRQM_ADOFILES = "`A_CORE' `A_DATA' `A_UTILS'"
