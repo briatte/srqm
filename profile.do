@@ -27,7 +27,7 @@ gl SRQM_FOLDERS  = "$SRQM_CODE $SRQM_DATA $SRQM_SETUP"
 
 // datasets
 
-gl SRQM_DATASETS = "ess0810 ess1214 gss0014 nhis1017 qog2016 wvs9904"
+gl SRQM_DATASETS = "ess0810 ess1214 gss0014 nhis1017 qog2019 wvs9904"
 
 // packages
 
