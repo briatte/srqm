@@ -49,6 +49,6 @@ Diez-Medrano, M. Lagos, P. Norris, E. Ponarin & B. Puranen et al. (eds.). 2014.
 World Values Survey: Round Four - Country-Pooled Datafile Version. Madrid: JD 
 Systems Institute.
 
-The links at the top of this README file should also appear in the citation.
+> URL: http://www.worldvaluessurvey.org/WVSDocumentationWV4.jsp
 
 * * *

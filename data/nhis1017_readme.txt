@@ -51,6 +51,6 @@ Health Interview Survey, 2010 (machine readable data file and documentation).
 National Center for Health Statistics, Centers for Disease Control and
 Prevention, Hyattsville, Maryland. 2011.
 
-The links at the top of this README file should also appear in the citations.
+> URL: https://www.cdc.gov/nchs/nhis/data-questionnaires-documentation.htm
 
 * * *
