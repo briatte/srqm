@@ -1,10 +1,11 @@
-*! check integrity of the course utilities
-*! returns error -1 if anything is missing
+*! srqm : check integrity of the course utilities
+*!        returns error -1 if anything is missing
 *!
 *! ARGUMENTS
 *!
-*! , i , info    : print system information
-*! , v , verbose : print ado-file descriptions
+*! , i , info     : print system information
+*!
+*! , v , verbose  : print ado-file descriptions
 *!
 cap pr drop srqm
 program srqm
@@ -23,6 +24,7 @@ program srqm
   di as txt _n "`pid' Working directory:", as res c(pwd)
   di as txt "`pid' Course folders: ", as res "$SRQM_FOLDERS"
   di as txt "`pid' Course datasets:", as res "$SRQM_DATASETS"
+
   qui tokenize "$SRQM_PACKAGES"
   di as txt "`pid' Installed packages:", ///
     as res "`1',", "`2',", "...", "(`:word count `*'' packages)"
@@ -30,7 +32,7 @@ program srqm
   foreach x in $SRQM_ADOFILES $SRQM_DOFILES {
     
     loc f = "$SRQM_SETUP/`x'"
-    if !regexm("`x'", ".do") loc f = "`f'.ado"
+    if !regexm("`x'", "\.do$") loc f = "`f'.ado"
 
     cap conf f "`f'"
     
@@ -54,3 +56,5 @@ program srqm
   }
   
 end
+
+// ------------------------------------------------ sic transit comedia mundi --

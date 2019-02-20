@@ -1,9 +1,10 @@
 *! srqm_link  : add working directory to setup/profile.do and copy it to 
-*!              application folder
+*!              application folder, using -filefilter-
 *!
 *! ARGUMENTS
 *!
 *! , f , force  : force copy
+*!
 *! , o , off    : remove profile.do from application folder
 *!
 cap pr drop srqm_link

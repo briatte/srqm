@@ -42,7 +42,7 @@ foreach y in `x' {
   // -------------------------------- download sample adults and persons data --
 
   loc j = "samadult personsx"
-  foreach f of local j {
+  foreach f of loc j {
 
     * download ZIP file
     loc z "`f'.zip"

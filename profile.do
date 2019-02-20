@@ -4,8 +4,12 @@
 
 /* --- SRQM --------------------------------------------------------------------
 
-  This file sets up a computer for use with the SRQM course. It creates another
-  profile.do file in the Stata application folder. See README file for details.
+  This do-file sets up Stata for taking the SRQM course:
+  https://github.com/briatte/srqm
+
+  It creates a profile.do file in the Stata application folder that will try to
+  set the working directory to this folder. This do-file then tries to set up a
+  few Stata defaults and checks the integrity of the course material.
 
 ----------------------------------------------------------------------------- */
 
@@ -153,6 +157,7 @@ foreach x of glo SRQM_FOLDERS {
 }
 
 // --- COURSE UTLITIES ---------------------------------------------------------
+// calls, in that order: srqm, srqm_link, srqm_pkgs, srqm_scan
 
 adopath + "`c(pwd)'/$SRQM_SETUP"
 cap run "$SRQM_SETUP/utils.ado"  // required by srqm_pkgs (pkgs)

@@ -4,22 +4,21 @@
 *!
 *! srqm_grab [FILE] [FILE] ...
 *!
-*! ARGUMENTS
-*!
-*! , using  :  set remote source to grab [FILE] from
-*!             defaults to http://f.briatte.org/stata (HTTP only)
-*!
-*! , backup :  keep a timestamped backup of any existing [FILE] (default)
-*!
-*! NOTES
-*!
 *! [FILE] specifies both the location of the file on the remote source and the
 *! local destination, e.g.
 *!
-*!     srqm_grab code/week3.do
+*! srqm_grab code/week3.do
 *!
 *! ... will try to grab code/week3.do on the remote source, and will then save
 *! it to code/week3.do on disk
+*!
+*! ARGUMENTS
+*!
+*! , using   : set remote source to grab [FILE] from
+*!             defaults to http://f.briatte.org/stata (HTTP only)
+*!
+*! , backup  : keep a timestamped backup of any existing [FILE]
+*!             on by default
 *!
 cap pr drop srqm_grab
 pr srqm_grab

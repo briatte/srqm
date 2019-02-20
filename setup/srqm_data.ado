@@ -3,6 +3,7 @@
 *! USAGE
 *!
 *! srqm_data [NAME]  : run data preparation do-file for dataset [NAME]
+*!
 *! srqm_data all     : run all data preparation do-files
 *!
 cap pr drop srqm_data

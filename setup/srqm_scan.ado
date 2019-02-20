@@ -3,7 +3,7 @@
 *!
 *! ARGUMENTS
 *!
-*! , f , force  : force-restore all course datasets from the ZIP files
+*! , f , force  : force-restore all course datasets from their ZIP files
 *!
 cap pr drop srqm_scan
 program srqm_scan
@@ -82,16 +82,16 @@ program srqm_scan
 
           di _n ///
             as txt "`pid' course dataset" , ///
-            as inp "`d'.dta"                , ///
-            as txt "not found in"           , ///
-            as inp "`1'"                    , ///
+            as inp "`d'.dta"              , ///
+            as txt "not found in"         , ///
+            as inp "`1'"                  , ///
             as txt "folder"
 
           di ///
             as txt "`pid' trying to restore" , ///
-            as inp "`d'.dta"                   , ///
-            as txt "from"                      , ///
-            as inp "`d'.zip"                   , ///
+            as inp "`d'.dta"                 , ///
+            as txt "from"                    , ///
+            as inp "`d'.zip"                 , ///
             as txt "archive"
 
           * check for existence of ZIP file
@@ -100,10 +100,10 @@ program srqm_scan
           if _rc == 601 {
 
             di ///
-              as txt "`pid' course dataset archive"   , ///
-              as inp "`d'.zip"                        , ///
-              as txt "not found in"                   , ///
-              as inp "`1'"                            , ///
+              as txt "`pid' course dataset archive" , ///
+              as inp "`d'.zip"                      , ///
+              as txt "not found in"                 , ///
+              as inp "`1'"                          , ///
               as txt "folder"
 
           }
@@ -198,15 +198,15 @@ program srqm_scan
         // check whether the zip successfully unpacked the dta file
         cap conf f `d'.dta
 
-        * ----------------------------------------------------------------
-        * if not (2): try restoring from sources
-        * ----------------------------------------------------------------
+        * ----------------------------------------------------------------------
+        * if not (2): try restoring from sources by running datat prep. do-file
+        * ----------------------------------------------------------------------
 
         if _rc {
 
           di ///
             as txt "`pid' trying to restore" , ///
-            as inp "`d'.dta"                   , ///
+            as inp "`d'.dta"                 , ///
             as txt "from source files"
 
             * run data preparation do-file
@@ -224,9 +224,10 @@ program srqm_scan
         if _rc {
 
           di ///
-            as err "`pid' ERROR:"      , ///
-            as txt "failed to restore" , ///
-            as inp "`d'.dta (code", _rc ")"
+            as err "`pid' ERROR:"           , ///
+            as txt "failed to restore"      , ///
+            as inp "`d'.dta"                , ///
+            as txt "(code", _rc ")"
 
           // return to working directory (does not modify _rc)
           qui cd ..
@@ -264,20 +265,20 @@ program srqm_scan
 
           di _n ///
             as txt "`pid' course do-file" , ///
-            as inp "week`i'.do"             , ///
-            as txt "not found in"           , ///
-            as inp "`1'"                    , ///
+            as inp "week`i'.do"           , ///
+            as txt "not found in"         , ///
+            as inp "`1'"                  , ///
             as txt "folder"
 
           di ///
-            as txt "`pid' trying to restore"  , ///
-            as inp "week`i'.do"                 , ///
+            as txt "`pid' trying to restore" , ///
+            as inp "week`i'.do"              , ///
             as txt "from remote repository"
 
           cap noi srqm_grab code/week`i'.do
 
           // silently cancel the return to working directory
-          // caused by running srqm_copy
+          // caused by running srqm_grab
           cap qui cd code
 
         }

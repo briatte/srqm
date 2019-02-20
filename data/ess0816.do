@@ -59,7 +59,7 @@ erase `f'
 
 loc d "data/"
 loc j "ESS4e04_5 ESS8e02_1"
-foreach f of local j {
+foreach f of loc j {
 
   loc f "`f'.stata.zip"
 
