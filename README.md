@@ -34,7 +34,7 @@ For additional information on the files in each folder, see the wiki pages:
 
 # VERSION
 
-This is version [0.6.2][wiki-hist] (Fall 2018) of the course.
+This is version [0.7.x][wiki-hist] (Winter 2019) of the course.
 
 [wiki-hist]: https://github.com/briatte/srqm/wiki/course-history
 
