@@ -6,7 +6,7 @@
    Execute this do-file if you need me to help you debug your system:
    
    1. Open Stata
-   2. Select the 'File > Set working directory…' menu item
+   2. Select the 'File > Set working directory...' menu item
    3. Select the SRQM folder - which should be on your Desktop
    4. Type the following command to run the script:
 
