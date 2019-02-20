@@ -1,5 +1,5 @@
 
-*! SRQM version 2019-02
+*! SRQM version 2019-XX
 *! URL: https://f.briatte.org/teaching/quanti/
 
 /* --- SRQM --------------------------------------------------------------------
