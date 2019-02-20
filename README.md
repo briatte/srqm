@@ -36,7 +36,7 @@ For additional information on the files in each folder, see the wiki pages:
 
 Thanks first and foremost to [Ivaylo Petev][ip], who taught on the first versions of the course from 2010 to 2013, and who helped design much of the current course material.
 
-Thanks also to all instructors who have run their own forks of the course since then, including Mathilde Bauwin, [Cyril Benoît][cb], [Joël Gombin][jg], [Andrey Indukaev][ai], [Filip Kostelka][fk], [Antonin de Laever][adl], [Antoine Marsaudon][am], [Haley McAvay][hma], [Pavlos Vasilopoulos][pv], and many others.
+Thanks also to all instructors who have run their own forks of the course over the years, including Mathilde Bauwin, [Cyril Benoît][cb], [Joël Gombin][jg], [Andrey Indukaev][ai], [Filip Kostelka][fk], [Antonin de Laever][adl], [Antoine Marsaudon][am], [Haley McAvay][hma], [Pavlos Vasilopoulos][pv], and many others.
 
 [cb]: https://cyrilbenoit.com/
 [jg]: https://datactivist.coop/
@@ -57,9 +57,10 @@ Additional thanks go to [Emiliano Grossman][eg], [Antoine Jardin][aj], [Simon Pe
 [glm]: https://www.sciencespo.fr/ecole-urbaine/en/glm
 [psia]: https://www.sciencespo.fr/psia/
 
-Last but not least, thanks to all current and past SRQM students, especially Alba Guesch, Leila Ferrali, [Laura Führer][lf] and Gabriel Odin, from one of the [PSIA][psia] Fall 2010 classes, who generously suggested many improvements to early versions of the course.
+Last but not least, thanks to all current and past SRQM students, especially Alba Guesch, [Leila Ferrali][lf], [Laura Maria Führer][lmf] and Gabriel Odin, who took the course in the fall of 2010, and who generously suggested many improvements to it.
 
-[lf]: https://www.sv.uio.no/iss/english/people/aca/lauramf/
+[lf]: https://www.linkedin.com/in/leilaferrali/
+[lmf]: https://www.sv.uio.no/iss/english/people/aca/lauramf/
 
 # VERSION
 
