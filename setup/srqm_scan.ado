@@ -199,7 +199,7 @@ program srqm_scan
         cap conf f `d'.dta
 
         * ----------------------------------------------------------------------
-        * if not (2): try restoring from sources by running datat prep. do-file
+        * if not (2): try restoring from sources by running data prep. do-file
         * ----------------------------------------------------------------------
 
         if _rc {
