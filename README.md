@@ -1,30 +1,37 @@
-This repository contains the [Statistical Reasoning and Quantitative Methods][srqm] (SRQM) course taught at Sciences Po by [François Briatte][fb] (since 2010), [Ivaylo Petev][ip] (2010-2013) and [many others](#thanks).
+This repository contains the [Statistical Reasoning and Quantitative Methods][srqm] (SRQM) course, taught at [Sciences Po][scpo] in Paris by [François Briatte][frbr] (since 2010), [Ivaylo Petev][ivpe] (2010-2013) and [many others](#thanks).
 
 [srqm]: https://f.briatte.org/teaching/quanti/
-[fb]: https://f.briatte.org/
-[ip]: http://ipetev.org/
+[scpo]: https://www.sciencespo.fr/
+[frbr]: https://f.briatte.org/
+[ivpe]: http://ipetev.org/
 
-The course requires a working copy of [Stata][stata]. Instructions to set up your computer for the course are provided in the introduction of the course handbook. Additional material is distributed in class through Google Docs.
-
-If you are reading this online on GitHub, please feel free to [report issues][issues] or ask for enhancements. Feedback on [running the course with Stata 13+](https://github.com/briatte/srqm/issues/12) is particularly welcome, as is feedback on [running the course with older versions of Stata](https://github.com/briatte/srqm/issues/18).
-
-__Students__ – please check with your instructor _as soon as possible_ if you have any questions or are having difficulties with the course setup, which will be explained extensively in class. Welcome to the course, and see you soon!
+The course requires a working copy of [Stata][stata].
 
 [stata]: https://www.stata.com/
+
+__GitHub users__ - please feel free to [report issues][issues] or ask for enhancements. Feedback on [running the course with Stata 13+](https://github.com/briatte/srqm/issues/12) is particularly welcome, as is feedback on [running the course with older versions of Stata](https://github.com/briatte/srqm/issues/18).
+
 [issues]: https://github.com/briatte/srqm/issues
+
+__Sciences Po users__ - this course is currently on offer in the [GLM][scpo-glm] (Urban School) and [PSIA][scpo-psia] (International Affairs) Masters, under codes [KGLM 2015][scpo-glm-2018] and [KOUT 2030][scpo-psia-2018] respectively.
+
+[scpo-glm]: https://www.sciencespo.fr/ecole-urbaine/en/glm
+[scpo-psia]: https://www.sciencespo.fr/psia/
+[scpo-glm-2018]: http://formation.sciences-po.fr/enseignement/2018/KGLM/2015
+[scpo-psia-2018]: http://formation.sciences-po.fr/enseignement/2018/KOUT/2030
+
+- _Instructors_ – please email me at <francois.briatte@sciencespo.fr> in order to receive an additional 'briefing pack' (detailed instructions and recommendations on how to run the course).
+
+- _Students_ – your course instructor will provide you with all necessary course material, and will tell you in your first class how it should be installed on your computer. Welcome to the course!
 
 # FILES
 
 - The `course` folder contains draft teaching material.
-  * The [course slides][srqm-slides] contain startup material for the 12 course sessions.
+  * The [course slides][srqm-slides] contain material for 12 course sessions.
   * The [Stata Guide][stata-guide] contains detailed help and instructions.
 - The `code` folder contains the [replication code][wiki-code] of all course sessions.
 - The `data` folder contains the [teaching datasets][wiki-data] in zipped format.
 - The `setup` folder contains the [course utilities][wiki-util].
-
-For additional information on the files in each folder, see the wiki pages:
-
-> <https://github.com/briatte/srqm/wiki>
 
 [stata-guide]: https://github.com/briatte/srqm/blob/master/course/stata-guide-2012.pdf
 [srqm-slides]: https://github.com/briatte/srqm/tree/master/course/slides
@@ -32,35 +39,37 @@ For additional information on the files in each folder, see the wiki pages:
 [wiki-data]: https://github.com/briatte/srqm/wiki/data
 [wiki-util]: https://github.com/briatte/srqm/wiki/course-utilities
 
+See the course wiki for additional information and links:
+
+> <https://github.com/briatte/srqm/wiki>
+
 # THANKS
 
-Thanks first and foremost to [Ivaylo Petev][ip], who taught on the first versions of the course from 2010 to 2013, and who helped design much of the current course material.
+Thanks first and foremost to [Ivaylo Petev][ivpe], who taught on the first versions of the course from 2010 to 2013, and who helped design much of the current course material.
 
-Thanks also to all instructors who have run their own forks of the course over the years, including Mathilde Bauwin, [Cyril Benoît][cb], [Joël Gombin][jg], [Andrey Indukaev][ai], [Filip Kostelka][fk], [Antonin de Laever][adl], [Antoine Marsaudon][am], [Haley McAvay][hma], [Pavlos Vasilopoulos][pv], and many others.
+Thanks also to all instructors who have run their own forks of the course over the years, including Mathilde Bauwin, [Cyril Benoît][cybe], [Joël Gombin][jogo], [Andrey Indukaev][anid], [Filip Kostelka][fiko], [Antonin de Laever][andl], [Antoine Marsaudon][anma], [Haley McAvay][hama], [Pavlos Vasilopoulos][pava], and many others.
 
-[cb]: https://cyrilbenoit.com/
-[jg]: https://datactivist.coop/
-[ai]: https://tuhat.helsinki.fi/portal/en/persons/andrey-indukaev(c77ccdd8-bb80-4aa5-bf3d-bbb632e9c1e4).html
-[fk]: https://filipkostelka.com/
-[adl]: https://fr.linkedin.com/in/antonin-de-laever-a2039958
-[am]: https://www.parisschoolofeconomics.eu/en/marsaudon-antoine/
-[hma]: http://haleymcavay.weebly.com/
-[pv]: https://pvasilopoulos.weebly.com/
+[cybe]: https://cyrilbenoit.com/
+[jogo]: https://datactivist.coop/
+[anid]: https://tuhat.helsinki.fi/portal/en/persons/andrey-indukaev(c77ccdd8-bb80-4aa5-bf3d-bbb632e9c1e4).html
+[fiko]: https://filipkostelka.com/
+[andl]: https://fr.linkedin.com/in/antonin-de-laever-a2039958
+[anma]: https://www.parisschoolofeconomics.eu/en/marsaudon-antoine/
+[hama]: http://haleymcavay.weebly.com/
+[pava]: https://pvasilopoulos.weebly.com/
 
-Additional thanks go to [Emiliano Grossman][eg], [Antoine Jardin][aj], [Simon Persico][sp], [Daniel Stockemer][ds], [Tommaso Vitale][tv] and Hyungsoo Woo, and to the [GLM][glm] and [PSIA][psia] Sciences Po admin teams, with special thanks to Carole Bacheter, Andreas Roessner, Régine Serra and Mimi Maung-Trentin.
+Additional thanks go to [Emiliano Grossman][emgr], [Antoine Jardin][anja], [Simon Persico][sipe], [Daniel Stockemer][dast], [Tommaso Vitale][tovi] and Hyungsoo Woo, and to the Sciences Po admin teams, with special thanks to Carole Bacheter, Andreas Roessner, Régine Serra and Mimi Maung-Trentin.
 
-[eg]: http://www.emilianogrossman.eu/
-[aj]: http://antoinejardin.com/
-[sp]: https://www.pacte-grenoble.fr/membres/simon-persico
-[ds]: https://uniweb.uottawa.ca/members/860
-[tv]: https://www.sciencespo.fr/centre-etudes-europeennes/fr/chercheur/tommaso-vitale
-[glm]: https://www.sciencespo.fr/ecole-urbaine/en/glm
-[psia]: https://www.sciencespo.fr/psia/
+[emgr]: http://www.emilianogrossman.eu/
+[anja]: http://antoinejardin.com/
+[sipe]: https://www.pacte-grenoble.fr/membres/simon-persico
+[dast]: https://uniweb.uottawa.ca/members/860
+[tovi]: https://www.sciencespo.fr/centre-etudes-europeennes/fr/chercheur/tommaso-vitale
 
-Last but not least, thanks to all current and past SRQM students, especially Alba Guesch, [Leila Ferrali][lf], [Laura Maria Führer][lmf] and Gabriel Odin, who took the course in the fall of 2010, and who generously suggested many improvements to it.
+Last but not least, thanks to all current and past SRQM students, especially Alba Guesch, [Leila Ferrali][lefe], [Laura Maria Führer][lamf] and Gabriel Odin, who took the course in the fall of 2010, and who generously suggested many improvements to it.
 
-[lf]: https://www.linkedin.com/in/leilaferrali/
-[lmf]: https://www.sv.uio.no/iss/english/people/aca/lauramf/
+[lefe]: https://www.linkedin.com/in/leilaferrali/
+[lamf]: https://www.sv.uio.no/iss/english/people/aca/lauramf/
 
 # VERSION
 
