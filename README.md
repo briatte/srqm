@@ -45,10 +45,13 @@ See the course wiki for additional information and links:
 
 # THANKS
 
-Thanks first and foremost to [Ivaylo Petev][ivpe], who taught on the first versions of the course from 2010 to 2013, and who helped design much of the current course material.
+Thanks first and foremost to [Ivaylo Petev][ivpe], who taught on the first versions of the course from 2010 to 2013, and who helped design much of the current course material. Thanks to [Vincent Tiberj][viti], who put us in touch, and who did lots for statistics education at Sciences Po.
 
-Thanks also to all instructors who have run their own forks of the course over the years, including Mathilde Bauwin, [Cyril Benoît][cybe], [Joël Gombin][jogo], [Andrey Indukaev][anid], [Filip Kostelka][fiko], [Antonin de Laever][andl], [Antoine Marsaudon][anma], [Haley McAvay][hama], [Pavlos Vasilopoulos][pava], and many others.
+[viti]: https://durkheim.u-bordeaux.fr/Notre-equipe/Chercheur-e-s-et-enseignant-e-s-chercheur-e-s/CV/Vincent-Tiberj
 
+Thanks also to all instructors who have run their own forks of the course over the years, including Mathilde Bauwin, [Cyril Benoît][cybe], [Joël Gombin][jogo], [Andrey Indukaev][anid], [Antoine Jardin][anja], [Filip Kostelka][fiko], [Antonin de Laever][andl], [Antoine Marsaudon][anma], [Haley McAvay][hama], [Sarah Schneider-Strawczynski][sasc], [Pavlos Vasilopoulos][pava], and many others.
+
+[anja]: http://antoinejardin.com/
 [cybe]: https://cyrilbenoit.com/
 [jogo]: https://datactivist.coop/
 [anid]: https://tuhat.helsinki.fi/portal/en/persons/andrey-indukaev(c77ccdd8-bb80-4aa5-bf3d-bbb632e9c1e4).html
@@ -57,11 +60,11 @@ Thanks also to all instructors who have run their own forks of the course over t
 [anma]: https://www.parisschoolofeconomics.eu/en/marsaudon-antoine/
 [hama]: http://haleymcavay.weebly.com/
 [pava]: https://pvasilopoulos.weebly.com/
+[sasc]: https://www.parisschoolofeconomics.eu/en/schneider-sarah/
 
-Additional thanks go to [Emiliano Grossman][emgr], [Antoine Jardin][anja], [Simon Persico][sipe], [Daniel Stockemer][dast], [Tommaso Vitale][tovi] and Hyungsoo Woo, and to the Sciences Po admin teams, with special thanks to Carole Bacheter, Andreas Roessner, Régine Serra and Mimi Maung-Trentin.
+Additional thanks go to [Emiliano Grossman][emgr], [Simon Persico][sipe], [Daniel Stockemer][dast], [Tommaso Vitale][tovi] and Hyungsoo Woo, and to the Sciences Po admin teams, with special thanks to Carole Bacheter, Andreas Roessner, Régine Serra and Mimi Maung-Trentin.
 
 [emgr]: http://www.emilianogrossman.eu/
-[anja]: http://antoinejardin.com/
 [sipe]: https://www.pacte-grenoble.fr/membres/simon-persico
 [dast]: https://uniweb.uottawa.ca/members/860
 [tovi]: https://www.sciencespo.fr/centre-etudes-europeennes/fr/chercheur/tommaso-vitale
