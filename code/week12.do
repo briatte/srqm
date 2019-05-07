@@ -223,8 +223,10 @@ eststo NBR: nbreg sxp_count i.female inc educ size i.wrkstat i.marital age
 esttab LIN NBR, b(1) wide compress mti("Lin. reg." "Neg. bin.")
 
 * Export in wide format.
-esttab LIN NBR using week12_regressions.txt, replace ///
-	b(1) wide compress mti("Lin. reg." "Neg. bin.")
+esttab LIN NBR using week12_regressions.rtf, ///
+	eform b(1) wide compress ///
+	mti("Lin. reg." "Neg. bin.") ///
+	replace
 
 
 * ========

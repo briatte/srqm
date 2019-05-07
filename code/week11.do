@@ -380,7 +380,7 @@ leanout: reg hsat ib45.age6 female i.health lowinc ib2.pol3 if cntry == "GB"
    We later turn to regression diagnostics to explore the error term. */
 
 
-* Using the -estout- command
+* Using the -estout- package
 * --------------------------
 
 * Store model estimates.
@@ -394,8 +394,10 @@ eststo dir
 esttab, wide nogaps beta(2) se(2) sca(rmse) mti("FR" "GB")
 
 * Export unstandardized coefficients.
-esttab using week11_regressions.txt, replace ///
-    nolines wide nogaps b(1) se(1) sca(rmse) mti("FR" "GB")
+esttab using week11_regressions.rtf, ///
+    nolines wide nogaps b(1) se(1) sca(rmse) ///
+	mti("FR" "GB") ///
+	replace
 
 
 * Models with covariates

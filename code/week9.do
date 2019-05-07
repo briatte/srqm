@@ -127,7 +127,7 @@ mkcorr births schooling log_gdpc, ///
 * Export method using -estout-.
 eststo clear
 qui estpost correlate births schooling log_gdpc, matrix listwise
-esttab using "week9_estpost.txt", unstack not compress label replace
+esttab using "week9_estpost.rtf", unstack not compress label replace
 
 
 * =====================
@@ -461,7 +461,7 @@ esttab M1 M2 M3, lab b(1) se(1) sca(rmse) ///
     mti("Baseline" "Control" "Interaction")
 
 * Export all models for comparison and reporting.
-esttab M1 M2 M3 using week9_regressions.txt, replace /// 
+esttab M1 M2 M3 using week9_regressions.rtf, replace /// 
 	lab b(1) se(1) sca(rmse) ///
     mti("Baseline" "Controls" "Interactions")
 

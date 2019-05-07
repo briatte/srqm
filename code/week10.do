@@ -213,7 +213,7 @@ rvfplot, yli(0) ///
 eststo clear
 eststo lin_1: reg imdfetn $bl [pw = dpw]
 eststo lin_2: reg imdfetn $bl [pw = dpw], vce(cluster cid)
-esttab lin_? using week10_regressions.txt, mti("OLS" "Adj. OLS") replace
+esttab lin_? using week10_regressions.rtf, mti("OLS" "Adj. OLS") replace
 
 * The diagnostics clearly identify the issue here: the limited number of levels
 * in the DV is causing residuals to follow a low-dimensional pattern that does
@@ -277,11 +277,19 @@ logit nomigrants $bl [pw = dpw], vce(cluster cid)
 * Odds ratios.
 logit nomigrants $bl [pw = dpw], vce(cluster cid) or
 
-* Export.
+* Export model results
+* --------------------
+
+* Store the models.
 eststo clear
 eststo log_1: logit nomigrants $bl [pw = dpw]
 eststo log_2: logit nomigrants $bl [pw = dpw], vce(cluster cid)
-esttab log_? using week10_logits.txt, mti("Logit" "Adj. logit") replace
+
+* Export stored models to RTF, using exponentiated coefficients.
+esttab log_? using week10_logits.rtf, ///
+	eform ///
+	mti("Logit" "Adj. logit") ///
+	replace
 
 
 * Marginal effects
@@ -332,14 +340,19 @@ ologit imdfetn $bl [pw = dpw], vce(cluster cid)
 * Export model results
 * --------------------
 
+* Store the models.
 eststo clear
 eststo lin_1: qui reg imdfetn $bl [pw = dpw], b
 eststo lin_2: qui reg imdfetn $bl [pw = dpw], vce(cluster cid)
 eststo log_1: qui logit nomigrants $bl [pw = dpw]
 eststo log_2: qui logit nomigrants $bl [pw = dpw], vce(cluster cid)
 eststo log_3: qui ologit imdfetn $bl [pw = dpw], vce(cluster cid)
-esttab lin_* log_* using week10_models.txt, constant label beta(2) se(2) r2(2) ///
-	mti("OLS" "Adj. OLS" "Logit" "Adj. logit" "Ord. logit") replace
+
+* Export stored models to RTF, using exponentiated coefficients.
+esttab lin_* log_* using week10_models.rtf, ///
+	eform constant label beta(2) se(2) r2(2) ///
+	mti("OLS" "Adj. OLS" "Logit" "Adj. logit" "Ord. logit") ///
+	replace
 
 
 * =======
