@@ -14,7 +14,7 @@ cap log using code/week4.log, replace
 
  - TOPIC:  Social Determinants of Adult Obesity in the United States
 
- - DATA:   U.S. National Health Interview Survey (2009)
+ - DATA:   U.S. National Health Interview Survey (2011)
 
  - Since last week, you should now know what dataset and variables you plan to
    use for your research project. Please register your project online by writing
