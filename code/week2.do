@@ -14,7 +14,7 @@ cap log using code/week2.log, replace
 
  - TOPIC:  Social Determinants of Adult Obesity in the United States
 
- - DATA:   U.S. National Health Interview Survey (2009)
+ - DATA:   U.S. National Health Interview Survey (2017)
 
  - Hi! Welcome to your second SRQM do-file.
 
@@ -38,12 +38,12 @@ cap log using code/week2.log, replace
    dataset. Your sample should be all world countries: do not further restrict
    the sample further by subsetting to less observations.
 
-   Last updated 2013-08-17.
+   Last updated 2020-02-14.
 
 ----------------------------------------------------------------------------- */
 
 * Load NHIS dataset.
-use data/nhis9711, clear
+use data/nhis1017, clear
 
 * Once the dataset is loaded, the Variables window will fill up, and you will
 * be able to look at the actual dataset from the Data Editor. Read from the
@@ -83,17 +83,17 @@ tab year
 
 * The data should be cross-sectional for the purpose of this course. However,
 * the dataset contains observations for more than one year. We will solve that
-* issue by keeping observations for the 2009 survey year only.
+* issue by keeping observations for the 2017 survey year only.
 
 * Keep observations for the single latest survey year.
-keep if year == 2011
+keep if year == 2017
 
 * The -keep- command keeps only observations for which the variable 'year' is
-* equal (==) to 2011: all other dataset observations are dropped. Similarly:
-drop if year != 2011
+* equal (==) to 2017: all other dataset observations are dropped. Similarly:
+drop if year != 2017
 
 * The -drop- command tried to delete observations for which the 'year' variable
-* is different (!=) from 2011 (but none were left after the -keep- command).
+* is different (!=) from 2017 (but none were left after the -keep- command).
 
 * Notice that the 'equal to' operator in Stata is a double equal sign (==).
 * The space around logical operators is optional but recommended for clarity.
@@ -231,8 +231,8 @@ su bmi if sex == 1 & age >= 65
 * This command reads as: 'summarize BMI for observations of sex equal to 1
 * (i.e. males in this dataset) and of age greater or equal to 65.'
 
-su bmi if raceb == 2 | raceb == 3
-* This command uses the 'raceb' variable, which codes Blacks and Hispanics
+su bmi if race == 2 | race == 3
+* This command uses the 'race' variable, which codes Blacks and Hispanics
 * with values 2 and 3. This command therefore summarises BMI only for these
 * two ethnic groups: the '|' symbol is the logical operator for 'or'. It
 * reads as: 'summarize BMI if the respondent is Black or Hispanic.'
@@ -301,11 +301,11 @@ bys health: su bmi weight
 * -----------------------------
 
 * Graph the mean BMI of each ethnic group, using a dot plot.
-gr dot bmi, over(raceb) ytitle("Average Body Mass Index") ///
+gr dot bmi, over(race) ytitle("Average Body Mass Index") ///
 	name(bmi_race, replace)
 
 * Add a new categorical division between men and women to the dot plot.
-gr dot bmi, over(sex) over(raceb) ytitle("Average Body Mass Index") ///
+gr dot bmi, over(sex) over(race) ytitle("Average Body Mass Index") ///
 	name(bmi_race, replace)
 
 * Each independent variable might influence BMI, but can also interact with
@@ -318,7 +318,7 @@ gr dot bmi, over(sex) over(raceb) ytitle("Average Body Mass Index") ///
 * An additional trick in this graph is that its command runs over three lines.
 * The '///' indicates that you have to select all three lines to properly run
 * the graph command. This trick helps formatting do-files in short lines.
-gr dot health, exclude0 yreverse over(sex) over(raceb) ///
+gr dot health, exclude0 yreverse over(sex) over(race) ///
 	ylabel(1 "Excellent" 3 "Good" 5 "Poor") ytitle("Average health status") ///
 	name(health_sex_race, replace)
 
@@ -341,12 +341,12 @@ gr dot health, exclude0 yreverse over(sex) over(raceb) ///
 * selection of variables. The -misstable- command produces a pattern that shows
 * the number of observations with no missing values across all listed variables.
 * Let's first check our core demographics and socio-economic indicators:
-misstable pat age sex raceb health earnings uninsured, freq
+misstable pat age sex race health earnings uninsured, freq
 
 * There are only a few missing values in the selection of variables above, due
-* to the fact that our simplified 'raceb' variable excludes some small groups.
+* to the fact that our simplified 'race' variable excludes some small groups.
 * Now let's see what happens when we add the 'variable' to that list:
-misstable pat age sex health raceb earnings uninsured bmi
+misstable pat age sex health race earnings uninsured bmi
 
 * We removed the -freq- option to get the size of the data with no missing 
 * values as a percentage: we lose 10% of the data due to missing values, mostly
@@ -360,7 +360,7 @@ misstable pat age sex health raceb earnings uninsured bmi
 * We can now finalize the dataset by deleting observations with missing data in
 * our selection of variables. The final count is the actual sample size that we
 * will analyze at later stages of the course.
-drop if mi(bmi, age, sex, health, raceb, earnings, uninsured)
+drop if mi(bmi, age, sex, health, race, earnings, uninsured)
 
 * Final count.
 count
