@@ -28,7 +28,7 @@ set more off
    research project. Practice with Stata by trying out commands as you learn
    them. If things do not work out, try again after checking the command syntax.
 
-   Last updated 2013-08-17.
+   Last updated 2020-02-14.
 
 ----------------------------------------------------------------------------- */
 
@@ -381,20 +381,20 @@ log using code/week1.log, replace
 * Now run these example commands (do not worry about the comments, you can leave
 * them where they are and 'execute' them too, Stata will just ignore them):
 
-* Loading data from the U.S. National Health Interview Survey (1997-2011).
-use data/nhis9711, clear
+* Loading data from the U.S. National Health Interview Survey (2010-2017).
+use data/nhis1017, clear
 
 * The -clear- option gets rid of any data previously loaded into memory, since
 * Stata can only open one dataset at once.
 
 * Describe a few variables.
-d year sex weight raceb
+d year sex weight race
 
-* Keep observations only for year 2009.    
-keep if year == 2011
+* Keep observations only for year 2017.
+keep if year == 2017
 
 * Calculate the frequencies for each racial-ethnic group.
-fre raceb
+fre race
 
 * Obtain summary statistics for the weight variable.
 su weight
@@ -403,10 +403,10 @@ su weight
 tab sex
 
 * Crosstabulate sex and race.
-tab sex raceb
+tab sex race
 
 * Plot average weight by sex and race. You must run both lines below together.
-gr dot weight, over(raceb) over(sex) ///
+gr dot weight, over(race) over(sex) ///
 	name(weight_race_sex, replace)
 
 * To close the log file previously opened, type the following command:
@@ -466,46 +466,47 @@ ls "data/*.dta", w
 * one of the course datasets.
 
 
-* (2) European Social Survey Round 5, 2008
-* ----------------------------------------
+* (2) European Social Survey Rounds 4 (2008) and 8 (2016)
+* -------------------------------------------------------
 
 * Load.
-use data/ess0810, clear
+use data/ess0816, clear
 
 * Example search.
 lookfor health immig
 
 
-* (3) Quality of Government, 2013
-* -------------------------------
+* (3) Quality of Government (2019)
+* --------------------------------
 
 * Load.
-use data/qog2016, clear
+use data/qog2019, clear
 
 * Example search.
 lookfor devel orig
 
 
-* (4) World Values Survey, 2000
-* -----------------------------
+* (4) World Values Survey, Wave 4 (1999-2004)
+* -------------------------------------------
 
 * Load.
-use data/wvs2000, clear
+use data/wvs9904, clear
 
 * Example search.
 lookfor army homo
 
 
-* (5) General Social Survey, 2014
-* -------------------------------
+* (5) General Social Survey, 1976-2016
+* ------------------------------------
 
 * Load.
-use data/gss0014, clear
+use data/gss7616, clear
 
 * Example search.
 lookfor army homo
 
-* Note that this dataset holds more than one year of data.
+* Note that this dataset holds more than one year of data: the GSS is conducted
+* annually, but this teaching dataset has only years 1976, 1986, ..., 2016.
 tab year
 
 * This means that you will have to reduce it to one year of observations before
