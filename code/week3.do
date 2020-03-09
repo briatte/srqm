@@ -48,12 +48,12 @@ cap log using code/week3.log, replace
    detail, and another draft paragraph that lists your independent variables and
    offers a general theory on the articulation between your variables.
 
-   Last updated 2019-02-15.
+   Last updated 2020-02-28.
 
 ----------------------------------------------------------------------------- */
 
 * Load WVS dataset.
-use data/wvs2000, clear
+use data/wvs9904, clear
 
 * Survey weights (see WVS documentation).
 svyset [pw = v245]
@@ -65,7 +65,7 @@ fre v2
 ren v2 country
 
 * Survey years.
-table country, c(min s020 max s020)
+tab country, su(v246)
 
 
 * Dependent variable: Support for sharia law
@@ -141,8 +141,8 @@ tabstat prosharia, s(n mean) c(s)
 * means generating five dummies starting with the 'sharia_' prefix:
 tab sharia, gen(sharia_)
 
-* Show all variables named 'sharia_[whatever]'.
-codebook sharia_*, c
+* Show all variables named 'sharia_[one character]'.
+codebook sharia_?, c
 
 
 * Stacked plots with dummies
@@ -230,19 +230,21 @@ tab prosharia female, col nof
 
 fre v225
 
-* Strangely enough, '98' and '99' are missing values here, so we replace those
-* values with the proper code for missing values. The -replace- command is the
-* quickest way to do that.
-replace v225 = . if inlist(v225, 98, 99)
+* Fun fact: in past versions of this dataset, '98' and '99' actually coded for
+* missing values in this variable. The problem is now gone, and instead, more
+* sensible values (-5, -2) are used. We still need to replace those values with
+* the proper symbol for missing values. The -replace- command is the quickest
+* way to do that.
+replace v225 = . if v225 < 0
 
 * There are often more than one way to do things like recoding. The command
-* above could have been written in many different ways, including this one:
+* above could have been written in many different ways, including those ones:
 
-// gen age = v225 if v225 < 98
-// replace v225 = . if v225 == 98 | v225 == 99
+// replace v225 = . if inlist(v225, -5, -2)
+// replace v225 = . if v225 == -5 | v225 == -2
 
-* Now that the missing values are correctly encoded, we clone the variable.
-clonevar age = v225
+* Now that the missing values are correctly encoded, we rename the variable.
+ren v225 age
 
 * Use -summarize- (or simply -su-) to get the summary statistics, as appropriate
 * for continuous variables where the mean and standard deviation are meaningful.
@@ -321,7 +323,7 @@ hist edu4, by(country, note("")) percent discrete xla(0(1)3) ///
 fre v229
 
 * Clone variable without missing values.
-clonevar empl = v229 if v229 < 8
+clonevar empl = v229 if v229 > 0 & v229 < 7
 fre empl
 
 
@@ -331,11 +333,11 @@ fre empl
 fre v106 v107
 
 * Married dummy.
-gen married = (v106 == 1) if v106 < 8
+gen married = (v106 == 1) if v106 > 0
 tab v106 married
 
 * Children dummy.
-gen haskids = (v107 > 0) if v107 < 9
+gen haskids = (v107 > 0) if v107 > 0
 tab v107 haskids
 
 
@@ -368,16 +370,16 @@ fre city4
 fre country
 
 * Subset to two countries of interest.
-keep if inlist(country, 89, 96)
+keep if inlist(country, 12, 818)
 
 * Overall (i.e. both countries pooled together) pattern of missing values.
 misstable pat sharia age female edu4 empl married haskids city4
 
 * Pattern of missing values for Egypt.
-misstable pat sharia age female edu4 empl married haskids city4 if country == 89
+misstable pat sharia age female edu4 empl married haskids city4 if country == 818
 
 * Pattern of missing values for Algeria.
-misstable pat sharia age female edu4 empl married haskids city4 if country == 96
+misstable pat sharia age female edu4 empl married haskids city4 if country == 12
 
 * Studying the pattern of missing values is a crucial requirement: dropping
 * observations with missing values might affect the representativeness of the
