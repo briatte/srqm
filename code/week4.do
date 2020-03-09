@@ -14,7 +14,7 @@ cap log using code/week4.log, replace
 
  - TOPIC:  Social Determinants of Adult Obesity in the United States
 
- - DATA:   U.S. National Health Interview Survey (2011)
+ - DATA:   U.S. National Health Interview Survey (2017)
 
  - Since last week, you should now know what dataset and variables you plan to
    use for your research project. Please register your project online by writing
@@ -33,12 +33,12 @@ cap log using code/week4.log, replace
    no systematic way to assess normality, but your decision should take skewness
    and kurtosis into account.
    
-   Last updated 2013-08-17.
+   Last updated 2020-03-09.
 
 ----------------------------------------------------------------------------- */
 
 * Load NHIS data for latest survey year.
-use data/nhis9711 if year == 2011, clear
+use data/nhis1017 if year == 2017, clear
 
 * Set individual survey weights.
 svyset psu [pw = perweight], strata(strata)
@@ -58,11 +58,11 @@ su bmi, d
 * ---------------------
 
 * Inspect some of the variables.
-d sex raceb earnings
+d sex race earnings
 
 * Low-dimensional, categorical variables.
 fre sex
-fre raceb
+fre race
 fre earnings
 
 * The default -tab- command returns similar results, minus value labels.
@@ -97,10 +97,10 @@ kdensity bmi, normal legend(row(1)) title("") note("") ///
 	name(kdens, replace)
 
 * Box plots.
-gr hbox bmi, over(raceb) ///
+gr hbox bmi, over(race) ///
 	name(bmi_race, replace)
 
-gr hbox bmi, over(sex) asyvars over(raceb) ///
+gr hbox bmi, over(sex) asyvars over(race) ///
 	name(bmi_race_sex, replace)
 
 * The next commands use scalars to describe a distribution through its standard 
@@ -285,9 +285,6 @@ gr di bmi_comparison
 * ==================
 
 
-* Sort the data by order of survey collection.
-sort serial
-
 * Now here's a simple issue: if we subsample our data, the average BMI will not
 * necessarily reflect the sample mean.
 su bmi in 1/10
@@ -335,7 +332,7 @@ replace yrsinus = . if yrsinus == 0
 * We know from previous analysis that BMI varies by gender and ethnicity.
 * We now look for the effect of the number of years spent in the U.S. within
 * each gender and ethnic categories.
-gr dot bmi, over(sex) over(yrsinus) over(raceb) asyvars scale(.7) ///
+gr dot bmi, over(sex) over(yrsinus) over(race) asyvars scale(.7) ///
 	ti("Body Mass Index by age, sex, race and number of years in the U.S.") ///
 	yti("Mean BMI") ///
 	name(bmi_sex_yrs, replace)
@@ -343,12 +340,12 @@ gr dot bmi, over(sex) over(yrsinus) over(raceb) asyvars scale(.7) ///
 * The average BMI of Blacks who spent less than one year in the U.S. shows
 * an outstanding difference for males and sexs, but this category holds
 * so little observations that the difference should not be considered.
-bys sex: ci bmi if raceb == 2 & yrsinus == 1
+bys sex: ci bmi if race == 2 & yrsinus == 1
 
 * Identically, the seemingly clean pattern among male and sex Asians is
 * calculated on a low number of observations and requires verification of
 * the confidence intervals. The pattern appears to be rather robust.
-bys yrsinus: ci bmi if raceb == 4
+bys yrsinus: ci bmi if race == 4
 
 
 * Confidence intervals with proportions
@@ -364,19 +361,19 @@ ci sex, binomial
 * come with confidence intervals that reflect the range of values that each
 * category might take in the true population. The proportions of ethnic groups
 * in the U.S., for instance, are somehwere in these intervals:
-prop raceb
+prop race
 
 * Actually, if you want to be completely correct, you need to weight the data
 * with the svy: prefix to use the weight settings specified earlier. This will
 * have a tremendous effect on your data in this case, shifting the proportion
 * of White respondents from roughly 60% to roughly 70% of all U.S. adults, the
 * reason being that other racial-ethnic groups are oversampled in NHIS data.
-svy: prop raceb
+svy: prop race
 
 * Identically to continuous variables, confidence intervals for categorical
 * data will increase when the total number of observations decreases. The
 * 95% CI for ethnicity on morbidly obese respondents illustrates that issue.
-prop raceb if bmi > 40
+prop race if bmi > 40
 
 
 * =======
