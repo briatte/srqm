@@ -77,7 +77,7 @@ foreach f of loc j {
     use `f'.dta, clear
   }
   else {
-    merge 1:1 essround cntry idno using `f'.dta, assert(1 2)
+    merge 1:1 essround cntry idno using `f'.dta, nogen assert(1 2)
   }
   rm `f'.dta
 
