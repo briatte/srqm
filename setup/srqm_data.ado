@@ -70,10 +70,10 @@ pr srqm_data
 
       loc s "`1'.do"
       
-      di as txt "[DATA] updating" , ///
-        as inp "`d'/`1'.dta"      , ///
-        as txt "using"            , ///
-        as inp "`d'/`s'"          , ///
+      di as txt "[DATA] updating"     , ///
+        as inp "`d'/`1'.dta"          , ///
+        as txt "using"                , ///
+        as inp "`d'/`s'"              , ///
         as txt "(might take a while)"
       
       cap noi run `s'
@@ -81,9 +81,9 @@ pr srqm_data
       if _rc {
     
         di ///
-          as err "`pid' ERROR:"  ,  ///
-          as txt "failed to run" , ///
-          as inp "`s'"           , ///
+          as err "`pid' ERROR:"   , ///
+          as txt "failed to run"  , ///
+          as inp "`s'"            , ///
           as txt "(code", _rc ")"
 
         qui cd "$SRQM_WD"
@@ -108,10 +108,34 @@ pr srqm_data
 
       }
 
+      // -------------------------------- warn if there are lots of variables --
+
+      * for compatibility with Stata/IC
+      * https://www.stata.com/products/comparison-of-limits/
+      qui d
+
+      * leave 100 variables for the user
+      if `r(k)' >= (2048 - 100) {
+
+        di ///
+          as err "`pid' WARNING:"    , ///
+          as txt "there are"         , ///
+          as inp "`r(k)'"            , ///
+          as txt "variables; "       , ///
+          as txt "Stata/IC supports" , ///
+          as txt "only 2,048."
+
+      }
+
       // ------------------------------------------ label as teaching dataset --
 
-    	note _dta: Teaching dataset: please do not redistribute.
-    	note _dta: Production date: TS
+    	note _dta: Variables with 0 nonmissing values have been removed.
+    	note _dta: See companion {bf:variables.txt} file for all available variables.
+    	note _dta: This version is a teaching dataset: please do not redistribute.
+    	note _dta: Use the original dataset for any use outside of class.
+    	note _dta: Check the official codebook and documentation before use.
+    	note _dta: Cite this dataset properly if you use it in your own work.
+    	note _dta: Production date:{bf: TS }
 
       // --------------------------------------- list variables, zip and save --
 
@@ -123,7 +147,7 @@ pr srqm_data
       loc l `1'_variables
     	cap log close `l'
     	log using `l'.txt, text name(`l') replace
-    	noi d
+    	noi d, f
     	log close `l'
   
       * save dataset in Stata 12 format
@@ -136,7 +160,7 @@ pr srqm_data
       *   saveold saves in Stata (11?/)12 format
       *   (.dta-format 115 from Stata 12)
       *
-      * - if run using Stata 14 or 15,
+      * - if run using Stata 14, 15 or 16,
       *   saveold saves in Stata 12 (dta_???)
       *
       loc v = cond(c(version) >= 14, "version(12)", "")
