@@ -14,7 +14,7 @@ cap log using code/week7.log, replace
 
  - TOPIC:  Fertility and Education, Part 1
 
- - DATA:   Quality of Government (2016)
+ - DATA:   Quality of Government (2019)
 
    This do-file is the last one that we will run on the topic of association.
    You are expected to submit the second draft of your work very soon: the draft
@@ -31,19 +31,21 @@ cap log using code/week7.log, replace
    on interpreting rather than coding. Use the course material to bring yourself
    up to speed with both Stata and essential statistical theory.
 
-   Last updated 2013-08-17.
+   Last updated 2020-04-03.
+   
+   Note -- previous versions of this do-file used bl_asy25mf for education.
 
 ----------------------------------------------------------------------------- */
 
 * Load QOG dataset.
-use data/qog2016, clear
+use data/qog2019, clear
 
 * Rename variables to short handles.
-renvars wdi_fertility bl_asy25mf undp_hdi ti_cpi \ births schooling hdi corruption
+renvars wdi_fertility gea_ea1524f undp_hdi ti_cpi \ births schooling hdi corruption
 
 * Compute GDP per capita.
-gen gdpc = unna_gdp / unna_pop
-la var gdpc "Real GDP per capita (constant USD)"
+gen gdpc = wdi_gdppppcur / wdi_pop
+la var gdpc "GDP per capita (constant USD)"
 
 * Recode to less, shorter labels.
 recode ht_region (6/10 = 6), gen(region)
@@ -100,7 +102,7 @@ sc gdpc schooling, ysc(log) ///
 * In this classical case, log units are more informative than metric ones to
 * identify the relationship between the dependent and independent variables.
 gen log_gdpc = ln(gdpc)
-la var log_gdpc "Real GDP per capita (log)"
+la var log_gdpc "GDP per capita (log)"
 
 * Verify the transformation.
 sc log_gdpc schooling, ///

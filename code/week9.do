@@ -14,7 +14,7 @@ cap log using code/week9.log, replace
 
  - TOPIC:  Fertility and Education, Part 3
 
- - DATA:   Quality of Government (2013)
+ - DATA:   Quality of Government (2019)
  
    This is our final do-file with the Quality of Government example that we have
    been running over three sessions. It explains how to build on correlation and
@@ -24,9 +24,10 @@ cap log using code/week9.log, replace
    It also shows how to use the -estout- command to store and export the results
    of regression models.
    
-   For your second draft, go as far as possible with multiple linear regression.
-   Start with correlations if applicable, then go forward with simple linear
-   regressions (add scatterplots if your predictors are continuous).
+   For your final paper, go as far as possible with multiple linear regression,
+   and possibly with logistic regression. Start with correlations if applicable,
+   then go forward with simple and then multiple linear regressions, adding
+   scatterplots if your predictors are continuous.
 
    Follow the instructions from the draft paper template. If you manage to go as
    far as diagnosing your model, discuss them and add interaction terms if you
@@ -36,24 +37,24 @@ cap log using code/week9.log, replace
    variables that are (or are closer to being) categorical in nature, and will
    go deeper into the core mechanics of regression modelling.
 
-   Last updated 2013-08-17.
+   Last updated 2021-10-29.
 
 ----------------------------------------------------------------------------- */
 
 * Load QOG dataset.
-use data/qog2016, clear
+use data/qog2019, clear
 
 * Rename variables to short handles.
-renvars wdi_fertility bl_asy25mf wdi_hivtot1549 ciri_wecon \ births schooling hiv womenrights
+renvars wdi_fertility gea_ea1524f wdi_birthskill \ births schooling safebirths
 
-* Transformation of real GDP per capita to logged units.
-gen log_gdpc = ln(unna_gdp / unna_pop)
-la var log_gdpc "Real GDP/capita (constant USD, logged)"
+* Transformation of GDP per capita to logged units.
+gen log_gdpc = ln(wdi_gdppppcur / wdi_pop)
+la var log_gdpc "GDP per capita (constant USD, log)"
 
-* Dummy for the highest quartile of HIV/AIDS prevalence.
-su hiv, d
-gen aids = (hiv > 1.5) if !mi(hiv)
-la var aids "Highest HIV/AIDS prevalence quartile"
+* Dummy for high presence of skilled health staff at birth.
+su safebirths, d
+gen safebirths01 = (safebirths >= 99) if !mi(safebirths)
+la var safebirths01 "Skilled health staff at birth (0/1)"
 
 * Recode regions to less, shorter labels.
 recode ht_region (6/10 = 6), gen(region)
@@ -69,7 +70,7 @@ la def region 1 "E. Europe and PSU" 2 "Lat. America" ///
 * ----------
 
 * Check missing values.
-misstable pat births schooling log_gdpc aids womenrights, freq
+misstable pat births schooling log_gdpc safebirths01, freq
 
 * Check sampling bias due to low availability of schooling years.
 gen mi = mi(schooling)
@@ -78,7 +79,7 @@ gr hbar (count) schooling (count) mi, over(region, sort(2)des) stack ///
     name(mi, replace)
 
 * Delete incomplete observations.
-drop if mi(births, schooling, log_gdpc, aids, womenrights)
+drop if mi(births, schooling, log_gdpc, safebirths01)
 
 * Final sample size.
 count
@@ -94,7 +95,7 @@ count
 
 stab using week9_stats.txt, replace ///
     mean(births schooling log_gdpc) ///
-    prop(aids region)
+    prop(safebirths01 region)
 
 /* Syntax of the -stab- command:
 
@@ -102,10 +103,8 @@ stab using week9_stats.txt, replace ///
  - replace     - overwrite any previously existing file
  - mean()      - summarizes a list of continuous variables (mean, sd, min, max)
  - prop()      - summarizes a list of categorical variables (frequencies)
-
-  In the example above, the -stab- command will export two files to the working
-  directory, containing summary statistics (week9_stats.txt) and a correlation
-  matrix (week9_correlations.txt) created with the -corr()- argument. */
+ 
+ The resulting file can easily be imported into a rich-text editor. */
 
 
 * =====================
@@ -149,29 +148,29 @@ sc births schooling || lfit births schooling, ///
 reg births schooling
 
 * An increase in one unit of schooling (years) is associated to a negative 
-* variation of -.4 births, or rather, 2-3 additional years of schooling are
+* variation of -.3 births, or rather, 2-3 additional years of schooling are
 * associated with birth rates that are one child lower on average. When the
 * IV is logged, things get complex because the association rule changes.
 
-* IV: Real GDP per capita.
+* IV: GDP per capita.
 sc births log_gdpc || lfit births log_gdpc, ///
 	name(simplereg2, replace)
 reg births log_gdpc
 
 * In this 'lin-log' equation, a 1% increase in GDP per capita is associated to a
-* 0.01 * -.8 variation in the birth rate, or more exactly, -.8 * log(1.01). The
-* mathematical trick is now to reverse the equation to understand the mechanism:
+* 0.01 * -.92 variation in the birth rate, or more exactly, -.92 * log(1.01).
+* Let's reverse the equation to understand the mechanism:
 
 * Inverting the terms.
 reg log_gdpc births
 
 * The equation is now log-linear ('log-lin') instead of being 'lin-log'. The
 * interpretation is: an increase in one child per woman is associated to GDP
-* per capita that is 100 * -.8 = 80% lower (remember: on average).
+* per capita that is 100 * -.65 = 65% lower (remember: on average).
 
 * Illustrate the principle with two regions different by one child per woman.
 tab region if region > 4, su(births)
-tab region if region > 4, su(wdi_gdppccur)
+tab region if region > 4, su(wdi_gdppppcur)
 
 * In 'lin-log' and 'log-lin' equations, changes are proportionate rather than
 * absolute. In a 'log-log' model, interpretation is proportionate on both sides
@@ -249,7 +248,7 @@ tw (sc births schooling if region == 4, ms(O)) ///
 * Previous regression model.
 reg births schooling log_gdpc
 
-* Previous regression model with geographical region and HIV dummies.
+* Previous regression model with geographical region dummies.
 reg births schooling log_gdpc i.region
 
 * Proof of concept: A dummy simply codes for a particular category against all
@@ -286,41 +285,21 @@ tw (sc births schooling if region == 4, mc(blue) ms(O)) ///
 * are not appropriate as predictors. Let's now run some substantive examples,
 * using a dummy and a 4-level categorical predictor.
 
-* Visualizing HIV/AIDS dummy within the sample.
-tw (sc births schooling if !aids, ms(O)) ///
-    (sc births schooling if aids, ms(O)) ///
+* Visualizing the 'safe births' dummy within the sample.
+tw (sc births schooling if !safebirths01, ms(O)) ///
+    (sc births schooling if safebirths01, ms(O)) ///
     (lfit births schooling, lc(gs10)), ///
-    legend(order(2 "High AIDS prevalence" 1 "Rest of sample") row(1)) ///
+    legend(order(2 "Safe births" 1 "Rest of sample") row(1)) ///
     yti("Fertility rate") ///
-    name(reg_aids1, replace)
+    name(reg_safebirths1, replace)
 
-* Regression line for the HIV/AIDS dummy.
-tw (sc yhat aids) (lfit yhat aids), xlab(0 "Low" 1 "High") ///
-	name(reg_aids2, replace)
+* Regression line for the 'safe births' dummy.
+tw (sc yhat safebirths01) (lfit yhat safebirths01), xlab(0 "Low" 1 "High") ///
+	name(reg_safebirths2, replace)
 
 * Comparison of t-test and regression results for a single dummy.
-ttest yhat, by(aids)
-reg yhat i.aids
-
-* Switching to fertility and women's rights.
-fre womenrights
-
-* We start by visualizing the average fertility for each level of rights. The 
-* plot contains a LOWESS smoothed trend to show the DV mean at each level.
-sc births womenrights, yti("Fertility rate") || lowess births womenrights, ///
-	name(fert_womenrights, replace)
-
-* Regression model.
-reg births i.womenrights
-
-* The baseline category here is womenrights = 0 (no women's rights). Compared
-* to countries in this category, other countries have lower mean fertility rates
-* and the effect increases as women's rights increases from categories 1 to 3.
-
-* Change the baseline category to highest level "3" of women's rights. This is
-* convenient when you need to compare from a reference category that is not the
-* first one in the coding of the variable, which is the Stata default.
-reg births ib1.womenrights
+ttest yhat, by(safebirths01)
+reg yhat i.safebirths01
 
 
 * =========================
@@ -328,8 +307,9 @@ reg births ib1.womenrights
 * =========================
 
 
-* Rerun regression model. Note that the "i." prefix is optional for dummies.
-reg births schooling log_gdpc aids i.womenrights
+* Rerun regression model. Note that the "i." prefix is optional for dummies, so
+* we do not put it in front of the 'safe births' dummy.
+reg births schooling log_gdpc safebirths01
 
 * Storing fitted (predicted) values.
 cap drop yhat
@@ -407,17 +387,17 @@ gen schoolingXlog_gdpc = schooling * log_gdpc
 la var schoolingXlog_gdpc "GDP * Education"
 
 * Regression model.
-reg births schooling log_gdpc aids
+reg births schooling log_gdpc safebirths01
 
 * Regression model with an interaction term.
-reg births schooling log_gdpc schoolingXlog_gdpc aids
+reg births schooling log_gdpc schoolingXlog_gdpc safebirths01
 
 * Standardised coefficients reveal the extent to which the interaction actually
 * influences the model, in comparison to all other included predictors (IVs).
-reg births schooling log_gdpc schoolingXlog_gdpc aids, b
+reg births schooling log_gdpc schoolingXlog_gdpc safebirths01, b
 
 * Last, a shorter way to write up an interaction for two continuous predictors.
-reg births c.schooling##c.log_gdpc aids, b
+reg births c.schooling##c.log_gdpc safebirths01, b
 
 
 * ========================
@@ -444,14 +424,14 @@ eststo M1: qui reg births schooling log_gdpc
 * Re-read, in simplified form.
 leanout:
 
-* Model 2: Adding the HIV/AIDS dummy.
-eststo M2: qui reg births schooling log_gdpc aids
+* Model 2: Adding the 'safe births' dummy.
+eststo M2: qui reg births schooling log_gdpc safebirths01
 
 * Re-read, in simplified form.
 leanout:
 
 * Model 3: Adding the interaction between education and wealth.
-eststo M3: qui reg births c.schooling##c.log_gdpc aids
+eststo M3: qui reg births c.schooling##c.log_gdpc safebirths01
 
 * Re-read, in simplified form.
 leanout:

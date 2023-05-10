@@ -1,11 +1,11 @@
 
 /* ----------------------------------------------------------------- QOG 2019 --
 
-   Data:   Quality of Government (QOG)
+   Data:   Quality of Government Standard Dataset (QOG)
    Source: Quality of Government Institute, University of Gothenburg, Sweden
 
-   https://qog.pol.gu.se/
-   https://qog.pol.gu.se/data/datadownloads/qogstandarddata
+   https://www.gu.se/en/quality-government
+   https://www.gu.se/en/quality-government/qog-data/data-downloads/standard-dataset
    https://www.qogdata.pol.gu.se/data/
 
    - Downloads the cross-sectional Standard dataset, January 2019 release
@@ -41,6 +41,10 @@ use `u', clear
 
 // ------------------------------------------------------------ label dataset --
 
-la da "Quality of Government 2019"
+la da "Quality of Government Standard Dataset 2019"
+
+note _dta: Quality of Government Standard Dataset 2019
+note _dta: Source: Quality of Government Institute, University of Gothenburg, Sweden
+note _dta: URL: {bf:https://qog.pol.gu.se/}
 
 // ---------------------------------------------------------- have a nice day --

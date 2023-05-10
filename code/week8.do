@@ -11,7 +11,7 @@ cap log using code/week8.log, replace
 
  - TOPIC:  Fertility and Education, Part 2
 
- - DATA:   Quality of Government (2016)
+ - DATA:   Quality of Government (2019)
 
    This do-file is a continuation from last week's do-file, which we start by
    running in the background. This will prepare the data by renaming variables,
@@ -28,7 +28,7 @@ cap log using code/week8.log, replace
    variables. Make sure that you understand the logic of ordinary least squares
    (OLS) in order to include simple linear regression models in your next draft.
 
-   Last updated 2013-08-17.
+   Last updated 2020-04-03.
 
 ----------------------------------------------------------------------------- */
 
@@ -203,11 +203,11 @@ reg births log_gdpc
 
 * Visualizing a nonlinear, quadratic fit with corruption as the DV.
 tw (sc corruption hdi, $ccode) (qfit corruption hdi, $ci), ///
-    ysc(rev) yla(0 "High" 10 "Low") yti("Level of corruption") ///
+    ysc(rev) yla(0 "High" 100 "Low") yti("Level of corruption") ///
     name(cpi_hdi, replace)
 
 * Before interpreting the model, deal with the reverse-coding issue.
-gen corrupt = 10 - corruption
+gen corrupt = 100 - corruption
 la var corrupt "Corruption Perception Index"
 
 * Regression model in first approximation (linear form).
@@ -224,7 +224,7 @@ cap drop yhat
 predict yhat
 
 * Plot of linear fitted values.
-sc corrupt yhat hdi, yla(0 "Lowly corrupt" 10 "Highly corrupt") ///
+sc corrupt yhat hdi, yla(0 "Lowly corrupt" 100 "Highly corrupt") ///
     connect(i l) sort(yhat) ///
     name(r_linear, replace)
 
@@ -241,7 +241,7 @@ cap drop yhat2
 predict yhat2
 
 * Comparison of both fits.
-sc corrupt yhat2 hdi, yla(0 "Highly corrupt" 10 "Lowly corrupt") ///
+sc corrupt yhat2 hdi, yla(0 "Lowly corrupt" 10 "Highly corrupt") ///
     c(i l) sort(yhat) || sc yhat hdi, c(l) legend(order(2 3) ///
     lab(2 "Quadratic fit") lab(3 "Linear fit")) ///
     name(r_curvilinear, replace)
