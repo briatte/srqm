@@ -23,40 +23,40 @@
 	%
 	%
 
-	% --- prologue: electoral forecasts with data (Silver) or a model (Hibbs)
-
-	\begin{frame}[c]%{``538'' forecast}
-				 
-		\begin{columns}[T]
-		\column{.45\textwidth}
-
-			\href{http://fivethirtyeight.blogs.nytimes.com/}{%
-				%
-				\includegraphics[width=\textwidth]{538-logo}\\%
-				%
-				\includegraphics[width=\textwidth]{538-nov6-prediction}%
-			}
-		
-		\column{.4\textwidth}
-
-			\href{http://simplystatistics.org/post/35187901781/nate-silver-does-it-again-will-pundits-finally-accept}{\includegraphics[width=\textwidth]{538-simply-statistics}}
-			
-			\href{http://www.acthomas.ca/comment/2012/11/538s-uncertainty-estimates-are-as-good-as-they-get.html}{\includegraphics[width=\textwidth]{538-uniform-plots}}
-		
-		\end{columns}
-		
-	\end{frame}
-	
-	\begin{frame}[c]%{``Bread and Peace'' model}
-			
-		\begin{center}
-			\href{http://www.douglas-hibbs.com/HibbsArticles/Web-2012-Post-mortem.htm}{\includegraphics[height=6.5cm]{Hibbs-Post-mortem}}
-		\end{center}
-				
-	\end{frame}
-
-	%
-	%
+  % % --- prologue: electoral forecasts with data (Silver) or a model (Hibbs)
+  %
+  % \begin{frame}[c]%{``538'' forecast}
+  %
+  %   \begin{columns}[T]
+  %   \column{.45\textwidth}
+  %
+  %     \href{http://fivethirtyeight.blogs.nytimes.com/}{%
+  %       %
+  %       \includegraphics[width=\textwidth]{538-logo}\\%
+  %       %
+  %       \includegraphics[width=\textwidth]{538-nov6-prediction}%
+  %     }
+  %
+  %   \column{.4\textwidth}
+  %
+  %     \href{http://simplystatistics.org/post/35187901781/nate-silver-does-it-again-will-pundits-finally-accept}{\includegraphics[width=\textwidth]{538-simply-statistics}}
+  %
+  %     \href{http://www.acthomas.ca/comment/2012/11/538s-uncertainty-estimates-are-as-good-as-they-get.html}{\includegraphics[width=\textwidth]{538-uniform-plots}}
+  %
+  %   \end{columns}
+  %
+  % \end{frame}
+  %
+  % \begin{frame}[c]%{``Bread and Peace'' model}
+  %
+  %   \begin{center}
+  %     \href{http://www.douglas-hibbs.com/HibbsArticles/Web-2012-Post-mortem.htm}{\includegraphics[height=6.5cm]{Hibbs-Post-mortem}}
+  %   \end{center}
+  %
+  % \end{frame}
+  %
+  % %
+  % %
 	
 	\section{A simple linear model} % A serious man
 	
@@ -127,31 +127,7 @@
 		
 	%
 	%
-	
-	\begin{frame}{Simple linear regression}
-		 
-		\begin{block}{Equations}
-			$Y = \alpha + \beta X + \epsilon \quad \hat{Y} = \hat{\alpha} + \hat{\beta} X + \hat{\epsilon} \quad \epsilon = Y - \hat{Y}$
-		\end{block}
-		
-		\begin{block}{Parameters}
-			\begin{itemize}
-			 	\item $Y$ is the dependent variable and $\hat{Y}$ its predicted value
-			 	\item $X$ is the independent variable used as a predictor of $Y$
-			 	\item $\alpha$ is the \red{constant} (intercept)
-			 	\item $\beta$ is the \red{regression coefficient} (slope)
-			 	\item $\epsilon$ is the \red{error term} (residuals)
-			\end{itemize}
-		\end{block}
 
-		\begin{alertblock}{Warning}
-		 	The model assumes a \emph{linear}, \emph{additive} relationship.
-		\end{alertblock}
-		
-	\end{frame}
-
-	%
-	%
 
 	% -- linear fits
 
@@ -179,6 +155,32 @@
 				
 	\end{frame}
 	
+	%
+	%
+
+
+	\begin{frame}{Simple linear regression}
+		 
+		\begin{block}{Equations}
+			$Y = \alpha + \beta X + \epsilon \quad \hat{Y} = \hat{\alpha} + \hat{\beta} X + \hat{\epsilon} \quad \epsilon = Y - \hat{Y}$
+		\end{block}
+		
+		\begin{block}{Parameters}
+			\begin{itemize}
+			 	\item $Y$ is the dependent variable and $\hat{Y}$ its predicted value
+			 	\item $X$ is the independent variable used as a predictor of $Y$
+			 	\item $\alpha$ is the \red{constant} (intercept)
+			 	\item $\beta$ is the \red{regression coefficient} (slope)
+			 	\item $\epsilon$ is the \red{error term} (residuals)
+			\end{itemize}
+		\end{block}
+
+		\begin{alertblock}{Warning}
+		 	The model assumes a \emph{linear}, \emph{additive} relationship.
+		\end{alertblock}
+		
+	\end{frame}
+
 	%
 	%
 	
@@ -293,7 +295,7 @@
 
 	\end{frame}
 
-	\begin{frame}[c]{Logarithmic coefficients: see \href{http://www.ats.ucla.edu/stat/mult_pkg/faq/general/log_transformed_regression.htm}{UCLA mini-guide}}
+	\begin{frame}[c]{Logarithmic coefficients: see \href{https://stats.idre.ucla.edu/other/mult-pkg/faq/general/faqhow-do-i-interpret-a-regression-model-when-some-variables-are-log-transformed/}{UCLA mini-guide}}
 	
 		\begin{block}{Linear-linear relationships: $Y = \alpha + \beta X$}
 			An increase of one unit of $X$ is associated with an increase of $\beta_1$ units of $Y$.
@@ -323,11 +325,11 @@
 			\begin{itemize}
 				\item For Democrat presidents, \texttt{republican == 0}
 				
-				$$Y = \alpha + \beta X_0 = \alpha$$
+				$$Y = \alpha + \beta_1 INCOME + \beta_2 (0)$$
 				
 				\item For Republican presidents, \texttt{republican == 1}
 				
-				$$Y = \alpha + \red{\beta X_1}$$
+				$$Y = \alpha + \beta_1 INCOME + \beta_2 (1)$$
 				
 			\end{itemize}
 						
@@ -669,7 +671,7 @@
 
 			\begin{itemize}
 				\item Quality of Government (QOG)
-				\item Sample: countries, c.~2002
+				\item Sample: countries, c.~2012
 			\end{itemize}
 		
 			\vspace{.75em}
@@ -694,32 +696,32 @@
 	%
 	%
 	
-	%
-	%
-	\subsection{Practice session}
+  % %
+  % %
+  % \subsection{Practice session}
+  %   %
+  %   %
   %
+  % \begin{frame}[t]{Practice session}
   %
-  
-	\begin{frame}[t]{Practice session}
-
-    \begin{block}{Class}
-      \comm{Get the do-file for this week.}\\
-      \code{srqm\_get week8.do}\\
-      
-			\comm{Open to read and replicate.}\\
-			\code{doedit code/week8}\\    
-    \end{block}
-
-    \begin{alertblock}{Coursework}
-      \begin{itemize}
-	      \item Finish the do-file and read all comments at home.
-	      \item Correct your do-file and add significance tests.
-	      \item Correct your paper and substantiate its hypotheses.
-      \end{itemize}
-    \end{alertblock}
-    		
-	\end{frame}
+  %     \begin{block}{Class}
+  %       \comm{Get the do-file for this week.}\\
+  %       \code{srqm\_get week8.do}\\
   %
+  %     \comm{Open to read and replicate.}\\
+  %     \code{doedit code/week8}\\
+  %     \end{block}
   %
+  %     \begin{alertblock}{Coursework}
+  %       \begin{itemize}
+  %       \item Finish the do-file and read all comments at home.
+  %       \item Correct your do-file and add significance tests.
+  %       \item Correct your paper and substantiate its hypotheses.
+  %       \end{itemize}
+  %     \end{alertblock}
+  %
+  % \end{frame}
+  %   %
+  %   %
 		
 \end{document}

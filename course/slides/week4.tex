@@ -68,35 +68,35 @@
 	%
 	%
 
-	\begin{frame}[t]{Histograms}
-		
-	  \begin{block}{Plot the distributions of \red{continuous variables}}
-			
-			\begin{itemize}
-				\item Use \textbf{histograms} for distributions %
-					\hfill \code{hist}
-				\item Use \textbf{options} for better results %
-					\hfill \code{hist, bin(10) norm}
-				\item Use \textbf{box plots} when there are outliers %
-					\hfill \code{gr (h)box}
-			\end{itemize}
-	  \end{block}
-	
-	  \begin{block}{Split distributions with \red{categorical variables}}
-						
-			\begin{itemize}
-				\item Plot \textbf{by} categories %
-					\hfill \code{hist, by(...)}
-				\item Plot \textbf{over} categories %
-					\hfill \code{gr (h)box, over(...)}
-				\item Plot \textbf{bars} to compare means %
-					\hfill \code{gr (h)bar, over(...)}
-			\end{itemize}
-	  \end{block}
-		
-	\end{frame}
-	%
-	%
+  % \begin{frame}[t]{Histograms}
+  %
+  %   \begin{block}{Plot the distributions of \red{continuous variables}}
+  %
+  %     \begin{itemize}
+  %       \item Use \textbf{histograms} for distributions %
+  %         \hfill \code{hist}
+  %       \item Use \textbf{options} for better results %
+  %         \hfill \code{hist, bin(10) norm}
+  %       \item Use \textbf{box plots} when there are outliers %
+  %         \hfill \code{gr (h)box}
+  %     \end{itemize}
+  %   \end{block}
+  %
+  %   \begin{block}{Split distributions with \red{categorical variables}}
+  %
+  %     \begin{itemize}
+  %       \item Plot \textbf{by} categories %
+  %         \hfill \code{hist, by(...)}
+  %       \item Plot \textbf{over} categories %
+  %         \hfill \code{gr (h)box, over(...)}
+  %       \item Plot \textbf{bars} to compare means %
+  %         \hfill \code{gr (h)bar, over(...)}
+  %     \end{itemize}
+  %   \end{block}
+  %
+  % \end{frame}
+  % %
+  % %
 	
 	%
 	%
@@ -162,6 +162,43 @@
 
 	%
 	%
+	\subsection{Variability}
+	%
+	%
+	
+  
+  \begin{frame}[c]{Variability}
+
+		\begin{center}
+			\href{http://www.phdcomics.com/comics.php?f=1563}{\includegraphics[width=.8\textwidth]{phdcomics-parenting}}
+    \end{center}
+		  
+  \end{frame}
+  %
+  %
+	
+	\begin{frame}[t]{Variability}
+
+		\begin{block}{Measures of dispersion}
+			\begin{itemize}
+				\item $X_{max} - X_{min}$: \textbf{range} (in `natural' units of $X$)
+				\item $\text{Var}_X$: \textbf{squared distances from the mean} (summed over $N$)
+				\item $SD_X$: \textbf{dispersion} (compound square root of variance by $N$)
+			\end{itemize}
+		\end{block}
+	
+	  \begin{block}{Variance and standard deviation}
+
+			$$Var_X = \sigma^2 = \red{\frac{1}{N}} \sum_{i=1}^N (\red{X_i - \bar X})^2 \quad SD_X = \sigma = \sqrt{\red{\frac{1}{N}} \sum_{i=1}^N (X_i - \bar X)^2}$$
+
+		\end{block}
+	
+	\end{frame}
+	%
+	%
+	
+	%
+	%
 	\subsection{Skewness a.k.a. symmetry}
 	%
 	%
@@ -189,44 +226,7 @@
 	\end{frame}
 	%
 	%
-	
-	%
-	%
-	\subsection{Variability}
-	%
-	%
-	
   
-  \begin{frame}[c]{Variability}
-
-		\begin{center}
-			\href{http://www.phdcomics.com/comics.php?f=1563}{\includegraphics[width=.8\textwidth]{phdcomics-parenting}}
-    \end{center}
-		  
-  \end{frame}
-  %
-  %
-	
-	\begin{frame}[t]{Variability}
-
-		\begin{block}{Measures of dispersion}
-			\begin{itemize}
-				\item $X_{max} - X_{min}$: \textbf{range} (in `natural' units of $X$)
-				\item $Var_X$: \textbf{squared distances from the mean} (summed over $N$)
-				\item $SD_X$: \textbf{dispersion} (compound square root of variance by $N$)
-			\end{itemize}
-		\end{block}
-	
-	  \begin{block}{Variance and standard deviation}
-
-			$$Var_X = \sigma^2 = \red{\frac{1}{N}} \sum_{i=1}^N (\red{X_i - \bar X})^2 \quad SD_X = \sigma = \sqrt{\red{\frac{1}{N}} \sum_{i=1}^N (X_i - \bar X)^2}$$
-
-		\end{block}
-	
-	\end{frame}
-	%
-	%
-	
 	%
 	%
 	\section{Normal distribution}
@@ -285,7 +285,7 @@
 			  (\red{$skewness \sim 0$}) %
 				and `peakedness' (\red{$kurtosis \sim 3$}) of a variable.
 			\item Use \code{tabstat x y, s(skew kurt) c(s)} %
-				to compare a variable with its transformation (often to log-units).
+				to compare a variable \code{x} with its (generally logarithmic) transformation \code{y}.%
 		\end{itemize}
 
 	\end{block}
@@ -343,7 +343,7 @@
 				
 				\begin{itemize}
 					\item National Health Interview Survey (NHIS)
-					\item Sample: U.S. adult population, 2009
+					\item Sample: U.S. adult population, 2017
 				\end{itemize}
 	
 				\column{.2\textwidth}
@@ -354,32 +354,56 @@
 	%
 	%
 	
-	%
-	%
-	\subsection{Practice session}
+  % %
+  % %
+  % \subsection{Practice session}
+  % %
+  % %
+
+  % \begin{frame}[t]{Practice session}
+  %
+  %     \begin{block}{Class}
+  %       \comm{Get the do-file for this week.}\\
+  %       \code{srqm\_get week4.do}\\
+  %
+  %     \comm{Open to read and replicate.}\\
+  %     \code{doedit code/week4}\\
+  %     \end{block}
+  %
+  %     \begin{alertblock}{Coursework}
+  %       \begin{itemize}
+  %        \item Finish the do-file and read all comments at home.
+  %        \item Follow instructions on top of the code.
+  %        \item Prepare questions in your group's draft do-file.
+  %       \end{itemize}
+  %     \end{alertblock}
+  %
+  % \end{frame}
+  %   %
+  %   %
+
+  \subsection{Learning goals}
   %
   %
-  
-	\begin{frame}[t]{Practice session}
 
-    \begin{block}{Class}
-      \comm{Get the do-file for this week.}\\
-      \code{srqm\_get week4.do}\\
-      
-			\comm{Open to read and replicate.}\\
-			\code{doedit code/week4}\\    
-    \end{block}
+ \begin{frame}[t]{Learning goals for this week}
 
-    \begin{alertblock}{Coursework}
-      \begin{itemize}
-	       \item Finish the do-file and read all comments at home.
-	       \item Follow instructions on top of the code.
-	       \item Prepare questions in your group's draft do-file.
-      \end{itemize}
+   \code{doedit code/week4}\\[1em]
+
+	\begin{itemize}
+		\item \red{Summarizing variables} (see also Weeks 2 and 3)\\[.5em]%
+      Ex. commands: \code{fre} · \code{su} · \code{hist}\\[.5em]%
+		\item Deciding if a continuous variable is \red{normally distributed}\\[.5em]%
+      Ex. commands: \code{hist} · \code{su, d}\\[.5em]%
+		\item Estimating \red{confidence intervals} (anticipating Week 5)\\[.5em]%
+      Ex. commands: \code{ci} · \code{prop}\\[.5em]%
+	\end{itemize}
+
+    \begin{alertblock}{Important}
+       The first two items above are especially useful for your first drafts.
     \end{alertblock}
-    		
-	\end{frame}
+
+  \end{frame}
   %
-  %
-	
+  %	
 \end{document}

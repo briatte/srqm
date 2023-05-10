@@ -269,7 +269,43 @@
 	\end{frame}
 	%
 	%
+
+	\begin{frame}[t]{Standard normal distribution $\mathcal{N}(0,1)$}
 	
+	\begin{block}{Properties}
+		\begin{itemize}
+			\item $\mu \pm 1\sigma$ contains approximately \textbf{68\%} of all values.
+			\item $\mu \pm 2\sigma$ contains approximately \textbf{95\%} of all values.
+			\item $\mu \pm 3\sigma$ contains approximately \textbf{99\%} of all values.
+		\end{itemize}
+	\end{block}
+	
+	\begin{center}
+		\includegraphics[width=.8\textwidth]{normal-distribution.pdf}
+	\end{center}
+		
+	\end{frame}
+	%
+	%
+	
+	\begin{frame}[t]{Probability density function}
+	
+	\begin{block}{Properties}	
+		\begin{itemize}
+			\item $Pr(\mu - 1\sigma < \mu < \mu + 1\sigma) \approx .68$
+			\item $Pr(\mu - 2\sigma < \mu < \mu + 2\sigma) \approx .95$
+			\item $Pr(\mu - 3\sigma < \mu < \mu + 3\sigma) \approx .99$
+		\end{itemize}
+	\end{block}
+	
+	\begin{center}
+		\includegraphics[width=.8\textwidth]{normal-distribution.pdf}
+	\end{center}
+		
+	\end{frame}
+	%
+	%
+
 	%
 	%
 	\section{Estimation}
@@ -293,9 +329,9 @@
 			\begin{itemize}
 				\item \textbf{Central Limit Theorem} (CLT)
 					% $\bar X$ relates to $\mu$ via a normal distribution
-				\item \textbf{Law of Large Numbers:} (LLN)
+				\item \textbf{Law of Large Numbers} (LLN)
 					%with no formatting issues throughout
-				\item \textbf{Confidence intervals:} (CIs)
+				\item \textbf{Confidence intervals} (CIs)
 					%a range of values likely to contain $\mu$
 			\end{itemize}
 		\end{block}
@@ -371,42 +407,6 @@
 	%
 	%
 
-	\begin{frame}[t]{Standard normal distribution $\mathcal{N}(0,1)$}
-	
-	\begin{block}{Properties}
-		\begin{itemize}
-			\item $\mu \pm 1\sigma$ contains approximately \textbf{68\%} of all values.
-			\item $\mu \pm 2\sigma$ contains approximately \textbf{95\%} of all values.
-			\item $\mu \pm 3\sigma$ contains approximately \textbf{99\%} of all values.
-		\end{itemize}
-	\end{block}
-	
-	\begin{center}
-		\includegraphics[width=.8\textwidth]{normal-distribution.pdf}
-	\end{center}
-		
-	\end{frame}
-	%
-	%
-	
-	\begin{frame}[t]{Probability density function}
-	
-	\begin{block}{Properties}	
-		\begin{itemize}
-			\item $Pr(\mu - 1\sigma < \mu < \mu + 1\sigma) \approx .68$
-			\item $Pr(\mu - 2\sigma < \mu < \mu + 2\sigma) \approx .95$
-			\item $Pr(\mu - 3\sigma < \mu < \mu + 3\sigma) \approx .99$
-		\end{itemize}
-	\end{block}
-	
-	\begin{center}
-		\includegraphics[width=.8\textwidth]{normal-distribution.pdf}
-	\end{center}
-		
-	\end{frame}
-	%
-	%
-
 	%
 	% 	
 	\subsection{Confidence intervals}
@@ -435,7 +435,7 @@ These bounds define a \red{95\% confidence interval}.
 			\item In 2.5\% of cases, $\mu > \bar{X} + 1.96$.
 		\end{itemize}
 		\column{.3\textwidth}
-		\vspace{-4em}
+		\vspace{-3.5em}
 		\begin{flushright}
 		\includegraphics[scale=.3]{longcat-white.jpg}		
 		\end{flushright}
@@ -494,32 +494,57 @@ These bounds define a \red{95\% confidence interval}.
 	%
 	%
 	
-	%
-	%
-	\subsection{Practice session}
+  % %
+  % %
+  % \subsection{Practice session}
+  %   %
+  %   %
+  %
+  % \begin{frame}[t]{Practice session}
+  %
+  %     \begin{block}{Class}
+  %       \comm{Get the do-file for this week.}\\
+  %       \code{srqm\_get week5.do}\\
+  %
+  %     \comm{Open to read and replicate.}\\
+  %     \code{doedit code/week5}\\
+  %     \end{block}
+  %
+  %     \begin{alertblock}{Coursework}
+  %       \begin{itemize}
+  %        \item Finish the do-file and read all comments at home.
+  %        \item Use the do-file as a template for your first draft.
+  %        \item Write up your paper, following final instructions.
+  %       \end{itemize}
+  %     \end{alertblock}
+  %
+  % \end{frame}
+  %   %
+  %   %
+
+  \subsection{Learning goals}
   %
   %
-  
-	\begin{frame}[t]{Practice session}
 
-    \begin{block}{Class}
-      \comm{Get the do-file for this week.}\\
-      \code{srqm\_get week5.do}\\
-      
-			\comm{Open to read and replicate.}\\
-			\code{doedit code/week5}\\    
-    \end{block}
+ \begin{frame}[t]{Learning goals for this week}
 
-    \begin{alertblock}{Coursework}
-      \begin{itemize}
-	       \item Finish the do-file and read all comments at home.
-	       \item Use the do-file as a template for your first draft.
-	       \item Write up your paper, following final instructions.
-      \end{itemize}
+   \code{doedit code/week5}\\[1em]
+
+	\begin{itemize}
+		\item Estimating \red{confidence intervals} (anticipating Week 5)\\[.5em]%
+      Ex. commands: \code{ci} · \code{prop}\\[.5em]%
+		\item Catching up on \red{late homework}\\[.5em]%
+      Stata do-files + \emph{Stata Guide}, Sections 1--9\\[.5em]%
+		\item Submitting your \red{first draft}!\\[.5em]%
+      Deadline: see my emails\\[.5em]%
+	\end{itemize}
+
+    \begin{alertblock}{Important}
+       Use the `Questions' part of your first draft strategically.
     \end{alertblock}
-    		
-	\end{frame}
+
+  \end{frame}
   %
-  %
-	
+  %	
+
 \end{document}

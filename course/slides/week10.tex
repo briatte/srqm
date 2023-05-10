@@ -7,8 +7,9 @@
 
 \documentclass[t]{beamer}
 \usetheme{hkllite}
+\usepackage{booktabs}
 
-\title{revised draft}
+\title{logistic regression}
 	\author{François Briatte \& Ivaylo Petev}
 	\date{Week~\#10}
 
@@ -19,132 +20,132 @@
 		\tableofcontents[hideallsubsections]
 		}
 
-	%
-	%
+  % %
+  % %
+  %
+  % %
+  % %
+  % \section{Draft No. 2}
+  % %
+  % %
+  %
+  % %
+  % %
+  % \subsection{Description}
+  % %
+  % %
+  %
+  % \begin{frame}[t]{Draft No.~2}
+  %
+  % \begin{columns}[T]
+  %   \column{.3\textwidth}
+  %
+  %     \textbf{Univariate\\statistics}\\[.5em]
+  %
+  %     \begin{itemize}
+  %       \item Introduction
+  %       % (topic)
+  %       \item Datasets
+  %       % (observations and variables)
+  %       \item Distributions
+  %       % (central tendency, variability, normality)
+  %       \item Estimation
+  %       % (PDF, CLT, LLN, CIs)
+  %     \end{itemize}
+  %
+  %     $$
+  %     \left.
+  %         \begin{array}{rrr}
+  %             corrected \\
+  %             revised\\
+  %             appended
+  %         \end{array}
+  %     \right \}
+  %     $$
+  %
+  %   \column{.3\textwidth}
+  %
+  %     \textbf{Bivariate\\statistics}
+  %
+  %     \begin{itemize}
+  %       \item Significance
+  %       % (comparison of means and proportions)
+  %       \item Comparisons
+  %       % (t-test, Chi-squared test)
+  %       \item Correlation
+  %       % (scatterplot and correlation matrixes)
+  %       \item Regression
+  %       % (Simple OLS linear regression)
+  %     \end{itemize}
+  %
+  %     \begin{center}
+  %       \red{Revised draft}\\[.5em]
+  %       \fbox{\includegraphics[width=.75\textwidth]{holy-grail2.jpg}}
+  %     \end{center}
+  %
+  %   \column{.3\textwidth}
+  %
+  %     \textbf{Statistical\\modelling}
+  %
+  %     \begin{itemize}
+  %       \item Basics
+  %       % (residuals)
+  %       \item Extensions
+  %       % (dummies)
+  %       \item Diagnostics
+  %       % (multicollinearity, heteroscedasticity)
+  %       \item Conclusion
+  %       % (extensions)
+  %     \end{itemize}
+  %
+  %     \begin{center}
+  %       Final paper\\[.5em]
+  %       \fbox{\includegraphics[width=.75\textwidth]{holy-grail.jpg}}
+  %     \end{center}
+  %
+  % \end{columns}
+  %
+  % \end{frame}
+  % %
+  % %
+  %
+  % %
+  % %
+  % \subsection{Instructions}
+  % %
+  % %
+  %
+  % \begin{frame}[t]{First steps}
+  %
+  % \begin{block}{Go through corrections}
+  %
+  %   \begin{itemize}
+  %     \item Remove technical content
+  %     \item \red{Rewrite until concision}
+  %   \end{itemize}
+  %
+  % \end{block}
+  %
+  % \begin{block}{Explore associations}
+  %
+  %   \begin{itemize}
+  %     \item Stata Guide, Sec.~10 \hfill%
+  %       \code{ttest}, \code{prtest}, \code{tab,~chi2}, \code{pwcorr}
+  %     \item Stata Guide, Sec.~11 \hfill%
+  %       \code{sc}, \code{lowess}, \code{pwcorr}, \code{reg}, \code{rvfplot}
+  %   \end{itemize}
+  %
+  %   Write up \red{substantive results} as sentences; %
+  %   cite significance tests and other statistics in brackets: %
+  %   $(\rho = .7)$, $(p < .05)$, …
+  %
+  % \end{block}
+  %
+  % \end{frame}
+  % %
+  % %
 
-	%
-	%
-	\section{Draft No. 2}	
-	%
-	%
-	
-	%
-	%
-	\subsection{Description}
-	%
-	%
-	
-	\begin{frame}[t]{Draft No.~2}
-	
-	\begin{columns}[T]
-		\column{.3\textwidth}
-
-			\textbf{Univariate\\statistics}\\[.5em]
-	
-			\begin{itemize}
-				\item Introduction
-				% (topic)
-				\item Datasets
-				% (observations and variables)
-				\item Distributions
-				% (central tendency, variability, normality)
-				\item Estimation
-				% (PDF, CLT, LLN, CIs)
-			\end{itemize}
-			
-			$$
-			\left.
-			    \begin{array}{rrr}
-			        corrected \\
-			        revised\\
-			        appended
-			    \end{array}
-			\right \} 
-			$$	
-		
-		\column{.3\textwidth}
-		
-			\textbf{Bivariate\\statistics}
-	
-			\begin{itemize}
-				\item Significance
-				% (comparison of means and proportions)
-				\item Comparisons
-				% (t-test, Chi-squared test)
-				\item Correlation
-				% (scatterplot and correlation matrixes)
-				\item Regression
-				% (Simple OLS linear regression)
-			\end{itemize}
-			
-			\begin{center}
-				\red{Revised draft}\\[.5em]
-				\fbox{\includegraphics[width=.75\textwidth]{holy-grail2.jpg}}
-			\end{center}
-		
-		\column{.3\textwidth}
-
-			\textbf{Statistical\\modelling}
-	
-			\begin{itemize}
-				\item Basics
-				% (residuals)
-				\item Extensions
-				% (dummies)
-				\item Diagnostics
-				% (multicollinearity, heteroscedasticity)
-				\item Conclusion
-				% (extensions)
-			\end{itemize}
-
-			\begin{center}
-				Final paper\\[.5em]
-				\fbox{\includegraphics[width=.75\textwidth]{holy-grail.jpg}}
-			\end{center}
-			
-	\end{columns}
-		
-	\end{frame}
-	%
-	%
-
-	%
-	%
-	\subsection{Instructions}
-	%
-	%
-
-	\begin{frame}[t]{First steps}
-
-	\begin{block}{Go through corrections}
-	
-		\begin{itemize}
-			\item Remove technical content
-			\item \red{Rewrite until concision}
-		\end{itemize}
-
-	\end{block}
-	
-	\begin{block}{Explore associations}
-
-		\begin{itemize}
-			\item Stata Guide, Sec.~10 \hfill%
-				\code{ttest}, \code{prtest}, \code{tab,~chi2}, \code{pwcorr}
-			\item Stata Guide, Sec.~11 \hfill%
-				\code{sc}, \code{lowess}, \code{pwcorr}, \code{reg}, \code{rvfplot}
-		\end{itemize}
-		
-		Write up \red{substantive results} as sentences; %
-		cite significance tests and other statistics in brackets: %
-		$(\rho = .7)$, $(p < .05)$, …
-			
-	\end{block}
-
-	\end{frame}
-	%
-	%
-
-  \begin{frame}[c]{Draft regressions}
+  \begin{frame}[c]{Using a nonlinear regression equation}
   
 	\begin{block}{Model choice}
 	
@@ -164,7 +165,7 @@
 
 	\end{block}
 
-	\begin{block}{Model operations}
+	\begin{block}{Model operations are unchanged}
 
 		\begin{itemize}
 			\item Estimation and diagnostics
@@ -176,6 +177,133 @@
   \end{frame}
 	%
 	%
+
+  \begin{frame}[c]{How it works: the \red{logit link function}}
+
+    \begin{block}{Expressing the \red{odds} of $Y = 1$}
+
+      $$\phi (Y = 1) = \frac{P(Y=1)}{1-P(Y=1)} \in [0, + \infty)$$
+
+    \end{block}
+
+    \begin{block}{Getting a \red{linear function} for $\phi$}
+
+      $$L = \ln \phi = \ln \bigg( \frac{P}{1-P} \bigg) \in (-\infty, +\infty)$$
+
+    \end{block}
+
+  \end{frame}
+  %
+  %
+
+  \begin{frame}[t]{A \red{logit} transform of a linear function}
+    \includegraphics[width=\textwidth]{logit-transform.png}
+  \end{frame}
+  %
+  %
+  
+  \begin{frame}[c]{How to read it: \red{exponentiation}}
+
+    \begin{block}{From \red{odds to probabilities}}
+
+      $$p (L) = \frac{1}{1 + e^{-L}}$$
+
+    \end{block}
+
+    \begin{block}{Examples with negative and positive values of $L$}
+
+      $$p(L = -2.4) = \frac{1}{1 + e^{-(-2.4)}} = 0.084$$
+      
+      $$p(L = +3.1) = \frac{1}{1 + e^{-3.1}} = 0.957$$
+
+    \end{block}
+
+  \end{frame}
+  %
+  %
+
+  \begin{frame}[c]{How to read it \emph{easily}: \red{odds ratios}}
+
+    \begin{block}{Exponentiating (\code{logit, or}) results provides}
+
+      $$OR = \frac{\textrm{odds after a unit change in~} X}{\textrm{original odds}}$$%
+
+    \end{block}
+
+    \begin{block}{Which means...}
+
+      \begin{itemize}
+        \item An increase of 24\% in $Y$ if $OR(X) = 1.24$
+        \item An increase of \red{(answer that one!)}~\% in $Y$ if $OR(X) = 0.83$%
+      \end{itemize}
+
+    \end{block}
+
+  \end{frame}
+  %
+  %
+
+	\section{Odds ratios}
+
+	\begin{frame}[t]{Computation of \red{odds ratios}}
+					
+		\begin{quote}
+		``Scotland has 13\% redheads, Kabylie has 4\% redheads.''\\
+		``Scots are \red{more likely} to be redheads than Kabyles.''
+		\end{quote}
+		
+		Quantify the second statement.
+
+		\begin{itemize}
+			\item \textbf{Treat the dependent variable as a binary `success/failure':}\\1 is success (red hair), 0 is failure (other colour).
+						
+			$$\textsf{Odds of \textit{p}:~}\frac{\textsf{red hair}}{\textsf{other colour}}=\frac{p}{1-p}=\frac{\textsf{success}}{\textsf{failure}}$$
+			\vspace{0em}
+			
+			\item \textbf{Divide the odds in each group to compare across them:} the odds ratio quantifies their comparative likelihood of success.
+			
+			$$\theta = \frac{\textsf{odds}_{\textsf{Scotland}}}{\textsf{odds}_{\textsf{Kabylie}}}=\frac{\textsf{odds}_1}{\textsf{odds}_2}=\frac{\textsf{success}_1}{\textsf{failure}_1}\times\frac{\textsf{failure}_2}{\textsf{success}_2}$$
+						
+		\end{itemize}
+
+	\end{frame}
+	
+	\begin{frame}[t]{Computation of \red{odds ratios}}
+					
+		\begin{quote}
+		``Scotland has 13\% redheads, Kabylie has 4\% redheads.''\\
+		``Scots are \red{more likely} to be redheads than Kabyles.''
+		\end{quote}
+		
+		Quantify the second statement.
+		
+		\begin{columns}[t]
+		\column{.55\textwidth}
+		\vspace{-.5em}
+    \begin{center}
+    \begin{tabular}{lcc}
+      \toprule
+      & \multicolumn{2}{c}{Hair colour} \\
+      \cmidrule(r){2-3}
+      Population & Red & Other \\
+      \midrule
+      Scotland & .13 & $1-.13=.87$\\
+      Kabylie & .04 & $1-.04=.96$ \\
+      \bottomrule
+    \end{tabular}\\[0em]
+  \end{center}
+		
+	\column{.25\textwidth}
+	\vspace{3.275em}	
+	$$\hspace{-3em}\theta = \frac{.13}{.87}\times\frac{.96}{.04}\approx\red{3.5}$$
+	\end{columns}
+	
+	\vspace{1.5em}
+	Scots are roughly \red{3.5 times more likely} to have red hair than Kabyles.% (\href{http://en.wikipedia.org/wiki/Red_hair}{All figures taken from current Wikipedia estimates.})
+		
+	\end{frame}	
+  %
+  %
 
 	%
 	%
@@ -220,33 +348,55 @@
 	\end{frame}
 	%
 	%
-	
-	%
-	%
-	\subsection{Practice session}
-  %
-  %
-  
-	\begin{frame}[t]{Practice session}
 
-    \begin{block}{Class}
-      \comm{Get the do-file for this week.}\\
-      \code{srqm\_get week10.do}\\
-      
-			\comm{Open to read and replicate.}\\
-			\code{doedit code/week10}\\    
-    \end{block}
+   \subsection{Learning goals}
+   %
+   %
 
-    \begin{alertblock}{Coursework}
-      \begin{itemize}
-	      \item Finish the do-file and read all comments at home.
-	      \item Add draft regressions to your do-file.
-	      \item Add draft regression results to your paper.
+  \begin{frame}[t]{Learning goals for this week}
+
+    \code{doedit code/week10}\\[1em]
+
+     \begin{alertblock}{Same as multiple linear regression!}
+        Logistic regression is just a `generalization' of what we saw with (multiple) linear regression, except there's a link function and the estimation of coefficients uses something else than least squares (called maximum likelihood).%
+     \end{alertblock}
+
+     \begin{block}{Differences are}
+        \begin{itemize}
+          \item Interpreting the coefficients is trickier (focus on that)%
+          \item Diagnostics are different (forget about those)%
       \end{itemize}
-    \end{alertblock}
-    		
-	\end{frame}
+     \end{block}
+   \end{frame}
+   %
+   %
+
+  % %
+  % %
+  % \subsection{Practice session}
+  %   %
+  %   %
   %
+  % \begin{frame}[t]{Practice session}
   %
+  %     \begin{block}{Class}
+  %       \comm{Get the do-file for this week.}\\
+  %       \code{srqm\_get week10.do}\\
+  %
+  %     \comm{Open to read and replicate.}\\
+  %     \code{doedit code/week10}\\
+  %     \end{block}
+  %
+  %     \begin{alertblock}{Coursework}
+  %       \begin{itemize}
+  %       \item Finish the do-file and read all comments at home.
+  %       \item Add draft regressions to your do-file.
+  %       \item Add draft regression results to your paper.
+  %       \end{itemize}
+  %     \end{alertblock}
+  %
+  % \end{frame}
+  %   %
+  %   %
 	
 \end{document}

@@ -44,25 +44,92 @@
 	%
 	%
 
-	% \begin{frame}[t]{Course logistics}
+	\begin{frame}[t]{Course logistics}
+	
+		\begin{block}{This week}
+	    		\begin{itemize}
+    	    			\item Check Stata setup
+		        \item Form student groups (on Google Drive)
+	    		    \item Stata practice
+		    \end{itemize}
+		 \end{block}
+
+		\begin{block}{Group work}
+	        		\begin{enumerate}
+	        			\item Schedule meetings
+		        		\item Start discussing topics and datasets
+		        	\end{enumerate}		
+		\end{block}
+
+     \begin{alertblock}{Important point}
+       Groupwork requires organisation and collaboration.
+     \end{alertblock}
+	
+	 \end{frame}
 	%
-	%     \begin{block}{Project management}
-	%       \begin{enumerate}
-	%         \item Computer setup
-	%         \item Register on the \textbf{projects list:} \url{http://goo.gl/xNGmDA}
-	%       \end{enumerate}
-	%     \end{block}
 	%
-	%     \begin{alertblock}{Weekly reminders}
-	%       \begin{itemize}
-	%        \item \textbf{Emails} start with ``SRQM:''
-	%        \item \textbf{Homework} is replication and readings
-	%       \end{itemize}
-	%     \end{alertblock}
-	%
-	% \end{frame}
-	%   %
-	%   %
+
+  %
+  %
+  \subsection{Learning goals}
+    %
+    %
+
+   \begin{frame}[t]{Learning goals from \red{last week}}
+
+    \begin{columns}[T]
+
+      \column{.7\textwidth}
+
+     \code{doedit code/week1}\\[1em]
+
+		\begin{itemize}
+			\item Getting to know how to use \red{Stata}\\[.5em]%
+        Focus on keyboard shortcuts.\\[.5em]%
+	        \item Running the \red{course setup}\\[.5em]%
+        See my last email for the full procedure.\\[.5em]%
+%        Example command: \code{pwd}\\[.5em]%
+			\item Creating and opening \red{do-files}\\[.5em]%
+        Command: \code{doedit}\\[.5em]%
+		\end{itemize}
+
+      \column{.3\textwidth}
+      
+      \begin{center}
+        \vspace{-2em}
+        \href{http://www.stata.com/}{\includegraphics[width=.8\textwidth]{icon-stata16}}
+      \end{center}
+
+    \end{columns}
+    
+    \begin{alertblock}{Important point}
+         This takes regular practice.
+    \end{alertblock}
+
+  \end{frame}
+    %
+    %
+
+   \begin{frame}[t]{Learning goals for \red{this week}}
+
+     \code{doedit code/week2}\\[1em]
+
+		\begin{itemize}
+			\item Loading and describing a \red{dataset} and its \red{variables}\\[.5em]%
+        Example commands: \code{use} · \code{d} · \code{lookfor}\\[.5em]%
+			\item Subsetting to a \red{cross-section} of \red{complete observations}\\[.5em]%
+        Example commands: \code{drop} · \code{if mi()} · \code{misstable pat}\\[.5em]%
+			\item Creating and \red{summarizing} variables (also next week)\\[.5em]%
+        Example commands: \code{tab}, or better, \code{fre} · \code{su}\\[.5em]%
+		\end{itemize}
+
+      \begin{alertblock}{Important point}
+         Representativeness (\code{svyset}) ≠ Sample size (\code{count})
+      \end{alertblock}
+
+  \end{frame}
+    %
+    %
   
   % %
   % %
@@ -475,7 +542,7 @@
 	
 	\begin{frame}[t]{Practice: \red{NHIS dataset}}
 
-		$$\mathsf{Body~Mass~Index} = \frac{\mbox{mass} \ \mbox{(kg)}}{\left( \mbox{height}(\mathsf{m})\right)^2} = \frac{\mbox{mass} \ \mathsf{(lb)} \times 703}{\left(\mbox{height} (\mathsf{in})\right)^2}$$
+		$$\mathsf{Body~Mass~Index} = \frac{\mbox{mass} \ \mathsf{(kg)}}{\left( \mbox{height} \ (\mathsf{m})\right)^2} = \frac{\mbox{mass} \ \mathsf{(lb)} \times 703}{\left(\mbox{height} \ (\mathsf{in})\right)^2}$$
 		
 		\vspace{1em}
 
@@ -494,7 +561,7 @@
 				
 				\begin{itemize}
 					\item National Health Interview Survey (NHIS)
-					\item Sample: U.S. adult population, 2009
+					\item Sample: U.S. adult population, 2017
 				\end{itemize}
 	
 				\column{.2\textwidth}
