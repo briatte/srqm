@@ -269,7 +269,14 @@ tab age_q4, sum(age)
 
 * Expectedly, there is more variance in the last, older group. Let's finally get
 * the range, or lower (min) and lower (max) bounds, of each age quartile.
-table age_q4, c(min age max age)
+if c(version) < 17 {
+	table age_q4, c(min age max age)
+}
+else {
+	table age_q4, stat(min age) stat(max age)
+}
+* Note: the code above shows two different syntaxes. The former is for older
+* versions of Stata. The latter is for Stata 17 and above.
 
 * Recode to four age groups. The -irecode- command creates categories based on
 * continuous intervals: category 0 of age4 will contain observations of age up
@@ -278,7 +285,12 @@ gen age4:age4 = irecode(age, 33, 49, 64, .)
 
 * Check the results. This is a different -table- command than the -tab- one used
 * previously, which we will get to use for more flexible crosstabulations.
-table age4, c(min age max age)
+if c(version) < 17 {
+	table age4, c(min age max age)
+}
+else {
+	table age4, stat(min age) stat(max age)
+}
 
 * And here's yet another way to crosstabulate: the -tab- command with the -sum- 
 * option returns the average age in each age group, along with the SD and count.
