@@ -92,10 +92,12 @@ pr de srqm_error
   if _rc di as err "`pid' ERROR:", as txt "command failed (code", _rc ")"
 end
 
-if c(os) != "Unix" &  c(update_query) == "on" | `debug' {
+if c(os) != "Unix" {
+  if c(update_query) == "on" | `debug' {
   noi di as txt "`pid' permanently disabling -update_query-"
   cap set update_query off
   noi srqm_error
+  }
 }
 
 if c(more) == "on" | `debug' {
