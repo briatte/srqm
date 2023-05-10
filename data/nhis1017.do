@@ -210,4 +210,8 @@ foreach i in `*' {
 
 la da "U.S. National Health Interview Survey 2010 and 2017"
 
+note _dta: U.S. National Health Interview Survey 2010 and 2017
+note _dta: Source: U.S. Centers for Disease Control (CDC), NCHS
+note _dta: URL: {bf:https://www.cdc.gov/nchs/nhis/}
+
 // ---------------------------------------------------------- have a nice day --

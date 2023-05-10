@@ -33,7 +33,7 @@ cap log using code/week4.log, replace
    no systematic way to assess normality, but your decision should take skewness
    and kurtosis into account.
    
-   Last updated 2020-03-09.
+   Last updated 2021-01-28.
 
 ----------------------------------------------------------------------------- */
 
@@ -69,7 +69,7 @@ fre earnings
 tab sex
 
 * High-dimensional, continuous variables.
-fre bmi, rows(30)
+tab bmi
 
 
 * ================
@@ -301,10 +301,10 @@ su bmi in 1/10
 * a reflection of sample size. We will come back to the SEM equation next week.
 
 * Mean BMI for the full sample with a 95% CI.
-ci bmi
+ci means bmi
 
 * Mean BMI for the full sample with a 99% CI (more confidence, less precision).
-ci bmi, level(99)
+ci means bmi, level(99)
 
 * Mean BMI for full sample with survey design weights (as set earlier).
 svy: mean bmi
@@ -319,10 +319,10 @@ mean bmi [pw = sampweight]
 * If we compute the average BMI for subsamples of the population, such as one
 * category of the population, the total number of observations will drop and
 * the confidence interval will widen, as shown here with smaller subsamples:
-ci bmi in 1/10
-ci bmi in 1/100
-ci bmi in 1/1000
-ci bmi in 1/10000
+ci means bmi in 1/10
+ci means bmi in 1/100
+ci means bmi in 1/1000
+ci means bmi in 1/10000
 
 * Confidence bands can become useful to detect spurious relationships. Let's
 * take a look, for instance, at the number of years spent in the U.S.
@@ -340,12 +340,12 @@ gr dot bmi, over(sex) over(yrsinus) over(race) asyvars scale(.7) ///
 * The average BMI of Blacks who spent less than one year in the U.S. shows
 * an outstanding difference for males and sexs, but this category holds
 * so little observations that the difference should not be considered.
-bys sex: ci bmi if race == 2 & yrsinus == 1
+bys sex: ci means bmi if race == 2 & yrsinus == 1
 
 * Identically, the seemingly clean pattern among male and sex Asians is
 * calculated on a low number of observations and requires verification of
 * the confidence intervals. The pattern appears to be rather robust.
-bys yrsinus: ci bmi if race == 4
+bys yrsinus: ci means bmi if race == 4
 
 
 * Confidence intervals with proportions
@@ -355,7 +355,7 @@ bys yrsinus: ci bmi if race == 4
 * bands follow a different method of calculation. Basically, categorical data is
 * just dummies for a bunch of categories, and the distribution of binary data
 * can hardly be normal. The binomial distributions applies instead.
-ci sex, binomial
+// (see below)
 
 * Categorical variables, which can be described through proportions, also
 * come with confidence intervals that reflect the range of values that each
