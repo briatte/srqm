@@ -14,7 +14,7 @@ cap log using code/week10.log, replace
 
  - TOPIC:  Attitudes Towards Immigration in Europe
  
- - DATA:   European Social Survey Round 4 (2008)
+ - DATA:   European Social Survey Rounds 4 (2008) and 6 (2016)
 
    This do-file complements the series that we finished running last week using
    the Quality of Government dataset. It shows how multiple regression can apply
@@ -32,12 +32,15 @@ cap log using code/week10.log, replace
    logistic estimator is more appropriate than a linear one, and include draft
    models in your revised draft.
    
-   Last updated 2017-04-14.
+   Last updated 2021-01-28.
 
 ----------------------------------------------------------------------------- */
 
 * Load ESS dataset.
-use data/ess0810, clear
+use data/ess0816, clear
+
+* Remove a technical variable.
+cap drop _merge
 
 * Subsetting to respondents age 25+ with full data.
 drop if agea < 25 | mi(imdfetn, agea, gndr, brncntr, eduyrs, hinctnta, lrscale)

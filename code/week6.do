@@ -52,12 +52,15 @@ cap log using code/week6.log, replace
    the proportions test, the Chi-squared test and finally linear correlation.
    The Stata Guide also covers these tests. Make sure to read what you need to!
 
-   Last updated 2013-08-17.
+   Last updated 2020-04-03.
 
 ----------------------------------------------------------------------------- */
 
 * Load ESS dataset, Round 4.
-use data/ess0810 if essround == 4, clear
+use data/ess0816 if essround == 4, clear
+
+* Technical step: delete a variable that should not be there.
+cap drop _merge
 
 * Survey weights.
 svyset [pw = dweight] // weighting scheme set to country-specific population
@@ -162,7 +165,6 @@ hist age, bin(15) normal ///
 
 * Recoding to 4 age groups:
 gen age4:age4 = irecode(age, 24, 44, 64)          // quick recode
-table age4, c(min age max age n age)              // check result
 la def age4 0 "15-24" 1 "25-44" 2 "45-64" 3 "65+" // value labels
 la var age4 "Age (4 groups)"                      // label result
 fre age4                                          // final result

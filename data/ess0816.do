@@ -4,18 +4,17 @@
    Data:   European Social Survey (ESS)
    Source: ESS website
 
-   http://www.worldvaluessurvey.org/
-   http://www.worldvaluessurvey.org/WVSDocumentationWV4.jsp
+   https://www.europeansocialsurvey.org/
+   https://www.europeansocialsurvey.org/data/round-index.html
 
    - Downloads the codebook and questionnaire
-   - Downloads Wave 4 (1999-2004), v2018-09-12 official release
-   - Makes all variables lowercase
+   - Downloads Round 4 (2008-2010)
 
-   Last modified: 2019-02-19
+   Last modified: 2021-01-31
 
-   NOTE -- downloading from the WVS website requires setting cookies, which is
-   not possible via Stata alone; to make sure that this script runs fine on 
-   standard Windows, it downloads the files from my own access point instead.
+   NOTE -- downloading from the ESS website requires email registration and
+   login, which is not possible via Stata alone; to make sure that this script
+   runs fine, it downloads the files from my own access point instead.
 
 ----------------------------------------------------------------------------- */
 
@@ -98,5 +97,8 @@ foreach f of loc j {
 // ------------------------------------------------------------ label dataset --
 
 la da "European Social Survey Rounds 4 (2008-9) and 8 (2016-7)"
+
+note _dta: European Social Survey
+note _dta: URL: {bf:https://www.europeansocialsurvey.org/}
 
 // ---------------------------------------------------------- have a nice day --

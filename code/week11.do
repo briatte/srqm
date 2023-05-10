@@ -40,12 +40,12 @@ cap log using code/week11.log, replace
    with health services can be predicted from political views, independently
    of age, sex, health status and financial situation.
    
-   Last updated 2013-08-17.
+   Last updated 2020-05-07.
 
 ----------------------------------------------------------------------------- */
 
 * Load ESS dataset.
-use data/ess0810, clear
+use data/ess0816 if essround == 4, clear
 
 * Country-specific design weight, multiplied by country-level population weight.
 gen dpw = dweight * pweight
@@ -573,11 +573,11 @@ local rhs "ib45.age6 female i.health lowinc ib2.pol3"
 * instead of the $dollar sign, and they have to be run in the same sequence as
 * the regression commands to work properly, WITHOUT stopping execution. This
 * means that your local macros will work only if you run the whole code block
-* (the line below AND the -reg- commands), or the whole do-file.
+* (the -local- line above AND the -reg- commands below), or the whole do-file.
 
 * Store robust models.
-eststo FRr: reg hsat `rhs' if cntry == "FR", vce(cluster region)
-eststo GBr: reg hsat `rhs' if cntry == "GB", vce(cluster region)
+eststo FRr: reg hsat `rhs' if cntry == "FR", vce(cluster regionfr)
+eststo GBr: reg hsat `rhs' if cntry == "GB", vce(cluster regiongb)
 
 * Compare both versions for a more realistic assessment of the standard errors.
 esttab est1 FRr est2 GBr, nogaps b(2) se(2) sca(rmse) compress ///
