@@ -71,4 +71,7 @@ rename *, lower
 
 la da "World Values Survey Wave 4 (1999-2004)"
 
+note _dta: World Values Survey Wave 4 (1999-2004)
+note _dta: URL: {bf:http://www.worldvaluessurvey.org/}
+
 // ---------------------------------------------------------- have a nice day --
