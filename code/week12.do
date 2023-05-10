@@ -14,19 +14,19 @@ cap log using code/week12.log, replace
 
  - TOPIC:  Sexual Partners in the United States
 
- - DATA:   U.S. General Social Survey (2010)
+ - DATA:   U.S. General Social Survey (2016)
  
    What makes Americans likely to report high numbers of sexual partners in the
    last five years? What makes them more likely to report low numbers?
    
    For this session, all hypotheses are to be provided by the students.
    
-   Last updated 2013-08-17.
+   Last updated 2020-05-07.
 
 ----------------------------------------------------------------------------- */
 
 * Load GSS dataset for selected survey year.
-use data/gss0014 if year == 2010, clear
+use data/gss7616 if year == 2016, clear
 
 * Inspect DV.
 fre partnrs5

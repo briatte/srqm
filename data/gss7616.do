@@ -67,4 +67,8 @@ keep if inlist(year, 1976, 1986, 1996, 2006, 2016)
 
 la da "U.S. General Social Survey 1976, 1986, 1996, 2006 and 2016"
 
+note _dta: U.S. General Social Survey 1976, 1986, 1996, 2006 and 2016
+note _dta: Source: NORC, University of Chicago
+note _dta: URL: {bf:http://gss.norc.org/}
+
 // ---------------------------------------------------------- have a nice day --
