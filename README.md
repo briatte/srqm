@@ -5,7 +5,7 @@ This repository contains the [Statistical Reasoning and Quantitative Methods][sr
 [frbr]: https://f.briatte.org/
 [ivpe]: http://ipetev.org/
 
-The course requires a working copy of [Stata][stata].
+The course requires a working copy of [Stata][stata]. Due to it being over 10 years old, the course was designed on very old versions of Stata, but should still work fine on Stata 13+ at least, with minor issues due to a few syntax changes.
 
 [stata]: https://www.stata.com/
 
@@ -13,12 +13,10 @@ __GitHub users__ - please feel free to [report issues][issues] or ask for enhanc
 
 [issues]: https://github.com/briatte/srqm/issues
 
-__Sciences Po users__ - this course is currently on offer in the [GLM][scpo-glm] (Urban School) and [PSIA][scpo-psia] (International Affairs) Masters, under codes [KGLM 2015][scpo-glm-2018] and [KOUT 2030][scpo-psia-2018] respectively.
+__Sciences Po users__ - this course is currently on offer in the [PSIA][scpo-psia] (International Affairs) Masters, under code  KOUT 2030. The course used to be on offer in the [GLM][scpo-glm] (Urban School) Master until 2018, under code KGLM 2015.
 
 [scpo-glm]: https://www.sciencespo.fr/ecole-urbaine/en/glm
 [scpo-psia]: https://www.sciencespo.fr/psia/
-[scpo-glm-2018]: http://formation.sciences-po.fr/enseignement/2018/KGLM/2015
-[scpo-psia-2018]: http://formation.sciences-po.fr/enseignement/2018/KOUT/2030
 
 - _Instructors_ – please email me at <francois.briatte@sciencespo.fr> in order to receive an additional 'briefing pack' (detailed instructions and recommendations on how to run the course).
 
@@ -49,7 +47,7 @@ Thanks first and foremost to [Ivaylo Petev][ivpe], who taught on the first versi
 
 [viti]: https://durkheim.u-bordeaux.fr/Notre-equipe/Chercheur-e-s-et-enseignant-e-s-chercheur-e-s/CV/Vincent-Tiberj
 
-Thanks also to all instructors who have run their own forks of the course over the years, including Mathilde Bauwin, [Cyril Benoît][cybe], [Joël Gombin][jogo], [Andrey Indukaev][anid], [Antoine Jardin][anja], [Filip Kostelka][fiko], [Antonin de Laever][andl], [Antoine Marsaudon][anma], [Haley McAvay][hama], [Sarah Schneider-Strawczynski][sasc], [Pavlos Vasilopoulos][pava], and many others.
+Thanks also to all instructors who have run their own forks of the course over the years, including Mathilde Bauwin, [Cyril Benoît][cybe], [Joël Gombin][jogo], [Andrey Indukaev][anid], [Antoine Jardin][anja], [Filip Kostelka][fiko], [Antonin de Laever][andl], [Antoine Marsaudon][anma], [Haley McAvay][hama], [Sarah Schneider-Strawczynski][sasc], [Pavlos Vasilopoulos][pava], and many, many others, who are unfortunately not listed here because I lost track around fall 2018.
 
 [anja]: http://antoinejardin.com/
 [cybe]: https://cyrilbenoit.com/
@@ -76,7 +74,7 @@ Last but not least, thanks to all current and past SRQM students, especially Alb
 
 # VERSION
 
-This is version [0.7.x][wiki-hist] (Winter 2019) of the course.
+This is version ~~[0.7.x][wiki-hist]~~ "whatever" of the course, with just a few updates since 2019 to ensure that the course still runs on Stata 17.
 
 [wiki-hist]: https://github.com/briatte/srqm/wiki/course-history
 
