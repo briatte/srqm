@@ -35,7 +35,7 @@
         % Spring 2019 link
         % \item \red{\href{https://frama.link/srqm-2019}{Register your \textbf{group}}} on Google Sheets%
         \item Manage your \textbf{group work}
-        \item Provisional \textbf{deadline: \red{Wednesday 2 March}}
+        \item Write down the \textbf{deadline} (sent by email)
       \end{enumerate}
     \end{block}
 
@@ -43,7 +43,7 @@
       \begin{itemize}
 	      \item \textbf{Course emails}, Sessions 1--4
         \item \textbf{Stata~Guide}, Sections 5--9%
-        \item First draft \textbf{templates} (to be sent by email)
+        \item First draft \textbf{templates} (on Google Drive)
         \item \textbf{Q \& A} in Sessions 4 and 5
       \end{itemize}
     \end{block}
@@ -230,13 +230,13 @@
 		\item Subsetting to a \red{cross-section} of \red{complete observations}\\[.5em]%
       Ex. commands: \code{drop} · \code{if mi()} · \code{misstable pat}\\[.5em]%
 		\item Creating and \red{summarizing} variables\\[.5em]%
-      Ex. commands: \code{fre} (better than \code{tab}) · \code{su} · \code{tabstat}\\[.5em]%
+      Ex. commands: \code{fre} (better than \code{tab}) · \code{su} · \code{bys: tab, su()}\\[.5em]%
 		\item \red{Recoding} variables of different \red{variable types}\\[.5em]%
       Ex. commands: \code{clonevar} · \code{replace} · \code{recode, gen()}\\[.5em]%
 	\end{itemize}
 
     \begin{block}{Side note}
-       Graphs are useful, but Stata graph syntax is awkward.
+       The do-file for today contains some graphs. Do not focus too much on them, as Stata graph syntax is pretty awkward.%
     \end{block}
 
   \end{frame}
