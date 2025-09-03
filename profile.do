@@ -1,5 +1,5 @@
 
-*! SRQM version 2023.01.25
+*! SRQM version 2025.09.03
 *! URL: https://f.briatte.org/teaching/quanti/
 
 /* --- SRQM --------------------------------------------------------------------
@@ -82,9 +82,9 @@ noi di as txt _n "`pid' Setting up Stata for the course..."
 
 loc debug 0
 
-if c(version) < 13 | c(version) > 17 | `debug' {
+if c(version) < 13 | c(version) > 19.5 | `debug' {
   noi di as err "`pid' WARNING:", ///
-    as txt "code currently tested only with Stata 13 and 17"
+    as txt "code currently tested only with Stata 13 to 19.5"
 }
 
 cap pr drop srqm_error
