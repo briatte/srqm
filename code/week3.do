@@ -265,37 +265,21 @@ xtile age_q4 = age, nq(4)
 fre age_q4
 
 * Inspect how age varies within each quartile (e.g. compare top and bottom 25%).
-tab age_q4, sum(age)
+* 'Std. dev.' means 'standard deviation' (SD) -- more on that next week.
+tab age_q4, su(age)
 
 * Expectedly, there is more variance in the last, older group. Let's finally get
 * the range, or lower (min) and lower (max) bounds, of each age quartile.
-if c(version) < 17 {
-	table age_q4, c(min age max age)
-}
-else {
-	table age_q4, stat(min age) stat(max age)
-}
-* Note: the code above shows two different syntaxes. The former is for older
-* versions of Stata. The latter is for Stata 17 and above.
+bys age_q4: su age
 
 * Recode to four age groups. The -irecode- command creates categories based on
 * continuous intervals: category 0 of age4 will contain observations of age up
 * to 33, category 1 will contain those from 34 to 49, and so on.
 gen age4:age4 = irecode(age, 33, 49, 64, .)
 
-* Check the results. This is a different -table- command than the -tab- one used
-* previously, which we will get to use for more flexible crosstabulations.
-if c(version) < 17 {
-	table age4, c(min age max age)
-}
-else {
-	table age4, stat(min age) stat(max age)
-}
-
-* And here's yet another way to crosstabulate: the -tab- command with the -sum- 
-* option returns the average age in each age group, along with the SD and count.
-* More on the SD (standard deviation) next week.
-tab age4, sum(age)
+* Check the results, using the same command that we just used while looking at
+* the four age quartiles (age_q4) instead of the four age groups (age4).
+bys age4: su age
 
 * Write the value and variable labels.
 la def age4 0 "16-33" 1 "34-49" 2 "50-64" 3 "65+", replace
