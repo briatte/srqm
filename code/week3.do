@@ -258,7 +258,7 @@ hist age, by(country, note("")) bin(9) percent ///
 
 * Recode to quartiles -- shown for demonstration purposes: recoding to groups
 * makes much more sense here, but recoding to n-quantiles like percentiles or
-* quartiles is useful in many explorative situations.
+* quartiles is useful in many exploratory situations.
 xtile age_q4 = age, nq(4)
 
 * Check that the quartiles each capture roughly a quarter of the distribution.

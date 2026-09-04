@@ -173,7 +173,7 @@ pwcorr births schooling log_gdpc corruption
 * p-value is below the level of statistical significance.
 pwcorr births schooling log_gdpc corruption, star(.05)
 
-* For explorative purposes, another option can be used to print out only the
+* For exploratory purposes, another option can be used to print out only the
 * statistically significant correlations, which comes in handy especially in
 * very large matrixes with majorily insignificant correlation coefficients.
 pwcorr births schooling log_gdpc corruption, print(.05)
