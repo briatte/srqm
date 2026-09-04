@@ -28,7 +28,7 @@ set more off
    research project. Practice with Stata by trying out commands as you learn
    them. If things do not work out, try again after checking the command syntax.
 
-   Last updated 2020-02-14.
+   Last updated 2026-09-04.
 
 ----------------------------------------------------------------------------- */
 

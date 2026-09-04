@@ -31,7 +31,7 @@ cap log using code/week7.log, replace
    on interpreting rather than coding. Use the course material to bring yourself
    up to speed with both Stata and essential statistical theory.
 
-   Last updated 2020-04-03.
+   Last updated 2026-09-04.
    
    Note -- previous versions of this do-file used bl_asy25mf for education.
 
