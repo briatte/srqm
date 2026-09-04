@@ -49,10 +49,10 @@ cap log using code/week6.log, replace
    open your textbooks and read at length about statistical estimation.
    
    There are many different kinds of hypothesis tests: we will cover the t-test,
-   the proportions test, the Chi-squared test and finally linear correlation.
-   The Stata Guide also covers these tests. Make sure to read what you need to!
+   and might also cover the proportions test and the Chi-squared test. We will
+   also cover linear correlation later, but not its significance test.
 
-   Last updated 2020-04-03.
+   Last updated 2026-09-04.
 
 ----------------------------------------------------------------------------- */
 

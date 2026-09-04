@@ -21,8 +21,8 @@ set more off
    with Stata commands.
 
  - We will start exploring do-files in class, and you get to finish them on your
-   own as homework, along with reading one chapter from the course handbook and
-   a few sections from the Stata Guide. These tasks complement each other.
+   own as homework, along with reading a chapter from the course handbook. 
+   These tasks complement each other.
    
  - Everything that you learn from the course do-files will be put to use in your
    research project. Practice with Stata by trying out commands as you learn
@@ -63,9 +63,9 @@ set more off
 * --------
 
 * Your mission for next week is to replicate this do-file. That means running
-* it in full, reading the comments along as you execute its commands. Use the
-* course slides to learn about running do-files and read from the Stata Guide
-* to understand the commands used.
+* it in full, reading the comments along as you execute its commands. Use your
+* course notes and read the comments to learn about running do-files, and try to
+* understand what the commands are intended to do.
 
 * There is no substitute to practice to learn statistical software. Code is
 * like music, you will recognize the tune and notation if you listen to it.
@@ -421,14 +421,17 @@ cap log close
 * example above and its output for each command. You can view the file in Stata:
 view code/week1.log
 
-* The dot graph will need to be saved separately: this can be done in several
-* ways that are documented in the course slides and in the Stata Guide. The
-* Stata help pages also cover each graph command. Have a look at them:
-help graph
+* The dot graph will need to be saved separately. You can right-click on it and
+* save it to e.g. JPEG, PNG or PDF, or do that programmatically by using the
+* following command:
+gr export week1_graph_example.png, name(weight_race_sex) replace
 
-* Identically, there is more about logs in the Stata Guide and in several of
-* the tutorials included in the course material, but we also recommend that you
-* use the Stata help pages, as explained below.
+* The following Stata help page explains the syntax of the command above:
+help graph export
+
+* There are similar help pages for all Stata commands: simply type -help cmd-
+* (replacing 'cmd' with whatever command you are interested in) to open them.
+* More on help pages further down below.
 
 
 * ============
@@ -581,8 +584,7 @@ h if
 * Last words: when you leave Stata, DO NOT SAVE YOUR DATASET. Keep it intact as
 * originally downloaded. Instead, save the do-file that contains the commands
 * you used to perform your analysis. Stata will automatically save the log file
-* for you when you shut it down, so this requires no action on your side. For
-* additional help, please turn again to the Stata Guide.
+* for you when you shut it down, so this requires no action on your side.
 
 * Close log (if still opened, which it should not).
 cap log close
