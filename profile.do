@@ -82,9 +82,9 @@ noi di as txt _n "`pid' Setting up Stata for the course..."
 
 loc debug 0
 
-if !inlist(c(version), 15, 19.5) | `debug' {
+if !inlist(c(version), 15.1, 19.5) | `debug' {
   noi di as err "`pid' WARNING:", ///
-    as txt "code currently tested only with Stata 15 (2017) and 19.5 (2026)"
+    as txt "code currently tested only with Stata 15.1 (2017) and 19.5 (2026)"
 }
 
 cap pr drop srqm_error
