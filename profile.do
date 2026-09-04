@@ -36,7 +36,7 @@ gl SRQM_DATASETS = "ess0816 gss7616 nhis1017 qog2019 wvs9904"
 // packages
 
 loc P_VARS    = "_gstd01 fre lookfor_all renvars" // revrs
-loc P_DATA    = "kountry spmap wbopendata"
+loc P_DATA    = "" // "kountry spmap wbopendata"
 loc P_PLOTS   = "plotbeta spineplot" // catplot ciplot distplot
 loc P_SCHEMES = "scheme-burd" // gr0002_3 (lean) blindschemes scheme_tufte
 loc P_TABLES  = "estout leanout mkcorr tab_chi tabout" // outreg2
