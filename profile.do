@@ -1,5 +1,5 @@
 
-*! SRQM version 2025.09.03
+*! SRQM version 2026-09-04
 *! URL: https://f.briatte.org/teaching/quanti/
 
 /* --- SRQM --------------------------------------------------------------------
@@ -82,9 +82,9 @@ noi di as txt _n "`pid' Setting up Stata for the course..."
 
 loc debug 0
 
-if c(version) < 13 | c(version) > 19.5 | `debug' {
+if !inlist(c(version), 15, 19.5) | `debug' {
   noi di as err "`pid' WARNING:", ///
-    as txt "code currently tested only with Stata 13 to 19.5"
+    as txt "code currently tested only with Stata 15 (2017) and 19.5 (2026)"
 }
 
 cap pr drop srqm_error
@@ -112,6 +112,7 @@ if c(varabbrev) == "on" | `debug' {
   noi srqm_error
 }
 
+// keeping this just in case, even though we dropped support for Stata < 15
 if c(version) < 12 | `debug' {
   noi di as txt "`pid' permanently setting -memory- to 500MB"
   cap set mem 500m, perm
